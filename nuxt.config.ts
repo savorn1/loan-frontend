@@ -6,6 +6,9 @@ const apiBase = process.env.NUXT_API_BASE || 'http://localhost:8080'
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+  devServer: {
+    port: Number(process.env.NUXT_PORT) || 3000
+  },
   modules: ['@nuxt/ui', '@pinia/nuxt'],
   ssr: true,
   app: {

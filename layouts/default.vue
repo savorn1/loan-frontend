@@ -1,29 +1,36 @@
 <template>
-  <div class="min-h-screen flex bg-gray-50 dark:bg-gray-900">
-    <aside class="w-56 shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col">
-      <div class="h-14 flex items-center px-4 border-b border-gray-200 dark:border-gray-800">
-        <NuxtLink to="/" class="font-bold text-gray-900 dark:text-white">LMS</NuxtLink>
-      </div>
-      <UVerticalNavigation :links="links" class="flex-1 px-2 py-4" />
-      <div class="border-t border-gray-200 dark:border-gray-800 px-3 py-3 space-y-2">
-        <div class="flex items-center gap-2 px-1">
-          <UBadge v-if="role" :color="isAdmin ? 'primary' : 'gray'" variant="subtle">{{ role }}</UBadge>
-          <span class="text-sm text-gray-600 dark:text-gray-300 truncate">{{ username }}</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <ColorModeToggle />
-          <div class="flex items-center gap-1">
-            <UButton size="xs" color="gray" variant="ghost" icon="i-heroicons-key" @click="showChangePassword = true">
-              Password
-            </UButton>
-            <UButton size="xs" color="gray" variant="ghost" icon="i-heroicons-arrow-right-on-rectangle" @click="onLogout" />
-          </div>
-        </div>
-      </div>
+  <div class="min-h-screen flex bg-gray-50 dark:bg-gray-950">
+    <!-- Desktop sidebar -->
+    <aside class="hidden lg:flex w-60 shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex-col">
+      <SidebarContent :links="links" :username="username" :role="role" :is-admin="isAdmin"
+        @change-password="showChangePassword = true" @logout="onLogout" />
     </aside>
-    <main class="flex-1 min-w-0 px-6 py-6">
-      <slot />
-    </main>
+
+    <!-- Mobile off-canvas nav -->
+    <USlideover v-model="mobileNavOpen" side="left" :ui="{ width: 'max-w-xs' }">
+      <div class="flex flex-col h-full bg-white dark:bg-gray-900">
+        <SidebarContent :links="links" :username="username" :role="role" :is-admin="isAdmin"
+          @change-password="showChangePassword = true; mobileNavOpen = false" @logout="onLogout" />
+      </div>
+    </USlideover>
+
+    <div class="flex-1 min-w-0 flex flex-col">
+      <!-- Mobile top bar -->
+      <header class="lg:hidden h-14 shrink-0 flex items-center gap-3 px-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-20">
+        <UButton icon="i-heroicons-bars-3" color="gray" variant="ghost" square :aria-label="'Open menu'" @click="mobileNavOpen = true" />
+        <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-primary-500 text-white shrink-0">
+          <UIcon name="i-heroicons-banknotes" class="w-4 h-4" />
+        </span>
+        <span class="font-bold text-gray-900 dark:text-white tracking-tight">LMS</span>
+      </header>
+
+      <main class="flex-1 min-w-0 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <div class="max-w-6xl mx-auto">
+          <slot />
+        </div>
+      </main>
+    </div>
+
     <ChangePasswordModal v-model="showChangePassword" />
   </div>
 </template>
@@ -41,6 +48,11 @@ const links = computed(() => [[
 ]])
 
 const showChangePassword = ref(false)
+const mobileNavOpen = ref(false)
+
+// Close the mobile drawer automatically whenever a nav link is followed.
+const route = useRoute()
+watch(() => route.fullPath, () => { mobileNavOpen.value = false })
 
 async function onLogout() {
   await logout()

@@ -6,13 +6,22 @@
       </template>
       <UForm :state="form" class="space-y-4" @submit="onSubmit">
         <UFormGroup label="Current password" name="currentPassword" required>
-          <UInput v-model="form.currentPassword" type="password" autocomplete="current-password" required />
+          <UInput v-model="form.currentPassword" :type="showPassword ? 'text' : 'password'" icon="i-heroicons-lock-closed" autocomplete="current-password" required />
         </UFormGroup>
         <UFormGroup label="New password" name="newPassword" required>
-          <UInput v-model="form.newPassword" type="password" autocomplete="new-password" minlength="6" required />
+          <UInput v-model="form.newPassword" :type="showPassword ? 'text' : 'password'" icon="i-heroicons-lock-closed" autocomplete="new-password" minlength="6" required>
+            <template #trailing>
+              <UButton
+                color="gray" variant="link" :padded="false"
+                :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                :aria-label="showPassword ? 'Hide passwords' : 'Show passwords'"
+                @click="showPassword = !showPassword"
+              />
+            </template>
+          </UInput>
         </UFormGroup>
         <UFormGroup label="Confirm new password" name="confirmPassword" required>
-          <UInput v-model="confirmPassword" type="password" autocomplete="new-password" required />
+          <UInput v-model="confirmPassword" :type="showPassword ? 'text' : 'password'" icon="i-heroicons-lock-closed" autocomplete="new-password" required />
         </UFormGroup>
         <UAlert v-if="error" color="red" variant="subtle" :title="error" />
         <div class="flex justify-end gap-2 pt-2">
@@ -36,6 +45,7 @@ const form = reactive<ChangePasswordRequest>({ currentPassword: '', newPassword:
 const confirmPassword = ref('')
 const loading = ref(false)
 const error = ref('')
+const showPassword = ref(false)
 
 watch(open, (value) => {
   if (value) {
@@ -43,6 +53,7 @@ watch(open, (value) => {
     form.newPassword = ''
     confirmPassword.value = ''
     error.value = ''
+    showPassword.value = false
   }
 })
 

@@ -1,21 +1,56 @@
 <template>
   <div>
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-xl font-bold">Loans</h1>
-      <UButton icon="i-heroicons-plus" @click="openCreate">New Loan</UButton>
-    </div>
+    <PageHeader title="Loans" :description="totalLabel">
+      <template #actions>
+        <UButton icon="i-heroicons-plus" @click="openCreate">New Loan</UButton>
+      </template>
+    </PageHeader>
 
     <UCard>
-      <UTable :rows="loans ?? []" :columns="columns" :loading="pending" @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)">
+      <template #header>
+        <div class="flex flex-wrap items-center gap-3">
+          <UInput
+            v-model="search"
+            icon="i-heroicons-magnifying-glass"
+            placeholder="Search by customer or purpose..."
+            class="max-w-xs w-full sm:w-auto"
+          >
+            <template v-if="search" #trailing>
+              <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            </template>
+          </UInput>
+          <USelectMenu v-model="statusFilter" :options="statusOptions" option-attribute="label" value-attribute="value" class="w-40" />
+        </div>
+      </template>
+
+      <UTable
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        v-model:sort="sort"
+        @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
+      >
         <template #status-data="{ row }">
           <StatusBadge :status="row.status" />
         </template>
         <template #principal-data="{ row }">{{ formatCurrency(row.principal) }}</template>
         <template #interestRate-data="{ row }">{{ row.interestRate }}%</template>
+        <template #empty-state>
+          <EmptyState
+            :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-banknotes'"
+            :title="hasFilters ? 'No matches' : 'No loans yet'"
+            :description="hasFilters ? 'Try a different search term or status filter.' : 'Create a loan for one of your customers to get started.'"
+          >
+            <template v-if="!hasFilters" #action>
+              <UButton icon="i-heroicons-plus" @click="openCreate">New Loan</UButton>
+            </template>
+          </EmptyState>
+        </template>
       </UTable>
-      <p v-if="!pending && (loans ?? []).length === 0" class="text-sm text-gray-500 py-4 text-center">
-        No loans yet.
-      </p>
+
+      <div v-if="total > pageSize" class="flex justify-end pt-4">
+        <UPagination v-model="page" :page-count="pageSize" :total="total" />
+      </div>
     </UCard>
 
     <UModal v-model="showCreate">
@@ -59,7 +94,7 @@
 
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
-import type { LoanRequest, LoanResponse } from '~/features/loans/types'
+import type { LoanRequest, LoanResponse, LoanStatus } from '~/features/loans/types'
 
 const api = useApi()
 const toast = useToast()
@@ -74,13 +109,39 @@ const customers = computed(() =>
 const selectedCustomer = ref<{ label: string; value: number } | undefined>(undefined)
 
 const columns = [
-  { key: 'id', label: 'ID' },
-  { key: 'customerName', label: 'Customer' },
-  { key: 'principal', label: 'Principal' },
-  { key: 'interestRate', label: 'Rate' },
-  { key: 'termMonths', label: 'Term (mo)' },
-  { key: 'status', label: 'Status' }
+  { key: 'id', label: 'ID', sortable: true },
+  { key: 'customerName', label: 'Customer', sortable: true },
+  { key: 'principal', label: 'Principal', sortable: true },
+  { key: 'interestRate', label: 'Rate', sortable: true },
+  { key: 'termMonths', label: 'Term (mo)', sortable: true },
+  { key: 'status', label: 'Status', sortable: true }
 ]
+
+const statusOptions: { label: string; value: LoanStatus | '' }[] = [
+  { label: 'All statuses', value: '' },
+  { label: 'Pending', value: 'PENDING' },
+  { label: 'Approved', value: 'APPROVED' },
+  { label: 'Active', value: 'ACTIVE' },
+  { label: 'Rejected', value: 'REJECTED' },
+  { label: 'Closed', value: 'CLOSED' }
+]
+const statusFilter = ref<LoanStatus | ''>('')
+
+const filteredByStatus = computed(() =>
+  statusFilter.value ? (loans.value ?? []).filter(l => l.status === statusFilter.value) : loans.value
+)
+
+const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
+  searchFields: ['customerName', 'purpose'],
+  pageSize: 10
+})
+
+const hasFilters = computed(() => !!search.value || !!statusFilter.value)
+
+const totalLabel = computed(() => {
+  const count = loans.value?.length ?? 0
+  return count === 1 ? '1 loan' : `${count} loans`
+})
 
 const showCreate = ref(false)
 const creating = ref(false)

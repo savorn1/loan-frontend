@@ -1,17 +1,50 @@
 <template>
   <div>
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-xl font-bold">Customers</h1>
-      <UButton icon="i-heroicons-plus" @click="showCreate = true">New Customer</UButton>
-    </div>
+    <PageHeader title="Customers" :description="totalLabel">
+      <template #actions>
+        <UButton icon="i-heroicons-plus" @click="showCreate = true">New Customer</UButton>
+      </template>
+    </PageHeader>
 
     <UCard>
-      <UTable :rows="customers ?? []" :columns="columns" :loading="pending" @select="onSelect">
+      <template #header>
+        <UInput
+          v-model="search"
+          icon="i-heroicons-magnifying-glass"
+          placeholder="Search by name or email..."
+          class="max-w-xs"
+          :ui="{ icon: { trailing: { pointer: '' } } }"
+        >
+          <template v-if="search" #trailing>
+            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+          </template>
+        </UInput>
+      </template>
+
+      <UTable
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        v-model:sort="sort"
+        @select="onSelect"
+      >
         <template #createdAt-data="{ row }">{{ formatDate(row.createdAt) }}</template>
+        <template #empty-state>
+          <EmptyState
+            :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-users'"
+            :title="search ? 'No matches' : 'No customers yet'"
+            :description="search ? `Nothing matches “${search}”.` : 'Add your first customer to start creating loans for them.'"
+          >
+            <template v-if="!search" #action>
+              <UButton icon="i-heroicons-plus" @click="showCreate = true">New Customer</UButton>
+            </template>
+          </EmptyState>
+        </template>
       </UTable>
-      <p v-if="!pending && (customers ?? []).length === 0" class="text-sm text-gray-500 py-4 text-center">
-        No customers yet.
-      </p>
+
+      <div v-if="total > pageSize" class="flex justify-end pt-4">
+        <UPagination v-model="page" :page-count="pageSize" :total="total" />
+      </div>
     </UCard>
 
     <UModal v-model="showCreate">
@@ -38,13 +71,23 @@ const showCreate = ref(false)
 const creating = ref(false)
 
 const columns = [
-  { key: 'id', label: 'ID' },
-  { key: 'firstName', label: 'First name' },
-  { key: 'lastName', label: 'Last name' },
-  { key: 'email', label: 'Email' },
+  { key: 'id', label: 'ID', sortable: true },
+  { key: 'firstName', label: 'First name', sortable: true },
+  { key: 'lastName', label: 'Last name', sortable: true },
+  { key: 'email', label: 'Email', sortable: true },
   { key: 'phone', label: 'Phone' },
-  { key: 'createdAt', label: 'Created' }
+  { key: 'createdAt', label: 'Created', sortable: true }
 ]
+
+const { search, page, pageSize, sort, total, rows } = useClientTable(customers, {
+  searchFields: ['firstName', 'lastName', 'email'],
+  pageSize: 10
+})
+
+const totalLabel = computed(() => {
+  const count = customers.value?.length ?? 0
+  return count === 1 ? '1 customer' : `${count} customers`
+})
 
 function onSelect(row: CustomerResponse) {
   router.push(`/customers/${row.id}`)

@@ -26,6 +26,15 @@
         <template #header>
           <span class="font-semibold">Details</span>
         </template>
+
+        <div v-if="loan.status === 'ACTIVE' || loan.status === 'CLOSED'" class="mb-5">
+          <div class="flex items-center justify-between text-sm mb-1.5">
+            <span class="text-gray-500">Paid off</span>
+            <span class="font-medium text-gray-900 dark:text-white">{{ payoffPercent }}%</span>
+          </div>
+          <UProgress :value="payoffPercent" :color="loan.status === 'CLOSED' ? 'green' : 'primary'" size="sm" />
+        </div>
+
         <dl class="grid grid-cols-2 gap-y-3 text-sm">
           <dt class="text-gray-500">Customer</dt>
           <dd>
@@ -98,10 +107,14 @@
             Mark paid
           </UButton>
         </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-calendar-days"
+            title="No payment schedule yet"
+            :description="loan.status === 'ACTIVE' ? 'Generate an amortization schedule to start tracking installments.' : 'A schedule is generated automatically once the loan is disbursed.'"
+          />
+        </template>
       </UTable>
-      <p v-if="!paymentsPending && (payments ?? []).length === 0" class="text-sm text-gray-500 py-4 text-center">
-        No payment schedule yet.
-      </p>
     </UCard>
 
     <ConfirmModal
@@ -114,6 +127,9 @@
       @update:model-value="(v: boolean) => { if (!v) confirmAction = null }"
       @confirm="doAction"
     />
+  </div>
+  <div v-else class="flex justify-center py-16">
+    <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
   </div>
 </template>
 
@@ -129,6 +145,13 @@ const { isAdmin } = storeToRefs(useAuth())
 const loanId = route.params.id as string
 
 const { data: loan, refresh } = await useAsyncData(`loan-${loanId}`, () => api<LoanResponse>(`/loans/${loanId}`))
+const payoffPercent = computed(() => {
+  if (!loan.value || !loan.value.principal) return 0
+  const outstanding = loan.value.outstandingBalance ?? 0
+  const paid = loan.value.principal - outstanding
+  return Math.max(0, Math.min(100, Math.round((paid / loan.value.principal) * 100)))
+})
+
 const { data: payments, pending: paymentsPending, refresh: refreshPayments } = await useAsyncData(
   `loan-${loanId}-payments`,
   () => api<PaymentResponse[]>(`/payments/loan/${loanId}`)

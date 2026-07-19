@@ -1,14 +1,19 @@
 <template>
   <div>
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-xl font-bold">User Management</h1>
-      <UButton icon="i-heroicons-plus" @click="openCreate">New User</UButton>
-    </div>
+    <PageHeader title="User Management" :description="totalLabel">
+      <template #actions>
+        <UButton icon="i-heroicons-plus" @click="openCreate">New User</UButton>
+      </template>
+    </PageHeader>
 
     <UCard class="mb-4">
       <div class="flex flex-wrap items-end gap-4">
         <UFormGroup label="Search username" class="w-56">
-          <UInput v-model="filters.username" placeholder="Search..." icon="i-heroicons-magnifying-glass" />
+          <UInput v-model="filters.username" placeholder="Search..." icon="i-heroicons-magnifying-glass">
+            <template v-if="filters.username" #trailing>
+              <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="filters.username = ''" />
+            </template>
+          </UInput>
         </UFormGroup>
         <UFormGroup label="Role" class="w-40">
           <USelectMenu v-model="filters.role" :options="roleFilterOptions" option-attribute="label" value-attribute="value" />
@@ -53,10 +58,10 @@
             />
           </div>
         </template>
+        <template #empty-state>
+          <EmptyState icon="i-heroicons-shield-check" title="No users found" description="Try adjusting your search or filters." />
+        </template>
       </UTable>
-      <p v-if="!pending && (users?.content ?? []).length === 0" class="text-sm text-gray-500 py-4 text-center">
-        No users found.
-      </p>
       <div v-if="users && users.totalPages > 1" class="flex justify-end pt-4">
         <UPagination v-model="page" :page-count="users.size" :total="users.totalElements" />
       </div>
@@ -147,6 +152,11 @@ const { data: users, pending, refresh } = await useAsyncData(
   'users',
   () => api<PageResponse<UserResponse>>('/auth/users', { query: buildQuery() })
 )
+
+const totalLabel = computed(() => {
+  const count = users.value?.totalElements ?? 0
+  return count === 1 ? '1 user' : `${count} users`
+})
 
 watch(page, () => refresh())
 watch(() => filters.role, () => { page.value = 1; refresh() })

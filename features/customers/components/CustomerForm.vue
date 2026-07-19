@@ -9,21 +9,21 @@
       </UFormGroup>
     </div>
     <UFormGroup label="Email" name="email" required>
-      <UInput v-model="form.email" type="email" required />
+      <UInput v-model="form.email" type="email" icon="i-heroicons-envelope" required />
     </UFormGroup>
     <div class="grid grid-cols-2 gap-4">
       <UFormGroup label="Phone" name="phone">
-        <UInput v-model="form.phone" />
+        <UInput v-model="form.phone" icon="i-heroicons-phone" />
       </UFormGroup>
       <UFormGroup label="National ID" name="nationalId">
-        <UInput v-model="form.nationalId" />
+        <UInput v-model="form.nationalId" icon="i-heroicons-identification" />
       </UFormGroup>
     </div>
     <UFormGroup label="Address" name="address">
-      <UInput v-model="form.address" />
+      <UInput v-model="form.address" icon="i-heroicons-map-pin" />
     </UFormGroup>
     <UFormGroup label="Date of birth" name="dateOfBirth">
-      <UInput v-model="form.dateOfBirth" type="date" />
+      <UInput v-model="form.dateOfBirth" type="date" icon="i-heroicons-cake" />
     </UFormGroup>
     <div class="flex justify-end gap-2 pt-2">
       <UButton type="submit" :loading="loading">{{ submitLabel }}</UButton>
