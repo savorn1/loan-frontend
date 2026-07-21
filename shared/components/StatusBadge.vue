@@ -11,12 +11,14 @@ const props = defineProps<{ status: string }>()
 // Maps loan/payment statuses to a badge color + icon. Covers both LoanStatus
 // (PENDING/APPROVED/REJECTED/ACTIVE/CLOSED) and PaymentStatus
 // (PENDING/PAID/OVERDUE) since they share the PENDING value.
+// Positive statuses are teal (not green) so they stay visually distinct from
+// the emerald brand color used on buttons/links (see app.config.ts).
 const color = computed(() => {
   switch (props.status) {
     case 'APPROVED':
     case 'ACTIVE':
     case 'PAID':
-      return 'green'
+      return 'teal'
     case 'REJECTED':
     case 'OVERDUE':
       return 'red'

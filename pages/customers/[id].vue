@@ -2,7 +2,10 @@
   <div v-if="customer">
     <div class="flex items-center justify-between mb-6 gap-4">
       <div class="flex items-center gap-3 min-w-0">
-        <div class="flex items-center justify-center w-11 h-11 rounded-full bg-primary-50 dark:bg-primary-400/10 text-primary-600 dark:text-primary-400 font-semibold shrink-0">
+        <div
+          class="flex items-center justify-center w-11 h-11 rounded-full text-white font-semibold shrink-0 shadow-sm"
+          :class="avatarGradient(`${customer.firstName} ${customer.lastName}`)"
+        >
           {{ initials }}
         </div>
         <div class="min-w-0">

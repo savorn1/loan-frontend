@@ -4,68 +4,63 @@
       <template #header>
         <span class="font-semibold">Change Password</span>
       </template>
-      <UForm :state="form" class="space-y-4" @submit="onSubmit">
-        <UFormGroup label="Current password" name="currentPassword" required>
-          <UInput v-model="form.currentPassword" :type="showPassword ? 'text' : 'password'" icon="i-heroicons-lock-closed" autocomplete="current-password" required />
-        </UFormGroup>
-        <UFormGroup label="New password" name="newPassword" required>
-          <UInput v-model="form.newPassword" :type="showPassword ? 'text' : 'password'" icon="i-heroicons-lock-closed" autocomplete="new-password" minlength="6" required>
-            <template #trailing>
-              <UButton
-                color="gray" variant="link" :padded="false"
-                :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
-                :aria-label="showPassword ? 'Hide passwords' : 'Show passwords'"
-                @click="showPassword = !showPassword"
-              />
-            </template>
-          </UInput>
-        </UFormGroup>
-        <UFormGroup label="Confirm new password" name="confirmPassword" required>
-          <UInput v-model="confirmPassword" :type="showPassword ? 'text' : 'password'" icon="i-heroicons-lock-closed" autocomplete="new-password" required />
-        </UFormGroup>
-        <UAlert v-if="error" color="red" variant="subtle" :title="error" />
-        <div class="flex justify-end gap-2 pt-2">
-          <UButton color="gray" variant="ghost" @click="open = false">Cancel</UButton>
-          <UButton type="submit" :loading="loading">Update password</UButton>
-        </div>
-      </UForm>
+      <DynamicForm
+        v-model="form"
+        :fields="fields"
+        :loading="loading"
+        :error="error"
+        submit-label="Update password"
+        cancelable
+        @submit="onSubmit"
+        @cancel="open = false"
+      />
     </UCard>
   </UModal>
 </template>
 
 <script setup lang="ts">
+// Declarative form on the shared <DynamicForm>/<Field> system. The confirm
+// field is form-only (Backpack would call it a "fake" field) — it's stripped
+// from the payload before hitting the API. FieldPassword provides its own
+// visibility toggle per input.
 import type { ChangePasswordRequest } from '~/features/auth/types'
+import type { FieldDef } from '~/shared/types'
 
 const open = defineModel<boolean>({ default: false })
 
 const { changePassword } = useAuth()
 const toast = useToast()
 
-const form = reactive<ChangePasswordRequest>({ currentPassword: '', newPassword: '' })
-const confirmPassword = ref('')
+const fields: FieldDef[] = [
+  { name: 'currentPassword', type: 'password', required: true },
+  { name: 'newPassword', type: 'password', required: true, hint: 'At least 6 characters' },
+  { name: 'confirmPassword', label: 'Confirm new password', type: 'password', required: true }
+]
+
+const form = ref<Record<string, any>>({})
 const loading = ref(false)
 const error = ref('')
-const showPassword = ref(false)
 
 watch(open, (value) => {
   if (value) {
-    form.currentPassword = ''
-    form.newPassword = ''
-    confirmPassword.value = ''
+    form.value = { currentPassword: '', newPassword: '', confirmPassword: '' }
     error.value = ''
-    showPassword.value = false
   }
 })
 
-async function onSubmit() {
+async function onSubmit(values: Record<string, any>) {
   error.value = ''
-  if (form.newPassword !== confirmPassword.value) {
+  if (values.newPassword !== values.confirmPassword) {
     error.value = 'New password and confirmation do not match.'
     return
   }
   loading.value = true
   try {
-    await changePassword(form)
+    const payload: ChangePasswordRequest = {
+      currentPassword: values.currentPassword,
+      newPassword: values.newPassword
+    }
+    await changePassword(payload)
     toast.add({ title: 'Password updated', color: 'green' })
     open.value = false
   } catch (err) {

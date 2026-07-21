@@ -1,8 +1,12 @@
 <template>
   <div class="min-h-screen flex bg-white dark:bg-gray-950">
     <!-- Branding panel — hidden below lg, where the form takes the full viewport -->
-    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-600 to-indigo-700 text-white flex-col justify-between p-12">
+    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-600 to-teal-700 text-white flex-col justify-between p-12">
       <div class="absolute inset-0 opacity-20 [background:radial-gradient(circle_at_20%_15%,white,transparent_45%)]" />
+      <!-- Slow drifting blobs (assets/css/main.css) — purely decorative -->
+      <div class="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-white/10 blur-2xl animate-blob" aria-hidden="true" />
+      <div class="absolute bottom-24 -left-20 w-80 h-80 rounded-full bg-teal-400/20 blur-3xl animate-blob animation-delay-4s" aria-hidden="true" />
+      <div class="absolute top-1/3 right-1/4 w-40 h-40 rounded-full bg-emerald-300/15 blur-xl animate-blob animation-delay-8s" aria-hidden="true" />
 
       <NuxtLink to="/" class="relative flex items-center gap-2.5">
         <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-white/15 backdrop-blur">

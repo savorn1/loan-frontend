@@ -1,0 +1,81 @@
+/* Global styles: page transitions + small delight animations.
+   Kept tiny on purpose — Nuxt UI / Tailwind handle everything else. */
+
+/* Cross-page transition: opacity-only. Animating transform on a whole page
+   forces large repaints and reads as jank; a short pure fade stays at 60fps. */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.15s ease;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+/* Gentle float for empty-state icons — slower and softer than Tailwind's
+   built-in animate-bounce. will-change keeps it on the GPU compositor. */
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float-soft {
+  animation: float-soft 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Slow drifting blobs for the auth layout's branding panel.
+   translateZ(0) promotes each blob to its own compositor layer so the
+   heavy blur() isn't re-rasterized every animation frame. */
+@keyframes blob-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(24px, -18px, 0) scale(1.06); }
+  66% { transform: translate3d(-16px, 14px, 0) scale(0.97); }
+}
+.animate-blob {
+  animation: blob-drift 14s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.animation-delay-4s {
+  animation-delay: -4s;
+}
+.animation-delay-8s {
+  animation-delay: -8s;
+}
+
+/* Card hover lift used by dashboard tiles / clickable cards.
+   Animate only transform (composited) — animating box-shadow repaints the
+   card every frame and stutters; a pseudo-element fading in is smooth. */
+.hover-lift {
+  position: relative;
+  transition: transform 0.15s ease;
+}
+.hover-lift::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 8px 24px -8px rgb(0 0 0 / 0.15);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+.hover-lift:hover::after {
+  opacity: 1;
+}
+
+/* Respect users who prefer less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-leave-active,
+  .animate-float-soft,
+  .animate-blob,
+  .hover-lift,
+  .hover-lift::after {
+    transition: none;
+    animation: none;
+  }
+}

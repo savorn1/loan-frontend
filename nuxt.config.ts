@@ -10,11 +10,20 @@ export default defineNuxtConfig({
     port: Number(process.env.NUXT_PORT) || 3000
   },
   modules: ['@nuxt/ui', '@pinia/nuxt'],
+  // Colors passed to UBadge/UProgress/UButton dynamically (computed refs in
+  // StatusBadge, ConfirmModal callers, etc.) aren't visible to Nuxt UI's
+  // static safelist scan — list them so their Tailwind classes are generated.
+  ui: {
+    safelistColors: ['teal', 'green', 'orange', 'red']
+  },
   ssr: true,
+  css: ['~/assets/css/main.css'],
   app: {
     head: {
       title: 'Loan Management System'
-    }
+    },
+    // Soft fade+rise between routes (classes live in assets/css/main.css).
+    pageTransition: { name: 'page', mode: 'out-in' }
   },
   // Feature-folder layout: each domain (features/<name>/) owns its components,
   // composables, utils and types; only truly cross-cutting code lives in shared/.

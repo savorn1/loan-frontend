@@ -30,7 +30,7 @@
           <UBadge :color="row.role === 'ADMIN' ? 'primary' : 'gray'" variant="subtle">{{ row.role }}</UBadge>
         </template>
         <template #active-data="{ row }">
-          <UBadge :color="row.active ? 'green' : 'red'" variant="subtle">{{ row.active ? 'Active' : 'Disabled' }}</UBadge>
+          <UBadge :color="row.active ? 'teal' : 'red'" variant="subtle">{{ row.active ? 'Active' : 'Disabled' }}</UBadge>
         </template>
         <template #createdAt-data="{ row }">{{ formatDate(row.createdAt) }}</template>
         <template #actions-data="{ row }">
@@ -72,26 +72,16 @@
         <template #header>
           <span class="font-semibold">New User</span>
         </template>
-        <UForm :state="createForm" class="space-y-4" @submit="onCreate">
-          <UFormGroup label="Username" name="username" required>
-            <UInput v-model="createForm.username" autocomplete="username" required />
-          </UFormGroup>
-          <UFormGroup label="Password" name="password" required help="At least 6 characters">
-            <UInput v-model="createForm.password" type="password" autocomplete="new-password" required minlength="6" />
-          </UFormGroup>
-          <div class="grid grid-cols-2 gap-4 items-end">
-            <UFormGroup label="Role" name="role">
-              <USelectMenu v-model="createForm.role" :options="['USER', 'ADMIN']" />
-            </UFormGroup>
-            <UFormGroup label="Active" name="active">
-              <UToggle v-model="createForm.active" />
-            </UFormGroup>
-          </div>
-          <UAlert v-if="createError" color="red" variant="subtle" :title="createError" />
-          <div class="flex justify-end gap-2 pt-2">
-            <UButton type="submit" :loading="creating">Create</UButton>
-          </div>
-        </UForm>
+        <DynamicForm
+          v-model="createForm"
+          :fields="userFields"
+          :loading="creating"
+          :error="createError"
+          submit-label="Create"
+          cancelable
+          @submit="onCreate"
+          @cancel="showCreate = false"
+        />
       </UCard>
     </UModal>
 
@@ -112,7 +102,7 @@
 
 <script setup lang="ts">
 import type { CreateUserRequest, UserFilter, UserResponse } from '~/features/users/types'
-import type { PageResponse } from '~/shared/types'
+import type { FieldDef, PageResponse } from '~/shared/types'
 
 definePageMeta({ middleware: 'admin' })
 
@@ -189,23 +179,36 @@ const deleting = ref(false)
 const showCreate = ref(false)
 const creating = ref(false)
 const createError = ref('')
-const createForm = reactive<CreateUserRequest>({ username: '', password: '', role: 'USER', active: true })
+
+const userFields: FieldDef[] = [
+  { name: 'username', required: true },
+  { name: 'password', type: 'password', required: true, hint: 'At least 6 characters' },
+  {
+    name: 'role',
+    type: 'select',
+    wrapper: 'half',
+    options: [
+      { label: 'User', value: 'USER' },
+      { label: 'Admin', value: 'ADMIN' }
+    ]
+  },
+  { name: 'active', type: 'switch', wrapper: 'half' }
+]
+
+const createForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  createForm.username = ''
-  createForm.password = ''
-  createForm.role = 'USER'
-  createForm.active = true
+  createForm.value = { username: '', password: '', role: 'USER', active: true }
   createError.value = ''
   showCreate.value = true
 }
 
-async function onCreate() {
+async function onCreate(values: Record<string, any>) {
   creating.value = true
   createError.value = ''
   try {
-    await api('/auth/users', { method: 'POST', body: createForm })
-    toast.add({ title: `User "${createForm.username}" created`, color: 'green' })
+    await api('/auth/users', { method: 'POST', body: values as CreateUserRequest })
+    toast.add({ title: `User "${values.username}" created`, color: 'green' })
     showCreate.value = false
     page.value = 1
     await refresh()

@@ -32,7 +32,7 @@
             <span class="text-gray-500">Paid off</span>
             <span class="font-medium text-gray-900 dark:text-white">{{ payoffPercent }}%</span>
           </div>
-          <UProgress :value="payoffPercent" :color="loan.status === 'CLOSED' ? 'green' : 'primary'" size="sm" />
+          <UProgress :value="payoffPercent" :color="loan.status === 'CLOSED' ? 'teal' : 'primary'" size="sm" />
         </div>
 
         <dl class="grid grid-cols-2 gap-y-3 text-sm">

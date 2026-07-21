@@ -18,7 +18,7 @@
       <!-- Mobile top bar -->
       <header class="lg:hidden h-14 shrink-0 flex items-center gap-3 px-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-20">
         <UButton icon="i-heroicons-bars-3" color="gray" variant="ghost" square :aria-label="'Open menu'" @click="mobileNavOpen = true" />
-        <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-primary-500 text-white shrink-0">
+        <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-primary-500 to-teal-600 text-white shrink-0 shadow-sm">
           <UIcon name="i-heroicons-banknotes" class="w-4 h-4" />
         </span>
         <span class="font-bold text-gray-900 dark:text-white tracking-tight">LMS</span>

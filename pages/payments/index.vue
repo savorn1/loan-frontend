@@ -64,30 +64,16 @@
         <template #header>
           <span class="font-semibold">New Payment</span>
         </template>
-        <UForm :state="form" class="space-y-4" @submit="onCreate">
-          <UFormGroup label="Loan" name="loanId" required>
-            <USelectMenu
-              v-model="selectedLoan"
-              :options="loanOptions"
-              option-attribute="label"
-              searchable
-              placeholder="Select a loan"
-            />
-          </UFormGroup>
-          <UFormGroup label="Amount" name="amount" required>
-            <UInput v-model.number="form.amount" type="number" min="0.01" step="0.01" required />
-          </UFormGroup>
-          <UFormGroup label="Due date" name="dueDate" required>
-            <UInput v-model="form.dueDate" type="date" required />
-          </UFormGroup>
-          <UFormGroup label="Note" name="note">
-            <UInput v-model="form.note" />
-          </UFormGroup>
-          <UAlert v-if="error" color="red" variant="subtle" :title="error" />
-          <div class="flex justify-end">
-            <UButton type="submit" :loading="creating">Create</UButton>
-          </div>
-        </UForm>
+        <DynamicForm
+          v-model="createForm"
+          :fields="paymentFields"
+          :loading="creating"
+          :error="error"
+          submit-label="Create"
+          cancelable
+          @submit="onCreate"
+          @cancel="showCreate = false"
+        />
       </UCard>
     </UModal>
 
@@ -107,6 +93,7 @@
 <script setup lang="ts">
 import type { LoanResponse } from '~/features/loans/types'
 import type { PaymentRequest, PaymentResponse, PaymentStatus } from '~/features/payments/types'
+import type { FieldDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
@@ -170,27 +157,33 @@ const markingPaid = ref<number | null>(null)
 const deleting = ref(false)
 const confirmDeleteId = ref<number | null>(null)
 
-const selectedLoan = ref<LoanOption | undefined>(undefined)
-const form = reactive<Omit<PaymentRequest, 'loanId'>>({ amount: 0, dueDate: '', note: '' })
+// Declarative field defs for <DynamicForm> — required/select/date validation
+// is handled there (these controls have no native browser validation).
+const paymentFields = computed<FieldDef[]>(() => [
+  { name: 'loanId', label: 'Loan', type: 'select', required: true, options: loanOptions.value, placeholder: 'Select a loan' },
+  { name: 'amount', type: 'number', required: true, prefix: '$', min: 0.01, step: 0.01 },
+  { name: 'dueDate', type: 'date', required: true, placeholder: 'Select due date' },
+  { name: 'note', type: 'text' }
+])
+
+const createForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  selectedLoan.value = undefined
-  form.amount = 0
-  form.dueDate = ''
-  form.note = ''
+  createForm.value = { loanId: undefined, amount: undefined, dueDate: '', note: '' }
   error.value = ''
   showCreate.value = true
 }
 
-async function onCreate() {
-  if (!selectedLoan.value) {
-    error.value = 'Please select a loan'
-    return
-  }
+async function onCreate(values: Record<string, any>) {
   creating.value = true
   error.value = ''
   try {
-    const payload: PaymentRequest = { loanId: selectedLoan.value.value, ...form }
+    const payload: PaymentRequest = {
+      loanId: values.loanId,
+      amount: values.amount,
+      dueDate: values.dueDate,
+      note: values.note || undefined
+    }
     await api('/payments', { method: 'POST', body: payload })
     toast.add({ title: 'Payment created', color: 'green' })
     showCreate.value = false

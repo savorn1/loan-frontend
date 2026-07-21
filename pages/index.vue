@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader :title="greeting" description="Here's what's happening across the loan book today." />
+    <PageHeader :title="greeting" :description="`${dayGreeting} Here's what's happening across the loan book.`" />
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <template v-if="loading">
@@ -16,10 +16,10 @@
       </template>
       <template v-else>
         <NuxtLink v-for="tile in statTiles" :key="tile.label" :to="tile.to" class="block">
-          <UCard class="transition-shadow hover:shadow-md cursor-pointer">
+          <UCard class="hover-lift cursor-pointer">
             <div class="flex items-center gap-4">
-              <div class="shrink-0 rounded-lg p-2.5" :class="tile.iconBg">
-                <UIcon :name="tile.icon" class="w-5 h-5" :class="tile.iconColor" />
+              <div class="shrink-0 rounded-xl p-2.5 text-white shadow-sm" :class="tile.iconBg">
+                <UIcon :name="tile.icon" class="w-5 h-5" />
               </div>
               <div class="min-w-0">
                 <div class="text-sm text-gray-500 dark:text-gray-400">{{ tile.label }}</div>
@@ -97,7 +97,15 @@ const [{ data: customers }, { data: loans, pending }, { data: payments }] = awai
 
 const loading = computed(() => customers.value === null && loans.value === null && payments.value === null)
 
-const greeting = computed(() => `Welcome back${username.value ? `, ${username.value}` : ''}`)
+const greeting = computed(() => `Welcome back${username.value ? `, ${username.value}` : ''} 👋`)
+
+// Time-aware opener so the dashboard feels a little more alive than a static line.
+const dayGreeting = computed(() => {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Good morning!'
+  if (hour < 18) return 'Good afternoon!'
+  return 'Good evening!'
+})
 
 const pendingLoans = computed(() => (loans.value ?? []).filter(l => l.status === 'PENDING'))
 
@@ -108,38 +116,38 @@ const outstandingBalance = computed(() =>
 )
 const overdueCount = computed(() => (payments.value ?? []).filter(p => p.status === 'OVERDUE').length)
 
+// Each tile gets its own soft gradient so the row reads as four friendly
+// colored chips instead of four identical gray boxes.
 const statTiles = computed(() => [
   {
     label: 'Customers',
     value: customers.value?.length ?? 0,
     to: '/customers',
     icon: 'i-heroicons-users',
-    iconBg: 'bg-primary-50 dark:bg-primary-400/10',
-    iconColor: 'text-primary-500 dark:text-primary-400'
+    iconBg: 'bg-gradient-to-br from-sky-400 to-blue-500'
   },
   {
     label: 'Loans',
     value: loans.value?.length ?? 0,
     to: '/loans',
     icon: 'i-heroicons-banknotes',
-    iconBg: 'bg-primary-50 dark:bg-primary-400/10',
-    iconColor: 'text-primary-500 dark:text-primary-400'
+    iconBg: 'bg-gradient-to-br from-indigo-400 to-violet-500'
   },
   {
     label: 'Outstanding balance',
     value: formatCurrency(outstandingBalance.value),
     to: '/loans',
     icon: 'i-heroicons-currency-dollar',
-    iconBg: 'bg-gray-100 dark:bg-gray-800',
-    iconColor: 'text-gray-500 dark:text-gray-400'
+    iconBg: 'bg-gradient-to-br from-emerald-400 to-teal-500'
   },
   {
     label: 'Overdue payments',
     value: overdueCount.value,
     to: '/payments',
     icon: 'i-heroicons-exclamation-triangle',
-    iconBg: overdueCount.value > 0 ? 'bg-red-50 dark:bg-red-400/10' : 'bg-gray-100 dark:bg-gray-800',
-    iconColor: overdueCount.value > 0 ? 'text-red-500 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'
+    iconBg: overdueCount.value > 0
+      ? 'bg-gradient-to-br from-rose-400 to-red-500'
+      : 'bg-gradient-to-br from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-700'
   }
 ])
 

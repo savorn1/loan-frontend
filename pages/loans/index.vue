@@ -58,35 +58,16 @@
         <template #header>
           <span class="font-semibold">New Loan</span>
         </template>
-        <UForm :state="form" class="space-y-4" @submit="onCreate">
-          <UFormGroup label="Customer" name="customerId" required>
-            <USelectMenu
-              v-model="selectedCustomer"
-              :options="customers ?? []"
-              option-attribute="label"
-              searchable
-              placeholder="Select a customer"
-            />
-          </UFormGroup>
-          <div class="grid grid-cols-2 gap-4">
-            <UFormGroup label="Principal" name="principal" required help="Minimum 1000">
-              <UInput v-model.number="form.principal" type="number" min="1000" step="0.01" required />
-            </UFormGroup>
-            <UFormGroup label="Interest rate (%)" name="interestRate" required help="0.01 – 100">
-              <UInput v-model.number="form.interestRate" type="number" min="0.01" max="100" step="0.01" required />
-            </UFormGroup>
-          </div>
-          <UFormGroup label="Term (months)" name="termMonths" required help="1 – 360">
-            <UInput v-model.number="form.termMonths" type="number" min="1" max="360" required />
-          </UFormGroup>
-          <UFormGroup label="Purpose" name="purpose">
-            <UTextarea v-model="form.purpose" />
-          </UFormGroup>
-          <UAlert v-if="error" color="red" variant="subtle" :title="error" />
-          <div class="flex justify-end">
-            <UButton type="submit" :loading="creating">Create</UButton>
-          </div>
-        </UForm>
+        <DynamicForm
+          v-model="createForm"
+          :fields="loanFields"
+          :loading="creating"
+          :error="error"
+          submit-label="Create"
+          cancelable
+          @submit="onCreate"
+          @cancel="showCreate = false"
+        />
       </UCard>
     </UModal>
   </div>
@@ -95,6 +76,7 @@
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
 import type { LoanRequest, LoanResponse, LoanStatus } from '~/features/loans/types'
+import type { FieldDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
@@ -103,10 +85,9 @@ const router = useRouter()
 const { data: loans, pending, refresh } = await useAsyncData('loans', () => api<LoanResponse[]>('/loans'))
 const { data: customersRaw } = await useAsyncData('loans-customers', () => api<CustomerResponse[]>('/customers'))
 
-const customers = computed(() =>
+const customerOptions = computed(() =>
   (customersRaw.value ?? []).map(c => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
 )
-const selectedCustomer = ref<{ label: string; value: number } | undefined>(undefined)
 
 const columns = [
   { key: 'id', label: 'ID', sortable: true },
@@ -147,33 +128,34 @@ const showCreate = ref(false)
 const creating = ref(false)
 const error = ref('')
 
-const form = reactive({
-  principal: 1000,
-  interestRate: 5,
-  termMonths: 12,
-  purpose: ''
-})
+// Declarative field defs for <DynamicForm>. Computed because the customer
+// options load async; required/select validation is handled by DynamicForm.
+const loanFields = computed<FieldDef[]>(() => [
+  { name: 'customerId', label: 'Customer', type: 'select', required: true, options: customerOptions.value, placeholder: 'Select a customer' },
+  { name: 'principal', type: 'number', required: true, prefix: '$', min: 1000, step: 0.01, hint: 'Minimum 1000', wrapper: 'half' },
+  { name: 'interestRate', label: 'Interest rate', type: 'number', required: true, suffix: '%', min: 0.01, max: 100, step: 0.01, hint: '0.01 – 100', wrapper: 'half' },
+  { name: 'termMonths', label: 'Term (months)', type: 'number', required: true, min: 1, max: 360, hint: '1 – 360' },
+  { name: 'purpose', type: 'textarea' }
+])
+
+const createForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  selectedCustomer.value = undefined
+  createForm.value = { customerId: undefined, principal: 1000, interestRate: 5, termMonths: 12, purpose: '' }
   error.value = ''
   showCreate.value = true
 }
 
-async function onCreate() {
-  if (!selectedCustomer.value) {
-    error.value = 'Please select a customer'
-    return
-  }
+async function onCreate(values: Record<string, any>) {
   creating.value = true
   error.value = ''
   try {
     const payload: LoanRequest = {
-      customerId: selectedCustomer.value.value,
-      principal: form.principal,
-      interestRate: form.interestRate,
-      termMonths: form.termMonths,
-      purpose: form.purpose || undefined
+      customerId: values.customerId,
+      principal: values.principal,
+      interestRate: values.interestRate,
+      termMonths: values.termMonths,
+      purpose: values.purpose || undefined
     }
     const created = await api<LoanResponse>('/loans', { method: 'POST', body: payload })
     toast.add({ title: 'Loan created', color: 'green' })

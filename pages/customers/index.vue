@@ -52,7 +52,7 @@
         <template #header>
           <span class="font-semibold">New Customer</span>
         </template>
-        <CustomerForm :loading="creating" submit-label="Create" @submit="onCreate" />
+        <CustomerForm :loading="creating" submit-label="Create" cancelable @submit="onCreate" @cancel="showCreate = false" />
       </UCard>
     </UModal>
   </div>

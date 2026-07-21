@@ -1,4 +1,5 @@
 import type { ApiErrorBody } from '~/shared/types'
+import { unwrapApiResponse } from '~/shared/utils/apiResponse'
 
 // Thin wrapper around $fetch: attaches the Bearer token to every request. On a 401
 // (expired/invalid access token — mirrors what the gateway's AuthenticationFilter
@@ -18,7 +19,8 @@ export function useApi() {
         headers.set('Authorization', `Bearer ${token.value}`)
         options.headers = headers
       }
-    }
+    },
+    onResponse: unwrapApiResponse
   })
 
   // Dedupes concurrent 401s triggered by multiple calls through this same

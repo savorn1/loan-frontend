@@ -2,7 +2,7 @@
   <div class="flex flex-col h-full">
     <div class="h-16 shrink-0 flex items-center gap-2.5 px-5 border-b border-gray-200 dark:border-gray-800">
       <NuxtLink to="/" class="flex items-center gap-2.5">
-        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary-500 text-white shrink-0">
+        <span class="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-primary-500 to-teal-600 text-white shrink-0 shadow-sm">
           <UIcon name="i-heroicons-banknotes" class="w-4.5 h-4.5" />
         </span>
         <span class="font-bold text-gray-900 dark:text-white tracking-tight">LMS</span>
@@ -22,7 +22,10 @@
     />
     <div class="shrink-0 border-t border-gray-200 dark:border-gray-800 px-4 py-3 space-y-3">
       <div class="flex items-center gap-2">
-        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-semibold uppercase shrink-0">
+        <div
+          class="flex items-center justify-center w-7 h-7 rounded-full text-white text-xs font-semibold uppercase shrink-0 shadow-sm"
+          :class="avatarGradient(username)"
+        >
           {{ username?.slice(0, 2) }}
         </div>
         <div class="min-w-0">

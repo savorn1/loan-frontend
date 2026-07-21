@@ -1,5 +1,11 @@
 import type { AuthResponse, ChangePasswordRequest, LoginRequest, RegisterRequest } from '~/features/auth/types'
 import type { Role } from '~/shared/types'
+import { unwrapApiResponse } from '~/shared/utils/apiResponse'
+
+// Plain $fetch (no auth token attachment/refresh retry — that's useApi()'s job, and
+// useApi() depends on this store so it can't be used here) but still needs the same
+// ApiResponse envelope unwrapped.
+const authClient = $fetch.create({ onResponse: unwrapApiResponse })
 
 // Auth state persisted in cookies (SSR-safe, survives reloads). The access token is
 // short-lived (24h per auth-service `jwt.expiration`); the refresh token (7d, single-use,
@@ -27,13 +33,13 @@ export const useAuth = defineStore('auth', () => {
   }
 
   async function login(payload: LoginRequest) {
-    const res = await $fetch<AuthResponse>('/api/auth/login', { method: 'POST', body: payload })
+    const res = await authClient<AuthResponse>('/api/auth/login', { method: 'POST', body: payload })
     applySession(res)
     return res
   }
 
   async function register(payload: RegisterRequest) {
-    const res = await $fetch<AuthResponse>('/api/auth/register', { method: 'POST', body: payload })
+    const res = await authClient<AuthResponse>('/api/auth/register', { method: 'POST', body: payload })
     applySession(res)
     return res
   }
@@ -44,7 +50,7 @@ export const useAuth = defineStore('auth', () => {
     if (!refreshToken.value) {
       throw new Error('No refresh token available')
     }
-    const res = await $fetch<AuthResponse>('/api/auth/refresh', {
+    const res = await authClient<AuthResponse>('/api/auth/refresh', {
       method: 'POST',
       body: { refreshToken: refreshToken.value }
     })
