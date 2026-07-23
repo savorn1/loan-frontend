@@ -96,12 +96,16 @@ const groups = computed(() => [
       {
         label: 'Product Interest Schemes',
         to: '/loan-product-interest-schemes',
-        icon: 'i-heroicons-link'
+        icon: 'i-heroicons-chart-bar'
       },
-      { label: 'Product Fee Schemes', to: '/loan-product-fee-schemes', icon: 'i-heroicons-link' },
-      { label: 'Product Terms', to: '/loan-product-terms', icon: 'i-heroicons-link' },
-      { label: 'Product Rules', to: '/loan-product-rules', icon: 'i-heroicons-link' },
-      { label: 'Product Documents', to: '/loan-product-documents', icon: 'i-heroicons-link' },
+      { label: 'Product Fee Schemes', to: '/loan-product-fee-schemes', icon: 'i-heroicons-banknotes' },
+      { label: 'Product Terms', to: '/loan-product-terms', icon: 'i-heroicons-calendar-days' },
+      {
+        label: 'Product Rules',
+        to: '/loan-product-rules',
+        icon: 'i-heroicons-clipboard-document-check'
+      },
+      { label: 'Product Documents', to: '/loan-product-documents', icon: 'i-heroicons-folder' },
       { label: 'Interest Schemes', to: '/interest-schemes', icon: 'i-heroicons-chart-bar-square' },
       { label: 'Fee Schemes', to: '/fee-schemes', icon: 'i-heroicons-currency-dollar' },
       { label: 'Term Templates', to: '/term-templates', icon: 'i-heroicons-clock' },
