@@ -4,7 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">Interest accruals</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">Add accrual</UButton>
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
+            >Add accrual</UButton
+          >
         </div>
       </template>
 
@@ -54,9 +56,12 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.id as string
 
-const { data: interest, pending, refresh } = await useAsyncData(
-  `loan-${loanId}-interest`,
-  () => api<LoanInterestResponse[]>(`/loans/${loanId}/interest`)
+const {
+  data: interest,
+  pending,
+  refresh
+} = await useAsyncData(`loan-${loanId}-interest`, () =>
+  api<LoanInterestResponse[]>(`/loans/${loanId}/interest`)
 )
 
 const columns: ColumnDef<LoanInterestResponse>[] = [
@@ -72,8 +77,25 @@ const columns: ColumnDef<LoanInterestResponse>[] = [
 const fields: FieldDef[] = [
   { name: 'periodStart', type: 'date', required: true, wrapper: 'half' },
   { name: 'periodEnd', type: 'date', required: true, wrapper: 'half' },
-  { name: 'rate', type: 'number', required: true, suffix: '%', min: 0.01, max: 100, step: 0.01, wrapper: 'half' },
-  { name: 'amount', type: 'number', required: true, prefix: '$', min: 0.01, step: 0.01, wrapper: 'half' }
+  {
+    name: 'rate',
+    type: 'number',
+    required: true,
+    suffix: '%',
+    min: 0.01,
+    max: 100,
+    step: 0.01,
+    wrapper: 'half'
+  },
+  {
+    name: 'amount',
+    type: 'number',
+    required: true,
+    prefix: '$',
+    min: 0.01,
+    step: 0.01,
+    wrapper: 'half'
+  }
 ]
 
 const showCreate = ref(false)

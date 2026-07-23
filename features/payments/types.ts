@@ -37,7 +37,8 @@ export interface GenerateScheduleRequest {
 }
 
 // ── Payment methods (lookup entity — how a payment was/can be collected) ───
-export type PaymentMethodType = 'CASH' | 'BANK_TRANSFER' | 'CREDIT_CARD' | 'MOBILE_WALLET' | 'CHEQUE'
+export type PaymentMethodType =
+  'CASH' | 'BANK_TRANSFER' | 'CREDIT_CARD' | 'MOBILE_WALLET' | 'CHEQUE'
 
 export interface PaymentMethodRequest {
   name: string

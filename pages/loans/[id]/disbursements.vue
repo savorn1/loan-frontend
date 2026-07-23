@@ -4,7 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">Disbursements</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">Add disbursement</UButton>
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
+            >Add disbursement</UButton
+          >
         </div>
       </template>
 
@@ -22,7 +24,10 @@
         </template>
       </DataTable>
 
-      <div v-if="totalDisbursed" class="pt-4 mt-2 border-t border-gray-200 dark:border-gray-800 text-sm flex justify-between">
+      <div
+        v-if="totalDisbursed"
+        class="pt-4 mt-2 border-t border-gray-200 dark:border-gray-800 text-sm flex justify-between"
+      >
         <span class="text-gray-500">Total disbursed</span>
         <span class="font-semibold">{{ formatCurrency(totalDisbursed) }}</span>
       </div>
@@ -59,12 +64,17 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.id as string
 
-const { data: disbursements, pending, refresh } = await useAsyncData(
-  `loan-${loanId}-disbursements`,
-  () => api<LoanDisbursementResponse[]>(`/loans/${loanId}/disbursements`)
+const {
+  data: disbursements,
+  pending,
+  refresh
+} = await useAsyncData(`loan-${loanId}-disbursements`, () =>
+  api<LoanDisbursementResponse[]>(`/loans/${loanId}/disbursements`)
 )
 
-const totalDisbursed = computed(() => (disbursements.value ?? []).reduce((sum, d) => sum + d.amount, 0))
+const totalDisbursed = computed(() =>
+  (disbursements.value ?? []).reduce((sum, d) => sum + d.amount, 0)
+)
 
 const columns: ColumnDef<LoanDisbursementResponse>[] = [
   { key: 'disbursedDate', label: 'Date', type: 'date' },
@@ -75,7 +85,15 @@ const columns: ColumnDef<LoanDisbursementResponse>[] = [
 ]
 
 const fields: FieldDef[] = [
-  { name: 'amount', type: 'number', required: true, prefix: '$', min: 0.01, step: 0.01, wrapper: 'half' },
+  {
+    name: 'amount',
+    type: 'number',
+    required: true,
+    prefix: '$',
+    min: 0.01,
+    step: 0.01,
+    wrapper: 'half'
+  },
   { name: 'disbursedDate', label: 'Date', type: 'date', required: true, wrapper: 'half' },
   {
     name: 'method',

@@ -13,9 +13,11 @@ export function generateAmortizationSchedule(loan: LoanResponse): ScheduleInstal
 
   let installment = loan.monthlyInstallment
   if (!installment) {
-    installment = monthlyRate === 0
-      ? principal / n
-      : (principal * monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1)
+    installment =
+      monthlyRate === 0
+        ? principal / n
+        : (principal * monthlyRate * Math.pow(1 + monthlyRate, n)) /
+          (Math.pow(1 + monthlyRate, n) - 1)
   }
 
   const startDate = loan.disbursedAt ? new Date(loan.disbursedAt) : new Date()

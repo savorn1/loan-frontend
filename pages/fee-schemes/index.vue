@@ -15,28 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable
-        :rows="rows"
-        :columns="columns"
-        :loading="pending"
-        v-model:sort="sort"
-      >
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-currency-dollar'"
             :title="search ? 'No matches' : 'No fee schemes yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Add a reusable fee scheme (a bundle of fee line items) that loan products can select.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Add a reusable fee scheme (a bundle of fee line items) that loan products can select.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New Fee Scheme</UButton>
@@ -93,7 +104,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -105,7 +120,11 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: schemes, pending, refresh } = await useAsyncData('fee-schemes', () => api<FeeSchemeResponse[]>('/fee-schemes'))
+const {
+  data: schemes,
+  pending,
+  refresh
+} = await useAsyncData('fee-schemes', () => api<FeeSchemeResponse[]>('/fee-schemes'))
 
 const columns: ColumnDef<FeeSchemeResponse>[] = [
   { key: 'code', sortable: true },
@@ -142,25 +161,25 @@ const fields: FieldDef[] = [
 ]
 
 const {
-  showCreate, 
-  creating, 
-  error, 
-  createForm, 
-  openCreate, 
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
   onCreate,
-  showEdit, 
-  editing, 
-  editError, 
-  editForm, 
-  openEdit, 
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
   onEdit,
-  deleting, 
-  confirmDelete, 
+  deleting,
+  confirmDelete,
   onDelete
 } = useCrudModals<FeeSchemeResponse, FeeSchemeRequest>('/fee-schemes', refresh, {
   entityName: 'Fee scheme',
   createDefaults: () => ({ code: '', name: '', status: 'ACTIVE' }),
-  toForm: row => ({ code: row.code, name: row.name, status: row.status }),
-  toPayload: values => ({ code: values.code, name: values.name, status: values.status })
+  toForm: (row) => ({ code: row.code, name: row.name, status: row.status }),
+  toPayload: (values) => ({ code: values.code, name: values.name, status: values.status })
 })
 </script>

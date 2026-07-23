@@ -32,11 +32,17 @@
     <div>
       <div class="flex items-center justify-between mb-2">
         <span class="text-sm font-medium">Lines</span>
-        <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine">Add line</UButton>
+        <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine"
+          >Add line</UButton
+        >
       </div>
       <div class="space-y-2">
         <div v-for="(line, i) in model.lines" :key="i" class="flex items-center gap-2">
-          <UInput v-model="line.accountRole" placeholder="Account role (e.g. CASH)" class="flex-1" />
+          <UInput
+            v-model="line.accountRole"
+            placeholder="Account role (e.g. CASH)"
+            class="flex-1"
+          />
           <USelectMenu
             v-model="line.entrySide"
             :options="entrySideOptions"
@@ -55,7 +61,10 @@
           />
         </div>
       </div>
-      <p class="text-xs mt-2 text-gray-500">Roles are symbolic (e.g. CASH, LOAN_RECEIVABLE) — an accounting scheme binds each one to a real GL account per currency.</p>
+      <p class="text-xs mt-2 text-gray-500">
+        Roles are symbolic (e.g. CASH, LOAN_RECEIVABLE) — an accounting scheme binds each one to a
+        real GL account per currency.
+      </p>
     </div>
   </div>
 </template>
@@ -95,7 +104,12 @@ const statusOptions = [
 ]
 
 function addLine() {
-  model.value.lines.push({ lineNo: model.value.lines.length + 1, accountRole: '', entrySide: 'DEBIT', description: '' })
+  model.value.lines.push({
+    lineNo: model.value.lines.length + 1,
+    accountRole: '',
+    entrySide: 'DEBIT',
+    description: ''
+  })
 }
 
 function removeLine(index: number) {

@@ -15,12 +15,18 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton
@@ -32,14 +38,24 @@
               @click="onSetDefault(row)"
             />
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-chart-bar-square'"
             :title="search ? 'No matches' : 'No interest scheme assignments yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Assign a reusable interest scheme to a loan product, with a priority and validity window.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Assign a reusable interest scheme to a loan product, with a priority and validity window.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">Assign Interest Scheme</UButton>
@@ -96,7 +112,11 @@
       confirm-label="Remove"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -114,7 +134,11 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 const api = useApi()
 const toast = useToast()
 
-const { data: mappings, pending, refresh } = await useAsyncData('loan-product-interest-schemes', () =>
+const {
+  data: mappings,
+  pending,
+  refresh
+} = await useAsyncData('loan-product-interest-schemes', () =>
   api<LoanProductInterestSchemeResponse[]>('/loan-products/interest-schemes')
 )
 const { data: products } = await useAsyncData('loan-product-interest-schemes-products', () =>
@@ -124,27 +148,47 @@ const { data: schemes } = await useAsyncData('loan-product-interest-schemes-sche
   api<InterestSchemeResponse[]>('/interest-schemes')
 )
 
-const productMap = computed(() => new Map((products.value ?? []).map(p => [p.id, p])))
+const productMap = computed(() => new Map((products.value ?? []).map((p) => [p.id, p])))
 function productLabel(id: string) {
   const p = productMap.value.get(id)
   return p ? `${p.name} (${p.code})` : id
 }
 
-const productOptions = computed(() => (products.value ?? []).map(p => ({ label: `${p.name} (${p.code})`, value: p.id })))
-const schemeOptions = computed(() => (schemes.value ?? []).map(s => ({ label: `${s.name} (${s.code})`, value: s.id })))
+const productOptions = computed(() =>
+  (products.value ?? []).map((p) => ({ label: `${p.name} (${p.code})`, value: p.id }))
+)
+const schemeOptions = computed(() =>
+  (schemes.value ?? []).map((s) => ({ label: `${s.name} (${s.code})`, value: s.id }))
+)
 
 const columns: ColumnDef<LoanProductInterestSchemeResponse>[] = [
-  { key: 'loanProductId', label: 'Loan product', value: row => productLabel(row.loanProductId) },
-  { key: 'interestSchemeName', label: 'Interest scheme', value: row => `${row.interestSchemeName} (${row.interestSchemeCode})` },
+  { key: 'loanProductId', label: 'Loan product', value: (row) => productLabel(row.loanProductId) },
+  {
+    key: 'interestSchemeName',
+    label: 'Interest scheme',
+    value: (row) => `${row.interestSchemeName} (${row.interestSchemeCode})`
+  },
   { key: 'priority', sortable: true },
-  { key: 'isDefault', label: 'Default', type: 'boolean', trueLabel: 'Default', falseLabel: '', trueColor: 'teal' },
+  {
+    key: 'isDefault',
+    label: 'Default',
+    type: 'boolean',
+    trueLabel: 'Default',
+    falseLabel: '',
+    trueColor: 'teal'
+  },
   { key: 'effectiveFrom', label: 'Effective', type: 'date', to: 'effectiveTo', toEmpty: 'open' },
   { key: 'status', type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
 ]
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(
-  computed(() => (mappings.value ?? []).map(m => ({ ...m, searchLabel: `${productLabel(m.loanProductId)} ${m.interestSchemeName} ${m.interestSchemeCode}` }))),
+  computed(() =>
+    (mappings.value ?? []).map((m) => ({
+      ...m,
+      searchLabel: `${productLabel(m.loanProductId)} ${m.interestSchemeName} ${m.interestSchemeCode}`
+    }))
+  ),
   { searchFields: ['searchLabel'], pageSize: 15 }
 )
 
@@ -160,7 +204,13 @@ const commonFields: FieldDef[] = [
   { name: 'priority', type: 'number', required: true, min: 0, wrapper: 'half' },
   { name: 'isDefault', label: 'Default scheme for this product', type: 'switch', wrapper: 'half' },
   { name: 'effectiveFrom', label: 'Effective from', type: 'date', required: true, wrapper: 'half' },
-  { name: 'effectiveTo', label: 'Effective to', type: 'date', hint: 'Leave blank for open-ended', wrapper: 'half' },
+  {
+    name: 'effectiveTo',
+    label: 'Effective to',
+    type: 'date',
+    hint: 'Leave blank for open-ended',
+    wrapper: 'half'
+  },
   {
     name: 'status',
     type: 'select',
@@ -175,13 +225,34 @@ const commonFields: FieldDef[] = [
 ]
 
 const createFields = computed<FieldDef[]>(() => [
-  { name: 'loanProductId', label: 'Loan product', type: 'select', required: true, wrapper: 'half', options: productOptions.value },
-  { name: 'interestSchemeId', label: 'Interest scheme', type: 'select', required: true, wrapper: 'half', options: schemeOptions.value },
+  {
+    name: 'loanProductId',
+    label: 'Loan product',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: productOptions.value
+  },
+  {
+    name: 'interestSchemeId',
+    label: 'Interest scheme',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: schemeOptions.value
+  },
   ...commonFields
 ])
 
 const editFields = computed<FieldDef[]>(() => [
-  { name: 'interestSchemeId', label: 'Interest scheme', type: 'select', required: true, wrapper: 'half', options: schemeOptions.value },
+  {
+    name: 'interestSchemeId',
+    label: 'Interest scheme',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: schemeOptions.value
+  },
   ...commonFields
 ])
 
@@ -219,7 +290,10 @@ async function onCreate(values: Record<string, any>) {
   creating.value = true
   error.value = ''
   try {
-    await api(`/loan-products/${values.loanProductId}/interest-schemes`, { method: 'POST', body: toPayload(values) })
+    await api(`/loan-products/${values.loanProductId}/interest-schemes`, {
+      method: 'POST',
+      body: toPayload(values)
+    })
     toast.add({ title: 'Interest scheme assigned', color: 'green' })
     showCreate.value = false
     await refresh()
@@ -255,10 +329,13 @@ async function onEdit(values: Record<string, any>) {
   editing.value = true
   editError.value = ''
   try {
-    await api(`/loan-products/${editingRow.value.loanProductId}/interest-schemes/${editingRow.value.id}`, {
-      method: 'PUT',
-      body: toPayload(values)
-    })
+    await api(
+      `/loan-products/${editingRow.value.loanProductId}/interest-schemes/${editingRow.value.id}`,
+      {
+        method: 'PUT',
+        body: toPayload(values)
+      }
+    )
     toast.add({ title: 'Assignment updated', color: 'green' })
     showEdit.value = false
     await refresh()
@@ -271,7 +348,9 @@ async function onEdit(values: Record<string, any>) {
 
 async function onSetDefault(row: LoanProductInterestSchemeResponse) {
   try {
-    await api(`/loan-products/${row.loanProductId}/interest-schemes/${row.id}/set-default`, { method: 'PUT' })
+    await api(`/loan-products/${row.loanProductId}/interest-schemes/${row.id}/set-default`, {
+      method: 'PUT'
+    })
     toast.add({ title: 'Default interest scheme updated', color: 'green' })
     await refresh()
   } catch (err) {
@@ -286,7 +365,10 @@ async function onDelete() {
   if (!confirmDelete.value) return
   deleting.value = true
   try {
-    await api(`/loan-products/${confirmDelete.value.loanProductId}/interest-schemes/${confirmDelete.value.id}`, { method: 'DELETE' })
+    await api(
+      `/loan-products/${confirmDelete.value.loanProductId}/interest-schemes/${confirmDelete.value.id}`,
+      { method: 'DELETE' }
+    )
     toast.add({ title: 'Assignment removed', color: 'green' })
     confirmDelete.value = null
     await refresh()

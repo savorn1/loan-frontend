@@ -7,7 +7,7 @@
     </PageHeader>
 
     <UCard>
-      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton
@@ -18,8 +18,21 @@
               title="Close period"
               @click="confirmClose = row"
             />
-            <UButton v-if="row.status === 'OPEN'" size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton v-if="row.status === 'OPEN'" size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              v-if="row.status === 'OPEN'"
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              @click="openEdit(row)"
+            />
+            <UButton
+              v-if="row.status === 'OPEN'"
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
@@ -83,7 +96,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
 
@@ -94,7 +111,11 @@
       confirm-label="Close period"
       color="orange"
       :loading="closing"
-      @update:model-value="(v: boolean) => { if (!v) confirmClose = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmClose = null
+        }
+      "
       @confirm="onClose"
     />
   </div>
@@ -107,7 +128,11 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 const api = useApi()
 const toast = useToast()
 
-const { data: periods, pending, refresh } = await useAsyncData('financial-periods', () =>
+const {
+  data: periods,
+  pending,
+  refresh
+} = await useAsyncData('financial-periods', () =>
   api<FinancialPeriodResponse[]>('/financial-periods')
 )
 
@@ -126,20 +151,42 @@ const totalLabel = computed(() => {
 })
 
 const fields: FieldDef[] = [
-  { name: 'periodName', label: 'Period name', required: true, placeholder: 'e.g. 2026-07', wrapper: 'full' },
+  {
+    name: 'periodName',
+    label: 'Period name',
+    required: true,
+    placeholder: 'e.g. 2026-07',
+    wrapper: 'full'
+  },
   { name: 'startDate', label: 'Start date', type: 'date', required: true, wrapper: 'half' },
   { name: 'endDate', label: 'End date', type: 'date', required: true, wrapper: 'half' }
 ]
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
 } = useCrudModals<FinancialPeriodResponse, FinancialPeriodRequest>('/financial-periods', refresh, {
   entityName: 'Financial period',
   createDefaults: () => ({ periodName: '', startDate: '', endDate: '' }),
-  toForm: row => ({ periodName: row.periodName, startDate: row.startDate, endDate: row.endDate }),
-  toPayload: values => ({ periodName: values.periodName, startDate: values.startDate, endDate: values.endDate })
+  toForm: (row) => ({ periodName: row.periodName, startDate: row.startDate, endDate: row.endDate }),
+  toPayload: (values) => ({
+    periodName: values.periodName,
+    startDate: values.startDate,
+    endDate: values.endDate
+  })
 })
 
 const closing = ref(false)

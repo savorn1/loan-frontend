@@ -1,24 +1,49 @@
 <template>
   <div class="min-h-screen flex bg-gray-50 dark:bg-gray-950">
     <!-- Desktop sidebar -->
-    <aside class="hidden lg:flex w-60 shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex-col">
-      <SidebarContent :groups="groups" :username="username" :role="role" :is-admin="isAdmin"
-        @change-password="showChangePassword = true" @logout="onLogout" />
+    <aside
+      class="hidden lg:flex w-60 shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex-col"
+    >
+      <SidebarContent
+        :groups="groups"
+        :username="username"
+        :role="role"
+        :is-admin="isAdmin"
+        @change-password="showChangePassword = true"
+        @logout="onLogout"
+      />
     </aside>
 
     <!-- Mobile off-canvas nav -->
     <USlideover v-model="mobileNavOpen" side="left" :ui="{ width: 'max-w-xs' }">
       <div class="flex flex-col h-full bg-white dark:bg-gray-900">
-        <SidebarContent :groups="groups" :username="username" :role="role" :is-admin="isAdmin"
-          @change-password="showChangePassword = true; mobileNavOpen = false" @logout="onLogout" />
+        <SidebarContent
+          :groups="groups"
+          :username="username"
+          :role="role"
+          :is-admin="isAdmin"
+          @change-password="showChangePassword = true; mobileNavOpen = false"
+          @logout="onLogout"
+        />
       </div>
     </USlideover>
 
     <div class="flex-1 min-w-0 flex flex-col">
       <!-- Mobile top bar -->
-      <header class="lg:hidden h-14 shrink-0 flex items-center gap-3 px-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-20">
-        <UButton icon="i-heroicons-bars-3" color="gray" variant="ghost" square :aria-label="'Open menu'" @click="mobileNavOpen = true" />
-        <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-fuchsia-400 to-pink-500 text-white shrink-0 shadow-sm">
+      <header
+        class="lg:hidden h-14 shrink-0 flex items-center gap-3 px-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-20"
+      >
+        <UButton
+          icon="i-heroicons-bars-3"
+          color="gray"
+          variant="ghost"
+          square
+          :aria-label="'Open menu'"
+          @click="mobileNavOpen = true"
+        />
+        <span
+          class="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-fuchsia-400 to-pink-500 text-white shrink-0 shadow-sm"
+        >
           <UIcon name="i-heroicons-banknotes" class="w-4 h-4" />
         </span>
         <span class="font-bold text-gray-900 dark:text-white tracking-tight">LMS</span>
@@ -42,6 +67,7 @@ const groups = computed(() => [
   {
     links: [
       { label: 'Customers', to: '/customers', icon: 'i-heroicons-users' },
+      { label: 'Applications', to: '/applications', icon: 'i-heroicons-document-text' },
       { label: 'Loans', to: '/loans', icon: 'i-heroicons-banknotes' },
       { label: 'Payments', to: '/payments', icon: 'i-heroicons-credit-card' },
       { label: 'Payment methods', to: '/payment-methods', icon: 'i-heroicons-wallet' },
@@ -51,6 +77,7 @@ const groups = computed(() => [
   },
   {
     title: 'Accounting',
+    icon: 'i-heroicons-calculator',
     links: [
       { label: 'Journal Entries', to: '/journal-entries', icon: 'i-heroicons-book-open' },
       { label: 'General Ledger', to: '/general-ledger', icon: 'i-heroicons-book-open' },
@@ -63,9 +90,14 @@ const groups = computed(() => [
   },
   {
     title: 'Loan Configuration',
+    icon: 'i-heroicons-adjustments-horizontal',
     links: [
       { label: 'Loan Products', to: '/loan-products', icon: 'i-heroicons-clipboard-document-list' },
-      { label: 'Product Interest Schemes', to: '/loan-product-interest-schemes', icon: 'i-heroicons-link' },
+      {
+        label: 'Product Interest Schemes',
+        to: '/loan-product-interest-schemes',
+        icon: 'i-heroicons-link'
+      },
       { label: 'Product Fee Schemes', to: '/loan-product-fee-schemes', icon: 'i-heroicons-link' },
       { label: 'Product Terms', to: '/loan-product-terms', icon: 'i-heroicons-link' },
       { label: 'Product Rules', to: '/loan-product-rules', icon: 'i-heroicons-link' },
@@ -73,8 +105,16 @@ const groups = computed(() => [
       { label: 'Interest Schemes', to: '/interest-schemes', icon: 'i-heroicons-chart-bar-square' },
       { label: 'Fee Schemes', to: '/fee-schemes', icon: 'i-heroicons-currency-dollar' },
       { label: 'Term Templates', to: '/term-templates', icon: 'i-heroicons-clock' },
-      { label: 'Rule Templates', to: '/rule-templates', icon: 'i-heroicons-adjustments-horizontal' },
-      { label: 'Document Templates', to: '/document-templates', icon: 'i-heroicons-document-duplicate' }
+      {
+        label: 'Rule Templates',
+        to: '/rule-templates',
+        icon: 'i-heroicons-adjustments-horizontal'
+      },
+      {
+        label: 'Document Templates',
+        to: '/document-templates',
+        icon: 'i-heroicons-document-duplicate'
+      }
     ]
   }
 ])
@@ -84,7 +124,12 @@ const mobileNavOpen = ref(false)
 
 // Close the mobile drawer automatically whenever a nav link is followed.
 const route = useRoute()
-watch(() => route.fullPath, () => { mobileNavOpen.value = false })
+watch(
+  () => route.fullPath,
+  () => {
+    mobileNavOpen.value = false
+  }
+)
 
 async function onLogout() {
   await logout()

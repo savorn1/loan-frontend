@@ -15,23 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-document-check'"
             :title="search ? 'No matches' : 'No document assignments yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Assign a reusable document template to a loan product\'s checklist.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Assign a reusable document template to a loan product\'s checklist.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">Assign Document</UButton>
@@ -88,7 +104,11 @@
       confirm-label="Remove"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -106,7 +126,11 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 const api = useApi()
 const toast = useToast()
 
-const { data: documents, pending, refresh } = await useAsyncData('loan-product-documents', () =>
+const {
+  data: documents,
+  pending,
+  refresh
+} = await useAsyncData('loan-product-documents', () =>
   api<LoanProductDocumentResponse[]>('/loan-products/documents')
 )
 const { data: products } = await useAsyncData('loan-product-documents-products', () =>
@@ -116,25 +140,46 @@ const { data: templates } = await useAsyncData('loan-product-documents-templates
   api<DocumentTemplateResponse[]>('/document-templates')
 )
 
-const productMap = computed(() => new Map((products.value ?? []).map(p => [p.id, p])))
+const productMap = computed(() => new Map((products.value ?? []).map((p) => [p.id, p])))
 function productLabel(id: string) {
   const p = productMap.value.get(id)
   return p ? `${p.name} (${p.code})` : id
 }
 
-const productOptions = computed(() => (products.value ?? []).map(p => ({ label: `${p.name} (${p.code})`, value: p.id })))
-const templateOptions = computed(() => (templates.value ?? []).map(t => ({ label: `${t.name} (${t.code})`, value: t.id })))
+const productOptions = computed(() =>
+  (products.value ?? []).map((p) => ({ label: `${p.name} (${p.code})`, value: p.id }))
+)
+const templateOptions = computed(() =>
+  (templates.value ?? []).map((t) => ({ label: `${t.name} (${t.code})`, value: t.id }))
+)
 
 const columns: ColumnDef<LoanProductDocumentResponse>[] = [
-  { key: 'loanProductId', label: 'Loan product', value: row => productLabel(row.loanProductId) },
-  { key: 'documentTemplateName', label: 'Document', value: row => `${row.documentTemplateName} (${row.documentTemplateCode})` },
-  { key: 'required', label: 'Required', type: 'boolean', trueLabel: 'Required', falseLabel: 'Optional', trueColor: 'teal', falseColor: 'gray' },
+  { key: 'loanProductId', label: 'Loan product', value: (row) => productLabel(row.loanProductId) },
+  {
+    key: 'documentTemplateName',
+    label: 'Document',
+    value: (row) => `${row.documentTemplateName} (${row.documentTemplateCode})`
+  },
+  {
+    key: 'required',
+    label: 'Required',
+    type: 'boolean',
+    trueLabel: 'Required',
+    falseLabel: 'Optional',
+    trueColor: 'teal',
+    falseColor: 'gray'
+  },
   { key: 'status', type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
 ]
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(
-  computed(() => (documents.value ?? []).map(d => ({ ...d, searchLabel: `${productLabel(d.loanProductId)} ${d.documentTemplateName} ${d.documentTemplateCode}` }))),
+  computed(() =>
+    (documents.value ?? []).map((d) => ({
+      ...d,
+      searchLabel: `${productLabel(d.loanProductId)} ${d.documentTemplateName} ${d.documentTemplateCode}`
+    }))
+  ),
   { searchFields: ['searchLabel'], pageSize: 15 }
 )
 
@@ -162,13 +207,34 @@ const commonFields: FieldDef[] = [
 ]
 
 const createFields = computed<FieldDef[]>(() => [
-  { name: 'loanProductId', label: 'Loan product', type: 'select', required: true, wrapper: 'half', options: productOptions.value },
-  { name: 'documentTemplateId', label: 'Document template', type: 'select', required: true, wrapper: 'half', options: templateOptions.value },
+  {
+    name: 'loanProductId',
+    label: 'Loan product',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: productOptions.value
+  },
+  {
+    name: 'documentTemplateId',
+    label: 'Document template',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: templateOptions.value
+  },
   ...commonFields
 ])
 
 const editFields = computed<FieldDef[]>(() => [
-  { name: 'documentTemplateId', label: 'Document template', type: 'select', required: true, wrapper: 'half', options: templateOptions.value },
+  {
+    name: 'documentTemplateId',
+    label: 'Document template',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: templateOptions.value
+  },
   ...commonFields
 ])
 
@@ -200,7 +266,10 @@ async function onCreate(values: Record<string, any>) {
   creating.value = true
   error.value = ''
   try {
-    await api(`/loan-products/${values.loanProductId}/documents`, { method: 'POST', body: toPayload(values) })
+    await api(`/loan-products/${values.loanProductId}/documents`, {
+      method: 'POST',
+      body: toPayload(values)
+    })
     toast.add({ title: 'Document assigned', color: 'green' })
     showCreate.value = false
     await refresh()
@@ -254,7 +323,10 @@ async function onDelete() {
   if (!confirmDelete.value) return
   deleting.value = true
   try {
-    await api(`/loan-products/${confirmDelete.value.loanProductId}/documents/${confirmDelete.value.id}`, { method: 'DELETE' })
+    await api(
+      `/loan-products/${confirmDelete.value.loanProductId}/documents/${confirmDelete.value.id}`,
+      { method: 'DELETE' }
+    )
     toast.add({ title: 'Assignment removed', color: 'green' })
     confirmDelete.value = null
     await refresh()

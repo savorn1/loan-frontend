@@ -13,7 +13,9 @@
     <UAlert v-if="displayError" color="red" variant="subtle" :title="displayError" />
 
     <div class="flex justify-end gap-2 pt-2">
-      <UButton v-if="cancelable" color="gray" variant="ghost" @click="emit('cancel')">Cancel</UButton>
+      <UButton v-if="cancelable" color="gray" variant="ghost" @click="emit('cancel')"
+        >Cancel</UButton
+      >
       <UButton type="submit" :loading="loading">{{ submitLabel }}</UButton>
     </div>
   </UForm>
@@ -25,18 +27,21 @@
 // from field defs are applied once for keys the model doesn't have yet.
 import type { FieldDef } from '~/shared/types'
 
-const props = withDefaults(defineProps<{
-  fields: FieldDef[]
-  loading?: boolean
-  submitLabel?: string
-  cancelable?: boolean
-  error?: string
-}>(), {
-  loading: false,
-  submitLabel: 'Save',
-  cancelable: false,
-  error: ''
-})
+const props = withDefaults(
+  defineProps<{
+    fields: FieldDef[]
+    loading?: boolean
+    submitLabel?: string
+    cancelable?: boolean
+    error?: string
+  }>(),
+  {
+    loading: false,
+    submitLabel: 'Save',
+    cancelable: false,
+    error: ''
+  }
+)
 
 const model = defineModel<Record<string, any>>({ required: true })
 

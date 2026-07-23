@@ -1,9 +1,5 @@
 <template>
-  <URadioGroup
-    v-model="model"
-    :options="field.options ?? []"
-    :disabled="field.disabled"
-  />
+  <URadioGroup v-model="model" :options="field.options ?? []" :disabled="field.disabled" />
 </template>
 
 <script setup lang="ts">

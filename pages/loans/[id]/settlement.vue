@@ -17,7 +17,11 @@
         <dd>{{ settlement.note || '—' }}</dd>
       </dl>
 
-      <UButton v-if="isAdmin && settlement.status === 'PENDING'" :loading="completing" @click="onComplete">
+      <UButton
+        v-if="isAdmin && settlement.status === 'PENDING'"
+        :loading="completing"
+        @click="onComplete"
+      >
         Mark completed
       </UButton>
     </UCard>
@@ -26,7 +30,9 @@
       <template #header>
         <span class="font-semibold">Settle this loan</span>
       </template>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">No settlement has been recorded for this loan yet.</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        No settlement has been recorded for this loan yet.
+      </p>
       <DynamicForm
         v-if="isAdmin"
         v-model="createForm"
@@ -64,15 +70,33 @@ const { data: settlement, refresh } = await useAsyncData(`loan-${loanId}-settlem
 const today = new Date().toISOString().slice(0, 10)
 
 const fields: FieldDef[] = [
-  { name: 'settlementAmount', label: 'Settlement amount', type: 'number', required: true, prefix: '$', min: 0.01, step: 0.01 },
-  { name: 'settlementDate', label: 'Settlement date', type: 'date', required: true, default: today },
+  {
+    name: 'settlementAmount',
+    label: 'Settlement amount',
+    type: 'number',
+    required: true,
+    prefix: '$',
+    min: 0.01,
+    step: 0.01
+  },
+  {
+    name: 'settlementDate',
+    label: 'Settlement date',
+    type: 'date',
+    required: true,
+    default: today
+  },
   { name: 'note', type: 'textarea' }
 ]
 
 const creating = ref(false)
 const completing = ref(false)
 const error = ref('')
-const createForm = ref<Record<string, any>>({ settlementAmount: undefined, settlementDate: today, note: '' })
+const createForm = ref<Record<string, any>>({
+  settlementAmount: undefined,
+  settlementDate: today,
+  note: ''
+})
 
 async function onCreate(values: Record<string, any>) {
   creating.value = true

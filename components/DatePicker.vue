@@ -8,7 +8,9 @@
       class="w-full justify-start font-normal"
       :ui="{ rounded: 'rounded-lg' }"
     >
-      <span :class="modelValue ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'">
+      <span
+        :class="modelValue ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'"
+      >
         {{ modelValue ? formatDate(modelValue) : placeholder }}
       </span>
     </UButton>
@@ -16,13 +18,32 @@
     <template #panel>
       <div class="p-3 w-[17rem] select-none">
         <div class="flex items-center justify-between mb-2">
-          <UButton icon="i-heroicons-chevron-left" color="gray" variant="ghost" size="xs" aria-label="Previous month" @click="shiftMonth(-1)" />
+          <UButton
+            icon="i-heroicons-chevron-left"
+            color="gray"
+            variant="ghost"
+            size="xs"
+            aria-label="Previous month"
+            @click="shiftMonth(-1)"
+          />
           <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ monthLabel }}</span>
-          <UButton icon="i-heroicons-chevron-right" color="gray" variant="ghost" size="xs" aria-label="Next month" @click="shiftMonth(1)" />
+          <UButton
+            icon="i-heroicons-chevron-right"
+            color="gray"
+            variant="ghost"
+            size="xs"
+            aria-label="Next month"
+            @click="shiftMonth(1)"
+          />
         </div>
 
         <div class="grid grid-cols-7 text-center mb-1">
-          <span v-for="d in WEEKDAYS" :key="d" class="text-xs font-medium text-gray-400 dark:text-gray-500 py-1">{{ d }}</span>
+          <span
+            v-for="d in WEEKDAYS"
+            :key="d"
+            class="text-xs font-medium text-gray-400 dark:text-gray-500 py-1"
+            >{{ d }}</span
+          >
         </div>
 
         <div class="grid grid-cols-7 gap-y-0.5">
@@ -40,9 +61,18 @@
           </button>
         </div>
 
-        <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+        <div
+          class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100 dark:border-gray-800"
+        >
           <UButton size="xs" color="gray" variant="ghost" @click="pickToday">Today</UButton>
-          <UButton v-if="clearable && modelValue" size="xs" color="gray" variant="ghost" @click="clear">Clear</UButton>
+          <UButton
+            v-if="clearable && modelValue"
+            size="xs"
+            color="gray"
+            variant="ghost"
+            @click="clear"
+            >Clear</UButton
+          >
         </div>
       </div>
     </template>
@@ -54,17 +84,20 @@
 // v-model is an ISO `yyyy-MM-dd` string ('' when empty) so it drops into the
 // existing DTOs (CustomerRequest.dateOfBirth, PaymentRequest.dueDate) without
 // any Date-object/timezone conversion at the call sites.
-const props = withDefaults(defineProps<{
-  modelValue?: string
-  placeholder?: string
-  min?: string
-  max?: string
-  clearable?: boolean
-}>(), {
-  modelValue: '',
-  placeholder: 'Select a date',
-  clearable: true
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string
+    placeholder?: string
+    min?: string
+    max?: string
+    clearable?: boolean
+  }>(),
+  {
+    modelValue: '',
+    placeholder: 'Select a date',
+    clearable: true
+  }
+)
 
 const emit = defineEmits<{ 'update:modelValue': [string] }>()
 

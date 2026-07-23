@@ -1,5 +1,11 @@
 <template>
-  <UTable :rows="rows" :columns="uColumns" :loading="loading" v-model:sort="sort" @select="(row: T) => emit('select', row)">
+  <UTable
+    v-model:sort="sort"
+    :rows="rows"
+    :columns="uColumns"
+    :loading="loading"
+    @select="(row: T) => emit('select', row)"
+  >
     <template v-for="column in columns" :key="column.key" #[`${column.key}-data`]="{ row }">
       <slot :name="`${column.key}-data`" :row="row">
         <ColumnValue :column="column" :row="row" />
@@ -29,10 +35,12 @@ const emit = defineEmits<{ select: [row: T] }>()
 
 const sort = defineModel<{ column: string; direction: 'asc' | 'desc' } | undefined>('sort')
 
-const uColumns = computed(() => props.columns.map(c => ({
-  key: c.key,
-  label: c.label ?? humanize(c.key),
-  sortable: c.sortable,
-  class: c.class
-})))
+const uColumns = computed(() =>
+  props.columns.map((c) => ({
+    key: c.key,
+    label: c.label ?? humanize(c.key),
+    sortable: c.sortable,
+    class: c.class
+  }))
+)
 </script>

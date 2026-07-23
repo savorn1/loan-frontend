@@ -1,6 +1,12 @@
 <template>
   <div v-if="transaction">
-    <UButton to="/payment-transactions" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
+    <UButton
+      to="/payment-transactions"
+      variant="link"
+      icon="i-heroicons-arrow-left"
+      size="xs"
+      class="mb-1 px-0"
+    >
       Back to transactions
     </UButton>
     <div class="flex items-center justify-between mb-6">
@@ -8,9 +14,20 @@
         <h1 class="text-xl font-bold">Transaction #{{ transaction.id }}</h1>
         <StatusBadge :status="transaction.status" />
       </div>
-      <div class="flex gap-2" v-if="isAdmin && transaction.status === 'PENDING'">
-        <UButton color="green" :loading="actionLoading === 'SUCCESS'" @click="onSetStatus('SUCCESS')">Mark success</UButton>
-        <UButton color="red" variant="soft" :loading="actionLoading === 'FAILED'" @click="onSetStatus('FAILED')">Mark failed</UButton>
+      <div v-if="isAdmin && transaction.status === 'PENDING'" class="flex gap-2">
+        <UButton
+          color="green"
+          :loading="actionLoading === 'SUCCESS'"
+          @click="onSetStatus('SUCCESS')"
+          >Mark success</UButton
+        >
+        <UButton
+          color="red"
+          variant="soft"
+          :loading="actionLoading === 'FAILED'"
+          @click="onSetStatus('FAILED')"
+          >Mark failed</UButton
+        >
       </div>
       <UButton
         v-else-if="isAdmin && transaction.status === 'SUCCESS'"
@@ -30,7 +47,9 @@
       <dl class="grid grid-cols-2 gap-y-3 text-sm">
         <dt class="text-gray-500">Loan</dt>
         <dd>
-          <NuxtLink :to="`/loans/${transaction.loanId}`" class="text-primary-500">#{{ transaction.loanId }}</NuxtLink>
+          <NuxtLink :to="`/loans/${transaction.loanId}`" class="text-primary-500"
+            >#{{ transaction.loanId }}</NuxtLink
+          >
         </dd>
         <dt class="text-gray-500">Payment</dt>
         <dd>#{{ transaction.paymentId }}</dd>
@@ -60,8 +79,9 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const transactionId = route.params.id as string
 
-const { data: transaction, refresh } = await useAsyncData(`payment-transaction-${transactionId}`, () =>
-  api<PaymentTransactionResponse>(`/payments/transactions/${transactionId}`)
+const { data: transaction, refresh } = await useAsyncData(
+  `payment-transaction-${transactionId}`,
+  () => api<PaymentTransactionResponse>(`/payments/transactions/${transactionId}`)
 )
 
 const actionLoading = ref<TransactionStatus | null>(null)

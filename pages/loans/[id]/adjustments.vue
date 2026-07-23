@@ -4,7 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">Adjustments</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">Add adjustment</UButton>
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
+            >Add adjustment</UButton
+          >
         </div>
       </template>
 
@@ -54,15 +56,18 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.id as string
 
-const { data: adjustments, pending, refresh } = await useAsyncData(
-  `loan-${loanId}-adjustments`,
-  () => api<LoanAdjustmentResponse[]>(`/loans/${loanId}/adjustments`)
+const {
+  data: adjustments,
+  pending,
+  refresh
+} = await useAsyncData(`loan-${loanId}-adjustments`, () =>
+  api<LoanAdjustmentResponse[]>(`/loans/${loanId}/adjustments`)
 )
 
 const columns: ColumnDef<LoanAdjustmentResponse>[] = [
   { key: 'id', label: 'ID' },
   { key: 'createdAt', label: 'Date', type: 'datetime' },
-  { key: 'type', type: 'badge', color: row => (row.type === 'CREDIT' ? 'teal' : 'orange') },
+  { key: 'type', type: 'badge', color: (row) => (row.type === 'CREDIT' ? 'teal' : 'orange') },
   { key: 'reason' },
   { key: 'amount', type: 'currency' }
 ]

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader title="Loans" :description="totalLabel">
+    <PageHeader title="Loan Applications" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Loan</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">New Application</UButton>
       </template>
     </PageHeader>
 
@@ -40,20 +40,20 @@
         :rows="rows"
         :columns="columns"
         :loading="pending"
-        @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
+        @select="(row: ApplicationResponse) => router.push(`/applications/${row.id}`)"
       >
         <template #empty-state>
           <EmptyState
-            :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-banknotes'"
-            :title="hasFilters ? 'No matches' : 'No loans yet'"
+            :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-document-text'"
+            :title="hasFilters ? 'No matches' : 'No applications yet'"
             :description="
               hasFilters
                 ? 'Try a different search term or status filter.'
-                : 'Create a loan for one of your customers to get started.'
+                : 'Submit a loan application for one of your customers to get started.'
             "
           >
             <template v-if="!hasFilters" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Loan</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">New Application</UButton>
             </template>
           </EmptyState>
         </template>
@@ -67,14 +67,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Loan</span>
+          <span class="font-semibold">New Application</span>
         </template>
         <DynamicForm
           v-model="createForm"
-          :fields="loanFields"
+          :fields="applicationFields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          submit-label="Submit"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -86,7 +86,11 @@
 
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
-import type { LoanRequest, LoanResponse, LoanStatus } from '~/features/loans/types'
+import type {
+  ApplicationRequest,
+  ApplicationResponse,
+  ApplicationStatus
+} from '~/features/loans/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
@@ -94,11 +98,11 @@ const toast = useToast()
 const router = useRouter()
 
 const {
-  data: loans,
+  data: applications,
   pending,
   refresh
-} = await useAsyncData('loans', () => api<LoanResponse[]>('/loans'))
-const { data: customersRaw } = await useAsyncData('loans-customers', () =>
+} = await useAsyncData('applications', () => api<ApplicationResponse[]>('/loans/applications'))
+const { data: customersRaw } = await useAsyncData('applications-customers', () =>
   api<CustomerResponse[]>('/customers')
 )
 
@@ -109,30 +113,29 @@ const customerOptions = computed(() =>
   }))
 )
 
-const columns: ColumnDef<LoanResponse>[] = [
+const columns: ColumnDef<ApplicationResponse>[] = [
   { key: 'id', label: 'ID', sortable: true },
   { key: 'customerName', label: 'Customer', sortable: true },
-  { key: 'principal', type: 'currency', sortable: true },
-  { key: 'interestRate', label: 'Rate', type: 'percent', sortable: true },
-  { key: 'termMonths', label: 'Term (mo)', sortable: true },
+  { key: 'requestedAmount', label: 'Requested', type: 'currency', sortable: true },
+  { key: 'requestedTermMonths', label: 'Term (mo)', sortable: true },
   { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true }
+  { key: 'submittedAt', label: 'Submitted', type: 'datetime', sortable: true }
 ]
 
-const statusOptions: { label: string; value: LoanStatus | '' }[] = [
+const statusOptions: { label: string; value: ApplicationStatus | '' }[] = [
   { label: 'All statuses', value: '' },
-  { label: 'Pending', value: 'PENDING' },
+  { label: 'Submitted', value: 'SUBMITTED' },
+  { label: 'Under review', value: 'UNDER_REVIEW' },
   { label: 'Approved', value: 'APPROVED' },
-  { label: 'Active', value: 'ACTIVE' },
   { label: 'Rejected', value: 'REJECTED' },
-  { label: 'Closed', value: 'CLOSED' }
+  { label: 'Withdrawn', value: 'WITHDRAWN' }
 ]
-const statusFilter = ref<LoanStatus | ''>('')
+const statusFilter = ref<ApplicationStatus | ''>('')
 
 const filteredByStatus = computed(() =>
   statusFilter.value
-    ? (loans.value ?? []).filter((l) => l.status === statusFilter.value)
-    : loans.value
+    ? (applications.value ?? []).filter((a) => a.status === statusFilter.value)
+    : applications.value
 )
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
@@ -143,17 +146,15 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByS
 const hasFilters = computed(() => !!search.value || !!statusFilter.value)
 
 const totalLabel = computed(() => {
-  const count = loans.value?.length ?? 0
-  return count === 1 ? '1 loan' : `${count} loans`
+  const count = applications.value?.length ?? 0
+  return count === 1 ? '1 application' : `${count} applications`
 })
 
 const showCreate = ref(false)
 const creating = ref(false)
 const error = ref('')
 
-// Declarative field defs for <DynamicForm>. Computed because the customer
-// options load async; required/select validation is handled by DynamicForm.
-const loanFields = computed<FieldDef[]>(() => [
+const applicationFields = computed<FieldDef[]>(() => [
   {
     name: 'customerId',
     label: 'Customer',
@@ -163,7 +164,8 @@ const loanFields = computed<FieldDef[]>(() => [
     placeholder: 'Select a customer'
   },
   {
-    name: 'principal',
+    name: 'requestedAmount',
+    label: 'Requested amount',
     type: 'number',
     required: true,
     prefix: '$',
@@ -173,25 +175,14 @@ const loanFields = computed<FieldDef[]>(() => [
     wrapper: 'half'
   },
   {
-    name: 'interestRate',
-    label: 'Interest rate',
-    type: 'number',
-    required: true,
-    suffix: '%',
-    min: 0.01,
-    max: 100,
-    step: 0.01,
-    hint: '0.01 – 100',
-    wrapper: 'half'
-  },
-  {
-    name: 'termMonths',
-    label: 'Term (months)',
+    name: 'requestedTermMonths',
+    label: 'Requested term (months)',
     type: 'number',
     required: true,
     min: 1,
     max: 360,
-    hint: '1 – 360'
+    hint: '1 – 360',
+    wrapper: 'half'
   },
   { name: 'purpose', type: 'textarea' }
 ])
@@ -201,9 +192,8 @@ const createForm = ref<Record<string, any>>({})
 function openCreate() {
   createForm.value = {
     customerId: undefined,
-    principal: 1000,
-    interestRate: 5,
-    termMonths: 12,
+    requestedAmount: 1000,
+    requestedTermMonths: 12,
     purpose: ''
   }
   error.value = ''
@@ -214,18 +204,20 @@ async function onCreate(values: Record<string, any>) {
   creating.value = true
   error.value = ''
   try {
-    const payload: LoanRequest = {
+    const payload: ApplicationRequest = {
       customerId: values.customerId,
-      principal: values.principal,
-      interestRate: values.interestRate,
-      termMonths: values.termMonths,
+      requestedAmount: values.requestedAmount,
+      requestedTermMonths: values.requestedTermMonths,
       purpose: values.purpose || undefined
     }
-    const created = await api<LoanResponse>('/loans', { method: 'POST', body: payload })
-    toast.add({ title: 'Loan created', color: 'green' })
+    const created = await api<ApplicationResponse>('/loans/applications', {
+      method: 'POST',
+      body: payload
+    })
+    toast.add({ title: 'Application submitted', color: 'green' })
     showCreate.value = false
     await refresh()
-    await router.push(`/loans/${created.id}`)
+    await router.push(`/applications/${created.id}`)
   } catch (err) {
     error.value = apiErrorMessage(err)
   } finally {

@@ -1,9 +1,17 @@
 <template>
   <div v-if="snapshot">
-    <UButton to="/trial-balance" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
+    <UButton
+      to="/trial-balance"
+      variant="link"
+      icon="i-heroicons-arrow-left"
+      size="xs"
+      class="mb-1 px-0"
+    >
       Back to trial balance
     </UButton>
-    <h1 class="text-xl font-bold mb-6">Trial Balance Snapshot — {{ snapshot.financialPeriodName }}</h1>
+    <h1 class="text-xl font-bold mb-6">
+      Trial Balance Snapshot — {{ snapshot.financialPeriodName }}
+    </h1>
 
     <UCard class="mb-6">
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 text-sm">

@@ -16,23 +16,33 @@
           :ui="{ icon: { trailing: { pointer: '' } } }"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
       <DataTable
+        v-model:sort="sort"
         :rows="rows"
         :columns="columns"
         :loading="pending"
-        v-model:sort="sort"
         @select="onSelect"
       >
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-users'"
             :title="search ? 'No matches' : 'No customers yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Add your first customer to start creating loans for them.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Add your first customer to start creating loans for them.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="showCreate = true">New Customer</UButton>
@@ -51,7 +61,13 @@
         <template #header>
           <span class="font-semibold">New Customer</span>
         </template>
-        <CustomerForm :loading="creating" submit-label="Create" cancelable @submit="onCreate" @cancel="showCreate = false" />
+        <CustomerForm
+          :loading="creating"
+          submit-label="Create"
+          cancelable
+          @submit="onCreate"
+          @cancel="showCreate = false"
+        />
       </UCard>
     </UModal>
   </div>
@@ -65,7 +81,11 @@ const api = useApi()
 const toast = useToast()
 const router = useRouter()
 
-const { data: customers, pending, refresh } = await useAsyncData('customers', () => api<CustomerResponse[]>('/customers'))
+const {
+  data: customers,
+  pending,
+  refresh
+} = await useAsyncData('customers', () => api<CustomerResponse[]>('/customers'))
 
 const showCreate = ref(false)
 const creating = ref(false)

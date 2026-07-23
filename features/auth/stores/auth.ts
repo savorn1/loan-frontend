@@ -1,4 +1,9 @@
-import type { AuthResponse, ChangePasswordRequest, LoginRequest, RegisterRequest } from '~/features/auth/types'
+import type {
+  AuthResponse,
+  ChangePasswordRequest,
+  LoginRequest,
+  RegisterRequest
+} from '~/features/auth/types'
 import type { Role } from '~/shared/types'
 import { unwrapApiResponse } from '~/shared/utils/apiResponse'
 
@@ -19,8 +24,14 @@ export const useAuth = defineStore('auth', () => {
   const authClient = $fetch.create({ baseURL: apiBase, onResponse: unwrapApiResponse })
 
   const token = useCookie<string | null>('auth_token', { default: () => null, sameSite: 'lax' })
-  const refreshToken = useCookie<string | null>('auth_refresh_token', { default: () => null, sameSite: 'lax' })
-  const username = useCookie<string | null>('auth_username', { default: () => null, sameSite: 'lax' })
+  const refreshToken = useCookie<string | null>('auth_refresh_token', {
+    default: () => null,
+    sameSite: 'lax'
+  })
+  const username = useCookie<string | null>('auth_username', {
+    default: () => null,
+    sameSite: 'lax'
+  })
   const role = useCookie<Role | null>('auth_role', { default: () => null, sameSite: 'lax' })
 
   const isAuthenticated = computed(() => !!token.value)
@@ -40,7 +51,10 @@ export const useAuth = defineStore('auth', () => {
   }
 
   async function register(payload: RegisterRequest) {
-    const res = await authClient<AuthResponse>('/api/auth/register', { method: 'POST', body: payload })
+    const res = await authClient<AuthResponse>('/api/auth/register', {
+      method: 'POST',
+      body: payload
+    })
     applySession(res)
     return res
   }
@@ -85,5 +99,16 @@ export const useAuth = defineStore('auth', () => {
     }
   }
 
-  return { token, username, role, isAuthenticated, isAdmin, login, register, refresh, changePassword, logout }
+  return {
+    token,
+    username,
+    role,
+    isAuthenticated,
+    isAdmin,
+    login,
+    register,
+    refresh,
+    changePassword,
+    logout
+  }
 })

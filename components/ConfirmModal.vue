@@ -8,7 +8,9 @@
       <template #footer>
         <div class="flex justify-end gap-2">
           <UButton color="gray" variant="ghost" @click="open = false">Cancel</UButton>
-          <UButton :color="color" :loading="loading" @click="emit('confirm')">{{ confirmLabel }}</UButton>
+          <UButton :color="color" :loading="loading" @click="emit('confirm')">{{
+            confirmLabel
+          }}</UButton>
         </div>
       </template>
     </UCard>
@@ -18,17 +20,20 @@
 <script setup lang="ts">
 const open = defineModel<boolean>({ default: false })
 
-withDefaults(defineProps<{
-  title: string
-  description: string
-  confirmLabel?: string
-  color?: 'primary' | 'red' | 'green' | 'gray' | 'orange'
-  loading?: boolean
-}>(), {
-  confirmLabel: 'Confirm',
-  color: 'primary',
-  loading: false
-})
+withDefaults(
+  defineProps<{
+    title: string
+    description: string
+    confirmLabel?: string
+    color?: 'primary' | 'red' | 'green' | 'gray' | 'orange'
+    loading?: boolean
+  }>(),
+  {
+    confirmLabel: 'Confirm',
+    color: 'primary',
+    loading: false
+  }
+)
 
 const emit = defineEmits<{ confirm: [] }>()
 </script>

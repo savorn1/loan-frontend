@@ -15,28 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable
-        :rows="rows"
-        :columns="columns"
-        :loading="pending"
-        v-model:sort="sort"
-      >
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-document-duplicate'"
             :title="search ? 'No matches' : 'No document templates yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Add a reusable document requirement (e.g. Payslip) that loan products can select.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Add a reusable document requirement (e.g. Payslip) that loan products can select.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New Document Template</UButton>
@@ -93,19 +104,32 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { DocumentTemplateRequest, DocumentTemplateResponse } from '~/features/loan-configuration/types'
+import type {
+  DocumentTemplateRequest,
+  DocumentTemplateResponse
+} from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: templates, pending, refresh } = await useAsyncData('document-templates', () => api<DocumentTemplateResponse[]>('/document-templates'))
+const {
+  data: templates,
+  pending,
+  refresh
+} = await useAsyncData('document-templates', () =>
+  api<DocumentTemplateResponse[]>('/document-templates')
+)
 
 const columns: ColumnDef<DocumentTemplateResponse>[] = [
   { key: 'code', sortable: true },
@@ -143,18 +167,39 @@ const fields: FieldDef[] = [
 ]
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
-} = useCrudModals<DocumentTemplateResponse, DocumentTemplateRequest>('/document-templates', refresh, {
-  entityName: 'Document template',
-  createDefaults: () => ({ code: '', name: '', description: '', status: 'ACTIVE' }),
-  toForm: row => ({ code: row.code, name: row.name, description: row.description ?? '', status: row.status }),
-  toPayload: values => ({
-    code: values.code,
-    name: values.name,
-    description: values.description || undefined,
-    status: values.status
-  })
-})
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
+} = useCrudModals<DocumentTemplateResponse, DocumentTemplateRequest>(
+  '/document-templates',
+  refresh,
+  {
+    entityName: 'Document template',
+    createDefaults: () => ({ code: '', name: '', description: '', status: 'ACTIVE' }),
+    toForm: (row) => ({
+      code: row.code,
+      name: row.name,
+      description: row.description ?? '',
+      status: row.status
+    }),
+    toPayload: (values) => ({
+      code: values.code,
+      name: values.name,
+      description: values.description || undefined,
+      status: values.status
+    })
+  }
+)
 </script>

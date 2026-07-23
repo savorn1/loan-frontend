@@ -16,30 +16,49 @@
             class="max-w-xs w-full sm:w-auto"
           >
             <template v-if="search" #trailing>
-              <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+              <UButton
+                color="gray"
+                variant="link"
+                icon="i-heroicons-x-mark"
+                :padded="false"
+                @click="search = ''"
+              />
             </template>
           </UInput>
-          <USelectMenu v-model="statusFilter" :options="statusOptions" option-attribute="label" value-attribute="value" class="w-40" />
+          <USelectMenu
+            v-model="statusFilter"
+            :options="statusOptions"
+            option-attribute="label"
+            value-attribute="value"
+            class="w-40"
+          />
         </div>
       </template>
 
-      <DataTable
-        :rows="rows"
-        :columns="columns"
-        :loading="pending"
-        v-model:sort="sort"
-      >
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
-            :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-clipboard-document-list'"
+            :icon="
+              hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-clipboard-document-list'
+            "
             :title="hasFilters ? 'No matches' : 'No loan products yet'"
-            :description="hasFilters ? 'Try a different search term or status filter.' : 'Define a loan product\'s amount range, term range and eligibility window.'"
+            :description="
+              hasFilters
+                ? 'Try a different search term or status filter.'
+                : 'Define a loan product\'s amount range, term range and eligibility window.'
+            "
           >
             <template v-if="!hasFilters" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New Loan Product</UButton>
@@ -96,19 +115,31 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { LoanProductRequest, LoanProductResponse, LoanProductStatus } from '~/features/loan-products/types'
+import type {
+  LoanProductRequest,
+  LoanProductResponse,
+  LoanProductStatus
+} from '~/features/loan-products/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: products, pending, refresh } = await useAsyncData('loan-products', () => api<LoanProductResponse[]>('/loan-products'))
+const {
+  data: products,
+  pending,
+  refresh
+} = await useAsyncData('loan-products', () => api<LoanProductResponse[]>('/loan-products'))
 
 const columns: ColumnDef<LoanProductResponse>[] = [
   { key: 'code', sortable: true },
@@ -119,7 +150,7 @@ const columns: ColumnDef<LoanProductResponse>[] = [
     label: 'Amount range',
     type: 'currency',
     to: 'maxAmount',
-    prefix: row => `${row.currency} `
+    prefix: (row) => `${row.currency} `
   },
   {
     key: 'minTerm',
@@ -140,7 +171,9 @@ const statusOptions: { label: string; value: LoanProductStatus | '' }[] = [
 const statusFilter = ref<LoanProductStatus | ''>('')
 
 const filteredByStatus = computed(() =>
-  statusFilter.value ? (products.value ?? []).filter(p => p.status === statusFilter.value) : products.value
+  statusFilter.value
+    ? (products.value ?? []).filter((p) => p.status === statusFilter.value)
+    : products.value
 )
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
@@ -183,10 +216,40 @@ const fields: FieldDef[] = [
       { label: 'KHR', value: 'KHR' }
     ]
   },
-  { name: 'minAmount', label: 'Min amount', type: 'number', required: true, min: 0, step: 0.01, wrapper: 'half' },
-  { name: 'maxAmount', label: 'Max amount', type: 'number', required: true, min: 0, step: 0.01, wrapper: 'half' },
-  { name: 'minTerm', label: 'Min term (months)', type: 'number', required: true, min: 1, wrapper: 'half' },
-  { name: 'maxTerm', label: 'Max term (months)', type: 'number', required: true, min: 1, wrapper: 'half' },
+  {
+    name: 'minAmount',
+    label: 'Min amount',
+    type: 'number',
+    required: true,
+    min: 0,
+    step: 0.01,
+    wrapper: 'half'
+  },
+  {
+    name: 'maxAmount',
+    label: 'Max amount',
+    type: 'number',
+    required: true,
+    min: 0,
+    step: 0.01,
+    wrapper: 'half'
+  },
+  {
+    name: 'minTerm',
+    label: 'Min term (months)',
+    type: 'number',
+    required: true,
+    min: 1,
+    wrapper: 'half'
+  },
+  {
+    name: 'maxTerm',
+    label: 'Max term (months)',
+    type: 'number',
+    required: true,
+    min: 1,
+    wrapper: 'half'
+  },
   {
     name: 'status',
     type: 'select',
@@ -200,14 +263,32 @@ const fields: FieldDef[] = [
     ]
   },
   { name: 'effectiveFrom', label: 'Effective from', type: 'date', required: true, wrapper: 'half' },
-  { name: 'effectiveTo', label: 'Effective to', type: 'date', hint: 'Leave blank for open-ended', wrapper: 'half' },
+  {
+    name: 'effectiveTo',
+    label: 'Effective to',
+    type: 'date',
+    hint: 'Leave blank for open-ended',
+    wrapper: 'half'
+  },
   { name: 'description', type: 'textarea' }
 ]
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
 } = useCrudModals<LoanProductResponse, LoanProductRequest>('/loan-products', refresh, {
   entityName: 'Loan product',
   createDefaults: () => ({
@@ -224,7 +305,7 @@ const {
     effectiveTo: '',
     description: ''
   }),
-  toForm: row => ({
+  toForm: (row) => ({
     name: row.name,
     code: row.code,
     loanType: row.loanType,
@@ -238,7 +319,7 @@ const {
     effectiveTo: row.effectiveTo ?? '',
     description: row.description ?? ''
   }),
-  toPayload: values => ({
+  toPayload: (values) => ({
     name: values.name,
     code: values.code,
     loanType: values.loanType,

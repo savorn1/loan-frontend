@@ -9,13 +9,27 @@
           {{ initials }}
         </div>
         <div class="min-w-0">
-          <UButton to="/customers" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-0.5 px-0">
+          <UButton
+            to="/customers"
+            variant="link"
+            icon="i-heroicons-arrow-left"
+            size="xs"
+            class="mb-0.5 px-0"
+          >
             Back to customers
           </UButton>
-          <h1 class="text-xl font-bold truncate">{{ customer.firstName }} {{ customer.lastName }}</h1>
+          <h1 class="text-xl font-bold truncate">
+            {{ customer.firstName }} {{ customer.lastName }}
+          </h1>
         </div>
       </div>
-      <UButton v-if="isAdmin" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = true">
+      <UButton
+        v-if="isAdmin"
+        color="red"
+        variant="soft"
+        icon="i-heroicons-trash"
+        @click="confirmDelete = true"
+      >
         Delete
       </UButton>
     </div>
@@ -25,7 +39,12 @@
         <template #header>
           <span class="font-semibold">Details</span>
         </template>
-        <CustomerForm :initial="customer" :loading="saving" submit-label="Save changes" @submit="onUpdate" />
+        <CustomerForm
+          :initial="customer"
+          :loading="saving"
+          submit-label="Save changes"
+          @submit="onUpdate"
+        />
       </UCard>
 
       <UCard>
@@ -35,9 +54,18 @@
             <UBadge v-if="loans?.length" color="gray" variant="subtle">{{ loans.length }}</UBadge>
           </div>
         </template>
-        <DataTable :rows="loans ?? []" :columns="loanColumns" :loading="loansPending" @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)">
+        <DataTable
+          :rows="loans ?? []"
+          :columns="loanColumns"
+          :loading="loansPending"
+          @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
+        >
           <template #empty-state>
-            <EmptyState icon="i-heroicons-banknotes" title="No loans yet" description="This customer doesn't have any loans on record." />
+            <EmptyState
+              icon="i-heroicons-banknotes"
+              title="No loans yet"
+              description="This customer doesn't have any loans on record."
+            />
           </template>
         </DataTable>
       </UCard>
@@ -74,8 +102,9 @@ const customerId = route.params.id as string
 const { data: customer, refresh } = await useAsyncData(`customer-${customerId}`, () =>
   api<CustomerResponse>(`/customers/${customerId}`)
 )
-const { data: loans, pending: loansPending } = await useAsyncData(`customer-${customerId}-loans`, () =>
-  api<LoanResponse[]>(`/loans/customer/${customerId}`)
+const { data: loans, pending: loansPending } = await useAsyncData(
+  `customer-${customerId}-loans`,
+  () => api<LoanResponse[]>(`/loans/customer/${customerId}`)
 )
 
 const initials = computed(() => {

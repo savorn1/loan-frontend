@@ -11,7 +11,9 @@
   >
     <template #trailing>
       <UButton
-        color="gray" variant="link" :padded="false"
+        color="gray"
+        variant="link"
+        :padded="false"
         :icon="visible ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
         :aria-label="visible ? 'Hide password' : 'Show password'"
         @click="visible = !visible"

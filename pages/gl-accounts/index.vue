@@ -15,23 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-list-bullet'"
             :title="search ? 'No matches' : 'No GL accounts yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Set up the chart of accounts that journal entries post against.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Set up the chart of accounts that journal entries post against.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New GL Account</UButton>
@@ -88,7 +104,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -100,9 +120,13 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: accounts, pending, refresh } = await useAsyncData('gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
+const {
+  data: accounts,
+  pending,
+  refresh
+} = await useAsyncData('gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
 
-const accountMap = computed(() => new Map((accounts.value ?? []).map(a => [a.id, a])))
+const accountMap = computed(() => new Map((accounts.value ?? []).map((a) => [a.id, a])))
 function accountLabel(id: number | null) {
   if (id === null) return '—'
   const a = accountMap.value.get(id)
@@ -112,7 +136,7 @@ function accountLabel(id: number | null) {
 const columns: ColumnDef<GlAccountResponse>[] = [
   { key: 'accountNo', label: 'Account no.', sortable: true },
   { key: 'accountName', label: 'Name', sortable: true },
-  { key: 'parentId', label: 'Parent', value: row => accountLabel(row.parentId) },
+  { key: 'parentId', label: 'Parent', value: (row) => accountLabel(row.parentId) },
   { key: 'accountType', label: 'Type', type: 'enum', sortable: true },
   { key: 'normalBalance', label: 'Normal balance', type: 'enum', sortable: true },
   { key: 'currency', sortable: true },
@@ -151,43 +175,117 @@ const statusOptions = [
 
 function parentOptions(excludeId?: number) {
   return (accounts.value ?? [])
-    .filter(a => a.id !== excludeId)
-    .map(a => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
+    .filter((a) => a.id !== excludeId)
+    .map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
 }
 
 const createFields = computed<FieldDef[]>(() => [
   { name: 'accountNo', label: 'Account number', required: true, wrapper: 'half' },
   { name: 'accountName', label: 'Account name', required: true, wrapper: 'half' },
-  { name: 'parentId', label: 'Parent account', type: 'select', wrapper: 'half', options: parentOptions(), hint: 'Leave blank for a top-level account' },
-  { name: 'accountType', label: 'Account type', type: 'select', required: true, wrapper: 'half', options: accountTypeOptions },
-  { name: 'normalBalance', label: 'Normal balance', type: 'select', required: true, wrapper: 'half', options: entrySideOptions },
+  {
+    name: 'parentId',
+    label: 'Parent account',
+    type: 'select',
+    wrapper: 'half',
+    options: parentOptions(),
+    hint: 'Leave blank for a top-level account'
+  },
+  {
+    name: 'accountType',
+    label: 'Account type',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: accountTypeOptions
+  },
+  {
+    name: 'normalBalance',
+    label: 'Normal balance',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: entrySideOptions
+  },
   { name: 'currency', required: true, wrapper: 'half' },
-  { name: 'allowPosting', label: 'Allow direct posting', type: 'switch', default: true, wrapper: 'half' },
-  { name: 'status', type: 'select', required: true, default: 'ACTIVE', wrapper: 'half', options: statusOptions }
+  {
+    name: 'allowPosting',
+    label: 'Allow direct posting',
+    type: 'switch',
+    default: true,
+    wrapper: 'half'
+  },
+  {
+    name: 'status',
+    type: 'select',
+    required: true,
+    default: 'ACTIVE',
+    wrapper: 'half',
+    options: statusOptions
+  }
 ])
 
 const editFields = computed<FieldDef[]>(() => [
   { name: 'accountNo', label: 'Account number', required: true, wrapper: 'half' },
   { name: 'accountName', label: 'Account name', required: true, wrapper: 'half' },
-  { name: 'parentId', label: 'Parent account', type: 'select', wrapper: 'half', options: parentOptions((editingId.value as number | undefined) ?? undefined), hint: 'Leave blank for a top-level account' },
-  { name: 'accountType', label: 'Account type', type: 'select', required: true, wrapper: 'half', options: accountTypeOptions },
-  { name: 'normalBalance', label: 'Normal balance', type: 'select', required: true, wrapper: 'half', options: entrySideOptions },
+  {
+    name: 'parentId',
+    label: 'Parent account',
+    type: 'select',
+    wrapper: 'half',
+    options: parentOptions((editingId.value as number | undefined) ?? undefined),
+    hint: 'Leave blank for a top-level account'
+  },
+  {
+    name: 'accountType',
+    label: 'Account type',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: accountTypeOptions
+  },
+  {
+    name: 'normalBalance',
+    label: 'Normal balance',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: entrySideOptions
+  },
   { name: 'currency', required: true, wrapper: 'half' },
   { name: 'allowPosting', label: 'Allow direct posting', type: 'switch', wrapper: 'half' },
   { name: 'status', type: 'select', required: true, wrapper: 'half', options: statusOptions }
 ])
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editingId, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editingId,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
 } = useCrudModals<GlAccountResponse, GlAccountRequest>('/gl-accounts', refresh, {
   entityName: 'GL account',
   createDefaults: () => ({
-    accountNo: '', accountName: '', parentId: undefined, accountType: undefined,
-    normalBalance: undefined, currency: '', allowPosting: true, status: 'ACTIVE'
+    accountNo: '',
+    accountName: '',
+    parentId: undefined,
+    accountType: undefined,
+    normalBalance: undefined,
+    currency: '',
+    allowPosting: true,
+    status: 'ACTIVE'
   }),
-  toForm: row => ({
+  toForm: (row) => ({
     accountNo: row.accountNo,
     accountName: row.accountName,
     parentId: row.parentId ?? undefined,
@@ -197,7 +295,7 @@ const {
     allowPosting: row.allowPosting,
     status: row.status
   }),
-  toPayload: values => ({
+  toPayload: (values) => ({
     accountNo: values.accountNo,
     accountName: values.accountName,
     parentId: values.parentId || undefined,

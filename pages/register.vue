@@ -1,7 +1,9 @@
 <template>
   <div>
     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Create account</h2>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">New accounts start with standard user access.</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">
+      New accounts start with standard user access.
+    </p>
 
     <UForm :state="form" class="space-y-4" @submit="onSubmit">
       <UInput
@@ -29,7 +31,9 @@
       >
         <template #trailing>
           <UButton
-            color="gray" variant="link" :padded="false"
+            color="gray"
+            variant="link"
+            :padded="false"
             :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
             :aria-label="showPassword ? 'Hide password' : 'Show password'"
             @click="showPassword = !showPassword"
@@ -47,7 +51,13 @@
         :ui="{ rounded: 'rounded-full' }"
       />
 
-      <UAlert v-if="error" color="red" variant="subtle" :title="error" icon="i-heroicons-exclamation-triangle" />
+      <UAlert
+        v-if="error"
+        color="red"
+        variant="subtle"
+        :title="error"
+        icon="i-heroicons-exclamation-triangle"
+      />
 
       <UButton type="submit" block size="lg" :loading="loading" :ui="{ rounded: 'rounded-full' }">
         Create account

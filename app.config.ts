@@ -9,24 +9,42 @@ export default defineAppConfig({
     primary: 'emerald',
     gray: 'slate',
     card: {
-      rounded: 'rounded-2xl',
+      rounded: 'rounded-md',
       shadow: 'shadow-sm',
       ring: 'ring-1 ring-gray-200/70 dark:ring-gray-800'
     },
     button: {
-      rounded: 'rounded-full',
+      rounded: 'rounded-md',
       default: {
         size: 'sm'
       }
     },
     input: {
-      rounded: 'rounded-lg'
+      rounded: 'rounded-md',
+      default: {
+        size: 'md'
+      }
+    },
+    select: {
+      rounded: 'rounded-md',
+      default: {
+        size: 'md'
+      }
+    },
+    selectMenu: {
+      rounded: 'rounded-md'
+    },
+    textarea: {
+      rounded: 'rounded-md'
+    },
+    inputMenu: {
+      rounded: 'rounded-md'
     },
     badge: {
-      rounded: 'rounded-full'
+      rounded: 'rounded-md'
     },
     modal: {
-      rounded: 'rounded-2xl'
+      rounded: 'rounded-md'
     }
   }
 })

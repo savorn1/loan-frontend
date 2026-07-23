@@ -39,7 +39,13 @@ const fields: FieldDef[] = [
   { name: 'phone', icon: 'i-heroicons-phone', wrapper: 'half' },
   { name: 'nationalId', label: 'National ID', icon: 'i-heroicons-identification', wrapper: 'half' },
   { name: 'address', icon: 'i-heroicons-map-pin' },
-  { name: 'dateOfBirth', type: 'date', placeholder: 'Select date of birth', max: today, hint: 'Optional' }
+  {
+    name: 'dateOfBirth',
+    type: 'date',
+    placeholder: 'Select date of birth',
+    max: today,
+    hint: 'Optional'
+  }
 ]
 
 const form = ref<Record<string, any>>({

@@ -4,7 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">Restructures</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">Add restructure</UButton>
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
+            >Add restructure</UButton
+          >
         </div>
       </template>
 
@@ -54,9 +56,12 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.id as string
 
-const { data: restructures, pending, refresh } = await useAsyncData(
-  `loan-${loanId}-restructures`,
-  () => api<LoanRestructureResponse[]>(`/loans/${loanId}/restructures`)
+const {
+  data: restructures,
+  pending,
+  refresh
+} = await useAsyncData(`loan-${loanId}-restructures`, () =>
+  api<LoanRestructureResponse[]>(`/loans/${loanId}/restructures`)
 )
 
 const columns: ColumnDef<LoanRestructureResponse>[] = [
@@ -68,8 +73,25 @@ const columns: ColumnDef<LoanRestructureResponse>[] = [
 ]
 
 const fields: FieldDef[] = [
-  { name: 'newTermMonths', label: 'New term (months)', type: 'number', required: true, min: 1, wrapper: 'half' },
-  { name: 'newInterestRate', label: 'New interest rate', type: 'number', suffix: '%', min: 0.01, max: 100, step: 0.01, hint: 'Optional — leave blank to keep the current rate', wrapper: 'half' },
+  {
+    name: 'newTermMonths',
+    label: 'New term (months)',
+    type: 'number',
+    required: true,
+    min: 1,
+    wrapper: 'half'
+  },
+  {
+    name: 'newInterestRate',
+    label: 'New interest rate',
+    type: 'number',
+    suffix: '%',
+    min: 0.01,
+    max: 100,
+    step: 0.01,
+    hint: 'Optional — leave blank to keep the current rate',
+    wrapper: 'half'
+  },
   { name: 'effectiveDate', type: 'date', required: true },
   { name: 'reason', type: 'textarea', required: true }
 ]
@@ -80,7 +102,12 @@ const error = ref('')
 const createForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  createForm.value = { newTermMonths: undefined, newInterestRate: undefined, effectiveDate: '', reason: '' }
+  createForm.value = {
+    newTermMonths: undefined,
+    newInterestRate: undefined,
+    effectiveDate: '',
+    reason: ''
+  }
   error.value = ''
   showCreate.value = true
 }

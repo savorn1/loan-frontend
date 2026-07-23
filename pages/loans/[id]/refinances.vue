@@ -4,7 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">Refinances</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">Add refinance</UButton>
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
+            >Add refinance</UButton
+          >
         </div>
       </template>
 
@@ -44,7 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import type { LoanRefinanceRequest, LoanRefinanceResponse, LoanResponse } from '~/features/loans/types'
+import type {
+  LoanRefinanceRequest,
+  LoanRefinanceResponse,
+  LoanResponse
+} from '~/features/loans/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const route = useRoute()
@@ -54,27 +60,45 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.id as string
 
-const { data: refinances, pending, refresh } = await useAsyncData(
-  `loan-${loanId}-refinances`,
-  () => api<LoanRefinanceResponse[]>(`/loans/${loanId}/refinances`)
+const {
+  data: refinances,
+  pending,
+  refresh
+} = await useAsyncData(`loan-${loanId}-refinances`, () =>
+  api<LoanRefinanceResponse[]>(`/loans/${loanId}/refinances`)
 )
-const { data: allLoans } = await useAsyncData(`loan-${loanId}-refinances-loans`, () => api<LoanResponse[]>('/loans'))
+const { data: allLoans } = await useAsyncData(`loan-${loanId}-refinances-loans`, () =>
+  api<LoanResponse[]>('/loans')
+)
 
 const loanOptions = computed(() =>
   (allLoans.value ?? [])
-    .filter(l => String(l.id) !== loanId)
-    .map(l => ({ label: `#${l.id} — ${l.customerName} (${l.status})`, value: l.id }))
+    .filter((l) => String(l.id) !== loanId)
+    .map((l) => ({ label: `#${l.id} — ${l.customerName} (${l.status})`, value: l.id }))
 )
 
 const columns: ColumnDef<LoanRefinanceResponse>[] = [
   { key: 'effectiveDate', label: 'Effective', type: 'date' },
-  { key: 'newLoanId', label: 'Replacement loan', type: 'link', href: row => `/loans/${row.newLoanId}`, prefix: () => '#' },
+  {
+    key: 'newLoanId',
+    label: 'Replacement loan',
+    type: 'link',
+    href: (row) => `/loans/${row.newLoanId}`,
+    prefix: () => '#'
+  },
   { key: 'reason' },
   { key: 'createdAt', label: 'Created', type: 'datetime' }
 ]
 
 const fields = computed<FieldDef[]>(() => [
-  { name: 'newLoanId', label: 'Replacement loan', type: 'select', required: true, options: loanOptions.value, placeholder: 'Select the new loan' },
+  {
+    name: 'newLoanId',
+    label: 'Replacement loan',
+    type: 'select',
+    required: true,
+    options: loanOptions.value,
+    placeholder: 'Select the new loan'
+  },
   { name: 'effectiveDate', type: 'date', required: true },
   { name: 'reason', type: 'textarea', required: true }
 ])

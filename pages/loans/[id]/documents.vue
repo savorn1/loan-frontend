@@ -4,7 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">Documents</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">Add document</UButton>
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
+            >Add document</UButton
+          >
         </div>
       </template>
 
@@ -26,7 +28,14 @@
           <StatusBadge v-else :status="row.status" />
         </template>
         <template #actions-data="{ row }">
-          <UButton v-if="isAdmin" size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDeleteId = row.id" />
+          <UButton
+            v-if="isAdmin"
+            size="2xs"
+            color="red"
+            variant="soft"
+            icon="i-heroicons-trash"
+            @click="confirmDeleteId = row.id"
+          />
         </template>
         <template #empty-state>
           <EmptyState
@@ -67,14 +76,22 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDeleteId = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDeleteId = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { LoanDocumentRequest, LoanDocumentResponse, LoanDocumentStatus } from '~/features/loans/types'
+import type {
+  LoanDocumentRequest,
+  LoanDocumentResponse,
+  LoanDocumentStatus
+} from '~/features/loans/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const route = useRoute()
@@ -84,9 +101,12 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.id as string
 
-const { data: documents, pending, refresh } = await useAsyncData(
-  `loan-${loanId}-documents`,
-  () => api<LoanDocumentResponse[]>(`/loans/${loanId}/documents`)
+const {
+  data: documents,
+  pending,
+  refresh
+} = await useAsyncData(`loan-${loanId}-documents`, () =>
+  api<LoanDocumentResponse[]>(`/loans/${loanId}/documents`)
 )
 
 const columns: ColumnDef<LoanDocumentResponse>[] = [

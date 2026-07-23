@@ -1,6 +1,9 @@
 <template>
   <div>
-    <PageHeader title="General Ledger" description="Balances and posted activity for a single GL account within a financial period." />
+    <PageHeader
+      title="General Ledger"
+      description="Balances and posted activity for a single GL account within a financial period."
+    />
 
     <UCard class="mb-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -43,8 +46,14 @@
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-book-open"
-            :title="glAccountId && financialPeriodId ? 'No posted activity' : 'Pick an account and period'"
-            :description="glAccountId && financialPeriodId ? 'This account has no posted journal entries in the selected period.' : 'Select a GL account and a financial period above to view its ledger.'"
+            :title="
+              glAccountId && financialPeriodId ? 'No posted activity' : 'Pick an account and period'
+            "
+            :description="
+              glAccountId && financialPeriodId
+                ? 'This account has no posted journal entries in the selected period.'
+                : 'Select a GL account and a financial period above to view its ledger.'
+            "
           />
         </template>
       </DataTable>
@@ -53,16 +62,29 @@
 </template>
 
 <script setup lang="ts">
-import type { GlAccountResponse, FinancialPeriodResponse, GeneralLedgerResponse, LedgerLineResponse } from '~/features/accounting/types'
+import type {
+  GlAccountResponse,
+  FinancialPeriodResponse,
+  GeneralLedgerResponse,
+  LedgerLineResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: glAccounts } = await useAsyncData('general-ledger-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
-const { data: periods } = await useAsyncData('general-ledger-periods', () => api<FinancialPeriodResponse[]>('/financial-periods'))
+const { data: glAccounts } = await useAsyncData('general-ledger-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
+const { data: periods } = await useAsyncData('general-ledger-periods', () =>
+  api<FinancialPeriodResponse[]>('/financial-periods')
+)
 
-const glAccountOptions = computed(() => (glAccounts.value ?? []).map(a => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id })))
-const periodOptions = computed(() => (periods.value ?? []).map(p => ({ label: p.periodName, value: p.id })))
+const glAccountOptions = computed(() =>
+  (glAccounts.value ?? []).map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
+)
+const periodOptions = computed(() =>
+  (periods.value ?? []).map((p) => ({ label: p.periodName, value: p.id }))
+)
 
 const glAccountId = ref<number | undefined>(undefined)
 const financialPeriodId = ref<number | undefined>(undefined)
@@ -71,7 +93,9 @@ const { data: ledger, pending } = await useAsyncData(
   'general-ledger-balance',
   () => {
     if (!glAccountId.value || !financialPeriodId.value) return Promise.resolve(null)
-    return api<GeneralLedgerResponse>(`/gl-accounts/${glAccountId.value}/ledger?financialPeriodId=${financialPeriodId.value}`)
+    return api<GeneralLedgerResponse>(
+      `/gl-accounts/${glAccountId.value}/ledger?financialPeriodId=${financialPeriodId.value}`
+    )
   },
   { watch: [glAccountId, financialPeriodId] }
 )
@@ -80,7 +104,12 @@ const columns: ColumnDef<LedgerLineResponse>[] = [
   { key: 'transactionDate', label: 'Date', type: 'date' },
   { key: 'entryNo', label: 'Entry no.' },
   { key: 'description' },
-  { key: 'entrySide', label: 'Side', type: 'badge', color: row => (row.entrySide === 'DEBIT' ? 'orange' : 'teal') },
+  {
+    key: 'entrySide',
+    label: 'Side',
+    type: 'badge',
+    color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
+  },
   { key: 'amount', type: 'currency' },
   { key: 'runningBalance', label: 'Balance', type: 'currency' }
 ]

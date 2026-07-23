@@ -15,28 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable
-        :rows="rows"
-        :columns="columns"
-        :loading="pending"
-        v-model:sort="sort"
-      >
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-clock'"
             :title="search ? 'No matches' : 'No term templates yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Add a reusable term (e.g. 12 months) that loan products can select.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Add a reusable term (e.g. 12 months) that loan products can select.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New Term Template</UButton>
@@ -93,7 +104,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -105,7 +120,11 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: templates, pending, refresh } = await useAsyncData('term-templates', () => api<TermTemplateResponse[]>('/term-templates'))
+const {
+  data: templates,
+  pending,
+  refresh
+} = await useAsyncData('term-templates', () => api<TermTemplateResponse[]>('/term-templates'))
 
 const columns: ColumnDef<TermTemplateResponse>[] = [
   { key: 'code', sortable: true },
@@ -129,7 +148,14 @@ const totalLabel = computed(() => {
 const fields: FieldDef[] = [
   { name: 'code', required: true, wrapper: 'half' },
   { name: 'name', required: true, wrapper: 'half' },
-  { name: 'termValue', label: 'Term value', type: 'number', required: true, min: 1, wrapper: 'half' },
+  {
+    name: 'termValue',
+    label: 'Term value',
+    type: 'number',
+    required: true,
+    min: 1,
+    wrapper: 'half'
+  },
   {
     name: 'status',
     type: 'select',
@@ -144,14 +170,31 @@ const fields: FieldDef[] = [
 ]
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
 } = useCrudModals<TermTemplateResponse, TermTemplateRequest>('/term-templates', refresh, {
   entityName: 'Term template',
   createDefaults: () => ({ code: '', name: '', termValue: undefined, status: 'ACTIVE' }),
-  toForm: row => ({ code: row.code, name: row.name, termValue: row.termValue, status: row.status }),
-  toPayload: values => ({
+  toForm: (row) => ({
+    code: row.code,
+    name: row.name,
+    termValue: row.termValue,
+    status: row.status
+  }),
+  toPayload: (values) => ({
     code: values.code,
     name: values.name,
     termValue: values.termValue,

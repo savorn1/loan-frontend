@@ -22,9 +22,11 @@
             v-else
             type="button"
             class="w-7 h-7 flex items-center justify-center rounded-md text-sm font-medium transition-colors"
-            :class="item === page
-              ? 'bg-primary-500 text-white dark:bg-primary-400 dark:text-gray-900'
-              : 'text-primary-500 dark:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800'"
+            :class="
+              item === page
+                ? 'bg-primary-500 text-white dark:bg-primary-400 dark:text-gray-900'
+                : 'text-primary-500 dark:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+            "
             @click="page = item"
           >
             {{ item }}
@@ -63,12 +65,15 @@
 // client-side pagination (a bare array sliced locally); server-paginated
 // lists (e.g. /auth/users) fetch a page at a time and don't have a full
 // `total` to slice against the same way.
-const props = withDefaults(defineProps<{
-  total: number
-  pageSizeOptions?: { label: string; value: number }[]
-}>(), {
-  pageSizeOptions: () => [10, 15, 25, 50].map(n => ({ label: String(n), value: n }))
-})
+const props = withDefaults(
+  defineProps<{
+    total: number
+    pageSizeOptions?: { label: string; value: number }[]
+  }>(),
+  {
+    pageSizeOptions: () => [10, 15, 25, 50].map((n) => ({ label: String(n), value: n }))
+  }
+)
 
 const page = defineModel<number>('page', { required: true })
 const pageSize = defineModel<number>('pageSize', { required: true })

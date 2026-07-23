@@ -7,11 +7,17 @@
     </PageHeader>
 
     <UCard>
-      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
@@ -71,7 +77,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -101,7 +111,11 @@ interface JournalTemplateFormValue {
 const api = useApi()
 const toast = useToast()
 
-const { data: templates, pending, refresh } = await useAsyncData('journal-templates', () =>
+const {
+  data: templates,
+  pending,
+  refresh
+} = await useAsyncData('journal-templates', () =>
   api<JournalTemplateResponse[]>('/journal-templates')
 )
 
@@ -109,7 +123,7 @@ const columns: ColumnDef<JournalTemplateResponse>[] = [
   { key: 'code', sortable: true },
   { key: 'name', sortable: true },
   { key: 'transactionType', label: 'Transaction type', type: 'enum', sortable: true },
-  { key: 'lines', label: 'Lines', value: row => row.lines.length },
+  { key: 'lines', label: 'Lines', value: (row) => row.lines.length },
   { key: 'status', type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
 ]
@@ -187,7 +201,12 @@ function openEdit(row: JournalTemplateResponse) {
     description: row.description ?? '',
     status: row.status,
     lines: row.lines.length
-      ? row.lines.map(l => ({ lineNo: l.lineNo, accountRole: l.accountRole, entrySide: l.entrySide, description: l.description ?? '' }))
+      ? row.lines.map((l) => ({
+          lineNo: l.lineNo,
+          accountRole: l.accountRole,
+          entrySide: l.entrySide,
+          description: l.description ?? ''
+        }))
       : emptyForm().lines
   }
   editError.value = ''
@@ -199,7 +218,10 @@ async function onEdit() {
   editing.value = true
   editError.value = ''
   try {
-    await api(`/journal-templates/${editingId.value}`, { method: 'PUT', body: toPayload(editForm.value) })
+    await api(`/journal-templates/${editingId.value}`, {
+      method: 'PUT',
+      body: toPayload(editForm.value)
+    })
     toast.add({ title: 'Journal template updated', color: 'green' })
     showEdit.value = false
     await refresh()

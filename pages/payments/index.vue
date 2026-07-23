@@ -16,28 +16,57 @@
           placeholder="Filter by loan"
           class="max-w-xs w-full sm:w-auto"
         />
-        <USelectMenu v-model="statusFilter" :options="statusOptions" option-attribute="label" value-attribute="value" class="w-40" />
-        <UButton v-if="filterLoan || statusFilter" variant="ghost" color="gray" icon="i-heroicons-x-mark" @click="clearFilters">
+        <USelectMenu
+          v-model="statusFilter"
+          :options="statusOptions"
+          option-attribute="label"
+          value-attribute="value"
+          class="w-40"
+        />
+        <UButton
+          v-if="filterLoan || statusFilter"
+          variant="ghost"
+          color="gray"
+          icon="i-heroicons-x-mark"
+          @click="clearFilters"
+        >
           Clear filters
         </UButton>
       </div>
     </UCard>
 
     <UCard>
-      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton v-if="row.status !== 'PAID'" size="2xs" variant="soft" :loading="markingPaid === row.id" @click="onMarkPaid(row.id)">
+            <UButton
+              v-if="row.status !== 'PAID'"
+              size="2xs"
+              variant="soft"
+              :loading="markingPaid === row.id"
+              @click="onMarkPaid(row.id)"
+            >
               Mark paid
             </UButton>
-            <UButton v-if="isAdmin" size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDeleteId = row.id" />
+            <UButton
+              v-if="isAdmin"
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDeleteId = row.id"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-credit-card'"
             :title="hasFilters ? 'No matches' : 'No payments found'"
-            :description="hasFilters ? 'Try clearing the loan or status filter.' : 'Payments appear here once a schedule is generated or created manually.'"
+            :description="
+              hasFilters
+                ? 'Try clearing the loan or status filter.'
+                : 'Payments appear here once a schedule is generated or created manually.'
+            "
           >
             <template v-if="!hasFilters" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New Payment</UButton>
@@ -76,7 +105,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDeleteId = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDeleteId = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -95,15 +128,25 @@ type LoanOption = { label: string; value: number }
 
 const filterLoan = ref<LoanOption | undefined>(undefined)
 
-const { data: payments, pending, refresh } = await useAsyncData(
+const {
+  data: payments,
+  pending,
+  refresh
+} = await useAsyncData(
   'payments',
-  () => (filterLoan.value ? api<PaymentResponse[]>(`/payments/loan/${filterLoan.value.value}`) : api<PaymentResponse[]>('/payments')),
+  () =>
+    filterLoan.value
+      ? api<PaymentResponse[]>(`/payments/loan/${filterLoan.value.value}`)
+      : api<PaymentResponse[]>('/payments'),
   { watch: [filterLoan] }
 )
 const { data: loansRaw } = await useAsyncData('payments-loans', () => api<LoanResponse[]>('/loans'))
 
 const loanOptions = computed<LoanOption[]>(() =>
-  (loansRaw.value ?? []).map(l => ({ label: `#${l.id} — ${l.customerName} (${l.status})`, value: l.id }))
+  (loansRaw.value ?? []).map((l) => ({
+    label: `#${l.id} — ${l.customerName} (${l.status})`,
+    value: l.id
+  }))
 )
 
 const statusOptions: { label: string; value: PaymentStatus | '' }[] = [
@@ -115,7 +158,9 @@ const statusOptions: { label: string; value: PaymentStatus | '' }[] = [
 const statusFilter = ref<PaymentStatus | ''>('')
 
 const filteredByStatus = computed(() =>
-  statusFilter.value ? (payments.value ?? []).filter(p => p.status === statusFilter.value) : payments.value
+  statusFilter.value
+    ? (payments.value ?? []).filter((p) => p.status === statusFilter.value)
+    : payments.value
 )
 
 const { page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, { pageSize: 10 })
@@ -134,7 +179,14 @@ function clearFilters() {
 
 const columns: ColumnDef<PaymentResponse>[] = [
   { key: 'id', label: 'ID', sortable: true },
-  { key: 'loanId', label: 'Loan', type: 'link', sortable: true, href: row => `/loans/${row.loanId}`, prefix: () => '#' },
+  {
+    key: 'loanId',
+    label: 'Loan',
+    type: 'link',
+    sortable: true,
+    href: (row) => `/loans/${row.loanId}`,
+    prefix: () => '#'
+  },
   { key: 'installmentNumber', label: '#', sortable: true },
   { key: 'amount', type: 'currency', sortable: true },
   { key: 'dueDate', label: 'Due', type: 'date', sortable: true },
@@ -153,7 +205,14 @@ const confirmDeleteId = ref<number | null>(null)
 // Declarative field defs for <DynamicForm> — required/select/date validation
 // is handled there (these controls have no native browser validation).
 const paymentFields = computed<FieldDef[]>(() => [
-  { name: 'loanId', label: 'Loan', type: 'select', required: true, options: loanOptions.value, placeholder: 'Select a loan' },
+  {
+    name: 'loanId',
+    label: 'Loan',
+    type: 'select',
+    required: true,
+    options: loanOptions.value,
+    placeholder: 'Select a loan'
+  },
   { name: 'amount', type: 'number', required: true, prefix: '$', min: 0.01, step: 0.01 },
   { name: 'dueDate', type: 'date', required: true, placeholder: 'Select due date' },
   { name: 'note', type: 'text' }

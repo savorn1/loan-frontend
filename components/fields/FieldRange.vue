@@ -9,7 +9,9 @@
       class="flex-1"
       :aria-label="field.label ?? field.name"
     />
-    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 min-w-10 text-right">{{ model }}</span>
+    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 min-w-10 text-right">{{
+      model
+    }}</span>
   </div>
 </template>
 

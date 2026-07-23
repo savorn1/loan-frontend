@@ -4,7 +4,10 @@
 // and how a row maps to <DynamicForm> values and back to a request payload.
 // Same "declarative data + a couple of callbacks" shape as ColumnDef/FieldDef,
 // applied to a whole page's CRUD wiring instead of one column/field.
-export function useCrudModals<TResponse extends { id: string | number }, TRequest = Record<string, any>>(
+export function useCrudModals<
+  TResponse extends { id: string | number },
+  TRequest = Record<string, any>
+>(
   basePath: string,
   refresh: () => Promise<void> | void,
   options: {
@@ -65,7 +68,10 @@ export function useCrudModals<TResponse extends { id: string | number }, TReques
     editing.value = true
     editError.value = ''
     try {
-      await api(`${basePath}/${editingId.value}`, { method: 'PUT', body: options.toPayload(values) })
+      await api(`${basePath}/${editingId.value}`, {
+        method: 'PUT',
+        body: options.toPayload(values)
+      })
       toast.add({ title: `${options.entityName} updated`, color: 'green' })
       showEdit.value = false
       await refresh()
@@ -95,8 +101,21 @@ export function useCrudModals<TResponse extends { id: string | number }, TReques
   }
 
   return {
-    showCreate, creating, error, createForm, openCreate, onCreate,
-    showEdit, editing, editError, editingId, editForm, openEdit, onEdit,
-    deleting, confirmDelete, onDelete
+    showCreate,
+    creating,
+    error,
+    createForm,
+    openCreate,
+    onCreate,
+    showEdit,
+    editing,
+    editError,
+    editingId,
+    editForm,
+    openEdit,
+    onEdit,
+    deleting,
+    confirmDelete,
+    onDelete
   }
 }

@@ -27,19 +27,28 @@ const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   SUCCESS: { color: 'teal', icon: 'i-heroicons-check-badge' },
   VERIFIED: { color: 'teal', icon: 'i-heroicons-check-badge' },
   COMPLETED: { color: 'teal', icon: 'i-heroicons-flag' },
+  PLEDGED: { color: 'teal', icon: 'i-heroicons-lock-closed' },
+  RELEASED: { color: 'gray', icon: 'i-heroicons-lock-open' },
   REJECTED: { color: 'red', icon: 'i-heroicons-x-circle' },
   FAILED: { color: 'red', icon: 'i-heroicons-x-circle' },
   REVERSED: { color: 'red', icon: 'i-heroicons-arrow-uturn-left' },
   OVERDUE: { color: 'red', icon: 'i-heroicons-exclamation-triangle' },
   CLOSED: { color: 'gray', icon: 'i-heroicons-lock-closed' },
+  SUPERSEDED: { color: 'gray', icon: 'i-heroicons-archive-box' },
+  PARTIALLY_PAID: { color: 'orange', icon: 'i-heroicons-adjustments-horizontal' },
   WAIVED: { color: 'gray', icon: 'i-heroicons-hand-raised' },
   REFUNDED: { color: 'gray', icon: 'i-heroicons-arrow-uturn-left' },
   INACTIVE: { color: 'gray', icon: 'i-heroicons-pause-circle' },
   SUBMITTED: { color: 'gray', icon: 'i-heroicons-paper-airplane' },
+  UNDER_REVIEW: { color: 'orange', icon: 'i-heroicons-magnifying-glass' },
+  WITHDRAWN: { color: 'gray', icon: 'i-heroicons-arrow-uturn-left' },
   PENDING: { color: 'orange', icon: 'i-heroicons-clock' }
 }
 
-const DEFAULT_META: { color: StatusColor; icon: string } = { color: 'orange', icon: 'i-heroicons-clock' }
+const DEFAULT_META: { color: StatusColor; icon: string } = {
+  color: 'orange',
+  icon: 'i-heroicons-clock'
+}
 
 const meta = computed(() => STATUS_META[props.status] ?? DEFAULT_META)
 </script>

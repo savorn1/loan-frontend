@@ -1,6 +1,9 @@
 <template>
   <div>
-    <PageHeader :title="greeting" :description="`${dayGreeting} Here's what's happening across the loan book.`" />
+    <PageHeader
+      :title="greeting"
+      :description="`${dayGreeting} Here's what's happening across the loan book.`"
+    />
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <template v-if="loading">
@@ -23,7 +26,9 @@
               </div>
               <div class="min-w-0">
                 <div class="text-sm text-gray-500 dark:text-gray-400">{{ tile.label }}</div>
-                <div class="text-2xl font-semibold text-gray-900 dark:text-white">{{ tile.value }}</div>
+                <div class="text-2xl font-semibold text-gray-900 dark:text-white">
+                  {{ tile.value }}
+                </div>
               </div>
             </div>
           </UCard>
@@ -36,12 +41,23 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">Loans awaiting review</span>
-            <UBadge v-if="pendingLoans.length" color="orange" variant="subtle">{{ pendingLoans.length }}</UBadge>
+            <UBadge v-if="pendingLoans.length" color="orange" variant="subtle">{{
+              pendingLoans.length
+            }}</UBadge>
           </div>
         </template>
-        <DataTable :rows="pendingLoans" :columns="columns" :loading="pending" @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)">
+        <DataTable
+          :rows="pendingLoans"
+          :columns="columns"
+          :loading="pending"
+          @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
+        >
           <template #empty-state>
-            <EmptyState icon="i-heroicons-check-circle" title="All caught up" description="No loans are waiting for review right now." />
+            <EmptyState
+              icon="i-heroicons-check-circle"
+              title="All caught up"
+              description="No loans are waiting for review right now."
+            />
           </template>
         </DataTable>
       </UCard>
@@ -51,15 +67,26 @@
           <span class="font-semibold">Recent activity</span>
         </template>
         <div v-if="!recentActivity.length" class="py-6">
-          <EmptyState icon="i-heroicons-clock" title="Nothing yet" description="Loan and payment activity will show up here." />
+          <EmptyState
+            icon="i-heroicons-clock"
+            title="Nothing yet"
+            description="Loan and payment activity will show up here."
+          />
         </div>
         <ul v-else class="divide-y divide-gray-100 dark:divide-gray-800 -my-1">
-          <li v-for="item in recentActivity" :key="`${item.kind}-${item.id}`" class="py-3 flex items-start gap-3">
+          <li
+            v-for="item in recentActivity"
+            :key="`${item.kind}-${item.id}`"
+            class="py-3 flex items-start gap-3"
+          >
             <div class="shrink-0 rounded-full p-1.5 mt-0.5" :class="item.iconBg">
               <UIcon :name="item.icon" class="w-3.5 h-3.5" :class="item.iconColor" />
             </div>
             <div class="min-w-0 flex-1">
-              <NuxtLink :to="item.to" class="text-sm text-gray-900 dark:text-white font-medium hover:text-primary-500 truncate block">
+              <NuxtLink
+                :to="item.to"
+                class="text-sm text-gray-900 dark:text-white font-medium hover:text-primary-500 truncate block"
+              >
                 {{ item.label }}
               </NuxtLink>
               <p class="text-xs text-gray-500 dark:text-gray-400">{{ item.timestamp }}</p>
@@ -90,7 +117,9 @@ const [{ data: customers }, { data: loans, pending }, { data: payments }] = awai
   useAsyncData('dash-payments', () => api<PaymentResponse[]>('/payments'))
 ])
 
-const loading = computed(() => customers.value === null && loans.value === null && payments.value === null)
+const loading = computed(
+  () => customers.value === null && loans.value === null && payments.value === null
+)
 
 const greeting = computed(() => `Welcome back${username.value ? `, ${username.value}` : ''} 👋`)
 
@@ -102,14 +131,16 @@ const dayGreeting = computed(() => {
   return 'Good evening!'
 })
 
-const pendingLoans = computed(() => (loans.value ?? []).filter(l => l.status === 'PENDING'))
+const pendingLoans = computed(() => (loans.value ?? []).filter((l) => l.status === 'PENDING'))
 
 const outstandingBalance = computed(() =>
   (loans.value ?? [])
-    .filter(l => l.status === 'ACTIVE')
+    .filter((l) => l.status === 'ACTIVE')
     .reduce((sum, l) => sum + (l.outstandingBalance ?? 0), 0)
 )
-const overdueCount = computed(() => (payments.value ?? []).filter(p => p.status === 'OVERDUE').length)
+const overdueCount = computed(
+  () => (payments.value ?? []).filter((p) => p.status === 'OVERDUE').length
+)
 
 // Each tile gets its own soft gradient so the row reads as four friendly
 // colored chips instead of four identical gray boxes.
@@ -140,9 +171,10 @@ const statTiles = computed(() => [
     value: overdueCount.value,
     to: '/payments',
     icon: 'i-heroicons-exclamation-triangle',
-    iconBg: overdueCount.value > 0
-      ? 'bg-gradient-to-br from-rose-400 to-red-500'
-      : 'bg-gradient-to-br from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-700'
+    iconBg:
+      overdueCount.value > 0
+        ? 'bg-gradient-to-br from-rose-400 to-red-500'
+        : 'bg-gradient-to-br from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-700'
   }
 ])
 
@@ -170,7 +202,7 @@ type ActivityItem = {
 }
 
 const recentActivity = computed<ActivityItem[]>(() => {
-  const loanItems: ActivityItem[] = (loans.value ?? []).map(l => ({
+  const loanItems: ActivityItem[] = (loans.value ?? []).map((l) => ({
     kind: 'loan',
     id: l.id,
     label: `Loan #${l.id} — ${l.customerName}`,
@@ -182,7 +214,7 @@ const recentActivity = computed<ActivityItem[]>(() => {
     iconBg: 'bg-primary-50 dark:bg-primary-400/10',
     iconColor: 'text-primary-500 dark:text-primary-400'
   }))
-  const paymentItems: ActivityItem[] = (payments.value ?? []).map(p => ({
+  const paymentItems: ActivityItem[] = (payments.value ?? []).map((p) => ({
     kind: 'payment',
     id: p.id,
     label: `Payment #${p.id} on loan #${p.loanId}`,

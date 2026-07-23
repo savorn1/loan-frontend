@@ -8,10 +8,10 @@
 
     <UCard>
       <DataTable
+        v-model:sort="sort"
         :rows="rows"
         :columns="columns"
         :loading="pending"
-        v-model:sort="sort"
         @select="(row: JournalEntryResponse) => router.push(`/journal-entries/${row.id}`)"
       >
         <template #empty-state>
@@ -54,7 +54,11 @@
             <UFormGroup label="Currency" name="currency" required>
               <UInput v-model="createForm.currency" placeholder="e.g. USD" />
             </UFormGroup>
-            <UFormGroup label="Reference" name="referenceId" hint="Opaque pointer back to the upstream event, e.g. a loan id">
+            <UFormGroup
+              label="Reference"
+              name="referenceId"
+              help="Opaque pointer back to the upstream event, e.g. a loan id"
+            >
               <UInput v-model="createForm.referenceId" placeholder="Reference ID" />
             </UFormGroup>
           </div>
@@ -65,7 +69,9 @@
           <div>
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium">Lines</span>
-              <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine">Add line</UButton>
+              <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine"
+                >Add line</UButton
+              >
             </div>
             <div class="space-y-2">
               <div v-for="(line, i) in createForm.lines" :key="i" class="flex items-center gap-2">
@@ -77,9 +83,29 @@
                   placeholder="Account"
                   class="flex-1"
                 />
-                <USelectMenu v-model="line.entrySide" :options="entrySideOptions" option-attribute="label" value-attribute="value" class="w-32" />
-                <UInput v-model.number="line.amount" type="number" min="0.01" step="0.01" placeholder="Amount" class="w-32" />
-                <UButton size="2xs" color="red" variant="ghost" icon="i-heroicons-x-mark" :disabled="createForm.lines.length <= 2" @click="removeLine(i)" />
+                <USelectMenu
+                  v-model="line.entrySide"
+                  :options="entrySideOptions"
+                  option-attribute="label"
+                  value-attribute="value"
+                  class="w-32"
+                />
+                <UInput
+                  v-model.number="line.amount"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="Amount"
+                  class="w-32"
+                />
+                <UButton
+                  size="2xs"
+                  color="red"
+                  variant="ghost"
+                  icon="i-heroicons-x-mark"
+                  :disabled="createForm.lines.length <= 2"
+                  @click="removeLine(i)"
+                />
               </div>
             </div>
             <p class="text-xs mt-2" :class="isBalanced ? 'text-gray-500' : 'text-red-500'">
@@ -101,17 +127,31 @@
 </template>
 
 <script setup lang="ts">
-import type { GlAccountResponse, JournalEntryLineRequest, JournalEntryRequest, JournalEntryResponse, TransactionType } from '~/features/accounting/types'
+import type {
+  GlAccountResponse,
+  JournalEntryLineRequest,
+  JournalEntryRequest,
+  JournalEntryResponse,
+  TransactionType
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
 const router = useRouter()
 
-const { data: entries, pending, refresh } = await useAsyncData('journal-entries', () => api<JournalEntryResponse[]>('/journal-entries'))
-const { data: glAccounts } = await useAsyncData('journal-entries-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
+const {
+  data: entries,
+  pending,
+  refresh
+} = await useAsyncData('journal-entries', () => api<JournalEntryResponse[]>('/journal-entries'))
+const { data: glAccounts } = await useAsyncData('journal-entries-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
 
-const glAccountOptions = computed(() => (glAccounts.value ?? []).map(a => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id })))
+const glAccountOptions = computed(() =>
+  (glAccounts.value ?? []).map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
+)
 
 const columns: ColumnDef<JournalEntryResponse>[] = [
   { key: 'entryNo', label: 'Entry no.', sortable: true },
@@ -174,9 +214,20 @@ const createForm = reactive<{
   lines: [emptyLine(), { ...emptyLine(), entrySide: 'CREDIT' }]
 })
 
-const totalDebit = computed(() => createForm.lines.filter(l => l.entrySide === 'DEBIT').reduce((sum, l) => sum + (Number(l.amount) || 0), 0))
-const totalCredit = computed(() => createForm.lines.filter(l => l.entrySide === 'CREDIT').reduce((sum, l) => sum + (Number(l.amount) || 0), 0))
-const isBalanced = computed(() => createForm.lines.length >= 2 && totalDebit.value > 0 && totalDebit.value === totalCredit.value)
+const totalDebit = computed(() =>
+  createForm.lines
+    .filter((l) => l.entrySide === 'DEBIT')
+    .reduce((sum, l) => sum + (Number(l.amount) || 0), 0)
+)
+const totalCredit = computed(() =>
+  createForm.lines
+    .filter((l) => l.entrySide === 'CREDIT')
+    .reduce((sum, l) => sum + (Number(l.amount) || 0), 0)
+)
+const isBalanced = computed(
+  () =>
+    createForm.lines.length >= 2 && totalDebit.value > 0 && totalDebit.value === totalCredit.value
+)
 
 function addLine() {
   createForm.lines.push(emptyLine())
@@ -218,7 +269,10 @@ async function onCreate() {
         amount: Number(l.amount)
       }))
     }
-    const created = await api<JournalEntryResponse>('/journal-entries', { method: 'POST', body: payload })
+    const created = await api<JournalEntryResponse>('/journal-entries', {
+      method: 'POST',
+      body: payload
+    })
     toast.add({ title: 'Journal entry created as draft', color: 'green' })
     showCreate.value = false
     await refresh()

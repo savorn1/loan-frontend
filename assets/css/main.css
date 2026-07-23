@@ -1,6 +1,16 @@
 /* Global styles: page transitions + small delight animations.
    Kept tiny on purpose — Nuxt UI / Tailwind handle everything else. */
 
+/* Hides the scrollbar on horizontally-scrollable tab bars (e.g. loan detail
+   tabs) while keeping them scrollable via touch/trackpad/shift+wheel. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Cross-page transition: opacity-only. Animating transform on a whole page
    forces large repaints and reads as jank; a short pure fade stays at 60fps. */
 .page-enter-active,
@@ -15,8 +25,13 @@
 /* Gentle float for empty-state icons — slower and softer than Tailwind's
    built-in animate-bounce. will-change keeps it on the GPU compositor. */
 @keyframes float-soft {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 .animate-float-soft {
   animation: float-soft 3s ease-in-out infinite;
@@ -27,9 +42,16 @@
    translateZ(0) promotes each blob to its own compositor layer so the
    heavy blur() isn't re-rasterized every animation frame. */
 @keyframes blob-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  33% { transform: translate3d(24px, -18px, 0) scale(1.06); }
-  66% { transform: translate3d(-16px, 14px, 0) scale(0.97); }
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(24px, -18px, 0) scale(1.06);
+  }
+  66% {
+    transform: translate3d(-16px, 14px, 0) scale(0.97);
+  }
 }
 .animate-blob {
   animation: blob-drift 14s ease-in-out infinite;

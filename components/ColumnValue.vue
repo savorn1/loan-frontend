@@ -3,7 +3,9 @@
     <StatusBadge :status="String(rawValue)" />
   </template>
   <template v-else-if="column.type === 'link'">
-    <NuxtLink :to="column.href!(row)" class="text-primary-500 font-medium" @click.stop>{{ text }}</NuxtLink>
+    <NuxtLink :to="column.href!(row)" class="text-primary-500 font-medium" @click.stop>{{
+      text
+    }}</NuxtLink>
   </template>
   <template v-else-if="column.type === 'boolean'">
     <UBadge v-if="rawValue || column.falseLabel !== ''" :color="boolColor" variant="subtle">

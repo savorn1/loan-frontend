@@ -1,13 +1,32 @@
 <template>
   <div v-if="entry">
-    <UButton to="/journal-entries" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
+    <UButton
+      to="/journal-entries"
+      variant="link"
+      icon="i-heroicons-arrow-left"
+      size="xs"
+      class="mb-1 px-0"
+    >
       Back to journal entries
     </UButton>
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-xl font-bold">Journal Entry {{ entry.entryNo ?? `#${entry.id}` }}</h1>
       <div class="flex gap-2">
-        <UButton v-if="entry.status === 'DRAFT'" icon="i-heroicons-check-circle" :loading="posting" @click="onPost">Post</UButton>
-        <UButton v-if="entry.status === 'POSTED'" color="orange" variant="soft" icon="i-heroicons-arrow-uturn-left" :loading="reversing" @click="onReverse">
+        <UButton
+          v-if="entry.status === 'DRAFT'"
+          icon="i-heroicons-check-circle"
+          :loading="posting"
+          @click="onPost"
+          >Post</UButton
+        >
+        <UButton
+          v-if="entry.status === 'POSTED'"
+          color="orange"
+          variant="soft"
+          icon="i-heroicons-arrow-uturn-left"
+          :loading="reversing"
+          @click="onReverse"
+        >
           Reverse
         </UButton>
       </div>
@@ -30,7 +49,13 @@
           <dt class="text-gray-500">Currency</dt>
           <dd>{{ entry.currency }}</dd>
           <dt class="text-gray-500">Reference</dt>
-          <dd>{{ entry.referenceType ? `${entry.referenceType} · ${entry.referenceId}` : (entry.referenceId || '—') }}</dd>
+          <dd>
+            {{
+              entry.referenceType
+                ? `${entry.referenceType} · ${entry.referenceId}`
+                : entry.referenceId || '—'
+            }}
+          </dd>
           <dt class="text-gray-500">Posted at</dt>
           <dd>{{ formatDateTime(entry.postedAt) }}</dd>
           <dt class="text-gray-500">Posted by</dt>
@@ -44,7 +69,10 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">Lines</span>
-            <span class="text-xs text-gray-500">Debits {{ formatCurrency(totalDebit) }} · Credits {{ formatCurrency(totalCredit) }}</span>
+            <span class="text-xs text-gray-500"
+              >Debits {{ formatCurrency(totalDebit) }} · Credits
+              {{ formatCurrency(totalCredit) }}</span
+            >
           </div>
         </template>
         <DataTable :rows="entry.lines" :columns="lineColumns" />
@@ -64,7 +92,11 @@
 </template>
 
 <script setup lang="ts">
-import type { JournalAuditLogResponse, JournalEntryLineResponse, JournalEntryResponse } from '~/features/accounting/types'
+import type {
+  JournalAuditLogResponse,
+  JournalEntryLineResponse,
+  JournalEntryResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 const route = useRoute()
@@ -76,13 +108,19 @@ const entryId = route.params.id as string
 const { data: entry, refresh } = await useAsyncData(`journal-entry-${entryId}`, () =>
   api<JournalEntryResponse>(`/journal-entries/${entryId}`)
 )
-const { data: auditLogs, refresh: refreshAuditLogs } = await useAsyncData(`journal-entry-${entryId}-audit-logs`, () =>
-  api<JournalAuditLogResponse[]>(`/journal-entries/${entryId}/audit-logs`)
+const { data: auditLogs, refresh: refreshAuditLogs } = await useAsyncData(
+  `journal-entry-${entryId}-audit-logs`,
+  () => api<JournalAuditLogResponse[]>(`/journal-entries/${entryId}/audit-logs`)
 )
 
 const lineColumns: ColumnDef<JournalEntryLineResponse>[] = [
   { key: 'glAccountNo', label: 'Account' },
-  { key: 'entrySide', label: 'Side', type: 'badge', color: row => (row.entrySide === 'DEBIT' ? 'orange' : 'teal') },
+  {
+    key: 'entrySide',
+    label: 'Side',
+    type: 'badge',
+    color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
+  },
   { key: 'amount', type: 'currency' },
   { key: 'description' }
 ]
@@ -94,8 +132,16 @@ const auditColumns: ColumnDef<JournalAuditLogResponse>[] = [
   { key: 'details' }
 ]
 
-const totalDebit = computed(() => (entry.value?.lines ?? []).filter(l => l.entrySide === 'DEBIT').reduce((sum, l) => sum + l.amount, 0))
-const totalCredit = computed(() => (entry.value?.lines ?? []).filter(l => l.entrySide === 'CREDIT').reduce((sum, l) => sum + l.amount, 0))
+const totalDebit = computed(() =>
+  (entry.value?.lines ?? [])
+    .filter((l) => l.entrySide === 'DEBIT')
+    .reduce((sum, l) => sum + l.amount, 0)
+)
+const totalCredit = computed(() =>
+  (entry.value?.lines ?? [])
+    .filter((l) => l.entrySide === 'CREDIT')
+    .reduce((sum, l) => sum + l.amount, 0)
+)
 
 const posting = ref(false)
 async function onPost() {
@@ -115,7 +161,9 @@ const reversing = ref(false)
 async function onReverse() {
   reversing.value = true
   try {
-    const reversal = await api<JournalEntryResponse>(`/journal-entries/${entryId}/reverse`, { method: 'POST' })
+    const reversal = await api<JournalEntryResponse>(`/journal-entries/${entryId}/reverse`, {
+      method: 'POST'
+    })
     toast.add({ title: 'Journal entry reversed', color: 'green' })
     await navigateTo(`/journal-entries/${reversal.id}`)
   } catch (err) {

@@ -9,17 +9,37 @@
     <UCard class="mb-4">
       <div class="flex flex-wrap items-end gap-4">
         <UFormGroup label="Search username" class="w-56">
-          <UInput v-model="filters.username" placeholder="Search..." icon="i-heroicons-magnifying-glass">
+          <UInput
+            v-model="filters.username"
+            placeholder="Search..."
+            icon="i-heroicons-magnifying-glass"
+          >
             <template v-if="filters.username" #trailing>
-              <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="filters.username = ''" />
+              <UButton
+                color="gray"
+                variant="link"
+                icon="i-heroicons-x-mark"
+                :padded="false"
+                @click="filters.username = ''"
+              />
             </template>
           </UInput>
         </UFormGroup>
         <UFormGroup label="Role" class="w-40">
-          <USelectMenu v-model="filters.role" :options="roleFilterOptions" option-attribute="label" value-attribute="value" />
+          <USelectMenu
+            v-model="filters.role"
+            :options="roleFilterOptions"
+            option-attribute="label"
+            value-attribute="value"
+          />
         </UFormGroup>
         <UFormGroup label="Status" class="w-40">
-          <USelectMenu v-model="filters.active" :options="statusFilterOptions" option-attribute="label" value-attribute="value" />
+          <USelectMenu
+            v-model="filters.active"
+            :options="statusFilterOptions"
+            option-attribute="label"
+            value-attribute="value"
+          />
         </UFormGroup>
       </div>
     </UCard>
@@ -29,7 +49,9 @@
         <template #actions-data="{ row }">
           <div class="flex items-center justify-end gap-1">
             <UButton
-              size="xs" color="gray" variant="ghost"
+              size="xs"
+              color="gray"
+              variant="ghost"
               :disabled="row.username === username"
               :loading="actingId === row.id && action === 'role'"
               @click="onToggleRole(row)"
@@ -37,7 +59,9 @@
               Make {{ row.role === 'ADMIN' ? 'User' : 'Admin' }}
             </UButton>
             <UButton
-              size="xs" color="gray" variant="ghost"
+              size="xs"
+              color="gray"
+              variant="ghost"
               :disabled="row.username === username"
               :loading="actingId === row.id && action === 'status'"
               @click="onToggleStatus(row)"
@@ -45,18 +69,29 @@
               {{ row.active ? 'Disable' : 'Enable' }}
             </UButton>
             <UButton
-              size="xs" color="red" variant="ghost" icon="i-heroicons-trash"
+              size="xs"
+              color="red"
+              variant="ghost"
+              icon="i-heroicons-trash"
               :disabled="row.username === username"
               @click="confirmDeleteUser = row"
             />
           </div>
         </template>
         <template #empty-state>
-          <EmptyState icon="i-heroicons-shield-check" title="No users found" description="Try adjusting your search or filters." />
+          <EmptyState
+            icon="i-heroicons-shield-check"
+            title="No users found"
+            description="Try adjusting your search or filters."
+          />
         </template>
       </DataTable>
       <div v-if="users && users.totalElements > 0" class="pt-4">
-        <DataPagination v-model:page="page" v-model:page-size="pageSize" :total="users.totalElements" />
+        <DataPagination
+          v-model:page="page"
+          v-model:page-size="pageSize"
+          :total="users.totalElements"
+        />
       </div>
     </UCard>
 
@@ -78,7 +113,14 @@
       </UCard>
     </UModal>
 
-    <UModal :model-value="!!confirmDeleteUser" @update:model-value="(v: boolean) => { if (!v) confirmDeleteUser = null }">
+    <UModal
+      :model-value="!!confirmDeleteUser"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDeleteUser = null
+        }
+      "
+    >
       <UCard v-if="confirmDeleteUser">
         <template #header>
           <span class="font-semibold">Delete user "{{ confirmDeleteUser.username }}"?</span>
@@ -132,9 +174,12 @@ function buildQuery(): UserFilter {
   }
 }
 
-const { data: users, pending, refresh } = await useAsyncData(
-  'users',
-  () => api<PageResponse<UserResponse>>('/auth/users', { query: buildQuery() })
+const {
+  data: users,
+  pending,
+  refresh
+} = await useAsyncData('users', () =>
+  api<PageResponse<UserResponse>>('/auth/users', { query: buildQuery() })
 )
 
 const totalLabel = computed(() => {
@@ -143,25 +188,51 @@ const totalLabel = computed(() => {
 })
 
 watch(page, () => refresh())
-watch(pageSize, () => { page.value = 1; refresh() })
-watch(() => filters.role, () => { page.value = 1; refresh() })
-watch(() => filters.active, () => { page.value = 1; refresh() })
+watch(pageSize, () => {
+  page.value = 1
+  refresh()
+})
+watch(
+  () => filters.role,
+  () => {
+    page.value = 1
+    refresh()
+  }
+)
+watch(
+  () => filters.active,
+  () => {
+    page.value = 1
+    refresh()
+  }
+)
 
 // Debounced so we don't fire a request on every keystroke.
 let searchTimer: ReturnType<typeof setTimeout>
-watch(() => filters.username, () => {
-  clearTimeout(searchTimer)
-  searchTimer = setTimeout(() => {
-    page.value = 1
-    refresh()
-  }, 400)
-})
+watch(
+  () => filters.username,
+  () => {
+    clearTimeout(searchTimer)
+    searchTimer = setTimeout(() => {
+      page.value = 1
+      refresh()
+    }, 400)
+  }
+)
 
 const columns: ColumnDef<UserResponse>[] = [
   { key: 'id', label: 'ID' },
   { key: 'username', label: 'Username' },
-  { key: 'role', type: 'badge', color: row => (row.role === 'ADMIN' ? 'primary' : 'gray') },
-  { key: 'active', label: 'Status', type: 'boolean', trueLabel: 'Active', falseLabel: 'Disabled', trueColor: 'teal', falseColor: 'red' },
+  { key: 'role', type: 'badge', color: (row) => (row.role === 'ADMIN' ? 'primary' : 'gray') },
+  {
+    key: 'active',
+    label: 'Status',
+    type: 'boolean',
+    trueLabel: 'Active',
+    falseLabel: 'Disabled',
+    trueColor: 'teal',
+    falseColor: 'red'
+  },
   { key: 'createdAt', label: 'Created', type: 'datetime' },
   { key: 'actions', label: '', class: 'text-right' }
 ]

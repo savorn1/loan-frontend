@@ -15,28 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable
-        :rows="rows"
-        :columns="columns"
-        :loading="pending"
-        v-model:sort="sort"
-      >
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-wallet'"
             :title="search ? 'No matches' : 'No payment methods yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Add a payment method to start recording transactions against it.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Add a payment method to start recording transactions against it.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Method</UButton>
@@ -93,7 +104,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -105,13 +120,26 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: methods, pending, refresh } = await useAsyncData('payment-methods', () => api<PaymentMethodResponse[]>('/payments/methods'))
+const {
+  data: methods,
+  pending,
+  refresh
+} = await useAsyncData('payment-methods', () => api<PaymentMethodResponse[]>('/payments/methods'))
 
 const columns: ColumnDef<PaymentMethodResponse>[] = [
   { key: 'id', label: 'ID', sortable: true },
   { key: 'name', sortable: true },
   { key: 'type', type: 'enum', sortable: true },
-  { key: 'isActive', label: 'Status', type: 'boolean', trueLabel: 'Active', falseLabel: 'Inactive', trueColor: 'teal', falseColor: 'gray', sortable: true },
+  {
+    key: 'isActive',
+    label: 'Status',
+    type: 'boolean',
+    trueLabel: 'Active',
+    falseLabel: 'Inactive',
+    trueColor: 'teal',
+    falseColor: 'gray',
+    sortable: true
+  },
   { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
 ]
@@ -146,14 +174,31 @@ const fields: FieldDef[] = [
 ]
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
 } = useCrudModals<PaymentMethodResponse, PaymentMethodRequest>('/payments/methods', refresh, {
   entityName: 'Payment method',
   createDefaults: () => ({ name: '', type: undefined, isActive: true, details: '' }),
-  toForm: row => ({ name: row.name, type: row.type, isActive: row.isActive, details: row.details ?? '' }),
-  toPayload: values => ({
+  toForm: (row) => ({
+    name: row.name,
+    type: row.type,
+    isActive: row.isActive,
+    details: row.details ?? ''
+  }),
+  toPayload: (values) => ({
     name: values.name,
     type: values.type,
     isActive: values.isActive,

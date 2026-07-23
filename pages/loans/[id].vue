@@ -8,22 +8,62 @@
         <h1 class="text-xl font-bold">Loan #{{ loan.id }}</h1>
         <StatusBadge :status="loan.status" />
       </div>
-      <div class="flex gap-2" v-if="isAdmin">
+      <div v-if="isAdmin" class="flex gap-2">
         <UButton v-if="loan.status === 'PENDING'" color="green" @click="confirmAction = 'approve'">
           Approve
         </UButton>
-        <UButton v-if="loan.status === 'PENDING'" color="red" variant="soft" @click="confirmAction = 'reject'">
+        <UButton
+          v-if="loan.status === 'PENDING'"
+          color="red"
+          variant="soft"
+          @click="confirmAction = 'reject'"
+        >
           Reject
         </UButton>
-        <UButton v-if="loan.status === 'APPROVED'" color="primary" @click="confirmAction = 'disburse'">
+        <UButton
+          v-if="loan.status === 'APPROVED'"
+          color="primary"
+          @click="confirmAction = 'disburse'"
+        >
           Disburse
         </UButton>
       </div>
     </div>
 
-    <UHorizontalNavigation :links="tabs" class="border-b border-gray-200 dark:border-gray-800 mb-6" />
+    <div class="flex flex-col md:flex-row gap-6">
+      <div class="md:w-56 shrink-0 space-y-4">
+        <div v-for="group in tabGroups" :key="group.title">
+          <p
+            class="px-3 mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500"
+          >
+            {{ group.title }}
+          </p>
+          <UVerticalNavigation
+            :links="group.links"
+            :ui="{
+              wrapper: 'space-y-0.5',
+              base: 'group relative flex items-center gap-2.5 rounded-xl border-l-2 border-transparent px-3 py-2 text-sm font-medium transition-colors',
+              padding: 'px-0 py-0',
+              rounded: 'rounded-xl',
+              active:
+                'text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50 dark:bg-fuchsia-400/10 border-l-2 border-fuchsia-500 dark:border-fuchsia-400 before:hidden',
+              inactive:
+                'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800',
+              icon: {
+                base: 'w-4.5 h-4.5 shrink-0',
+                active: 'text-fuchsia-600 dark:text-fuchsia-400',
+                inactive:
+                  'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+              }
+            }"
+          />
+        </div>
+      </div>
 
-    <NuxtPage />
+      <div class="flex-1 min-w-0">
+        <NuxtPage />
+      </div>
+    </div>
 
     <ConfirmModal
       :model-value="!!confirmAction"
@@ -32,7 +72,11 @@
       :confirm-label="confirmMeta.confirmLabel"
       :color="confirmMeta.color"
       :loading="!!actionLoading"
-      @update:model-value="(v: boolean) => { if (!v) confirmAction = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmAction = null
+        }
+      "
       @confirm="doAction"
     />
   </div>
@@ -55,21 +99,74 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.id as string
 
-const { data: loan, refresh } = await useAsyncData(`loan-${loanId}`, () => api<LoanResponse>(`/loans/${loanId}`))
+const { data: loan, refresh } = await useAsyncData(`loan-${loanId}`, () =>
+  api<LoanResponse>(`/loans/${loanId}`)
+)
 
-const tabs = computed(() => [
-  { label: 'Overview', to: `/loans/${loanId}`, exact: true },
-  { label: 'Status history', to: `/loans/${loanId}/status-history` },
-  { label: 'Disbursements', to: `/loans/${loanId}/disbursements` },
-  { label: 'Restructures', to: `/loans/${loanId}/restructures` },
-  { label: 'Refinances', to: `/loans/${loanId}/refinances` },
-  { label: 'Penalties', to: `/loans/${loanId}/penalties` },
-  { label: 'Interest', to: `/loans/${loanId}/interest` },
-  { label: 'Adjustments', to: `/loans/${loanId}/adjustments` },
-  { label: 'Settlement', to: `/loans/${loanId}/settlement` },
-  { label: 'Write-off', to: `/loans/${loanId}/writeoff` },
-  { label: 'Notes', to: `/loans/${loanId}/notes` },
-  { label: 'Documents', to: `/loans/${loanId}/documents` }
+const tabGroups = computed(() => [
+  {
+    title: 'Overview',
+    links: [
+      { label: 'Overview', to: `/loans/${loanId}`, exact: true, icon: 'i-heroicons-squares-2x2' },
+      { label: 'Contract', to: `/loans/${loanId}/contract`, icon: 'i-heroicons-document-text' },
+      { label: 'Schedule', to: `/loans/${loanId}/schedule`, icon: 'i-heroicons-calendar-days' }
+    ]
+  },
+  {
+    title: 'Money',
+    links: [
+      { label: 'Payments', to: `/loans/${loanId}/payments`, icon: 'i-heroicons-banknotes' },
+      {
+        label: 'Transactions',
+        to: `/loans/${loanId}/transactions`,
+        icon: 'i-heroicons-arrows-right-left'
+      },
+      {
+        label: 'Disbursements',
+        to: `/loans/${loanId}/disbursements`,
+        icon: 'i-heroicons-arrow-up-circle'
+      },
+      { label: 'Interest', to: `/loans/${loanId}/interest`, icon: 'i-heroicons-percent-badge' },
+      { label: 'Fees', to: `/loans/${loanId}/fees`, icon: 'i-heroicons-receipt-percent' },
+      {
+        label: 'Penalties',
+        to: `/loans/${loanId}/penalties`,
+        icon: 'i-heroicons-exclamation-triangle'
+      },
+      {
+        label: 'Adjustments',
+        to: `/loans/${loanId}/adjustments`,
+        icon: 'i-heroicons-adjustments-horizontal'
+      },
+      { label: 'Settlement', to: `/loans/${loanId}/settlement`, icon: 'i-heroicons-check-badge' },
+      { label: 'Write-off', to: `/loans/${loanId}/writeoff`, icon: 'i-heroicons-trash' }
+    ]
+  },
+  {
+    title: 'Related',
+    links: [
+      { label: 'Collateral', to: `/loans/${loanId}/collaterals`, icon: 'i-heroicons-shield-check' },
+      { label: 'Guarantors', to: `/loans/${loanId}/guarantors`, icon: 'i-heroicons-user-group' }
+    ]
+  },
+  {
+    title: 'History',
+    links: [
+      {
+        label: 'Status history',
+        to: `/loans/${loanId}/status-history`,
+        icon: 'i-heroicons-clock'
+      },
+      { label: 'Restructures', to: `/loans/${loanId}/restructures`, icon: 'i-heroicons-arrow-path' },
+      {
+        label: 'Refinances',
+        to: `/loans/${loanId}/refinances`,
+        icon: 'i-heroicons-arrow-path-rounded-square'
+      },
+      { label: 'Notes', to: `/loans/${loanId}/notes`, icon: 'i-heroicons-pencil-square' },
+      { label: 'Documents', to: `/loans/${loanId}/documents`, icon: 'i-heroicons-folder' }
+    ]
+  }
 ])
 
 const actionLoading = ref<string | null>(null)
@@ -77,7 +174,10 @@ const actionLoading = ref<string | null>(null)
 type LoanAction = 'approve' | 'reject' | 'disburse'
 const confirmAction = ref<LoanAction | null>(null)
 
-const CONFIRM_META: Record<LoanAction, { title: string; description: string; confirmLabel: string; color: 'green' | 'red' | 'primary' }> = {
+const CONFIRM_META: Record<
+  LoanAction,
+  { title: string; description: string; confirmLabel: string; color: 'green' | 'red' | 'primary' }
+> = {
   approve: {
     title: 'Approve this loan?',
     description: 'The loan moves to APPROVED and becomes eligible for disbursement.',
@@ -92,7 +192,8 @@ const CONFIRM_META: Record<LoanAction, { title: string; description: string; con
   },
   disburse: {
     title: 'Disburse this loan?',
-    description: 'Funds are marked as released, the amortization schedule is generated, and the loan becomes ACTIVE. This cannot be undone.',
+    description:
+      'Funds are marked as released, the amortization schedule is generated, and the loan becomes ACTIVE. This cannot be undone.',
     confirmLabel: 'Disburse',
     color: 'primary'
   }

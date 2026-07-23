@@ -52,7 +52,9 @@ const CONTROLS: Record<Exclude<FieldType, 'hidden'>, Component> = {
   datetime: FieldDateTime
 }
 
-const control = computed(() => CONTROLS[(props.field.type ?? 'text') as Exclude<FieldType, 'hidden'>])
+const control = computed(
+  () => CONTROLS[(props.field.type ?? 'text') as Exclude<FieldType, 'hidden'>]
+)
 
 // Backpack behavior: label is optional and constructed from the name —
 // 'dateOfBirth' / 'date_of_birth' both become 'Date of birth'.

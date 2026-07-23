@@ -15,28 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable
-        :rows="rows"
-        :columns="columns"
-        :loading="pending"
-        v-model:sort="sort"
-      >
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-adjustments-horizontal'"
             :title="search ? 'No matches' : 'No rule templates yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Add a reusable eligibility rule (e.g. Min Credit Score 650) that loan products can select.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Add a reusable eligibility rule (e.g. Min Credit Score 650) that loan products can select.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New Rule Template</UButton>
@@ -93,7 +104,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -105,7 +120,11 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: templates, pending, refresh } = await useAsyncData('rule-templates', () => api<RuleTemplateResponse[]>('/rule-templates'))
+const {
+  data: templates,
+  pending,
+  refresh
+} = await useAsyncData('rule-templates', () => api<RuleTemplateResponse[]>('/rule-templates'))
 
 const columns: ColumnDef<RuleTemplateResponse>[] = [
   { key: 'code', sortable: true },
@@ -160,8 +179,19 @@ const fields: FieldDef[] = [
       { label: 'In', value: 'IN' }
     ]
   },
-  { name: 'value', label: 'Value', required: true, wrapper: 'half', hint: 'Lower bound for BETWEEN, comma-separated list for IN' },
-  { name: 'value2', label: 'Value 2', wrapper: 'half', hint: 'Upper bound — required only when operator is BETWEEN' },
+  {
+    name: 'value',
+    label: 'Value',
+    required: true,
+    wrapper: 'half',
+    hint: 'Lower bound for BETWEEN, comma-separated list for IN'
+  },
+  {
+    name: 'value2',
+    label: 'Value 2',
+    wrapper: 'half',
+    hint: 'Upper bound — required only when operator is BETWEEN'
+  },
   { name: 'description', type: 'textarea' },
   {
     name: 'status',
@@ -177,13 +207,34 @@ const fields: FieldDef[] = [
 ]
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
 } = useCrudModals<RuleTemplateResponse, RuleTemplateRequest>('/rule-templates', refresh, {
   entityName: 'Rule template',
-  createDefaults: () => ({ code: '', name: '', field: undefined, operator: undefined, value: '', value2: '', description: '', status: 'ACTIVE' }),
-  toForm: row => ({
+  createDefaults: () => ({
+    code: '',
+    name: '',
+    field: undefined,
+    operator: undefined,
+    value: '',
+    value2: '',
+    description: '',
+    status: 'ACTIVE'
+  }),
+  toForm: (row) => ({
     code: row.code,
     name: row.name,
     field: row.field,
@@ -193,7 +244,7 @@ const {
     description: row.description ?? '',
     status: row.status
   }),
-  toPayload: values => ({
+  toPayload: (values) => ({
     code: values.code,
     name: values.name,
     field: values.field,

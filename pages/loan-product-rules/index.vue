@@ -15,23 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-shield-check'"
             :title="search ? 'No matches' : 'No eligibility rule assignments yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Assign a reusable eligibility rule to a loan product.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Assign a reusable eligibility rule to a loan product.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">Assign Rule</UButton>
@@ -88,7 +104,11 @@
       confirm-label="Remove"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -106,7 +126,11 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 const api = useApi()
 const toast = useToast()
 
-const { data: rules, pending, refresh } = await useAsyncData('loan-product-rules', () =>
+const {
+  data: rules,
+  pending,
+  refresh
+} = await useAsyncData('loan-product-rules', () =>
   api<LoanProductRuleResponse[]>('/loan-products/rules')
 )
 const { data: products } = await useAsyncData('loan-product-rules-products', () =>
@@ -116,20 +140,29 @@ const { data: templates } = await useAsyncData('loan-product-rules-templates', (
   api<RuleTemplateResponse[]>('/rule-templates')
 )
 
-const productMap = computed(() => new Map((products.value ?? []).map(p => [p.id, p])))
+const productMap = computed(() => new Map((products.value ?? []).map((p) => [p.id, p])))
 function productLabel(id: string) {
   const p = productMap.value.get(id)
   return p ? `${p.name} (${p.code})` : id
 }
 
-const productOptions = computed(() => (products.value ?? []).map(p => ({ label: `${p.name} (${p.code})`, value: p.id })))
+const productOptions = computed(() =>
+  (products.value ?? []).map((p) => ({ label: `${p.name} (${p.code})`, value: p.id }))
+)
 const templateOptions = computed(() =>
-  (templates.value ?? []).map(t => ({ label: `${t.name} (${t.code}) — ${formatEnum(t.field)} ${formatEnum(t.operator)} ${t.value}`, value: t.id }))
+  (templates.value ?? []).map((t) => ({
+    label: `${t.name} (${t.code}) — ${formatEnum(t.field)} ${formatEnum(t.operator)} ${t.value}`,
+    value: t.id
+  }))
 )
 
 const columns: ColumnDef<LoanProductRuleResponse>[] = [
-  { key: 'loanProductId', label: 'Loan product', value: row => productLabel(row.loanProductId) },
-  { key: 'ruleTemplateName', label: 'Rule', value: row => `${row.ruleTemplateName} (${row.ruleTemplateCode})` },
+  { key: 'loanProductId', label: 'Loan product', value: (row) => productLabel(row.loanProductId) },
+  {
+    key: 'ruleTemplateName',
+    label: 'Rule',
+    value: (row) => `${row.ruleTemplateName} (${row.ruleTemplateCode})`
+  },
   { key: 'field', type: 'enum' },
   { key: 'operator', type: 'enum' },
   { key: 'value', label: 'Value', to: 'value2', toEmpty: '' },
@@ -138,7 +171,12 @@ const columns: ColumnDef<LoanProductRuleResponse>[] = [
 ]
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(
-  computed(() => (rules.value ?? []).map(r => ({ ...r, searchLabel: `${productLabel(r.loanProductId)} ${r.ruleTemplateName} ${r.ruleTemplateCode}` }))),
+  computed(() =>
+    (rules.value ?? []).map((r) => ({
+      ...r,
+      searchLabel: `${productLabel(r.loanProductId)} ${r.ruleTemplateName} ${r.ruleTemplateCode}`
+    }))
+  ),
   { searchFields: ['searchLabel'], pageSize: 15 }
 )
 
@@ -165,13 +203,34 @@ const commonFields: FieldDef[] = [
 ]
 
 const createFields = computed<FieldDef[]>(() => [
-  { name: 'loanProductId', label: 'Loan product', type: 'select', required: true, wrapper: 'half', options: productOptions.value },
-  { name: 'ruleTemplateId', label: 'Rule template', type: 'select', required: true, wrapper: 'half', options: templateOptions.value },
+  {
+    name: 'loanProductId',
+    label: 'Loan product',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: productOptions.value
+  },
+  {
+    name: 'ruleTemplateId',
+    label: 'Rule template',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: templateOptions.value
+  },
   ...commonFields
 ])
 
 const editFields = computed<FieldDef[]>(() => [
-  { name: 'ruleTemplateId', label: 'Rule template', type: 'select', required: true, wrapper: 'half', options: templateOptions.value },
+  {
+    name: 'ruleTemplateId',
+    label: 'Rule template',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: templateOptions.value
+  },
   ...commonFields
 ])
 
@@ -201,7 +260,10 @@ async function onCreate(values: Record<string, any>) {
   creating.value = true
   error.value = ''
   try {
-    await api(`/loan-products/${values.loanProductId}/rules`, { method: 'POST', body: toPayload(values) })
+    await api(`/loan-products/${values.loanProductId}/rules`, {
+      method: 'POST',
+      body: toPayload(values)
+    })
     toast.add({ title: 'Rule assigned', color: 'green' })
     showCreate.value = false
     await refresh()
@@ -254,7 +316,10 @@ async function onDelete() {
   if (!confirmDelete.value) return
   deleting.value = true
   try {
-    await api(`/loan-products/${confirmDelete.value.loanProductId}/rules/${confirmDelete.value.id}`, { method: 'DELETE' })
+    await api(
+      `/loan-products/${confirmDelete.value.loanProductId}/rules/${confirmDelete.value.id}`,
+      { method: 'DELETE' }
+    )
     toast.add({ title: 'Assignment removed', color: 'green' })
     confirmDelete.value = null
     await refresh()

@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   devServer: {
     port: Number(process.env.NUXT_PORT) || 3000
   },
-  modules: ['@nuxt/ui', '@pinia/nuxt'],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/eslint'],
   // Colors passed to UBadge/UProgress/UButton dynamically (computed refs in
   // StatusBadge, ConfirmModal callers, etc.) aren't visible to Nuxt UI's
   // static safelist scan — list them so their Tailwind classes are generated.
@@ -28,11 +28,14 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' }
   },
   // Feature-folder layout: each domain (features/<name>/) owns its components,
-  // composables, utils and types; only truly cross-cutting code lives in shared/.
+  // composables, utils and types; cross-cutting composables/utils/types live in
+  // shared/, but shared components stay in the root components/ dir — Nuxt's
+  // shared/ is reserved for isomorphic app+server code and Nitro's bundler
+  // can't parse .vue files placed inside it.
   // pages/, layouts/ and middleware/ stay at the root — Nuxt's file-based
   // routing requires those conventional locations.
   components: [
-    { path: '~/shared/components', pathPrefix: false },
+    { path: '~/components', pathPrefix: false },
     { path: '~/features', pattern: '*/components/**/*.vue', pathPrefix: false }
   ],
   imports: {

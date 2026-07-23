@@ -17,7 +17,12 @@
         <dd>{{ writeoff.reason }}</dd>
       </dl>
 
-      <UButton v-if="isAdmin && writeoff.status === 'PENDING'" color="red" :loading="completing" @click="onComplete">
+      <UButton
+        v-if="isAdmin && writeoff.status === 'PENDING'"
+        color="red"
+        :loading="completing"
+        @click="onComplete"
+      >
         Mark completed
       </UButton>
     </UCard>
@@ -26,7 +31,9 @@
       <template #header>
         <span class="font-semibold">Write off this loan</span>
       </template>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">No write-off has been recorded for this loan yet.</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        No write-off has been recorded for this loan yet.
+      </p>
       <DynamicForm
         v-if="isAdmin"
         v-model="createForm"

@@ -7,11 +7,17 @@
     </PageHeader>
 
     <UCard>
-      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
@@ -75,7 +81,11 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
@@ -92,7 +102,11 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: schemes, pending, refresh } = await useAsyncData('accounting-schemes', () =>
+const {
+  data: schemes,
+  pending,
+  refresh
+} = await useAsyncData('accounting-schemes', () =>
   api<AccountingSchemeResponse[]>('/accounting-schemes')
 )
 const { data: templates } = await useAsyncData('accounting-schemes-templates', () =>
@@ -102,22 +116,30 @@ const { data: glAccounts } = await useAsyncData('accounting-schemes-gl-accounts'
   api<GlAccountResponse[]>('/gl-accounts')
 )
 
-const templateMap = computed(() => new Map((templates.value ?? []).map(t => [t.id, t])))
+const templateMap = computed(() => new Map((templates.value ?? []).map((t) => [t.id, t])))
 function templateLabel(id: number) {
   const t = templateMap.value.get(id)
   return t ? `${t.name} (${t.code})` : String(id)
 }
-const templateOptions = computed(() => (templates.value ?? []).map(t => ({ label: `${t.name} (${t.code})`, value: t.id })))
-const glAccountOptions = computed(() => (glAccounts.value ?? []).map(a => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id })))
+const templateOptions = computed(() =>
+  (templates.value ?? []).map((t) => ({ label: `${t.name} (${t.code})`, value: t.id }))
+)
+const glAccountOptions = computed(() =>
+  (glAccounts.value ?? []).map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
+)
 
 function rolesFor(templateId: number | undefined) {
   const template = templateId !== undefined ? templateMap.value.get(templateId) : undefined
-  const roles = [...new Set((template?.lines ?? []).map(l => l.accountRole))]
-  return roles.map(r => ({ label: r, value: r }))
+  const roles = [...new Set((template?.lines ?? []).map((l) => l.accountRole))]
+  return roles.map((r) => ({ label: r, value: r }))
 }
 
 const columns: ColumnDef<AccountingSchemeResponse>[] = [
-  { key: 'journalTemplateId', label: 'Journal template', value: row => templateLabel(row.journalTemplateId) },
+  {
+    key: 'journalTemplateId',
+    label: 'Journal template',
+    value: (row) => templateLabel(row.journalTemplateId)
+  },
   { key: 'accountRole', label: 'Role' },
   { key: 'glAccountNo', label: 'GL account' },
   { key: 'currency', sortable: true },
@@ -138,41 +160,113 @@ const statusOptions = [
 ]
 
 const createFields = computed<FieldDef[]>(() => [
-  { name: 'journalTemplateId', label: 'Journal template', type: 'select', required: true, wrapper: 'half', options: templateOptions.value },
-  { name: 'accountRole', label: 'Account role', type: 'select', required: true, wrapper: 'half', options: rolesFor(createForm.value.journalTemplateId), hint: 'Pick a journal template first' },
-  { name: 'glAccountId', label: 'GL account', type: 'select', required: true, wrapper: 'half', options: glAccountOptions.value },
+  {
+    name: 'journalTemplateId',
+    label: 'Journal template',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: templateOptions.value
+  },
+  {
+    name: 'accountRole',
+    label: 'Account role',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: rolesFor(createForm.value.journalTemplateId),
+    hint: 'Pick a journal template first'
+  },
+  {
+    name: 'glAccountId',
+    label: 'GL account',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: glAccountOptions.value
+  },
   { name: 'currency', required: true, wrapper: 'half' },
-  { name: 'status', type: 'select', required: true, default: 'ACTIVE', wrapper: 'half', options: statusOptions }
+  {
+    name: 'status',
+    type: 'select',
+    required: true,
+    default: 'ACTIVE',
+    wrapper: 'half',
+    options: statusOptions
+  }
 ])
 
 const editFields = computed<FieldDef[]>(() => [
-  { name: 'journalTemplateId', label: 'Journal template', type: 'select', required: true, wrapper: 'half', options: templateOptions.value },
-  { name: 'accountRole', label: 'Account role', type: 'select', required: true, wrapper: 'half', options: rolesFor(editForm.value.journalTemplateId) },
-  { name: 'glAccountId', label: 'GL account', type: 'select', required: true, wrapper: 'half', options: glAccountOptions.value },
+  {
+    name: 'journalTemplateId',
+    label: 'Journal template',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: templateOptions.value
+  },
+  {
+    name: 'accountRole',
+    label: 'Account role',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: rolesFor(editForm.value.journalTemplateId)
+  },
+  {
+    name: 'glAccountId',
+    label: 'GL account',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: glAccountOptions.value
+  },
   { name: 'currency', required: true, wrapper: 'half' },
   { name: 'status', type: 'select', required: true, wrapper: 'half', options: statusOptions }
 ])
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
-} = useCrudModals<AccountingSchemeResponse, AccountingSchemeRequest>('/accounting-schemes', refresh, {
-  entityName: 'Accounting scheme',
-  createDefaults: () => ({ journalTemplateId: undefined, accountRole: undefined, glAccountId: undefined, currency: '', status: 'ACTIVE' }),
-  toForm: row => ({
-    journalTemplateId: row.journalTemplateId,
-    accountRole: row.accountRole,
-    glAccountId: row.glAccountId,
-    currency: row.currency,
-    status: row.status
-  }),
-  toPayload: values => ({
-    journalTemplateId: values.journalTemplateId,
-    accountRole: values.accountRole,
-    glAccountId: values.glAccountId,
-    currency: values.currency,
-    status: values.status
-  })
-})
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
+} = useCrudModals<AccountingSchemeResponse, AccountingSchemeRequest>(
+  '/accounting-schemes',
+  refresh,
+  {
+    entityName: 'Accounting scheme',
+    createDefaults: () => ({
+      journalTemplateId: undefined,
+      accountRole: undefined,
+      glAccountId: undefined,
+      currency: '',
+      status: 'ACTIVE'
+    }),
+    toForm: (row) => ({
+      journalTemplateId: row.journalTemplateId,
+      accountRole: row.accountRole,
+      glAccountId: row.glAccountId,
+      currency: row.currency,
+      status: row.status
+    }),
+    toPayload: (values) => ({
+      journalTemplateId: values.journalTemplateId,
+      accountRole: values.accountRole,
+      glAccountId: values.glAccountId,
+      currency: values.currency,
+      status: values.status
+    })
+  }
+)
 </script>

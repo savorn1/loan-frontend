@@ -11,13 +11,19 @@
             <span class="text-gray-500">Paid off</span>
             <span class="font-medium text-gray-900 dark:text-white">{{ payoffPercent }}%</span>
           </div>
-          <UProgress :value="payoffPercent" :color="loan.status === 'CLOSED' ? 'teal' : 'primary'" size="sm" />
+          <UProgress
+            :value="payoffPercent"
+            :color="loan.status === 'CLOSED' ? 'teal' : 'primary'"
+            size="sm"
+          />
         </div>
 
         <dl class="grid grid-cols-2 gap-y-3 text-sm">
           <dt class="text-gray-500">Customer</dt>
           <dd>
-            <NuxtLink :to="`/customers/${loan.customerId}`" class="text-primary-500">{{ loan.customerName }}</NuxtLink>
+            <NuxtLink :to="`/customers/${loan.customerId}`" class="text-primary-500">{{
+              loan.customerName
+            }}</NuxtLink>
           </dd>
           <dt class="text-gray-500">Principal</dt>
           <dd>{{ formatCurrency(loan.principal) }}</dd>
@@ -49,12 +55,25 @@
              tracked separately in payment-service. -->
         <UForm :state="paymentForm" class="space-y-3" @submit="onApplyPayment">
           <UFormGroup label="Amount" name="amount" required>
-            <UInput v-model.number="paymentForm.amount" type="number" min="0.01" step="0.01" required />
+            <UInput
+              v-model.number="paymentForm.amount"
+              type="number"
+              min="0.01"
+              step="0.01"
+              required
+            />
           </UFormGroup>
-          <UButton type="submit" block :loading="applyingPayment" :disabled="loan.status !== 'ACTIVE'">
+          <UButton
+            type="submit"
+            block
+            :loading="applyingPayment"
+            :disabled="loan.status !== 'ACTIVE'"
+          >
             Apply payment
           </UButton>
-          <p v-if="loan.status !== 'ACTIVE'" class="text-xs text-gray-500">Only available for active loans.</p>
+          <p v-if="loan.status !== 'ACTIVE'" class="text-xs text-gray-500">
+            Only available for active loans.
+          </p>
         </UForm>
       </UCard>
     </div>
@@ -76,7 +95,13 @@
       </template>
       <DataTable :rows="payments ?? []" :columns="paymentColumns" :loading="paymentsPending">
         <template #actions-data="{ row }">
-          <UButton v-if="row.status !== 'PAID'" size="2xs" variant="soft" :loading="markingPaid === row.id" @click="onMarkPaid(row.id)">
+          <UButton
+            v-if="row.status !== 'PAID'"
+            size="2xs"
+            variant="soft"
+            :loading="markingPaid === row.id"
+            @click="onMarkPaid(row.id)"
+          >
             Mark paid
           </UButton>
         </template>
@@ -84,7 +109,11 @@
           <EmptyState
             icon="i-heroicons-calendar-days"
             title="No payment schedule yet"
-            :description="loan.status === 'ACTIVE' ? 'Generate an amortization schedule to start tracking installments.' : 'A schedule is generated automatically once the loan is disbursed.'"
+            :description="
+              loan.status === 'ACTIVE'
+                ? 'Generate an amortization schedule to start tracking installments.'
+                : 'A schedule is generated automatically once the loan is disbursed.'
+            "
           />
         </template>
       </DataTable>
@@ -106,7 +135,9 @@ const toast = useToast()
 
 const loanId = route.params.id as string
 
-const { data: loan, refresh } = await useAsyncData(`loan-${loanId}`, () => api<LoanResponse>(`/loans/${loanId}`))
+const { data: loan, refresh } = await useAsyncData(`loan-${loanId}`, () =>
+  api<LoanResponse>(`/loans/${loanId}`)
+)
 const payoffPercent = computed(() => {
   if (!loan.value || !loan.value.principal) return 0
   const outstanding = loan.value.outstandingBalance ?? 0
@@ -114,9 +145,12 @@ const payoffPercent = computed(() => {
   return Math.max(0, Math.min(100, Math.round((paid / loan.value.principal) * 100)))
 })
 
-const { data: payments, pending: paymentsPending, refresh: refreshPayments } = await useAsyncData(
-  `loan-${loanId}-payments`,
-  () => api<PaymentResponse[]>(`/payments/loan/${loanId}`)
+const {
+  data: payments,
+  pending: paymentsPending,
+  refresh: refreshPayments
+} = await useAsyncData(`loan-${loanId}-payments`, () =>
+  api<PaymentResponse[]>(`/payments/loan/${loanId}`)
 )
 
 const { isAdmin } = storeToRefs(useAuth())
@@ -155,7 +189,10 @@ async function onGenerateSchedule() {
   generatingSchedule.value = true
   try {
     const installments = generateAmortizationSchedule(loan.value)
-    await api('/payments/schedule', { method: 'POST', body: { loanId: Number(loanId), installments } })
+    await api('/payments/schedule', {
+      method: 'POST',
+      body: { loanId: Number(loanId), installments }
+    })
     toast.add({ title: 'Schedule generated', color: 'green' })
     await refreshPayments()
   } catch (err) {

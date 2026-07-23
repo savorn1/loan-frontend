@@ -15,28 +15,39 @@
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
-            <UButton color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" @click="search = ''" />
+            <UButton
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark"
+              :padded="false"
+              @click="search = ''"
+            />
           </template>
         </UInput>
       </template>
 
-      <DataTable
-        :rows="rows"
-        :columns="columns"
-        :loading="pending"
-        v-model:sort="sort"
-      >
+      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
-            <UButton size="2xs" color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDelete = row" />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              @click="confirmDelete = row"
+            />
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-chart-bar-square'"
             :title="search ? 'No matches' : 'No interest schemes yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Add a reusable interest scheme (e.g. Standard Reducing Balance) that loan products can select.'"
+            :description="
+              search
+                ? `Nothing matches “${search}”.`
+                : 'Add a reusable interest scheme (e.g. Standard Reducing Balance) that loan products can select.'
+            "
           >
             <template v-if="!search" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">New Interest Scheme</UButton>
@@ -93,19 +104,30 @@
       confirm-label="Delete"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onDelete"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { InterestSchemeRequest, InterestSchemeResponse } from '~/features/loan-configuration/types'
+import type {
+  InterestSchemeRequest,
+  InterestSchemeResponse
+} from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
-const { data: schemes, pending, refresh } = await useAsyncData('interest-schemes', () => api<InterestSchemeResponse[]>('/interest-schemes'))
+const {
+  data: schemes,
+  pending,
+  refresh
+} = await useAsyncData('interest-schemes', () => api<InterestSchemeResponse[]>('/interest-schemes'))
 
 const columns: ColumnDef<InterestSchemeResponse>[] = [
   { key: 'code', sortable: true },
@@ -167,20 +189,38 @@ const fields: FieldDef[] = [
 ]
 
 const {
-  showCreate, creating, error, createForm, openCreate, onCreate,
-  showEdit, editing, editError, editForm, openEdit, onEdit,
-  deleting, confirmDelete, onDelete
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
 } = useCrudModals<InterestSchemeResponse, InterestSchemeRequest>('/interest-schemes', refresh, {
   entityName: 'Interest scheme',
-  createDefaults: () => ({ code: '', name: '', interestType: undefined, calculationMethod: undefined, status: 'ACTIVE' }),
-  toForm: row => ({
+  createDefaults: () => ({
+    code: '',
+    name: '',
+    interestType: undefined,
+    calculationMethod: undefined,
+    status: 'ACTIVE'
+  }),
+  toForm: (row) => ({
     code: row.code,
     name: row.name,
     interestType: row.interestType,
     calculationMethod: row.calculationMethod,
     status: row.status
   }),
-  toPayload: values => ({
+  toPayload: (values) => ({
     code: values.code,
     name: values.name,
     interestType: values.interestType,

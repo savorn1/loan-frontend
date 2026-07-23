@@ -47,7 +47,9 @@ export function useApi() {
         throw err
       }
       try {
-        refreshPromise ??= refresh().finally(() => { refreshPromise = null })
+        refreshPromise ??= refresh().finally(() => {
+          refreshPromise = null
+        })
         await refreshPromise
         return await client<T>(apiUrl, opts)
       } catch {

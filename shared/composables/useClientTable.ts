@@ -8,7 +8,7 @@
 // column is marked `sortable: true` and `sort` is bound with `v-model:sort`.
 type SortState = { column: string; direction: 'asc' | 'desc' } | undefined
 
-export function useClientTable<T extends Record<string, any>>(
+export function useClientTable<T extends Record<string, unknown>>(
   source: Ref<T[] | null | undefined>,
   options: { searchFields?: (keyof T)[]; pageSize?: number } = {}
 ) {
@@ -21,8 +21,12 @@ export function useClientTable<T extends Record<string, any>>(
     const rows = source.value ?? []
     const query = search.value.trim().toLowerCase()
     if (!query || !options.searchFields?.length) return rows
-    return rows.filter(row =>
-      options.searchFields!.some(field => String(row[field] ?? '').toLowerCase().includes(query))
+    return rows.filter((row) =>
+      options.searchFields!.some((field) =>
+        String(row[field] ?? '')
+          .toLowerCase()
+          .includes(query)
+      )
     )
   })
 
@@ -31,8 +35,8 @@ export function useClientTable<T extends Record<string, any>>(
     const direction = sort.value?.direction
     if (!column) return filtered.value
     return [...filtered.value].sort((a, b) => {
-      const av = a[column]
-      const bv = b[column]
+      const av = a[column] as string | number
+      const bv = b[column] as string | number
       if (av === bv) return 0
       if (direction === 'asc') return av < bv ? -1 : 1
       return av > bv ? -1 : 1
@@ -49,8 +53,12 @@ export function useClientTable<T extends Record<string, any>>(
 
   // Changing the page size (via <DataPagination>) invalidates the current
   // page offset the same way a new search or a refreshed source list does.
-  watch([search, source, pageSize], () => { page.value = 1 })
-  watch(pageCount, (count) => { if (page.value > count) page.value = count })
+  watch([search, source, pageSize], () => {
+    page.value = 1
+  })
+  watch(pageCount, (count) => {
+    if (page.value > count) page.value = count
+  })
 
   return { search, page, pageSize, sort, total, pageCount, rows }
 }
