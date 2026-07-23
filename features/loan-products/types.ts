@@ -1,227 +1,223 @@
-// Mirrors loan-product-service's dto package (java/loan/loan-product-service),
+// Mirrors loan-product-service's loan_products table (java/loan/loan-product-service),
 // proxied through the gateway at /api/loan-products/** (see nuxt.config.ts).
-// {id} below is the loan_products.id UUID. Every child resource also exposes a
-// flat GET /loan-products/<resource> (no {id}) listing that resource across
-// every product — backs the standalone nav pages (e.g. pages/loan-product-fees/).
 //
-//   GET    /loan-products                                     -> LoanProductResponse[]
-//   POST   /loan-products                                     <- LoanProductRequest             -> LoanProductResponse
-//   GET    /loan-products/{id}                                 -> LoanProductResponse
-//   PUT    /loan-products/{id}                                 <- LoanProductRequest             -> LoanProductResponse
+// This is the core product record only. Rate, fee, term, eligibility and document
+// behavior is composed from the reusable scheme/template catalogs instead of being
+// embedded here — see features/loan-configuration/types.ts (interest-schemes,
+// fee-schemes, term-templates, rule-templates, document-templates). Linking a
+// product to those catalogs is a separate join resource, not modeled in this file.
+//
+//   GET    /loan-products          -> LoanProductResponse[]
+//   POST   /loan-products          <- LoanProductRequest   -> LoanProductResponse
+//   GET    /loan-products/{id}      -> LoanProductResponse
+//   PUT    /loan-products/{id}      <- LoanProductRequest   -> LoanProductResponse
 //   DELETE /loan-products/{id}
-//
-//   GET    /loan-products/interest-rates                       -> LoanProductInterestRateResponse[]  (flat, all products)
-//   GET    /loan-products/{id}/interest-rates                  -> LoanProductInterestRateResponse[]
-//   POST   /loan-products/{id}/interest-rates                  <- LoanProductInterestRateRequest
-//   PUT    /loan-products/{id}/interest-rates/{rateId}          <- LoanProductInterestRateRequest     (rateId: UUID)
-//   DELETE /loan-products/{id}/interest-rates/{rateId}
-//
-//   GET    /loan-products/fees                                  -> LoanProductFeeResponse[]  (flat, all products)
-//   GET    /loan-products/{id}/fees                             -> LoanProductFeeResponse[]
-//   POST   /loan-products/{id}/fees                             <- LoanProductFeeRequest
-//   PUT    /loan-products/{id}/fees/{feeId}                     <- LoanProductFeeRequest              (feeId: number)
-//   DELETE /loan-products/{id}/fees/{feeId}
-//
-//   GET    /loan-products/terms                                 -> LoanProductTermResponse[]  (flat, all products)
-//   GET    /loan-products/{id}/terms                            -> LoanProductTermResponse[]
-//   POST   /loan-products/{id}/terms                            <- LoanProductTermRequest
-//   PUT    /loan-products/{id}/terms/{termId}                   <- LoanProductTermRequest             (termId: number)
-//   PUT    /loan-products/{id}/terms/{termId}/set-default
-//   DELETE /loan-products/{id}/terms/{termId}
-//
-//   GET    /loan-products/rules                                 -> LoanProductRuleResponse[]  (flat, all products)
-//   GET    /loan-products/{id}/rules                             -> LoanProductRuleResponse[]
-//   POST   /loan-products/{id}/rules                             <- LoanProductRuleRequest
-//   PUT    /loan-products/{id}/rules/{ruleId}                    <- LoanProductRuleRequest            (ruleId: number)
-//   DELETE /loan-products/{id}/rules/{ruleId}
-//
-//   GET    /loan-products/documents                              -> LoanProductDocumentResponse[]  (flat, all products)
-//   GET    /loan-products/{id}/documents                         -> LoanProductDocumentResponse[]
-//   POST   /loan-products/{id}/documents                         <- LoanProductDocumentRequest
-//   PUT    /loan-products/{id}/documents/{documentId}             <- LoanProductDocumentRequest        (documentId: number)
-//   DELETE /loan-products/{id}/documents/{documentId}
-//
-// All child resources are scoped to a loan product and carry loanProductId in
-// their response; requests omit it (it's the path param).
 
-// ── Loan product (core configuration) — mirrors the loan_products table ────
-export type InterestType = 'FLAT' | 'REDUCING'
-export type RepaymentMethod = 'EMI' | 'EQUAL_PRINCIPAL' | 'BULLET'
-export type PaymentFrequency = 'DAILY' | 'WEEKLY' | 'MONTHLY'
-export type TermUnit = 'DAY' | 'MONTH' | 'YEAR'
-export type LoanProductStatus = 'ACTIVE' | 'INACTIVE'
+import type { RuleField, RuleOperator } from '~/features/loan-configuration/types'
+
+export type LoanType = 'PERSONAL' | 'HOME' | 'AUTO' | 'BUSINESS' | 'EDUCATION' | 'OTHER'
+export type LoanProductStatus = 'DRAFT' | 'PUBLISHED' | 'INACTIVE'
 
 export interface LoanProductRequest {
-  productCode: string
-  productName: string
+  code: string
+  name: string
   description?: string
+  loanType: LoanType
   currency: string
   minAmount: number
   maxAmount: number
-  defaultInterestRate: number
-  interestType: InterestType
-  repaymentMethod: RepaymentMethod
-  paymentFrequency: PaymentFrequency
   minTerm: number
   maxTerm: number
-  termUnit: TermUnit
-  gracePeriodDays: number
-  autoGenerateSchedule: boolean
   status: LoanProductStatus
+  effectiveFrom: string // ISO date
+  effectiveTo?: string // ISO date — omitted means open-ended
 }
 
 export interface LoanProductResponse {
   id: string // UUID
-  productCode: string
-  productName: string
+  code: string
+  name: string
   description: string | null
+  loanType: LoanType
   currency: string
   minAmount: number
   maxAmount: number
-  defaultInterestRate: number
-  interestType: InterestType
-  repaymentMethod: RepaymentMethod
-  paymentFrequency: PaymentFrequency
   minTerm: number
   maxTerm: number
-  termUnit: TermUnit
-  gracePeriodDays: number
-  autoGenerateSchedule: boolean
   status: LoanProductStatus
-  createdAt: string
-  updatedAt: string
-}
-
-// ── Interest rates (tiered by term/amount range, with a validity window) ───
-export type InterestRateStatus = 'ACTIVE' | 'INACTIVE'
-
-export interface LoanProductInterestRateRequest {
-  // Interpreted using the parent product's termUnit (DAY/MONTH/YEAR), same as LoanProductTerm.
-  minTerm: number
-  maxTerm: number
-  minAmount: number
-  maxAmount: number
-  interestRate: number
-  interestType: InterestType
-  effectiveFrom: string // ISO date
-  effectiveTo?: string // ISO date — omitted means open-ended (still in effect)
-  status: InterestRateStatus
-}
-
-export interface LoanProductInterestRateResponse {
-  id: string // UUID
-  loanProductId: string // FK -> loan_products.id (UUID)
-  minTerm: number
-  maxTerm: number
-  minAmount: number
-  maxAmount: number
-  interestRate: number
-  interestType: InterestType
+  version: number
   effectiveFrom: string
   effectiveTo: string | null
-  status: InterestRateStatus
+  createdBy: string
   createdAt: string
+  updatedBy: string | null
   updatedAt: string
 }
 
-// ── Fees ─────────────────────────────────────────────────────────────────────
-export type FeeType = 'ORIGINATION' | 'PROCESSING' | 'LATE_PAYMENT' | 'PREPAYMENT' | 'OTHER'
-export type FeeCalculationMethod = 'FLAT' | 'PERCENTAGE'
-export type FeeChargeTiming = 'UPFRONT' | 'ON_DISBURSEMENT' | 'RECURRING'
+// ── Interest scheme assignments (join: which interest schemes a product can
+// use, each with a priority, an optional default, and a validity window) ───
+// Flat across every product at /loan-products/interest-schemes; scoped CRUD
+// lives under /loan-products/{loanProductId}/interest-schemes since create
+// and update are both path-scoped to the owning product.
+//
+//   GET    /loan-products/interest-schemes                                    -> LoanProductInterestSchemeResponse[]  (flat, all products)
+//   GET    /loan-products/{loanProductId}/interest-schemes                     -> LoanProductInterestSchemeResponse[]
+//   POST   /loan-products/{loanProductId}/interest-schemes                     <- LoanProductInterestSchemeRequest
+//   PUT    /loan-products/{loanProductId}/interest-schemes/{mappingId}         <- LoanProductInterestSchemeRequest
+//   PUT    /loan-products/{loanProductId}/interest-schemes/{mappingId}/set-default
+//   DELETE /loan-products/{loanProductId}/interest-schemes/{mappingId}
+export type LoanProductInterestSchemeStatus = 'ACTIVE' | 'INACTIVE'
 
-export interface LoanProductFeeRequest {
-  name: string
-  type: FeeType
-  calculationMethod: FeeCalculationMethod
-  // Flat currency amount when calculationMethod is FLAT, percentage points (0-100) when PERCENTAGE.
-  amount: number
-  chargeTiming: FeeChargeTiming
-}
-
-export interface LoanProductFeeResponse {
-  id: number
-  loanProductId: string // FK -> loan_products.id (UUID)
-  name: string
-  type: FeeType
-  calculationMethod: FeeCalculationMethod
-  amount: number
-  chargeTiming: FeeChargeTiming
-  createdAt: string
-  updatedAt: string
-}
-
-// ── Terms (specific selectable durations within the product's min/max term —
-// repayment cadence now lives on the product itself as paymentFrequency, so
-// it's not repeated per term) ───────────────────────────────────────────────
-export interface LoanProductTermRequest {
-  // Interpreted using the parent product's termUnit (DAY/MONTH/YEAR).
-  termValue: number
+export interface LoanProductInterestSchemeRequest {
+  interestSchemeId: string // UUID
+  // Lower value = evaluated first when more than one assignment's window covers a given date.
+  priority: number
   isDefault: boolean
+  effectiveFrom: string // ISO date
+  effectiveTo?: string // ISO date — omitted means open-ended
+  status: LoanProductInterestSchemeStatus
+}
+
+export interface LoanProductInterestSchemeResponse {
+  id: string // UUID
+  loanProductId: string // FK -> loan_products.id (UUID)
+  interestSchemeId: string // UUID
+  interestSchemeCode: string
+  interestSchemeName: string
+  priority: number
+  isDefault: boolean
+  effectiveFrom: string
+  effectiveTo: string | null
+  status: LoanProductInterestSchemeStatus
+  createdAt: string
+  updatedAt: string
+}
+
+// ── Fee scheme assignments (join: which fee schemes apply to a product, each
+// mandatory or optional, with a priority and a validity window) ───────────
+// Same shape as the interest scheme join above, minus the is-default/set-default
+// concept — a product can have several mandatory fee schemes at once.
+//
+//   GET    /loan-products/fee-schemes                                    -> LoanProductFeeSchemeResponse[]  (flat, all products)
+//   GET    /loan-products/{loanProductId}/fee-schemes                     -> LoanProductFeeSchemeResponse[]
+//   POST   /loan-products/{loanProductId}/fee-schemes                     <- LoanProductFeeSchemeRequest
+//   PUT    /loan-products/{loanProductId}/fee-schemes/{mappingId}         <- LoanProductFeeSchemeRequest
+//   DELETE /loan-products/{loanProductId}/fee-schemes/{mappingId}
+export type LoanProductFeeSchemeStatus = 'ACTIVE' | 'INACTIVE'
+
+export interface LoanProductFeeSchemeRequest {
+  feeSchemeId: string // UUID
+  isMandatory: boolean
+  // Lower value = evaluated first when more than one assignment's window covers a given date.
+  priority: number
+  effectiveFrom: string // ISO date
+  effectiveTo?: string // ISO date — omitted means open-ended
+  status: LoanProductFeeSchemeStatus
+}
+
+export interface LoanProductFeeSchemeResponse {
+  id: string // UUID
+  loanProductId: string // FK -> loan_products.id (UUID)
+  feeSchemeId: string // UUID
+  feeSchemeCode: string
+  feeSchemeName: string
+  isMandatory: boolean
+  priority: number
+  effectiveFrom: string
+  effectiveTo: string | null
+  status: LoanProductFeeSchemeStatus
+  createdAt: string
+  updatedAt: string
+}
+
+// ── Term assignments (join: which term templates a product offers, with an
+// optional default — no priority or validity window, unlike the scheme joins
+// above) ────────────────────────────────────────────────────────────────────
+//
+//   GET    /loan-products/terms                                    -> LoanProductTermResponse[]  (flat, all products)
+//   GET    /loan-products/{loanProductId}/terms                     -> LoanProductTermResponse[]
+//   POST   /loan-products/{loanProductId}/terms                     <- LoanProductTermRequest
+//   PUT    /loan-products/{loanProductId}/terms/{termId}             <- LoanProductTermRequest             (termId: number)
+//   PUT    /loan-products/{loanProductId}/terms/{termId}/set-default
+//   DELETE /loan-products/{loanProductId}/terms/{termId}
+export type LoanProductTermStatus = 'ACTIVE' | 'INACTIVE'
+
+export interface LoanProductTermRequest {
+  termTemplateId: string // UUID
+  isDefault: boolean
+  status: LoanProductTermStatus
 }
 
 export interface LoanProductTermResponse {
   id: number
   loanProductId: string // FK -> loan_products.id (UUID)
+  termTemplateId: string // UUID
+  termTemplateCode: string
+  termTemplateName: string
   termValue: number
   isDefault: boolean
+  status: LoanProductTermStatus
   createdAt: string
   updatedAt: string
 }
 
-// ── Eligibility rules (structured field/operator/value builder) ────────────
-export type RuleField =
-  | 'CREDIT_SCORE'
-  | 'MONTHLY_INCOME'
-  | 'AGE'
-  | 'EMPLOYMENT_STATUS'
-  | 'EXISTING_LOAN_COUNT'
-  | 'DEBT_TO_INCOME_RATIO'
-
-export type RuleOperator =
-  | 'EQUALS'
-  | 'NOT_EQUALS'
-  | 'GREATER_THAN'
-  | 'GREATER_THAN_OR_EQUAL'
-  | 'LESS_THAN'
-  | 'LESS_THAN_OR_EQUAL'
-  | 'BETWEEN'
-  | 'IN'
+// ── Rule assignments (join: which rule templates apply to a product — the
+// rule's field/operator/value/description are fixed on the template and just
+// carried through on the response for display, not editable here) ─────────
+//
+//   GET    /loan-products/rules                                    -> LoanProductRuleResponse[]  (flat, all products)
+//   GET    /loan-products/{loanProductId}/rules                     -> LoanProductRuleResponse[]
+//   POST   /loan-products/{loanProductId}/rules                     <- LoanProductRuleRequest             (ruleId: number)
+//   PUT    /loan-products/{loanProductId}/rules/{ruleId}             <- LoanProductRuleRequest
+//   DELETE /loan-products/{loanProductId}/rules/{ruleId}
+export type LoanProductRuleStatus = 'ACTIVE' | 'INACTIVE'
 
 export interface LoanProductRuleRequest {
-  field: RuleField
-  operator: RuleOperator
-  // Single comparison value; for BETWEEN this is the lower bound, for IN a comma-separated list.
-  value: string
-  // Upper bound — only used (and required) when operator is BETWEEN.
-  value2?: string
-  description?: string
+  ruleTemplateId: string // UUID
+  status: LoanProductRuleStatus
 }
 
 export interface LoanProductRuleResponse {
   id: number
   loanProductId: string // FK -> loan_products.id (UUID)
+  ruleTemplateId: string // UUID
+  ruleTemplateCode: string
+  ruleTemplateName: string
   field: RuleField
   operator: RuleOperator
   value: string
   value2: string | null
   description: string | null
+  status: LoanProductRuleStatus
   createdAt: string
   updatedAt: string
 }
 
-// ── Required documents (checklist — metadata only, no file storage) ────────
+// ── Document assignments (join: which document templates a product requires
+// for its checklist, each required or optional) ────────────────────────────
+//
+//   GET    /loan-products/documents                                    -> LoanProductDocumentResponse[]  (flat, all products)
+//   GET    /loan-products/{loanProductId}/documents                     -> LoanProductDocumentResponse[]
+//   POST   /loan-products/{loanProductId}/documents                     <- LoanProductDocumentRequest
+//   PUT    /loan-products/{loanProductId}/documents/{documentId}         <- LoanProductDocumentRequest        (documentId: number)
+//   DELETE /loan-products/{loanProductId}/documents/{documentId}
+export type LoanProductDocumentStatus = 'ACTIVE' | 'INACTIVE'
+
 export interface LoanProductDocumentRequest {
-  name: string
-  description?: string
+  documentTemplateId: string // UUID
   required: boolean
+  status: LoanProductDocumentStatus
 }
 
 export interface LoanProductDocumentResponse {
   id: number
   loanProductId: string // FK -> loan_products.id (UUID)
-  name: string
-  description: string | null
+  documentTemplateId: string // UUID
+  documentTemplateCode: string
+  documentTemplateName: string
+  documentTemplateDescription: string | null
   required: boolean
+  status: LoanProductDocumentStatus
   createdAt: string
   updatedAt: string
 }

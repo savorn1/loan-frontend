@@ -51,19 +51,14 @@ const groups = computed(() => [
     ]
   },
   {
-    title: 'Loan Product',
-    links: [
-      { label: 'Loan Products', to: '/loan-products', icon: 'i-heroicons-clipboard-document-list' },
-      { label: 'Interest Rates', to: '/loan-product-interest-rates', icon: 'i-heroicons-percent-badge' },
-      { label: 'Fees', to: '/loan-product-fees', icon: 'i-heroicons-banknotes' },
-      { label: 'Terms', to: '/loan-product-terms', icon: 'i-heroicons-calendar-days' },
-      { label: 'Eligibility Rules', to: '/loan-product-rules', icon: 'i-heroicons-shield-check' },
-      { label: 'Documents', to: '/loan-product-documents', icon: 'i-heroicons-document-check' }
-    ]
-  },
-  {
     title: 'Loan Configuration',
     links: [
+      { label: 'Loan Products', to: '/loan-products', icon: 'i-heroicons-clipboard-document-list' },
+      { label: 'Product Interest Schemes', to: '/loan-product-interest-schemes', icon: 'i-heroicons-link' },
+      { label: 'Product Fee Schemes', to: '/loan-product-fee-schemes', icon: 'i-heroicons-link' },
+      { label: 'Product Terms', to: '/loan-product-terms', icon: 'i-heroicons-link' },
+      { label: 'Product Rules', to: '/loan-product-rules', icon: 'i-heroicons-link' },
+      { label: 'Product Documents', to: '/loan-product-documents', icon: 'i-heroicons-link' },
       { label: 'Interest Schemes', to: '/interest-schemes', icon: 'i-heroicons-chart-bar-square' },
       { label: 'Fee Schemes', to: '/fee-schemes', icon: 'i-heroicons-currency-dollar' },
       { label: 'Term Templates', to: '/term-templates', icon: 'i-heroicons-clock' },

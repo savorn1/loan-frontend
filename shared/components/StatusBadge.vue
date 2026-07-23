@@ -19,6 +19,8 @@ type StatusColor = 'teal' | 'red' | 'gray' | 'orange'
 const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   APPROVED: { color: 'teal', icon: 'i-heroicons-check-circle' },
   ACTIVE: { color: 'teal', icon: 'i-heroicons-bolt' },
+  PUBLISHED: { color: 'teal', icon: 'i-heroicons-check-circle' },
+  DRAFT: { color: 'gray', icon: 'i-heroicons-pencil' },
   PAID: { color: 'teal', icon: 'i-heroicons-check-badge' },
   SUCCESS: { color: 'teal', icon: 'i-heroicons-check-badge' },
   VERIFIED: { color: 'teal', icon: 'i-heroicons-check-badge' },

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader title="Loan Product Documents" :description="totalLabel">
+    <PageHeader title="Loan Product Fee Schemes" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">Assign Document</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">Assign Fee Scheme</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +11,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by product or document..."
+          placeholder="Search by product or scheme..."
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -29,12 +29,12 @@
         </template>
         <template #empty-state>
           <EmptyState
-            :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-document-check'"
-            :title="search ? 'No matches' : 'No document assignments yet'"
-            :description="search ? `Nothing matches “${search}”.` : 'Assign a reusable document template to a loan product\'s checklist.'"
+            :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-currency-dollar'"
+            :title="search ? 'No matches' : 'No fee scheme assignments yet'"
+            :description="search ? `Nothing matches “${search}”.` : 'Assign a reusable fee scheme to a loan product, with a priority and validity window.'"
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Assign Document</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">Assign Fee Scheme</UButton>
             </template>
           </EmptyState>
         </template>
@@ -48,7 +48,7 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Assign Document</span>
+          <span class="font-semibold">Assign Fee Scheme</span>
         </template>
         <DynamicForm
           v-model="createForm"
@@ -66,7 +66,7 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Document Assignment</span>
+          <span class="font-semibold">Edit Fee Scheme Assignment</span>
         </template>
         <DynamicForm
           v-model="editForm"
@@ -84,7 +84,7 @@
     <ConfirmModal
       :model-value="confirmDelete !== null"
       title="Remove this assignment?"
-      description="This removes the document from the loan product's checklist. This action cannot be undone."
+      description="This removes the fee scheme from the loan product. This action cannot be undone."
       confirm-label="Remove"
       color="red"
       :loading="deleting"
@@ -96,24 +96,24 @@
 
 <script setup lang="ts">
 import type {
-  LoanProductDocumentRequest,
-  LoanProductDocumentResponse,
+  LoanProductFeeSchemeRequest,
+  LoanProductFeeSchemeResponse,
   LoanProductResponse
 } from '~/features/loan-products/types'
-import type { DocumentTemplateResponse } from '~/features/loan-configuration/types'
+import type { FeeSchemeResponse } from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
 
-const { data: documents, pending, refresh } = await useAsyncData('loan-product-documents', () =>
-  api<LoanProductDocumentResponse[]>('/loan-products/documents')
+const { data: mappings, pending, refresh } = await useAsyncData('loan-product-fee-schemes', () =>
+  api<LoanProductFeeSchemeResponse[]>('/loan-products/fee-schemes')
 )
-const { data: products } = await useAsyncData('loan-product-documents-products', () =>
+const { data: products } = await useAsyncData('loan-product-fee-schemes-products', () =>
   api<LoanProductResponse[]>('/loan-products')
 )
-const { data: templates } = await useAsyncData('loan-product-documents-templates', () =>
-  api<DocumentTemplateResponse[]>('/document-templates')
+const { data: schemes } = await useAsyncData('loan-product-fee-schemes-schemes', () =>
+  api<FeeSchemeResponse[]>('/fee-schemes')
 )
 
 const productMap = computed(() => new Map((products.value ?? []).map(p => [p.id, p])))
@@ -123,23 +123,25 @@ function productLabel(id: string) {
 }
 
 const productOptions = computed(() => (products.value ?? []).map(p => ({ label: `${p.name} (${p.code})`, value: p.id })))
-const templateOptions = computed(() => (templates.value ?? []).map(t => ({ label: `${t.name} (${t.code})`, value: t.id })))
+const schemeOptions = computed(() => (schemes.value ?? []).map(s => ({ label: `${s.name} (${s.code})`, value: s.id })))
 
-const columns: ColumnDef<LoanProductDocumentResponse>[] = [
+const columns: ColumnDef<LoanProductFeeSchemeResponse>[] = [
   { key: 'loanProductId', label: 'Loan product', value: row => productLabel(row.loanProductId) },
-  { key: 'documentTemplateName', label: 'Document', value: row => `${row.documentTemplateName} (${row.documentTemplateCode})` },
-  { key: 'required', label: 'Required', type: 'boolean', trueLabel: 'Required', falseLabel: 'Optional', trueColor: 'teal', falseColor: 'gray' },
+  { key: 'feeSchemeName', label: 'Fee scheme', value: row => `${row.feeSchemeName} (${row.feeSchemeCode})` },
+  { key: 'priority', sortable: true },
+  { key: 'isMandatory', label: 'Mandatory', type: 'boolean', trueLabel: 'Mandatory', falseLabel: 'Optional', trueColor: 'teal', falseColor: 'gray' },
+  { key: 'effectiveFrom', label: 'Effective', type: 'date', to: 'effectiveTo', toEmpty: 'open' },
   { key: 'status', type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
 ]
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(
-  computed(() => (documents.value ?? []).map(d => ({ ...d, searchLabel: `${productLabel(d.loanProductId)} ${d.documentTemplateName} ${d.documentTemplateCode}` }))),
+  computed(() => (mappings.value ?? []).map(m => ({ ...m, searchLabel: `${productLabel(m.loanProductId)} ${m.feeSchemeName} ${m.feeSchemeCode}` }))),
   { searchFields: ['searchLabel'], pageSize: 15 }
 )
 
 const totalLabel = computed(() => {
-  const count = documents.value?.length ?? 0
+  const count = mappings.value?.length ?? 0
   return count === 1 ? '1 assignment' : `${count} assignments`
 })
 
@@ -147,7 +149,10 @@ const totalLabel = computed(() => {
 // (fixed for the lifetime of the assignment — it's the path param, not part
 // of the request body, so it isn't editable afterwards).
 const commonFields: FieldDef[] = [
-  { name: 'required', label: 'Required', type: 'switch', wrapper: 'half' },
+  { name: 'isMandatory', label: 'Mandatory', type: 'switch', wrapper: 'half' },
+  { name: 'priority', type: 'number', required: true, min: 0, wrapper: 'half' },
+  { name: 'effectiveFrom', label: 'Effective from', type: 'date', required: true, wrapper: 'half' },
+  { name: 'effectiveTo', label: 'Effective to', type: 'date', hint: 'Leave blank for open-ended', wrapper: 'half' },
   {
     name: 'status',
     type: 'select',
@@ -163,12 +168,12 @@ const commonFields: FieldDef[] = [
 
 const createFields = computed<FieldDef[]>(() => [
   { name: 'loanProductId', label: 'Loan product', type: 'select', required: true, wrapper: 'half', options: productOptions.value },
-  { name: 'documentTemplateId', label: 'Document template', type: 'select', required: true, wrapper: 'half', options: templateOptions.value },
+  { name: 'feeSchemeId', label: 'Fee scheme', type: 'select', required: true, wrapper: 'half', options: schemeOptions.value },
   ...commonFields
 ])
 
 const editFields = computed<FieldDef[]>(() => [
-  { name: 'documentTemplateId', label: 'Document template', type: 'select', required: true, wrapper: 'half', options: templateOptions.value },
+  { name: 'feeSchemeId', label: 'Fee scheme', type: 'select', required: true, wrapper: 'half', options: schemeOptions.value },
   ...commonFields
 ])
 
@@ -180,18 +185,24 @@ const createForm = ref<Record<string, any>>({})
 function openCreate() {
   createForm.value = {
     loanProductId: undefined,
-    documentTemplateId: undefined,
-    required: true,
+    feeSchemeId: undefined,
+    isMandatory: true,
+    priority: 0,
+    effectiveFrom: '',
+    effectiveTo: '',
     status: 'ACTIVE'
   }
   error.value = ''
   showCreate.value = true
 }
 
-function toPayload(values: Record<string, any>): LoanProductDocumentRequest {
+function toPayload(values: Record<string, any>): LoanProductFeeSchemeRequest {
   return {
-    documentTemplateId: values.documentTemplateId,
-    required: values.required ?? false,
+    feeSchemeId: values.feeSchemeId,
+    isMandatory: values.isMandatory ?? false,
+    priority: values.priority,
+    effectiveFrom: values.effectiveFrom,
+    effectiveTo: values.effectiveTo || undefined,
     status: values.status
   }
 }
@@ -200,8 +211,8 @@ async function onCreate(values: Record<string, any>) {
   creating.value = true
   error.value = ''
   try {
-    await api(`/loan-products/${values.loanProductId}/documents`, { method: 'POST', body: toPayload(values) })
-    toast.add({ title: 'Document assigned', color: 'green' })
+    await api(`/loan-products/${values.loanProductId}/fee-schemes`, { method: 'POST', body: toPayload(values) })
+    toast.add({ title: 'Fee scheme assigned', color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -214,14 +225,17 @@ async function onCreate(values: Record<string, any>) {
 const showEdit = ref(false)
 const editing = ref(false)
 const editError = ref('')
-const editingRow = ref<LoanProductDocumentResponse | null>(null)
+const editingRow = ref<LoanProductFeeSchemeResponse | null>(null)
 const editForm = ref<Record<string, any>>({})
 
-function openEdit(row: LoanProductDocumentResponse) {
+function openEdit(row: LoanProductFeeSchemeResponse) {
   editingRow.value = row
   editForm.value = {
-    documentTemplateId: row.documentTemplateId,
-    required: row.required,
+    feeSchemeId: row.feeSchemeId,
+    isMandatory: row.isMandatory,
+    priority: row.priority,
+    effectiveFrom: row.effectiveFrom,
+    effectiveTo: row.effectiveTo ?? '',
     status: row.status
   }
   editError.value = ''
@@ -233,7 +247,7 @@ async function onEdit(values: Record<string, any>) {
   editing.value = true
   editError.value = ''
   try {
-    await api(`/loan-products/${editingRow.value.loanProductId}/documents/${editingRow.value.id}`, {
+    await api(`/loan-products/${editingRow.value.loanProductId}/fee-schemes/${editingRow.value.id}`, {
       method: 'PUT',
       body: toPayload(values)
     })
@@ -248,13 +262,13 @@ async function onEdit(values: Record<string, any>) {
 }
 
 const deleting = ref(false)
-const confirmDelete = ref<LoanProductDocumentResponse | null>(null)
+const confirmDelete = ref<LoanProductFeeSchemeResponse | null>(null)
 
 async function onDelete() {
   if (!confirmDelete.value) return
   deleting.value = true
   try {
-    await api(`/loan-products/${confirmDelete.value.loanProductId}/documents/${confirmDelete.value.id}`, { method: 'DELETE' })
+    await api(`/loan-products/${confirmDelete.value.loanProductId}/fee-schemes/${confirmDelete.value.id}`, { method: 'DELETE' })
     toast.add({ title: 'Assignment removed', color: 'green' })
     confirmDelete.value = null
     await refresh()
