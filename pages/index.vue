@@ -39,17 +39,11 @@
             <UBadge v-if="pendingLoans.length" color="orange" variant="subtle">{{ pendingLoans.length }}</UBadge>
           </div>
         </template>
-        <UTable :rows="pendingLoans" :columns="columns" :loading="pending" @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)">
-          <template #status-data="{ row }">
-            <StatusBadge :status="row.status" />
-          </template>
-          <template #principal-data="{ row }">
-            {{ formatCurrency(row.principal) }}
-          </template>
+        <DataTable :rows="pendingLoans" :columns="columns" :loading="pending" @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)">
           <template #empty-state>
             <EmptyState icon="i-heroicons-check-circle" title="All caught up" description="No loans are waiting for review right now." />
           </template>
-        </UTable>
+        </DataTable>
       </UCard>
 
       <UCard class="lg:col-span-2">
@@ -82,6 +76,7 @@
 import type { LoanResponse } from '~/features/loans/types'
 import type { CustomerResponse } from '~/features/customers/types'
 import type { PaymentResponse } from '~/features/payments/types'
+import type { ColumnDef } from '~/shared/types'
 
 const api = useApi()
 const router = useRouter()
@@ -151,11 +146,12 @@ const statTiles = computed(() => [
   }
 ])
 
-const columns = [
+const columns: ColumnDef<LoanResponse>[] = [
   { key: 'id', label: 'ID' },
   { key: 'customerName', label: 'Customer' },
-  { key: 'principal', label: 'Principal' },
-  { key: 'status', label: 'Status' }
+  { key: 'principal', type: 'currency' },
+  { key: 'status', type: 'status' },
+  { key: 'createdAt', label: 'Created', type: 'datetime' }
 ]
 
 // Merges the most recent loans (by creation) and payments (by due date) into a

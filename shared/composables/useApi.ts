@@ -11,8 +11,10 @@ export function useApi() {
   const { token } = storeToRefs(auth)
   const { refresh, logout } = auth
 
+  const { apiBase } = useRuntimeConfig().public
+
   const client = $fetch.create({
-    baseURL: '/api',
+    baseURL: apiBase,
     onRequest({ options }) {
       if (token.value) {
         const headers = new Headers(options.headers as HeadersInit)
@@ -31,8 +33,14 @@ export function useApi() {
   // `any` here matches ofetch's own loosely-typed FetchOptions second parameter —
   // callers still get full inference on the return type via request<T>(...).
   return async function request<T>(url: string, opts?: any): Promise<T> {
+    // Feature call sites pass bare resource paths (e.g. '/loan-products'), not '/api/...' —
+    // that convention predates the dev-mode switch to calling the gateway directly (apiBase
+    // is now the raw gateway origin in dev, not '/api'), so the '/api' prefix has to be added
+    // here instead of relying on baseURL to supply it. Safe in prod too: ufo's withBase()
+    // no-ops when the path already starts with the base.
+    const apiUrl = `/api${url}`
     try {
-      return await client<T>(url, opts)
+      return await client<T>(apiUrl, opts)
     } catch (err) {
       const status = (err as { response?: { status?: number } })?.response?.status
       if (status !== 401) {
@@ -41,7 +49,7 @@ export function useApi() {
       try {
         refreshPromise ??= refresh().finally(() => { refreshPromise = null })
         await refreshPromise
-        return await client<T>(url, opts)
+        return await client<T>(apiUrl, opts)
       } catch {
         await logout()
         if (import.meta.client) navigateTo('/login')

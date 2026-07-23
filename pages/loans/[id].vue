@@ -21,101 +21,9 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-      <UCard class="lg:col-span-2">
-        <template #header>
-          <span class="font-semibold">Details</span>
-        </template>
+    <UHorizontalNavigation :links="tabs" class="border-b border-gray-200 dark:border-gray-800 mb-6" />
 
-        <div v-if="loan.status === 'ACTIVE' || loan.status === 'CLOSED'" class="mb-5">
-          <div class="flex items-center justify-between text-sm mb-1.5">
-            <span class="text-gray-500">Paid off</span>
-            <span class="font-medium text-gray-900 dark:text-white">{{ payoffPercent }}%</span>
-          </div>
-          <UProgress :value="payoffPercent" :color="loan.status === 'CLOSED' ? 'teal' : 'primary'" size="sm" />
-        </div>
-
-        <dl class="grid grid-cols-2 gap-y-3 text-sm">
-          <dt class="text-gray-500">Customer</dt>
-          <dd>
-            <NuxtLink :to="`/customers/${loan.customerId}`" class="text-primary-500">{{ loan.customerName }}</NuxtLink>
-          </dd>
-          <dt class="text-gray-500">Principal</dt>
-          <dd>{{ formatCurrency(loan.principal) }}</dd>
-          <dt class="text-gray-500">Interest rate</dt>
-          <dd>{{ loan.interestRate }}%</dd>
-          <dt class="text-gray-500">Term</dt>
-          <dd>{{ loan.termMonths }} months</dd>
-          <dt class="text-gray-500">Monthly installment</dt>
-          <dd>{{ formatCurrency(loan.monthlyInstallment) }}</dd>
-          <dt class="text-gray-500">Outstanding balance</dt>
-          <dd class="font-semibold">{{ formatCurrency(loan.outstandingBalance) }}</dd>
-          <dt class="text-gray-500">Purpose</dt>
-          <dd>{{ loan.purpose || '—' }}</dd>
-          <dt class="text-gray-500">Maturity date</dt>
-          <dd>{{ formatDate(loan.maturityDate) }}</dd>
-          <dt class="text-gray-500">Approved</dt>
-          <dd>{{ formatDateTime(loan.approvedAt) }}</dd>
-          <dt class="text-gray-500">Disbursed</dt>
-          <dd>{{ formatDateTime(loan.disbursedAt) }}</dd>
-        </dl>
-      </UCard>
-
-      <UCard>
-        <template #header>
-          <span class="font-semibold">Apply payment to balance</span>
-        </template>
-        <!-- Directly reduces loan.outstandingBalance via loan-service. Distinct
-             from the installment ledger in the "Payments" tab below, which is
-             tracked separately in payment-service. -->
-        <UForm :state="paymentForm" class="space-y-3" @submit="onApplyPayment">
-          <UFormGroup label="Amount" name="amount" required>
-            <UInput v-model.number="paymentForm.amount" type="number" min="0.01" step="0.01" required />
-          </UFormGroup>
-          <UButton type="submit" block :loading="applyingPayment" :disabled="loan.status !== 'ACTIVE'">
-            Apply payment
-          </UButton>
-          <p v-if="loan.status !== 'ACTIVE'" class="text-xs text-gray-500">Only available for active loans.</p>
-        </UForm>
-      </UCard>
-    </div>
-
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <span class="font-semibold">Payment schedule</span>
-          <UButton
-            v-if="isAdmin && loan.status === 'ACTIVE' && (payments ?? []).length === 0"
-            size="xs"
-            variant="soft"
-            :loading="generatingSchedule"
-            @click="onGenerateSchedule"
-          >
-            Generate schedule
-          </UButton>
-        </div>
-      </template>
-      <UTable :rows="payments ?? []" :columns="paymentColumns" :loading="paymentsPending">
-        <template #status-data="{ row }">
-          <StatusBadge :status="row.status" />
-        </template>
-        <template #amount-data="{ row }">{{ formatCurrency(row.amount) }}</template>
-        <template #dueDate-data="{ row }">{{ formatDate(row.dueDate) }}</template>
-        <template #paidAt-data="{ row }">{{ formatDate(row.paidAt) }}</template>
-        <template #actions-data="{ row }">
-          <UButton v-if="row.status !== 'PAID'" size="2xs" variant="soft" :loading="markingPaid === row.id" @click="onMarkPaid(row.id)">
-            Mark paid
-          </UButton>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-calendar-days"
-            title="No payment schedule yet"
-            :description="loan.status === 'ACTIVE' ? 'Generate an amortization schedule to start tracking installments.' : 'A schedule is generated automatically once the loan is disbursed.'"
-          />
-        </template>
-      </UTable>
-    </UCard>
+    <NuxtPage />
 
     <ConfirmModal
       :model-value="!!confirmAction"
@@ -134,8 +42,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ApplyLoanPaymentRequest, LoanResponse } from '~/features/loans/types'
-import type { PaymentResponse } from '~/features/payments/types'
+// Tab shell shared by every /loans/:id/** page — renders the loan header
+// (back link, status, admin lifecycle actions) once and hosts the tab body
+// via <NuxtPage/>. Nuxt nests pages/loans/[id]/*.vue routes inside this file
+// automatically because it shares the [id] param.
+import type { LoanResponse } from '~/features/loans/types'
 
 const route = useRoute()
 const api = useApi()
@@ -145,23 +56,23 @@ const { isAdmin } = storeToRefs(useAuth())
 const loanId = route.params.id as string
 
 const { data: loan, refresh } = await useAsyncData(`loan-${loanId}`, () => api<LoanResponse>(`/loans/${loanId}`))
-const payoffPercent = computed(() => {
-  if (!loan.value || !loan.value.principal) return 0
-  const outstanding = loan.value.outstandingBalance ?? 0
-  const paid = loan.value.principal - outstanding
-  return Math.max(0, Math.min(100, Math.round((paid / loan.value.principal) * 100)))
-})
 
-const { data: payments, pending: paymentsPending, refresh: refreshPayments } = await useAsyncData(
-  `loan-${loanId}-payments`,
-  () => api<PaymentResponse[]>(`/payments/loan/${loanId}`)
-)
+const tabs = computed(() => [
+  { label: 'Overview', to: `/loans/${loanId}`, exact: true },
+  { label: 'Status history', to: `/loans/${loanId}/status-history` },
+  { label: 'Disbursements', to: `/loans/${loanId}/disbursements` },
+  { label: 'Restructures', to: `/loans/${loanId}/restructures` },
+  { label: 'Refinances', to: `/loans/${loanId}/refinances` },
+  { label: 'Penalties', to: `/loans/${loanId}/penalties` },
+  { label: 'Interest', to: `/loans/${loanId}/interest` },
+  { label: 'Adjustments', to: `/loans/${loanId}/adjustments` },
+  { label: 'Settlement', to: `/loans/${loanId}/settlement` },
+  { label: 'Write-off', to: `/loans/${loanId}/writeoff` },
+  { label: 'Notes', to: `/loans/${loanId}/notes` },
+  { label: 'Documents', to: `/loans/${loanId}/documents` }
+])
 
 const actionLoading = ref<string | null>(null)
-const applyingPayment = ref(false)
-const generatingSchedule = ref(false)
-const markingPaid = ref<number | null>(null)
-const paymentForm = reactive({ amount: 0 })
 
 type LoanAction = 'approve' | 'reject' | 'disburse'
 const confirmAction = ref<LoanAction | null>(null)
@@ -189,15 +100,6 @@ const CONFIRM_META: Record<LoanAction, { title: string; description: string; con
 
 const confirmMeta = computed(() => CONFIRM_META[confirmAction.value ?? 'approve'])
 
-const paymentColumns = [
-  { key: 'installmentNumber', label: '#' },
-  { key: 'dueDate', label: 'Due' },
-  { key: 'amount', label: 'Amount' },
-  { key: 'status', label: 'Status' },
-  { key: 'paidAt', label: 'Paid on' },
-  { key: 'actions', label: '' }
-]
-
 async function doAction() {
   const action = confirmAction.value
   if (!action) return
@@ -211,49 +113,6 @@ async function doAction() {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
   } finally {
     actionLoading.value = null
-  }
-}
-
-async function onApplyPayment() {
-  applyingPayment.value = true
-  try {
-    const payload: ApplyLoanPaymentRequest = { amount: paymentForm.amount }
-    await api(`/loans/${loanId}/apply-payment`, { method: 'PUT', body: payload })
-    toast.add({ title: 'Payment applied', color: 'green' })
-    paymentForm.amount = 0
-    await refresh()
-  } catch (err) {
-    toast.add({ title: apiErrorMessage(err), color: 'red' })
-  } finally {
-    applyingPayment.value = false
-  }
-}
-
-async function onGenerateSchedule() {
-  if (!loan.value) return
-  generatingSchedule.value = true
-  try {
-    const installments = generateAmortizationSchedule(loan.value)
-    await api('/payments/schedule', { method: 'POST', body: { loanId: Number(loanId), installments } })
-    toast.add({ title: 'Schedule generated', color: 'green' })
-    await refreshPayments()
-  } catch (err) {
-    toast.add({ title: apiErrorMessage(err), color: 'red' })
-  } finally {
-    generatingSchedule.value = false
-  }
-}
-
-async function onMarkPaid(paymentId: number) {
-  markingPaid.value = paymentId
-  try {
-    await api(`/payments/${paymentId}/pay`, { method: 'PUT' })
-    toast.add({ title: 'Payment marked as paid', color: 'green' })
-    await refreshPayments()
-  } catch (err) {
-    toast.add({ title: apiErrorMessage(err), color: 'red' })
-  } finally {
-    markingPaid.value = null
   }
 }
 </script>

@@ -2,11 +2,6 @@ import type { AuthResponse, ChangePasswordRequest, LoginRequest, RegisterRequest
 import type { Role } from '~/shared/types'
 import { unwrapApiResponse } from '~/shared/utils/apiResponse'
 
-// Plain $fetch (no auth token attachment/refresh retry — that's useApi()'s job, and
-// useApi() depends on this store so it can't be used here) but still needs the same
-// ApiResponse envelope unwrapped.
-const authClient = $fetch.create({ onResponse: unwrapApiResponse })
-
 // Auth state persisted in cookies (SSR-safe, survives reloads). The access token is
 // short-lived (24h per auth-service `jwt.expiration`); the refresh token (7d, single-use,
 // revocable server-side) lets useApi() silently mint a new access token instead of forcing
@@ -17,6 +12,12 @@ const authClient = $fetch.create({ onResponse: unwrapApiResponse })
 // Pinia devtools and any future feature can read/react to it via storeToRefs() without
 // re-deriving it. The cookies remain the actual persistence layer — Pinia just wraps them.
 export const useAuth = defineStore('auth', () => {
+  const { apiBase } = useRuntimeConfig().public
+  // Plain $fetch (no auth token attachment/refresh retry — that's useApi()'s job, and
+  // useApi() depends on this store so it can't be used here) but still needs the same
+  // ApiResponse envelope unwrapped.
+  const authClient = $fetch.create({ baseURL: apiBase, onResponse: unwrapApiResponse })
+
   const token = useCookie<string | null>('auth_token', { default: () => null, sameSite: 'lax' })
   const refreshToken = useCookie<string | null>('auth_refresh_token', { default: () => null, sameSite: 'lax' })
   const username = useCookie<string | null>('auth_username', { default: () => null, sameSite: 'lax' })
@@ -60,6 +61,7 @@ export const useAuth = defineStore('auth', () => {
 
   async function changePassword(payload: ChangePasswordRequest) {
     await $fetch('/api/auth/change-password', {
+      baseURL: apiBase,
       method: 'PUT',
       headers: { Authorization: `Bearer ${token.value}` },
       body: payload
@@ -76,6 +78,7 @@ export const useAuth = defineStore('auth', () => {
       // Best-effort server-side revocation — the client-side session is already
       // cleared above regardless of whether this call succeeds.
       await $fetch('/api/auth/logout', {
+        baseURL: apiBase,
         method: 'POST',
         body: { refreshToken: pendingRefreshToken }
       }).catch(() => {})

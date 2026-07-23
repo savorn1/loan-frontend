@@ -35,15 +35,11 @@
             <UBadge v-if="loans?.length" color="gray" variant="subtle">{{ loans.length }}</UBadge>
           </div>
         </template>
-        <UTable :rows="loans ?? []" :columns="loanColumns" :loading="loansPending" @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)">
-          <template #status-data="{ row }">
-            <StatusBadge :status="row.status" />
-          </template>
-          <template #principal-data="{ row }">{{ formatCurrency(row.principal) }}</template>
+        <DataTable :rows="loans ?? []" :columns="loanColumns" :loading="loansPending" @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)">
           <template #empty-state>
             <EmptyState icon="i-heroicons-banknotes" title="No loans yet" description="This customer doesn't have any loans on record." />
           </template>
-        </UTable>
+        </DataTable>
       </UCard>
     </div>
 
@@ -65,6 +61,7 @@
 <script setup lang="ts">
 import type { CustomerRequest, CustomerResponse } from '~/features/customers/types'
 import type { LoanResponse } from '~/features/loans/types'
+import type { ColumnDef } from '~/shared/types'
 
 const route = useRoute()
 const router = useRouter()
@@ -90,11 +87,12 @@ const saving = ref(false)
 const deleting = ref(false)
 const confirmDelete = ref(false)
 
-const loanColumns = [
+const loanColumns: ColumnDef<LoanResponse>[] = [
   { key: 'id', label: 'ID' },
-  { key: 'principal', label: 'Principal' },
+  { key: 'principal', type: 'currency' },
   { key: 'termMonths', label: 'Term (mo)' },
-  { key: 'status', label: 'Status' }
+  { key: 'status', type: 'status' },
+  { key: 'createdAt', label: 'Created', type: 'datetime' }
 ]
 
 async function onUpdate(payload: CustomerRequest) {

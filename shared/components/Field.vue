@@ -30,6 +30,7 @@ import FieldCheckbox from './fields/FieldCheckbox.vue'
 import FieldSwitch from './fields/FieldSwitch.vue'
 import FieldRange from './fields/FieldRange.vue'
 import FieldDate from './fields/FieldDate.vue'
+import FieldDateTime from './fields/FieldDateTime.vue'
 
 const props = defineProps<{ field: FieldDef }>()
 
@@ -47,7 +48,8 @@ const CONTROLS: Record<Exclude<FieldType, 'hidden'>, Component> = {
   checkbox: FieldCheckbox,
   switch: FieldSwitch,
   range: FieldRange,
-  date: FieldDate
+  date: FieldDate,
+  datetime: FieldDateTime
 }
 
 const control = computed(() => CONTROLS[(props.field.type ?? 'text') as Exclude<FieldType, 'hidden'>])
@@ -55,12 +57,4 @@ const control = computed(() => CONTROLS[(props.field.type ?? 'text') as Exclude<
 // Backpack behavior: label is optional and constructed from the name —
 // 'dateOfBirth' / 'date_of_birth' both become 'Date of birth'.
 const label = computed(() => props.field.label ?? humanize(props.field.name))
-
-function humanize(name: string): string {
-  const words = name
-    .replace(/_/g, ' ')
-    .replace(/([a-z\d])([A-Z])/g, '$1 $2')
-    .toLowerCase()
-  return words.charAt(0).toUpperCase() + words.slice(1)
-}
 </script>

@@ -25,14 +25,7 @@
     </UCard>
 
     <UCard>
-      <UTable :rows="users?.content ?? []" :columns="columns" :loading="pending">
-        <template #role-data="{ row }">
-          <UBadge :color="row.role === 'ADMIN' ? 'primary' : 'gray'" variant="subtle">{{ row.role }}</UBadge>
-        </template>
-        <template #active-data="{ row }">
-          <UBadge :color="row.active ? 'teal' : 'red'" variant="subtle">{{ row.active ? 'Active' : 'Disabled' }}</UBadge>
-        </template>
-        <template #createdAt-data="{ row }">{{ formatDate(row.createdAt) }}</template>
+      <DataTable :rows="users?.content ?? []" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex items-center justify-end gap-1">
             <UButton
@@ -61,9 +54,9 @@
         <template #empty-state>
           <EmptyState icon="i-heroicons-shield-check" title="No users found" description="Try adjusting your search or filters." />
         </template>
-      </UTable>
-      <div v-if="users && users.totalPages > 1" class="flex justify-end pt-4">
-        <UPagination v-model="page" :page-count="users.size" :total="users.totalElements" />
+      </DataTable>
+      <div v-if="users && users.totalElements > 0" class="pt-4">
+        <DataPagination v-model:page="page" v-model:page-size="pageSize" :total="users.totalElements" />
       </div>
     </UCard>
 
@@ -102,7 +95,7 @@
 
 <script setup lang="ts">
 import type { CreateUserRequest, UserFilter, UserResponse } from '~/features/users/types'
-import type { FieldDef, PageResponse } from '~/shared/types'
+import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 definePageMeta({ middleware: 'admin' })
 
@@ -111,6 +104,7 @@ const toast = useToast()
 const { username } = storeToRefs(useAuth())
 
 const page = ref(1)
+const pageSize = ref(10)
 const filters = reactive({
   username: '',
   role: '' as '' | 'USER' | 'ADMIN',
@@ -131,7 +125,7 @@ const statusFilterOptions = [
 function buildQuery(): UserFilter {
   return {
     page: page.value,
-    size: 10,
+    size: pageSize.value,
     username: filters.username || undefined,
     role: filters.role || undefined,
     active: filters.active === '' ? undefined : filters.active === 'true'
@@ -149,6 +143,7 @@ const totalLabel = computed(() => {
 })
 
 watch(page, () => refresh())
+watch(pageSize, () => { page.value = 1; refresh() })
 watch(() => filters.role, () => { page.value = 1; refresh() })
 watch(() => filters.active, () => { page.value = 1; refresh() })
 
@@ -162,12 +157,12 @@ watch(() => filters.username, () => {
   }, 400)
 })
 
-const columns = [
+const columns: ColumnDef<UserResponse>[] = [
   { key: 'id', label: 'ID' },
   { key: 'username', label: 'Username' },
-  { key: 'role', label: 'Role' },
-  { key: 'active', label: 'Status' },
-  { key: 'createdAt', label: 'Created' },
+  { key: 'role', type: 'badge', color: row => (row.role === 'ADMIN' ? 'primary' : 'gray') },
+  { key: 'active', label: 'Status', type: 'boolean', trueLabel: 'Active', falseLabel: 'Disabled', trueColor: 'teal', falseColor: 'red' },
+  { key: 'createdAt', label: 'Created', type: 'datetime' },
   { key: 'actions', label: '', class: 'text-right' }
 ]
 

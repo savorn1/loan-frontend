@@ -23,18 +23,13 @@
         </div>
       </template>
 
-      <UTable
+      <DataTable
         :rows="rows"
         :columns="columns"
         :loading="pending"
         v-model:sort="sort"
         @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
       >
-        <template #status-data="{ row }">
-          <StatusBadge :status="row.status" />
-        </template>
-        <template #principal-data="{ row }">{{ formatCurrency(row.principal) }}</template>
-        <template #interestRate-data="{ row }">{{ row.interestRate }}%</template>
         <template #empty-state>
           <EmptyState
             :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-banknotes'"
@@ -46,10 +41,10 @@
             </template>
           </EmptyState>
         </template>
-      </UTable>
+      </DataTable>
 
-      <div v-if="total > pageSize" class="flex justify-end pt-4">
-        <UPagination v-model="page" :page-count="pageSize" :total="total" />
+      <div v-if="total > 0" class="pt-4">
+        <DataPagination v-model:page="page" v-model:page-size="pageSize" :total="total" />
       </div>
     </UCard>
 
@@ -76,7 +71,7 @@
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
 import type { LoanRequest, LoanResponse, LoanStatus } from '~/features/loans/types'
-import type { FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
@@ -89,13 +84,14 @@ const customerOptions = computed(() =>
   (customersRaw.value ?? []).map(c => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
 )
 
-const columns = [
+const columns: ColumnDef<LoanResponse>[] = [
   { key: 'id', label: 'ID', sortable: true },
   { key: 'customerName', label: 'Customer', sortable: true },
-  { key: 'principal', label: 'Principal', sortable: true },
-  { key: 'interestRate', label: 'Rate', sortable: true },
+  { key: 'principal', type: 'currency', sortable: true },
+  { key: 'interestRate', label: 'Rate', type: 'percent', sortable: true },
   { key: 'termMonths', label: 'Term (mo)', sortable: true },
-  { key: 'status', label: 'Status', sortable: true }
+  { key: 'status', type: 'status', sortable: true },
+  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true }
 ]
 
 const statusOptions: { label: string; value: LoanStatus | '' }[] = [

@@ -15,7 +15,7 @@ export function useClientTable<T extends Record<string, any>>(
   const search = ref('')
   const page = ref(1)
   const sort = ref<SortState>(undefined)
-  const pageSize = options.pageSize ?? 10
+  const pageSize = ref(options.pageSize ?? 10)
 
   const filtered = computed(() => {
     const rows = source.value ?? []
@@ -40,14 +40,16 @@ export function useClientTable<T extends Record<string, any>>(
   })
 
   const total = computed(() => sorted.value.length)
-  const pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize)))
+  const pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize.value)))
 
   const rows = computed(() => {
-    const start = (page.value - 1) * pageSize
-    return sorted.value.slice(start, start + pageSize)
+    const start = (page.value - 1) * pageSize.value
+    return sorted.value.slice(start, start + pageSize.value)
   })
 
-  watch([search, source], () => { page.value = 1 })
+  // Changing the page size (via <DataPagination>) invalidates the current
+  // page offset the same way a new search or a refreshed source list does.
+  watch([search, source, pageSize], () => { page.value = 1 })
   watch(pageCount, (count) => { if (page.value > count) page.value = count })
 
   return { search, page, pageSize, sort, total, pageCount, rows }

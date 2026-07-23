@@ -24,15 +24,7 @@
     </UCard>
 
     <UCard>
-      <UTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
-        <template #status-data="{ row }">
-          <StatusBadge :status="row.status" />
-        </template>
-        <template #amount-data="{ row }">{{ formatCurrency(row.amount) }}</template>
-        <template #dueDate-data="{ row }">{{ formatDate(row.dueDate) }}</template>
-        <template #loanId-data="{ row }">
-          <NuxtLink :to="`/loans/${row.loanId}`" class="text-primary-500 font-medium">#{{ row.loanId }}</NuxtLink>
-        </template>
+      <DataTable :rows="rows" :columns="columns" :loading="pending" v-model:sort="sort">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton v-if="row.status !== 'PAID'" size="2xs" variant="soft" :loading="markingPaid === row.id" @click="onMarkPaid(row.id)">
@@ -52,10 +44,10 @@
             </template>
           </EmptyState>
         </template>
-      </UTable>
+      </DataTable>
 
-      <div v-if="total > pageSize" class="flex justify-end pt-4">
-        <UPagination v-model="page" :page-count="pageSize" :total="total" />
+      <div v-if="total > 0" class="pt-4">
+        <DataPagination v-model:page="page" v-model:page-size="pageSize" :total="total" />
       </div>
     </UCard>
 
@@ -93,7 +85,7 @@
 <script setup lang="ts">
 import type { LoanResponse } from '~/features/loans/types'
 import type { PaymentRequest, PaymentResponse, PaymentStatus } from '~/features/payments/types'
-import type { FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
@@ -140,13 +132,14 @@ function clearFilters() {
   statusFilter.value = ''
 }
 
-const columns = [
+const columns: ColumnDef<PaymentResponse>[] = [
   { key: 'id', label: 'ID', sortable: true },
-  { key: 'loanId', label: 'Loan', sortable: true },
+  { key: 'loanId', label: 'Loan', type: 'link', sortable: true, href: row => `/loans/${row.loanId}`, prefix: () => '#' },
   { key: 'installmentNumber', label: '#', sortable: true },
-  { key: 'amount', label: 'Amount', sortable: true },
-  { key: 'dueDate', label: 'Due', sortable: true },
-  { key: 'status', label: 'Status', sortable: true },
+  { key: 'amount', type: 'currency', sortable: true },
+  { key: 'dueDate', label: 'Due', type: 'date', sortable: true },
+  { key: 'status', type: 'status', sortable: true },
+  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
 ]
 

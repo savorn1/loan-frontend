@@ -1,7 +1,9 @@
 // Nuxt config: Nuxt UI (Tailwind-based components) + a same-origin proxy to the
 // api-gateway so the browser never makes a cross-origin request (no CORS setup
 // needed on the backend). NUXT_API_BASE overrides the gateway URL at runtime.
+// process.dev isn't defined yet at config-eval time, so NODE_ENV is used instead.
 const apiBase = process.env.NUXT_API_BASE || 'http://localhost:8080'
+const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -14,7 +16,7 @@ export default defineNuxtConfig({
   // StatusBadge, ConfirmModal callers, etc.) aren't visible to Nuxt UI's
   // static safelist scan — list them so their Tailwind classes are generated.
   ui: {
-    safelistColors: ['teal', 'green', 'orange', 'red']
+    safelistColors: ['teal', 'green', 'orange', 'red', 'pink']
   },
   ssr: true,
   css: ['~/assets/css/main.css'],
@@ -44,18 +46,32 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: '/api' // client always calls same-origin /api/*, Nitro proxies it below
+      // Dev: call the gateway directly (it allows the localhost:3000 origin via CORS).
+      // Prod build: same-origin /api/*, proxied to the gateway by the routeRules below.
+      apiBase: isDev ? apiBase : '/api'
     }
   },
-  routeRules: {
-    // Forward only the actual backend resource paths to the Spring Cloud Gateway.
-    // Scoped (rather than a blanket '/api/**') so it never swallows Nuxt's own
-    // internal routes under /api/**, e.g. Nuxt Icon's /api/_nuxt_icon/** endpoint.
-    '/api/auth/**': { proxy: `${apiBase}/api/auth/**` },
-    '/api/customers/**': { proxy: `${apiBase}/api/customers/**` },
-    '/api/loans/**': { proxy: `${apiBase}/api/loans/**` },
-    '/api/payments/**': { proxy: `${apiBase}/api/payments/**` }
-  },
+  // Proxy only applies to the production build — in dev the client calls the
+  // gateway directly (see runtimeConfig.public.apiBase above), so these rules
+  // would never be hit anyway.
+  routeRules: isDev
+    ? {}
+    : {
+        // Forward only the actual backend resource paths to the Spring Cloud Gateway.
+        // Scoped (rather than a blanket '/api/**') so it never swallows Nuxt's own
+        // internal routes under /api/**, e.g. Nuxt Icon's /api/_nuxt_icon/** endpoint.
+        '/api/auth/**': { proxy: `${apiBase}/api/auth/**` },
+        '/api/customers/**': { proxy: `${apiBase}/api/customers/**` },
+        '/api/loans/**': { proxy: `${apiBase}/api/loans/**` },
+        '/api/loan-products/**': { proxy: `${apiBase}/api/loan-products/**` },
+        '/api/interest-schemes/**': { proxy: `${apiBase}/api/interest-schemes/**` },
+        '/api/fee-schemes/**': { proxy: `${apiBase}/api/fee-schemes/**` },
+        '/api/term-templates/**': { proxy: `${apiBase}/api/term-templates/**` },
+        '/api/rule-templates/**': { proxy: `${apiBase}/api/rule-templates/**` },
+        '/api/document-templates/**': { proxy: `${apiBase}/api/document-templates/**` },
+        '/api/payments/**': { proxy: `${apiBase}/api/payments/**` },
+        '/api/accounting/**': { proxy: `${apiBase}/api/accounting/**` }
+      },
   typescript: {
     strict: true
   }

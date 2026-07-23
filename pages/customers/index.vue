@@ -21,14 +21,13 @@
         </UInput>
       </template>
 
-      <UTable
+      <DataTable
         :rows="rows"
         :columns="columns"
         :loading="pending"
         v-model:sort="sort"
         @select="onSelect"
       >
-        <template #createdAt-data="{ row }">{{ formatDate(row.createdAt) }}</template>
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-users'"
@@ -40,10 +39,10 @@
             </template>
           </EmptyState>
         </template>
-      </UTable>
+      </DataTable>
 
-      <div v-if="total > pageSize" class="flex justify-end pt-4">
-        <UPagination v-model="page" :page-count="pageSize" :total="total" />
+      <div v-if="total > 0" class="pt-4">
+        <DataPagination v-model:page="page" v-model:page-size="pageSize" :total="total" />
       </div>
     </UCard>
 
@@ -60,6 +59,7 @@
 
 <script setup lang="ts">
 import type { CustomerRequest, CustomerResponse } from '~/features/customers/types'
+import type { ColumnDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
@@ -70,13 +70,13 @@ const { data: customers, pending, refresh } = await useAsyncData('customers', ()
 const showCreate = ref(false)
 const creating = ref(false)
 
-const columns = [
+const columns: ColumnDef<CustomerResponse>[] = [
   { key: 'id', label: 'ID', sortable: true },
-  { key: 'firstName', label: 'First name', sortable: true },
-  { key: 'lastName', label: 'Last name', sortable: true },
-  { key: 'email', label: 'Email', sortable: true },
-  { key: 'phone', label: 'Phone' },
-  { key: 'createdAt', label: 'Created', sortable: true }
+  { key: 'firstName', sortable: true },
+  { key: 'lastName', sortable: true },
+  { key: 'email', sortable: true },
+  { key: 'phone' },
+  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true }
 ]
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(customers, {
