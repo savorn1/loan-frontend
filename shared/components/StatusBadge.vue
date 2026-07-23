@@ -19,7 +19,9 @@ type StatusColor = 'teal' | 'red' | 'gray' | 'orange'
 const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   APPROVED: { color: 'teal', icon: 'i-heroicons-check-circle' },
   ACTIVE: { color: 'teal', icon: 'i-heroicons-bolt' },
+  OPEN: { color: 'teal', icon: 'i-heroicons-lock-open' },
   PUBLISHED: { color: 'teal', icon: 'i-heroicons-check-circle' },
+  POSTED: { color: 'teal', icon: 'i-heroicons-check-circle' },
   DRAFT: { color: 'gray', icon: 'i-heroicons-pencil' },
   PAID: { color: 'teal', icon: 'i-heroicons-check-badge' },
   SUCCESS: { color: 'teal', icon: 'i-heroicons-check-badge' },
@@ -27,6 +29,7 @@ const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   COMPLETED: { color: 'teal', icon: 'i-heroicons-flag' },
   REJECTED: { color: 'red', icon: 'i-heroicons-x-circle' },
   FAILED: { color: 'red', icon: 'i-heroicons-x-circle' },
+  REVERSED: { color: 'red', icon: 'i-heroicons-arrow-uturn-left' },
   OVERDUE: { color: 'red', icon: 'i-heroicons-exclamation-triangle' },
   CLOSED: { color: 'gray', icon: 'i-heroicons-lock-closed' },
   WAIVED: { color: 'gray', icon: 'i-heroicons-hand-raised' },

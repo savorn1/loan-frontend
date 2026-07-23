@@ -22,7 +22,7 @@ withDefaults(defineProps<{
   title: string
   description: string
   confirmLabel?: string
-  color?: 'primary' | 'red' | 'green' | 'gray'
+  color?: 'primary' | 'red' | 'green' | 'gray' | 'orange'
   loading?: boolean
 }>(), {
   confirmLabel: 'Confirm',

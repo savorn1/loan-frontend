@@ -46,8 +46,19 @@ const groups = computed(() => [
       { label: 'Payments', to: '/payments', icon: 'i-heroicons-credit-card' },
       { label: 'Payment methods', to: '/payment-methods', icon: 'i-heroicons-wallet' },
       { label: 'Transactions', to: '/payment-transactions', icon: 'i-heroicons-arrows-right-left' },
-      { label: 'Journal entries', to: '/journal-entries', icon: 'i-heroicons-book-open' },
       ...(isAdmin.value ? [{ label: 'Users', to: '/users', icon: 'i-heroicons-shield-check' }] : [])
+    ]
+  },
+  {
+    title: 'Accounting',
+    links: [
+      { label: 'Journal Entries', to: '/journal-entries', icon: 'i-heroicons-book-open' },
+      { label: 'General Ledger', to: '/general-ledger', icon: 'i-heroicons-book-open' },
+      { label: 'Trial Balance', to: '/trial-balance', icon: 'i-heroicons-scale' },
+      { label: 'Chart of Accounts', to: '/gl-accounts', icon: 'i-heroicons-list-bullet' },
+      { label: 'Journal Templates', to: '/journal-templates', icon: 'i-heroicons-document-text' },
+      { label: 'Accounting Schemes', to: '/accounting-schemes', icon: 'i-heroicons-link' },
+      { label: 'Financial Periods', to: '/financial-periods', icon: 'i-heroicons-calendar-days' }
     ]
   },
   {

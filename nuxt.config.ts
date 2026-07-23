@@ -70,7 +70,12 @@ export default defineNuxtConfig({
         '/api/rule-templates/**': { proxy: `${apiBase}/api/rule-templates/**` },
         '/api/document-templates/**': { proxy: `${apiBase}/api/document-templates/**` },
         '/api/payments/**': { proxy: `${apiBase}/api/payments/**` },
-        '/api/accounting/**': { proxy: `${apiBase}/api/accounting/**` }
+        '/api/gl-accounts/**': { proxy: `${apiBase}/api/gl-accounts/**` },
+        '/api/journal-templates/**': { proxy: `${apiBase}/api/journal-templates/**` },
+        '/api/accounting-schemes/**': { proxy: `${apiBase}/api/accounting-schemes/**` },
+        '/api/financial-periods/**': { proxy: `${apiBase}/api/financial-periods/**` },
+        '/api/journal-entries/**': { proxy: `${apiBase}/api/journal-entries/**` },
+        '/api/trial-balance/**': { proxy: `${apiBase}/api/trial-balance/**` }
       },
   typescript: {
     strict: true
