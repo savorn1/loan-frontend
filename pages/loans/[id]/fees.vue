@@ -120,11 +120,8 @@ const fields: FieldDef[] = [
   },
   {
     name: 'amount',
-    type: 'number',
+    type: 'currency',
     required: true,
-    prefix: '$',
-    min: 0.01,
-    step: 0.01,
     wrapper: 'half'
   },
   { name: 'chargedDate', label: 'Charged date', type: 'date', required: true },

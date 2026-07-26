@@ -213,7 +213,7 @@ const paymentFields = computed<FieldDef[]>(() => [
     options: loanOptions.value,
     placeholder: 'Select a loan'
   },
-  { name: 'amount', type: 'number', required: true, prefix: '$', min: 0.01, step: 0.01 },
+  { name: 'amount', type: 'currency', required: true },
   { name: 'dueDate', type: 'date', required: true, placeholder: 'Select due date' },
   { name: 'note', type: 'text' }
 ])

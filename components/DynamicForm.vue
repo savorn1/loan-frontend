@@ -2,7 +2,7 @@
   <UForm :state="model" class="space-y-4" @submit="onSubmit">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div
-        v-for="field in fields"
+        v-for="field in visibleFields"
         :key="field.name"
         :class="(field.wrapper ?? 'full') === 'full' ? 'sm:col-span-2' : 'sm:col-span-1'"
       >
@@ -54,12 +54,18 @@ for (const field of props.fields) {
   }
 }
 
+const visibleFields = computed(() =>
+  props.fields.filter((field) => !field.showIf || field.showIf(model.value))
+)
+
 function onSubmit() {
   // Required fields rendered by non-native controls (select, date, radio)
   // don't get browser validation — enforce them here before emitting.
-  for (const field of props.fields) {
+  for (const field of visibleFields.value) {
     const value = model.value[field.name]
-    if (field.required && (value === undefined || value === null || value === '')) {
+    const isEmpty =
+      value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)
+    if (field.required && isEmpty) {
       missingField.value = field
       return
     }

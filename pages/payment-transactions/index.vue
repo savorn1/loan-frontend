@@ -179,11 +179,8 @@ const fields = computed<FieldDef[]>(() => [
   },
   {
     name: 'amount',
-    type: 'number',
+    type: 'currency',
     required: true,
-    prefix: '$',
-    min: 0.01,
-    step: 0.01,
     wrapper: 'half'
   },
   { name: 'reference', wrapper: 'half' }

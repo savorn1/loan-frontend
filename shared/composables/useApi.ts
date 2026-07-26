@@ -32,6 +32,7 @@ export function useApi() {
 
   // `any` here matches ofetch's own loosely-typed FetchOptions second parameter —
   // callers still get full inference on the return type via request<T>(...).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return async function request<T>(url: string, opts?: any): Promise<T> {
     // Feature call sites pass bare resource paths (e.g. '/loan-products'), not '/api/...' —
     // that convention predates the dev-mode switch to calling the gateway directly (apiBase

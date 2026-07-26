@@ -169,7 +169,14 @@ const fields: FieldDef[] = [
       { label: 'Cheque', value: 'CHEQUE' }
     ]
   },
-  { name: 'isActive', label: 'Active', type: 'switch', default: true },
+  {
+    name: 'isActive',
+    label: 'Active',
+    type: 'switch',
+    default: true,
+    onLabel: 'Active',
+    offLabel: 'Inactive'
+  },
   { name: 'details', type: 'textarea' }
 ]
 

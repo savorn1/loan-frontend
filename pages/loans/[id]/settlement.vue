@@ -73,11 +73,8 @@ const fields: FieldDef[] = [
   {
     name: 'settlementAmount',
     label: 'Settlement amount',
-    type: 'number',
-    required: true,
-    prefix: '$',
-    min: 0.01,
-    step: 0.01
+    type: 'currency',
+    required: true
   },
   {
     name: 'settlementDate',

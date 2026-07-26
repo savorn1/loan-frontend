@@ -31,6 +31,8 @@ const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   RELEASED: { color: 'gray', icon: 'i-heroicons-lock-open' },
   REJECTED: { color: 'red', icon: 'i-heroicons-x-circle' },
   FAILED: { color: 'red', icon: 'i-heroicons-x-circle' },
+  REVOKED: { color: 'red', icon: 'i-heroicons-x-circle' },
+  EXPIRED: { color: 'red', icon: 'i-heroicons-exclamation-triangle' },
   REVERSED: { color: 'red', icon: 'i-heroicons-arrow-uturn-left' },
   OVERDUE: { color: 'red', icon: 'i-heroicons-exclamation-triangle' },
   CLOSED: { color: 'gray', icon: 'i-heroicons-lock-closed' },

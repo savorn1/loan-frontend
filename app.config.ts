@@ -14,7 +14,7 @@ export default defineAppConfig({
       ring: 'ring-1 ring-gray-200/70 dark:ring-gray-800'
     },
     button: {
-      rounded: 'rounded-md',
+      rounded: 'rounded-full',
       default: {
         size: 'sm'
       }
@@ -45,6 +45,13 @@ export default defineAppConfig({
     },
     modal: {
       rounded: 'rounded-md'
+    },
+    table: {
+      divide: 'divide-y divide-gray-200 dark:divide-gray-800',
+      tr: {
+        selected: 'bg-primary-50 dark:bg-primary-400/10',
+        active: 'hover:bg-primary-50 dark:hover:bg-primary-400/10 cursor-pointer'
+      }
     }
   }
 })

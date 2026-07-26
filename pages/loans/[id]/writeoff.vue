@@ -71,7 +71,7 @@ const { data: writeoff, refresh } = await useAsyncData(`loan-${loanId}-writeoff`
 const today = new Date().toISOString().slice(0, 10)
 
 const fields: FieldDef[] = [
-  { name: 'amount', type: 'number', required: true, prefix: '$', min: 0.01, step: 0.01 },
+  { name: 'amount', type: 'currency', required: true },
   { name: 'writeoffDate', label: 'Write-off date', type: 'date', required: true, default: today },
   { name: 'reason', type: 'textarea', required: true }
 ]

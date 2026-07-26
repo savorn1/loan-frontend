@@ -116,11 +116,8 @@ const fields: FieldDef[] = [
   {
     name: 'estimatedValue',
     label: 'Estimated value',
-    type: 'number',
+    type: 'currency',
     required: true,
-    prefix: '$',
-    min: 0.01,
-    step: 0.01,
     wrapper: 'half'
   },
   { name: 'description', type: 'textarea', required: true },

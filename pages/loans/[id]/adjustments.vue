@@ -82,7 +82,7 @@ const fields: FieldDef[] = [
       { label: 'Debit (increases balance)', value: 'DEBIT' }
     ]
   },
-  { name: 'amount', type: 'number', required: true, prefix: '$', min: 0.01, step: 0.01 },
+  { name: 'amount', type: 'currency', required: true },
   { name: 'reason', type: 'textarea', required: true }
 ]
 

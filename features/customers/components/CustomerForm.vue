@@ -15,11 +15,14 @@
 // components (shared/components) — same rendered output as the previous
 // hand-written template (2-col name row, icons, DatePicker capped at today),
 // but the field list is now data instead of markup.
-import type { CustomerRequest } from '~/features/customers/types'
+import type { CustomerRequest, CustomerResponse } from '~/features/customers/types'
 import type { FieldDef } from '~/shared/types'
 
 const props = defineProps<{
-  initial?: Partial<CustomerRequest>
+  // CustomerResponse (not CustomerRequest) — the only real caller passes an
+  // existing customer to edit, whose optional fields are `| null` (API
+  // response shape) rather than `| undefined` (request shape).
+  initial?: Partial<CustomerResponse>
   loading?: boolean
   submitLabel?: string
   cancelable?: boolean
@@ -36,13 +39,12 @@ const fields: FieldDef[] = [
   { name: 'firstName', required: true, wrapper: 'half' },
   { name: 'lastName', required: true, wrapper: 'half' },
   { name: 'email', type: 'email', required: true, icon: 'i-heroicons-envelope' },
-  { name: 'phone', icon: 'i-heroicons-phone', wrapper: 'half' },
+  { name: 'phone', type: 'phone', wrapper: 'half' },
   { name: 'nationalId', label: 'National ID', icon: 'i-heroicons-identification', wrapper: 'half' },
   { name: 'address', icon: 'i-heroicons-map-pin' },
   {
     name: 'dateOfBirth',
-    type: 'date',
-    placeholder: 'Select date of birth',
+    type: 'dob',
     max: today,
     hint: 'Optional'
   }

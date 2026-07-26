@@ -98,16 +98,13 @@ const {
   pending,
   refresh
 } = await useAsyncData('loans', () => api<LoanResponse[]>('/loans'))
-const { data: customersRaw } = await useAsyncData('loans-customers', () =>
-  api<CustomerResponse[]>('/customers')
-)
 
-const customerOptions = computed(() =>
-  (customersRaw.value ?? []).map((c) => ({
-    label: `${c.firstName} ${c.lastName} (#${c.id})`,
-    value: c.id
-  }))
-)
+// Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
+// the customer list can be far larger than any dropdown should hold client-side.
+async function searchCustomers(query: string) {
+  const customers = await api<CustomerResponse[]>('/customers', { query: { search: query, size: 20 } })
+  return customers.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
+}
 
 const columns: ColumnDef<LoanResponse>[] = [
   { key: 'id', label: 'ID', sortable: true },
@@ -151,24 +148,21 @@ const showCreate = ref(false)
 const creating = ref(false)
 const error = ref('')
 
-// Declarative field defs for <DynamicForm>. Computed because the customer
-// options load async; required/select validation is handled by DynamicForm.
-const loanFields = computed<FieldDef[]>(() => [
+// Declarative field defs for <DynamicForm>; required/select validation is
+// handled by DynamicForm.
+const loanFields: FieldDef[] = [
   {
     name: 'customerId',
     label: 'Customer',
-    type: 'select',
+    type: 'relationship',
     required: true,
-    options: customerOptions.value,
-    placeholder: 'Select a customer'
+    search: searchCustomers,
+    placeholder: 'Search customers…'
   },
   {
     name: 'principal',
-    type: 'number',
+    type: 'currency',
     required: true,
-    prefix: '$',
-    min: 1000,
-    step: 0.01,
     hint: 'Minimum 1000',
     wrapper: 'half'
   },
@@ -194,7 +188,7 @@ const loanFields = computed<FieldDef[]>(() => [
     hint: '1 – 360'
   },
   { name: 'purpose', type: 'textarea' }
-])
+]
 
 const createForm = ref<Record<string, any>>({})
 

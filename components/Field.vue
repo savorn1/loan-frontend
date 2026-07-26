@@ -22,34 +22,52 @@ import FieldText from './fields/FieldText.vue'
 import FieldEmail from './fields/FieldEmail.vue'
 import FieldPassword from './fields/FieldPassword.vue'
 import FieldUrl from './fields/FieldUrl.vue'
+import FieldPhone from './fields/FieldPhone.vue'
 import FieldNumber from './fields/FieldNumber.vue'
+import FieldCurrency from './fields/FieldCurrency.vue'
 import FieldTextarea from './fields/FieldTextarea.vue'
 import FieldSelect from './fields/FieldSelect.vue'
+import FieldRelationship from './fields/FieldRelationship.vue'
 import FieldRadio from './fields/FieldRadio.vue'
 import FieldCheckbox from './fields/FieldCheckbox.vue'
 import FieldSwitch from './fields/FieldSwitch.vue'
 import FieldRange from './fields/FieldRange.vue'
 import FieldDate from './fields/FieldDate.vue'
 import FieldDateTime from './fields/FieldDateTime.vue'
+import FieldDob from './fields/FieldDob.vue'
+import FieldMonth from './fields/FieldMonth.vue'
+import FieldWeek from './fields/FieldWeek.vue'
+import FieldFile from './fields/FieldFile.vue'
+import FieldImage from './fields/FieldImage.vue'
+import FieldBase64Image from './fields/FieldBase64Image.vue'
 
 const props = defineProps<{ field: FieldDef }>()
 
-const model = defineModel<any>()
+const model = defineModel<unknown>()
 
 const CONTROLS: Record<Exclude<FieldType, 'hidden'>, Component> = {
   text: FieldText,
   email: FieldEmail,
   password: FieldPassword,
   url: FieldUrl,
+  phone: FieldPhone,
   number: FieldNumber,
+  currency: FieldCurrency,
   textarea: FieldTextarea,
   select: FieldSelect,
+  relationship: FieldRelationship,
   radio: FieldRadio,
   checkbox: FieldCheckbox,
   switch: FieldSwitch,
   range: FieldRange,
   date: FieldDate,
-  datetime: FieldDateTime
+  datetime: FieldDateTime,
+  dob: FieldDob,
+  month: FieldMonth,
+  week: FieldWeek,
+  file: FieldFile,
+  image: FieldImage,
+  base64Image: FieldBase64Image
 }
 
 const control = computed(

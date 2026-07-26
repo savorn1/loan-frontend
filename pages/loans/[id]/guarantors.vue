@@ -87,15 +87,12 @@ const columns: ColumnDef<LoanGuarantorResponse>[] = [
 
 const fields: FieldDef[] = [
   { name: 'name', required: true, wrapper: 'half' },
-  { name: 'phone', required: true, wrapper: 'half' },
+  { name: 'phone', type: 'phone', required: true, wrapper: 'half' },
   { name: 'relationship', wrapper: 'half' },
   {
     name: 'guaranteedAmount',
     label: 'Guaranteed amount',
-    type: 'number',
-    prefix: '$',
-    min: 0.01,
-    step: 0.01,
+    type: 'currency',
     hint: 'Optional — leave blank if unspecified',
     wrapper: 'half'
   }

@@ -33,16 +33,25 @@ export type FieldType =
   | 'text'
   | 'textarea'
   | 'number'
+  | 'currency'
   | 'email'
   | 'password'
   | 'url'
+  | 'phone'
   | 'select'
+  | 'relationship'
   | 'radio'
   | 'checkbox'
   | 'switch'
   | 'range'
   | 'date'
   | 'datetime'
+  | 'dob'
+  | 'month'
+  | 'week'
+  | 'file'
+  | 'image'
+  | 'base64Image'
   | 'hidden'
 
 export interface FieldOption {
@@ -72,14 +81,32 @@ export interface FieldDef {
   readonly?: boolean
   /** select / radio choices. */
   options?: FieldOption[]
+  /** relationship: called with the current search text (debounced) to look up matching options — Backpack's select2_from_ajax/relationship field, for FKs too large to preload as a static `options` list. */
+  search?: (query: string) => Promise<FieldOption[]> | FieldOption[]
   /** number / range / date constraints. */
   min?: number | string
   max?: number | string
   step?: number | string
   /** textarea rows. */
   rows?: number
+  /** file/image: native input + drop-target restriction, e.g. 'image/*'. */
+  accept?: string
+  /** file/image: allow selecting more than one. */
+  multiple?: boolean
+  /** file/image/base64Image: reject files over this size. */
+  maxSizeMb?: number
+  /** switch: text shown next to the toggle for its true/false state (Backpack's on_label/off_label), e.g. 'Active'/'Inactive'. */
+  onLabel?: string
+  offLabel?: string
+  /** phone: ISO-3166 alpha-2 country to assume when the value has no recognized dial code (default 'KH'). */
+  defaultCountry?: string
   /** Layout in DynamicForm's 2-column grid (Backpack's `wrapper`). */
   wrapper?: 'full' | 'half'
+  /** Hide the field (and skip its `required` check) when this returns false for the current form values. */
+  // `any` matches DynamicForm's own model type (Record<string, any>) — form
+  // values are a dynamic Backpack-style bag of unrelated field types.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  showIf?: (values: Record<string, any>) => boolean
 }
 
 // ── Declarative list columns (Backpack for Laravel-style) ────────────────────
@@ -101,6 +128,12 @@ export type ColumnType =
   | 'badge'
   | 'link'
 
+// `any` here (not `unknown`) is deliberate: it's the default used only when a
+// caller doesn't parameterize ColumnDef (e.g. <ColumnValue>'s untyped prop).
+// `unknown`/`Record<string, unknown>` would reject every concrete response
+// type passed elsewhere as ColumnDef<T> — none of them declare an index
+// signature, so `T extends Record<string, unknown>` fails to satisfy.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ColumnDef<T = any> {
   /** The only mandatory attribute — row property to read (Backpack's `name`). */
   key: string
