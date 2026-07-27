@@ -5,7 +5,7 @@
     >
       <NuxtLink to="/" class="flex items-center gap-2.5">
         <span
-          class="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-fuchsia-400 to-pink-500 text-white shrink-0 shadow-sm"
+          class="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-primary-500 to-teal-600 text-white shrink-0 shadow-sm"
         >
           <UIcon name="i-heroicons-banknotes" class="w-4.5 h-4.5" />
         </span>
@@ -17,7 +17,7 @@
         <button
           v-if="group.title"
           type="button"
-          class="w-full flex items-center justify-between px-3 mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 hover:text-fuchsia-500 dark:hover:text-fuchsia-400"
+          class="w-full flex items-center justify-between px-3 mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400"
           @click="toggle(i)"
         >
           <span class="flex items-center gap-1.5">
@@ -38,13 +38,14 @@
             padding: 'px-0 py-0',
             rounded: 'rounded-xl',
             active:
-              'text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50 dark:bg-fuchsia-400/10 before:hidden',
+              'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-400/10 before:hidden',
             inactive:
               'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800',
             icon: {
               base: 'w-5 h-5 shrink-0',
-              active: 'text-fuchsia-600 dark:text-fuchsia-400',
-              inactive: 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+              active: 'text-primary-600 dark:text-primary-400',
+              inactive:
+                'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
             }
           }"
         />

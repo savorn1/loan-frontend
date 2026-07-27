@@ -106,7 +106,9 @@ const {
 // Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
 // the customer list can be far larger than any dropdown should hold client-side.
 async function searchCustomers(query: string) {
-  const customers = await api<CustomerResponse[]>('/customers', { query: { search: query, size: 20 } })
+  const customers = await api<CustomerResponse[]>('/customers', {
+    query: { search: query, size: 20 }
+  })
   return customers.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
 }
 

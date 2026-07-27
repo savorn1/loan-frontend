@@ -8,7 +8,12 @@
 // column is marked `sortable: true` and `sort` is bound with `v-model:sort`.
 type SortState = { column: string; direction: 'asc' | 'desc' } | undefined
 
-export function useClientTable<T extends Record<string, unknown>>(
+// `any` here (not `unknown`) matches DataTable's own generic — none of the
+// response types passed as T declare an index signature, so `Record<string,
+// unknown>` fails to satisfy the constraint (see shared/types.ts's ColumnDef
+// for the same issue).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useClientTable<T extends Record<string, any>>(
   source: Ref<T[] | null | undefined>,
   options: { searchFields?: (keyof T)[]; pageSize?: number } = {}
 ) {

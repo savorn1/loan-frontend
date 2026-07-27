@@ -188,13 +188,7 @@ export interface CustomerIncomeResponse {
 // Links between customers (customer_relationships) — directional: this
 // customer has relationshipType to relatedCustomerId, not implicitly mirrored.
 export type RelationshipType =
-  | 'SPOUSE'
-  | 'PARENT'
-  | 'CHILD'
-  | 'SIBLING'
-  | 'BUSINESS_PARTNER'
-  | 'GUARANTOR'
-  | 'OTHER'
+  'SPOUSE' | 'PARENT' | 'CHILD' | 'SIBLING' | 'BUSINESS_PARTNER' | 'GUARANTOR' | 'OTHER'
 
 export interface CustomerRelationshipRequest {
   relatedCustomerId: number

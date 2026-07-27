@@ -1,7 +1,11 @@
 <template>
   <div class="space-y-2">
     <div v-if="model" class="flex items-center gap-3">
-      <img :src="model" class="w-16 h-16 rounded object-cover border border-gray-200 dark:border-gray-700" alt="" />
+      <img
+        :src="model"
+        class="w-16 h-16 rounded object-cover border border-gray-200 dark:border-gray-700"
+        alt=""
+      />
       <UButton
         size="xs"
         color="gray"

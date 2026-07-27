@@ -46,12 +46,12 @@
               padding: 'px-0 py-0',
               rounded: 'rounded-xl',
               active:
-                'text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50 dark:bg-fuchsia-400/10 border-l-2 border-fuchsia-500 dark:border-fuchsia-400 before:hidden',
+                'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-400/10 border-l-2 border-primary-500 dark:border-primary-400 before:hidden',
               inactive:
                 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800',
               icon: {
                 base: 'w-4.5 h-4.5 shrink-0',
-                active: 'text-fuchsia-600 dark:text-fuchsia-400',
+                active: 'text-primary-600 dark:text-primary-400',
                 inactive:
                   'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
               }
@@ -157,7 +157,11 @@ const tabGroups = computed(() => [
         to: `/loans/${loanId}/status-history`,
         icon: 'i-heroicons-clock'
       },
-      { label: 'Restructures', to: `/loans/${loanId}/restructures`, icon: 'i-heroicons-arrow-path' },
+      {
+        label: 'Restructures',
+        to: `/loans/${loanId}/restructures`,
+        icon: 'i-heroicons-arrow-path'
+      },
       {
         label: 'Refinances',
         to: `/loans/${loanId}/refinances`,

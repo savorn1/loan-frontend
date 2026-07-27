@@ -74,7 +74,9 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">Identities (KYC)</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateIdentity">Add identity</UButton>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateIdentity"
+              >Add identity</UButton
+            >
           </div>
         </template>
         <DataTable :rows="identities ?? []" :columns="identityColumns" :loading="identitiesPending">
@@ -113,7 +115,9 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">Addresses</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateAddress">Add address</UButton>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateAddress"
+              >Add address</UButton
+            >
           </div>
         </template>
         <DataTable :rows="addresses ?? []" :columns="addressColumns" :loading="addressesPending">
@@ -152,7 +156,9 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">Contacts</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateContact">Add contact</UButton>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateContact"
+              >Add contact</UButton
+            >
           </div>
         </template>
         <DataTable :rows="contacts ?? []" :columns="contactColumns" :loading="contactsPending">
@@ -191,10 +197,16 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">Employment</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateEmployment">Add employment</UButton>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateEmployment"
+              >Add employment</UButton
+            >
           </div>
         </template>
-        <DataTable :rows="employments ?? []" :columns="employmentColumns" :loading="employmentsPending">
+        <DataTable
+          :rows="employments ?? []"
+          :columns="employmentColumns"
+          :loading="employmentsPending"
+        >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
               <UButton
@@ -219,7 +231,9 @@
               description="Add the customer's employer and income details."
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openCreateEmployment">Add employment</UButton>
+                <UButton icon="i-heroicons-plus" @click="openCreateEmployment"
+                  >Add employment</UButton
+                >
               </template>
             </EmptyState>
           </template>
@@ -230,7 +244,9 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">Income</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateIncome">Add income</UButton>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateIncome"
+              >Add income</UButton
+            >
           </div>
         </template>
         <DataTable :rows="incomes ?? []" :columns="incomeColumns" :loading="incomesPending">
@@ -269,10 +285,16 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">Relationships</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateRelationship">Add relationship</UButton>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateRelationship"
+              >Add relationship</UButton
+            >
           </div>
         </template>
-        <DataTable :rows="relationships ?? []" :columns="relationshipColumns" :loading="relationshipsPending">
+        <DataTable
+          :rows="relationships ?? []"
+          :columns="relationshipColumns"
+          :loading="relationshipsPending"
+        >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
               <UButton
@@ -297,7 +319,9 @@
               description="Link this customer to another customer (e.g. spouse, guarantor)."
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openCreateRelationship">Add relationship</UButton>
+                <UButton icon="i-heroicons-plus" @click="openCreateRelationship"
+                  >Add relationship</UButton
+                >
               </template>
             </EmptyState>
           </template>
@@ -1042,7 +1066,9 @@ const employmentColumns: ColumnDef<CustomerEmploymentResponse>[] = [
   {
     key: 'salary',
     value: (row) =>
-      row.salary == null ? '' : `${row.salary.toLocaleString()}${row.currency ? ' ' + row.currency : ''}`
+      row.salary == null
+        ? ''
+        : `${row.salary.toLocaleString()}${row.currency ? ' ' + row.currency : ''}`
   },
   { key: 'startDate', label: 'Start date', type: 'date' },
   { key: 'status', type: 'status' },
@@ -1229,7 +1255,9 @@ const relationshipColumns: ColumnDef<CustomerRelationshipResponse>[] = [
 
 // Excludes this customer from the results — a customer can't relate to themselves.
 async function searchOtherCustomers(query: string) {
-  const customers = await api<CustomerResponse[]>('/customers', { query: { search: query, size: 20 } })
+  const customers = await api<CustomerResponse[]>('/customers', {
+    query: { search: query, size: 20 }
+  })
   return customers
     .filter((c) => String(c.id) !== customerId)
     .map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))

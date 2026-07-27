@@ -64,7 +64,10 @@ function onSubmit() {
   for (const field of visibleFields.value) {
     const value = model.value[field.name]
     const isEmpty =
-      value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)
+      value === undefined ||
+      value === null ||
+      value === '' ||
+      (Array.isArray(value) && value.length === 0)
     if (field.required && isEmpty) {
       missingField.value = field
       return

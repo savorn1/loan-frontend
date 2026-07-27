@@ -42,7 +42,7 @@
           @click="mobileNavOpen = true"
         />
         <span
-          class="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-fuchsia-400 to-pink-500 text-white shrink-0 shadow-sm"
+          class="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-primary-500 to-teal-600 text-white shrink-0 shadow-sm"
         >
           <UIcon name="i-heroicons-banknotes" class="w-4 h-4" />
         </span>
@@ -71,6 +71,8 @@ const groups = computed(() => [
       { label: 'Loans', to: '/loans', icon: 'i-heroicons-banknotes' },
       { label: 'Payments', to: '/payments', icon: 'i-heroicons-credit-card' },
       { label: 'Payment methods', to: '/payment-methods', icon: 'i-heroicons-wallet' },
+      { label: 'Payment channels', to: '/payment-channels', icon: 'i-heroicons-signal' },
+      { label: 'Payment gateways', to: '/payment-gateways', icon: 'i-heroicons-globe-alt' },
       { label: 'Transactions', to: '/payment-transactions', icon: 'i-heroicons-arrows-right-left' },
       ...(isAdmin.value ? [{ label: 'Users', to: '/users', icon: 'i-heroicons-shield-check' }] : [])
     ]
@@ -98,7 +100,11 @@ const groups = computed(() => [
         to: '/loan-product-interest-schemes',
         icon: 'i-heroicons-chart-bar'
       },
-      { label: 'Product Fee Schemes', to: '/loan-product-fee-schemes', icon: 'i-heroicons-banknotes' },
+      {
+        label: 'Product Fee Schemes',
+        to: '/loan-product-fee-schemes',
+        icon: 'i-heroicons-banknotes'
+      },
       { label: 'Product Terms', to: '/loan-product-terms', icon: 'i-heroicons-calendar-days' },
       {
         label: 'Product Rules',

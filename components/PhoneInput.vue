@@ -13,7 +13,9 @@
       aria-label="Country code"
     >
       <template #label>
-        <span class="truncate">{{ selectedCountry ? `${selectedCountry.flag} ${selectedCountry.dialCode}` : 'Code' }}</span>
+        <span class="truncate">{{
+          selectedCountry ? `${selectedCountry.flag} ${selectedCountry.dialCode}` : 'Code'
+        }}</span>
       </template>
       <template #option="{ option }">
         <span class="truncate">{{ option.flag }} {{ option.name }} ({{ option.dialCode }})</span>
@@ -86,9 +88,9 @@ const model = defineModel<string>({ default: '' })
 // Longest dial code first so '+1' doesn't shadow a longer code that also
 // starts with '1' (none currently do, but stays correct as COUNTRIES grows).
 function parse(value: string) {
-  const match = [...COUNTRIES].sort((a, b) => b.dialCode.length - a.dialCode.length).find((c) =>
-    value.startsWith(c.dialCode)
-  )
+  const match = [...COUNTRIES]
+    .sort((a, b) => b.dialCode.length - a.dialCode.length)
+    .find((c) => value.startsWith(c.dialCode))
   return match
     ? { iso2: match.iso2, national: value.slice(match.dialCode.length).trim() }
     : { iso2: props.defaultCountry, national: value }

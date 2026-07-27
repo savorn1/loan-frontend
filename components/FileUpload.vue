@@ -99,7 +99,9 @@ const files = computed<File[]>(() => {
   return Array.isArray(model.value) ? model.value : [model.value]
 })
 
-const hintText = computed(() => props.hint ?? (props.maxSizeMb ? `Up to ${props.maxSizeMb}MB` : undefined))
+const hintText = computed(
+  () => props.hint ?? (props.maxSizeMb ? `Up to ${props.maxSizeMb}MB` : undefined)
+)
 
 // Thumbnails for image files only; revoked whenever the selection changes so
 // we don't leak object URLs for files the user has already removed.

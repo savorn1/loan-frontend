@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PageHeader title="Payment Methods" :description="totalLabel">
+    <PageHeader title="Payment Channels" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Method</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Channel</UButton>
       </template>
     </PageHeader>
 
@@ -41,16 +41,16 @@
         </template>
         <template #empty-state>
           <EmptyState
-            :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-wallet'"
-            :title="search ? 'No matches' : 'No payment methods yet'"
+            :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-signal'"
+            :title="search ? 'No matches' : 'No payment channels yet'"
             :description="
               search
                 ? `Nothing matches “${search}”.`
-                : 'Add a payment method to start recording transactions against it.'
+                : 'Add a payment channel to record which route a payment came in through.'
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Method</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Channel</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,7 +64,7 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Payment Method</span>
+          <span class="font-semibold">New Payment Channel</span>
         </template>
         <DynamicForm
           v-model="createForm"
@@ -82,7 +82,7 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Payment Method</span>
+          <span class="font-semibold">Edit Payment Channel</span>
         </template>
         <DynamicForm
           v-model="editForm"
@@ -99,8 +99,8 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this payment method?"
-      description="This permanently removes the payment method and cannot be undone."
+      title="Delete this payment channel?"
+      description="This permanently removes the payment channel and cannot be undone."
       confirm-label="Delete"
       color="red"
       :loading="deleting"
@@ -115,52 +115,42 @@
 </template>
 
 <script setup lang="ts">
-import type { PaymentMethodRequest, PaymentMethodResponse } from '~/features/payments/types'
+import type { PaymentChannelRequest, PaymentChannelResponse } from '~/features/payments/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 
 const {
-  data: methods,
+  data: channels,
   pending,
   refresh
-} = await useAsyncData('payment-methods', () => api<PaymentMethodResponse[]>('/payments/methods'))
+} = await useAsyncData('payment-channels', () =>
+  api<PaymentChannelResponse[]>('/payments/channels')
+)
 
-const columns: ColumnDef<PaymentMethodResponse>[] = [
+const columns: ColumnDef<PaymentChannelResponse>[] = [
   { key: 'code', sortable: true },
   { key: 'name', sortable: true },
-  { key: 'type', type: 'enum', sortable: true },
+  { key: 'channelType', label: 'Channel type', sortable: true },
   { key: 'status', type: 'status', sortable: true },
   { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
 ]
 
-const { search, page, pageSize, sort, total, rows } = useClientTable(methods, {
+const { search, page, pageSize, sort, total, rows } = useClientTable(channels, {
   searchFields: ['name', 'code'],
   pageSize: 10
 })
 
 const totalLabel = computed(() => {
-  const count = methods.value?.length ?? 0
-  return count === 1 ? '1 payment method' : `${count} payment methods`
+  const count = channels.value?.length ?? 0
+  return count === 1 ? '1 payment channel' : `${count} payment channels`
 })
 
 const fields: FieldDef[] = [
   { name: 'code', required: true, wrapper: 'half' },
   { name: 'name', required: true, wrapper: 'half' },
-  {
-    name: 'type',
-    type: 'select',
-    required: true,
-    wrapper: 'half',
-    options: [
-      { label: 'Cash', value: 'CASH' },
-      { label: 'Bank transfer', value: 'BANK_TRANSFER' },
-      { label: 'Credit card', value: 'CREDIT_CARD' },
-      { label: 'Mobile wallet', value: 'MOBILE_WALLET' },
-      { label: 'Cheque', value: 'CHEQUE' }
-    ]
-  },
+  { name: 'channelType', label: 'Channel type', required: true, wrapper: 'half' },
   {
     name: 'status',
     type: 'select',
@@ -190,19 +180,19 @@ const {
   deleting,
   confirmDelete,
   onDelete
-} = useCrudModals<PaymentMethodResponse, PaymentMethodRequest>('/payments/methods', refresh, {
-  entityName: 'Payment method',
-  createDefaults: () => ({ code: '', name: '', type: undefined, status: 'ACTIVE' }),
+} = useCrudModals<PaymentChannelResponse, PaymentChannelRequest>('/payments/channels', refresh, {
+  entityName: 'Payment channel',
+  createDefaults: () => ({ code: '', name: '', channelType: '', status: 'ACTIVE' }),
   toForm: (row) => ({
     code: row.code,
     name: row.name,
-    type: row.type,
+    channelType: row.channelType,
     status: row.status
   }),
   toPayload: (values) => ({
     code: values.code,
     name: values.name,
-    type: values.type,
+    channelType: values.channelType,
     status: values.status
   })
 })

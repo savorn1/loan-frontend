@@ -44,7 +44,7 @@
             :description="
               statusFilter
                 ? 'Try clearing the status filter.'
-                : 'Record a transaction against a payment to get started.'
+                : 'Record a transaction to get started.'
             "
           >
             <template v-if="!statusFilter" #action>
@@ -80,9 +80,11 @@
 </template>
 
 <script setup lang="ts">
+import type { CustomerResponse } from '~/features/customers/types'
 import type {
+  PaymentChannelResponse,
+  PaymentGatewayResponse,
   PaymentMethodResponse,
-  PaymentResponse,
   PaymentTransactionRequest,
   PaymentTransactionResponse,
   TransactionStatus
@@ -100,38 +102,49 @@ const {
 } = await useAsyncData('payment-transactions', () =>
   api<PaymentTransactionResponse[]>('/payments/transactions')
 )
-const { data: paymentsRaw } = await useAsyncData('payment-transactions-payments', () =>
-  api<PaymentResponse[]>('/payments')
-)
 const { data: methodsRaw } = await useAsyncData('payment-transactions-methods', () =>
   api<PaymentMethodResponse[]>('/payments/methods')
 )
-
-const paymentOptions = computed(() =>
-  (paymentsRaw.value ?? []).map((p) => ({
-    label: `#${p.id} — loan #${p.loanId} (${formatCurrency(p.amount)})`,
-    value: p.id
-  }))
+const { data: channelsRaw } = await useAsyncData('payment-transactions-channels', () =>
+  api<PaymentChannelResponse[]>('/payments/channels')
 )
+const { data: gatewaysRaw } = await useAsyncData('payment-transactions-gateways', () =>
+  api<PaymentGatewayResponse[]>('/payments/gateways')
+)
+
+// Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
+// the customer list can be far larger than any dropdown should hold client-side.
+async function searchCustomers(query: string) {
+  const customers = await api<CustomerResponse[]>('/customers', {
+    query: { search: query, size: 20 }
+  })
+  return customers.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
+}
+
 const methodOptions = computed(() =>
-  (methodsRaw.value ?? []).filter((m) => m.isActive).map((m) => ({ label: m.name, value: m.id }))
+  (methodsRaw.value ?? [])
+    .filter((m) => m.status === 'ACTIVE')
+    .map((m) => ({ label: m.name, value: m.id }))
+)
+const channelOptions = computed(() =>
+  (channelsRaw.value ?? [])
+    .filter((c) => c.status === 'ACTIVE')
+    .map((c) => ({ label: c.name, value: c.id }))
+)
+const gatewayOptions = computed(() =>
+  (gatewaysRaw.value ?? [])
+    .filter((g) => g.status === 'ACTIVE')
+    .map((g) => ({ label: g.name, value: g.id }))
 )
 
 const columns: ColumnDef<PaymentTransactionResponse>[] = [
-  { key: 'id', label: 'ID', sortable: true },
-  {
-    key: 'loanId',
-    label: 'Loan',
-    type: 'link',
-    sortable: true,
-    href: (row) => `/loans/${row.loanId}`,
-    prefix: () => '#'
-  },
-  { key: 'paymentMethodName', label: 'Method', sortable: true },
-  { key: 'amount', type: 'currency', sortable: true },
+  { key: 'paymentNo', label: 'Payment No', sortable: true },
+  { key: 'customerName', label: 'Customer', sortable: true },
+  { key: 'businessType', label: 'Business type', sortable: true },
+  { key: 'amount', type: 'currency', sortable: true, prefix: (row) => `${row.currency} ` },
   { key: 'status', type: 'status', sortable: true },
-  { key: 'processedAt', label: 'Processed', type: 'datetime', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true }
+  { key: 'requestedAt', label: 'Requested', type: 'datetime', sortable: true },
+  { key: 'completedAt', label: 'Completed', type: 'datetime', sortable: true }
 ]
 
 const statusOptions: { label: string; value: TransactionStatus | '' }[] = [
@@ -162,20 +175,50 @@ const error = ref('')
 
 const fields = computed<FieldDef[]>(() => [
   {
-    name: 'paymentId',
-    label: 'Payment',
-    type: 'select',
+    name: 'customerId',
+    label: 'Customer',
+    type: 'relationship',
     required: true,
-    options: paymentOptions.value,
-    placeholder: 'Select a payment'
+    search: searchCustomers,
+    placeholder: 'Search customers…'
   },
   {
     name: 'paymentMethodId',
     label: 'Payment method',
     type: 'select',
     required: true,
+    wrapper: 'half',
     options: methodOptions.value,
     placeholder: 'Select a method'
+  },
+  {
+    name: 'paymentChannelId',
+    label: 'Payment channel',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: channelOptions.value,
+    placeholder: 'Select a channel'
+  },
+  {
+    name: 'paymentGatewayId',
+    label: 'Payment gateway',
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: gatewayOptions.value,
+    placeholder: 'Select a gateway'
+  },
+  {
+    name: 'currency',
+    type: 'select',
+    required: true,
+    default: 'USD',
+    wrapper: 'half',
+    options: [
+      { label: 'USD', value: 'USD' },
+      { label: 'KHR', value: 'KHR' }
+    ]
   },
   {
     name: 'amount',
@@ -183,17 +226,30 @@ const fields = computed<FieldDef[]>(() => [
     required: true,
     wrapper: 'half'
   },
-  { name: 'reference', wrapper: 'half' }
+  {
+    name: 'businessType',
+    label: 'Business type',
+    required: true,
+    wrapper: 'half',
+    placeholder: 'e.g. LOAN_PAYMENT'
+  },
+  { name: 'businessReference', label: 'Business reference', wrapper: 'half' },
+  { name: 'referenceNo', label: 'Reference no.', wrapper: 'half' }
 ])
 
 const createForm = ref<Record<string, any>>({})
 
 function openCreate() {
   createForm.value = {
-    paymentId: undefined,
+    customerId: undefined,
     paymentMethodId: undefined,
+    paymentChannelId: undefined,
+    paymentGatewayId: undefined,
+    currency: 'USD',
     amount: undefined,
-    reference: ''
+    businessType: '',
+    businessReference: '',
+    referenceNo: ''
   }
   error.value = ''
   showCreate.value = true
@@ -204,10 +260,15 @@ async function onCreate(values: Record<string, any>) {
   error.value = ''
   try {
     const payload: PaymentTransactionRequest = {
-      paymentId: values.paymentId,
+      customerId: values.customerId,
       paymentMethodId: values.paymentMethodId,
+      paymentChannelId: values.paymentChannelId,
+      paymentGatewayId: values.paymentGatewayId,
+      currency: values.currency,
       amount: values.amount,
-      reference: values.reference || undefined
+      businessType: values.businessType,
+      businessReference: values.businessReference || undefined,
+      referenceNo: values.referenceNo || undefined
     }
     const created = await api<PaymentTransactionResponse>('/payments/transactions', {
       method: 'POST',
