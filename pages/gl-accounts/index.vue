@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Chart of Accounts" :description="totalLabel">
+    <PageHeader :title="t('accounting.glAccounts.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New GL Account</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('accounting.glAccounts.newGlAccount')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by number or name..."
+          :placeholder="t('accounting.glAccounts.searchPlaceholder')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-list-bullet'"
-            :title="search ? 'No matches' : 'No GL accounts yet'"
+            :title="search ? t('common.noMatches') : t('accounting.glAccounts.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Set up the chart of accounts that journal entries post against.'
+                ? t('common.nothingMatches', { query: search })
+                : t('accounting.glAccounts.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New GL Account</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('accounting.glAccounts.newGlAccount')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New GL Account</span>
+          <span class="font-semibold">{{ t('accounting.glAccounts.newGlAccount') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="createFields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit GL Account</span>
+          <span class="font-semibold">{{ t('accounting.glAccounts.editGlAccount') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="editFields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this GL account?"
-      description="This permanently removes the account and cannot be undone. Accounts with child accounts cannot be deleted."
-      confirm-label="Delete"
+      :title="t('accounting.glAccounts.deleteConfirmTitle')"
+      :description="t('accounting.glAccounts.deleteConfirmDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -118,6 +122,7 @@
 import type { GlAccountRequest, GlAccountResponse } from '~/features/accounting/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const {
@@ -133,17 +138,27 @@ function accountLabel(id: number | null) {
   return a ? `${a.accountNo} — ${a.accountName}` : String(id)
 }
 
-const columns: ColumnDef<GlAccountResponse>[] = [
-  { key: 'accountNo', label: 'Account no.', sortable: true },
-  { key: 'accountName', label: 'Name', sortable: true },
-  { key: 'parentId', label: 'Parent', value: (row) => accountLabel(row.parentId) },
-  { key: 'accountType', label: 'Type', type: 'enum', sortable: true },
-  { key: 'normalBalance', label: 'Normal balance', type: 'enum', sortable: true },
-  { key: 'currency', sortable: true },
-  { key: 'allowPosting', label: 'Postable', type: 'boolean', trueColor: 'teal' },
-  { key: 'status', type: 'status', sortable: true },
+const columns = computed<ColumnDef<GlAccountResponse>[]>(() => [
+  { key: 'accountNo', label: t('accounting.glAccounts.columns.accountNo'), sortable: true },
+  { key: 'accountName', label: t('accounting.glAccounts.columns.name'), sortable: true },
+  { key: 'parentId', label: t('accounting.glAccounts.columns.parent'), value: (row) => accountLabel(row.parentId) },
+  { key: 'accountType', label: t('accounting.glAccounts.columns.type'), type: 'enum', sortable: true },
+  {
+    key: 'normalBalance',
+    label: t('accounting.glAccounts.columns.normalBalance'),
+    type: 'enum',
+    sortable: true
+  },
+  { key: 'currency', label: t('accounting.glAccounts.columns.currency'), sortable: true },
+  {
+    key: 'allowPosting',
+    label: t('accounting.glAccounts.columns.postable'),
+    type: 'boolean',
+    trueColor: 'teal'
+  },
+  { key: 'status', label: t('accounting.glAccounts.columns.status'), type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(accounts, {
   searchFields: ['accountNo', 'accountName'],
@@ -152,26 +167,28 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(accounts, {
 
 const totalLabel = computed(() => {
   const count = accounts.value?.length ?? 0
-  return count === 1 ? '1 GL account' : `${count} GL accounts`
+  return count === 1
+    ? t('accounting.glAccounts.totalLabelOne')
+    : t('accounting.glAccounts.totalLabelOther', { count })
 })
 
-const accountTypeOptions = [
-  { label: 'Asset', value: 'ASSET' },
-  { label: 'Liability', value: 'LIABILITY' },
-  { label: 'Equity', value: 'EQUITY' },
-  { label: 'Income', value: 'INCOME' },
-  { label: 'Expense', value: 'EXPENSE' }
-]
+const accountTypeOptions = computed(() => [
+  { label: t('accounting.glAccounts.accountTypes.asset'), value: 'ASSET' },
+  { label: t('accounting.glAccounts.accountTypes.liability'), value: 'LIABILITY' },
+  { label: t('accounting.glAccounts.accountTypes.equity'), value: 'EQUITY' },
+  { label: t('accounting.glAccounts.accountTypes.income'), value: 'INCOME' },
+  { label: t('accounting.glAccounts.accountTypes.expense'), value: 'EXPENSE' }
+])
 
-const entrySideOptions = [
-  { label: 'Debit', value: 'DEBIT' },
-  { label: 'Credit', value: 'CREDIT' }
-]
+const entrySideOptions = computed(() => [
+  { label: t('accounting.entrySides.debit'), value: 'DEBIT' },
+  { label: t('accounting.entrySides.credit'), value: 'CREDIT' }
+])
 
-const statusOptions = [
-  { label: 'Active', value: 'ACTIVE' },
-  { label: 'Inactive', value: 'INACTIVE' }
-]
+const statusOptions = computed(() => [
+  { label: t('common.active'), value: 'ACTIVE' },
+  { label: t('common.inactive'), value: 'INACTIVE' }
+])
 
 function parentOptions(excludeId?: number) {
   return (accounts.value ?? [])
@@ -180,80 +197,113 @@ function parentOptions(excludeId?: number) {
 }
 
 const createFields = computed<FieldDef[]>(() => [
-  { name: 'accountNo', label: 'Account number', required: true, wrapper: 'half' },
-  { name: 'accountName', label: 'Account name', required: true, wrapper: 'half' },
+  {
+    name: 'accountNo',
+    label: t('accounting.glAccounts.fields.accountNo'),
+    required: true,
+    wrapper: 'half'
+  },
+  {
+    name: 'accountName',
+    label: t('accounting.glAccounts.fields.accountName'),
+    required: true,
+    wrapper: 'half'
+  },
   {
     name: 'parentId',
-    label: 'Parent account',
+    label: t('accounting.glAccounts.fields.parentAccount'),
     type: 'select',
     wrapper: 'half',
     options: parentOptions(),
-    hint: 'Leave blank for a top-level account'
+    hint: t('accounting.glAccounts.fields.parentAccountHint')
   },
   {
     name: 'accountType',
-    label: 'Account type',
+    label: t('accounting.glAccounts.fields.accountType'),
     type: 'select',
     required: true,
     wrapper: 'half',
-    options: accountTypeOptions
+    options: accountTypeOptions.value
   },
   {
     name: 'normalBalance',
-    label: 'Normal balance',
+    label: t('accounting.glAccounts.fields.normalBalance'),
     type: 'select',
     required: true,
     wrapper: 'half',
-    options: entrySideOptions
+    options: entrySideOptions.value
   },
-  { name: 'currency', required: true, wrapper: 'half' },
+  { name: 'currency', label: t('accounting.glAccounts.fields.currency'), required: true, wrapper: 'half' },
   {
     name: 'allowPosting',
-    label: 'Allow direct posting',
+    label: t('accounting.glAccounts.fields.allowPosting'),
     type: 'switch',
     default: true,
     wrapper: 'half'
   },
   {
     name: 'status',
+    label: t('accounting.glAccounts.fields.status'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
-    options: statusOptions
+    options: statusOptions.value
   }
 ])
 
 const editFields = computed<FieldDef[]>(() => [
-  { name: 'accountNo', label: 'Account number', required: true, wrapper: 'half' },
-  { name: 'accountName', label: 'Account name', required: true, wrapper: 'half' },
+  {
+    name: 'accountNo',
+    label: t('accounting.glAccounts.fields.accountNo'),
+    required: true,
+    wrapper: 'half'
+  },
+  {
+    name: 'accountName',
+    label: t('accounting.glAccounts.fields.accountName'),
+    required: true,
+    wrapper: 'half'
+  },
   {
     name: 'parentId',
-    label: 'Parent account',
+    label: t('accounting.glAccounts.fields.parentAccount'),
     type: 'select',
     wrapper: 'half',
     options: parentOptions((editingId.value as number | undefined) ?? undefined),
-    hint: 'Leave blank for a top-level account'
+    hint: t('accounting.glAccounts.fields.parentAccountHint')
   },
   {
     name: 'accountType',
-    label: 'Account type',
+    label: t('accounting.glAccounts.fields.accountType'),
     type: 'select',
     required: true,
     wrapper: 'half',
-    options: accountTypeOptions
+    options: accountTypeOptions.value
   },
   {
     name: 'normalBalance',
-    label: 'Normal balance',
+    label: t('accounting.glAccounts.fields.normalBalance'),
     type: 'select',
     required: true,
     wrapper: 'half',
-    options: entrySideOptions
+    options: entrySideOptions.value
   },
-  { name: 'currency', required: true, wrapper: 'half' },
-  { name: 'allowPosting', label: 'Allow direct posting', type: 'switch', wrapper: 'half' },
-  { name: 'status', type: 'select', required: true, wrapper: 'half', options: statusOptions }
+  { name: 'currency', label: t('accounting.glAccounts.fields.currency'), required: true, wrapper: 'half' },
+  {
+    name: 'allowPosting',
+    label: t('accounting.glAccounts.fields.allowPosting'),
+    type: 'switch',
+    wrapper: 'half'
+  },
+  {
+    name: 'status',
+    label: t('accounting.glAccounts.fields.status'),
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: statusOptions.value
+  }
 ])
 
 const {
@@ -274,7 +324,7 @@ const {
   confirmDelete,
   onDelete
 } = useCrudModals<GlAccountResponse, GlAccountRequest>('/gl-accounts', refresh, {
-  entityName: 'GL account',
+  entityName: t('accounting.entities.glAccount'),
   createDefaults: () => ({
     accountNo: '',
     accountName: '',

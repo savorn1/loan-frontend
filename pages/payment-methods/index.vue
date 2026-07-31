@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Payment Methods" :description="totalLabel">
+    <PageHeader :title="t('payments.methods.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Method</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('payments.methods.newPaymentMethod')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name or code..."
+          :placeholder="t('payments.methods.searchPlaceholder')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-wallet'"
-            :title="search ? 'No matches' : 'No payment methods yet'"
+            :title="search ? t('common.noMatches') : t('payments.methods.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Add a payment method to start recording transactions against it.'
+                ? t('common.nothingMatches', { query: search })
+                : t('payments.methods.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Method</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('payments.methods.newPaymentMethod')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Payment Method</span>
+          <span class="font-semibold">{{ t('payments.methods.newPaymentMethod') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Payment Method</span>
+          <span class="font-semibold">{{ t('payments.methods.editPaymentMethod') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="fields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this payment method?"
-      description="This permanently removes the payment method and cannot be undone."
-      confirm-label="Delete"
+      :title="t('payments.methods.deleteConfirmTitle')"
+      :description="t('payments.methods.deleteConfirmDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -116,63 +120,107 @@
 
 <script setup lang="ts">
 import type { PaymentMethodRequest, PaymentMethodResponse } from '~/features/payments/types'
-import type { ColumnDef, FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const api = useApi()
+const { t } = useI18n()
+
+const page = ref(1)
+const pageSize = ref(10)
+const search = ref('')
+const sort = ref<{ column: string; direction: 'asc' | 'desc' } | undefined>(undefined)
+
+function buildQuery() {
+  return {
+    page: page.value,
+    size: pageSize.value,
+    search: search.value || undefined,
+    sortBy: sort.value?.column ?? 'createdAt',
+    sortOrder: sort.value?.direction ?? 'desc'
+  }
+}
 
 const {
-  data: methods,
+  data: methodsPage,
   pending,
   refresh
-} = await useAsyncData('payment-methods', () => api<PaymentMethodResponse[]>('/payments/methods'))
+} = await useAsyncData('payment-methods', () =>
+  api<PageResponse<PaymentMethodResponse>>('/payments/methods', { query: buildQuery() })
+)
 
-const columns: ColumnDef<PaymentMethodResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'type', type: 'enum', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
-  { key: 'actions', label: '', class: 'text-right' }
-]
+const rows = computed(() => methodsPage.value?.content ?? [])
+const total = computed(() => methodsPage.value?.totalElements ?? 0)
 
-const { search, page, pageSize, sort, total, rows } = useClientTable(methods, {
-  searchFields: ['name', 'code'],
-  pageSize: 10
+watch(page, () => refresh())
+watch(pageSize, () => {
+  page.value = 1
+  refresh()
 })
+watch(
+  sort,
+  () => {
+    page.value = 1
+    refresh()
+  },
+  { deep: true }
+)
+
+// Debounced so we don't fire a request on every keystroke.
+let searchTimer: ReturnType<typeof setTimeout>
+watch(search, () => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => {
+    page.value = 1
+    refresh()
+  }, 400)
+})
+
+const columns = computed<ColumnDef<PaymentMethodResponse>[]>(() => [
+  { key: 'code', label: t('payments.methods.columns.code'), sortable: true },
+  { key: 'name', label: t('payments.methods.columns.name'), sortable: true },
+  { key: 'type', label: t('payments.methods.columns.type'), type: 'enum', sortable: true },
+  { key: 'status', label: t('payments.methods.columns.status'), type: 'status', sortable: true },
+  { key: 'createdAt', label: t('payments.methods.columns.created'), type: 'datetime', sortable: true },
+  { key: 'actions', label: '', class: 'text-right' }
+])
 
 const totalLabel = computed(() => {
-  const count = methods.value?.length ?? 0
-  return count === 1 ? '1 payment method' : `${count} payment methods`
+  const count = total.value
+  return count === 1
+    ? t('payments.methods.totalLabelOne')
+    : t('payments.methods.totalLabelOther', { count })
 })
 
-const fields: FieldDef[] = [
-  { name: 'code', required: true, wrapper: 'half' },
-  { name: 'name', required: true, wrapper: 'half' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'code', label: t('payments.methods.fields.code'), required: true, wrapper: 'half' },
+  { name: 'name', label: t('payments.methods.fields.name'), required: true, wrapper: 'half' },
   {
     name: 'type',
+    label: t('payments.methods.fields.type'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: [
-      { label: 'Cash', value: 'CASH' },
-      { label: 'Bank transfer', value: 'BANK_TRANSFER' },
-      { label: 'Credit card', value: 'CREDIT_CARD' },
-      { label: 'Mobile wallet', value: 'MOBILE_WALLET' },
-      { label: 'Cheque', value: 'CHEQUE' }
+      { label: t('payments.methods.types.cash'), value: 'CASH' },
+      { label: t('payments.methods.types.bankTransfer'), value: 'BANK_TRANSFER' },
+      { label: t('payments.methods.types.creditCard'), value: 'CREDIT_CARD' },
+      { label: t('payments.methods.types.mobileWallet'), value: 'MOBILE_WALLET' },
+      { label: t('payments.methods.types.cheque'), value: 'CHEQUE' }
     ]
   },
   {
     name: 'status',
+    label: t('payments.methods.fields.status'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const {
   showCreate,
@@ -191,7 +239,7 @@ const {
   confirmDelete,
   onDelete
 } = useCrudModals<PaymentMethodResponse, PaymentMethodRequest>('/payments/methods', refresh, {
-  entityName: 'Payment method',
+  entityName: t('payments.entities.paymentMethod'),
   createDefaults: () => ({ code: '', name: '', type: undefined, status: 'ACTIVE' }),
   toForm: (row) => ({
     code: row.code,

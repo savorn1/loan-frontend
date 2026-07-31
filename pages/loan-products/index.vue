@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Loan Products" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.loanProducts.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Loan Product</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.loanProducts.newLoanProduct')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -12,7 +14,7 @@
           <UInput
             v-model="search"
             icon="i-heroicons-magnifying-glass"
-            placeholder="Search by name or code..."
+            :placeholder="t('loanConfig.shared.searchByNameOrCode')"
             class="max-w-xs w-full sm:w-auto"
           >
             <template v-if="search" #trailing>
@@ -53,15 +55,17 @@
             :icon="
               hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-clipboard-document-list'
             "
-            :title="hasFilters ? 'No matches' : 'No loan products yet'"
+            :title="hasFilters ? t('common.noMatches') : t('loanConfig.loanProducts.emptyTitle')"
             :description="
               hasFilters
-                ? 'Try a different search term or status filter.'
-                : 'Define a loan product\'s amount range, term range and eligibility window.'
+                ? t('loanConfig.loanProducts.emptyDescriptionFiltered')
+                : t('loanConfig.loanProducts.emptyDescription')
             "
           >
             <template v-if="!hasFilters" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Loan Product</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.loanProducts.newLoanProduct')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -75,14 +79,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Loan Product</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProducts.newLoanProduct') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -93,14 +97,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Loan Product</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProducts.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="fields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -110,9 +114,13 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this loan product?"
-      :description="`This permanently removes ${confirmDelete?.name ?? 'this loan product'} and cannot be undone.`"
-      confirm-label="Delete"
+      :title="t('loanConfig.loanProducts.deleteTitle')"
+      :description="
+        t('loanConfig.loanProducts.deleteDescription', {
+          name: confirmDelete?.name ?? t('loanConfig.loanProducts.deleteFallbackName')
+        })
+      "
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -133,6 +141,7 @@ import type {
 } from '~/features/loan-products/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const {
@@ -141,33 +150,38 @@ const {
   refresh
 } = await useAsyncData('loan-products', () => api<LoanProductResponse[]>('/loan-products'))
 
-const columns: ColumnDef<LoanProductResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'loanType', label: 'Type', type: 'enum', sortable: true },
+const columns = computed<ColumnDef<LoanProductResponse>[]>(() => [
+  { key: 'code', label: t('loanConfig.shared.codeColumn'), sortable: true },
+  { key: 'name', label: t('loanConfig.shared.nameColumn'), sortable: true },
+  { key: 'loanType', label: t('loanConfig.shared.typeColumn'), type: 'enum', sortable: true },
   {
     key: 'minAmount',
-    label: 'Amount range',
+    label: t('loanConfig.loanProducts.amountRangeColumn'),
     type: 'currency',
     to: 'maxAmount',
     prefix: (row) => `${row.currency} `
   },
   {
     key: 'minTerm',
-    label: 'Term range',
+    label: t('loanConfig.loanProducts.termRangeColumn'),
     to: 'maxTerm'
   },
-  { key: 'effectiveFrom', label: 'Effective from', type: 'date', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
+  {
+    key: 'effectiveFrom',
+    label: t('loanConfig.shared.effectiveFromLabel'),
+    type: 'date',
+    sortable: true
+  },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
-const statusOptions: { label: string; value: LoanProductStatus | '' }[] = [
-  { label: 'All statuses', value: '' },
-  { label: 'Draft', value: 'DRAFT' },
-  { label: 'Published', value: 'PUBLISHED' },
-  { label: 'Inactive', value: 'INACTIVE' }
-]
+const statusOptions = computed<{ label: string; value: LoanProductStatus | '' }[]>(() => [
+  { label: t('loanConfig.loanProducts.statusFilterAll'), value: '' },
+  { label: t('loanConfig.loanProducts.statusDraft'), value: 'DRAFT' },
+  { label: t('loanConfig.loanProducts.statusPublished'), value: 'PUBLISHED' },
+  { label: t('common.inactive'), value: 'INACTIVE' }
+])
 const statusFilter = ref<LoanProductStatus | ''>('')
 
 const filteredByStatus = computed(() =>
@@ -185,29 +199,43 @@ const hasFilters = computed(() => !!search.value || !!statusFilter.value)
 
 const totalLabel = computed(() => {
   const count = products.value?.length ?? 0
-  return count === 1 ? '1 loan product' : `${count} loan products`
+  return count === 1
+    ? t('loanConfig.loanProducts.total.one')
+    : t('loanConfig.loanProducts.total.other', { count })
 })
 
-const fields: FieldDef[] = [
-  { name: 'name', label: 'Product name', required: true, wrapper: 'half' },
-  { name: 'code', label: 'Product code', required: true, hint: 'e.g. PL, HL', wrapper: 'half' },
+const fields = computed<FieldDef[]>(() => [
+  {
+    name: 'name',
+    label: t('loanConfig.loanProducts.productNameLabel'),
+    required: true,
+    wrapper: 'half'
+  },
+  {
+    name: 'code',
+    label: t('loanConfig.loanProducts.productCodeLabel'),
+    required: true,
+    hint: t('loanConfig.loanProducts.productCodeHint'),
+    wrapper: 'half'
+  },
   {
     name: 'loanType',
-    label: 'Loan type',
+    label: t('loanConfig.loanProducts.loanTypeLabel'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: [
-      { label: 'Personal', value: 'PERSONAL' },
-      { label: 'Home', value: 'HOME' },
-      { label: 'Auto', value: 'AUTO' },
-      { label: 'Business', value: 'BUSINESS' },
-      { label: 'Education', value: 'EDUCATION' },
-      { label: 'Other', value: 'OTHER' }
+      { label: t('loanConfig.loanProducts.optionPersonal'), value: 'PERSONAL' },
+      { label: t('loanConfig.loanProducts.optionHome'), value: 'HOME' },
+      { label: t('loanConfig.loanProducts.optionAuto'), value: 'AUTO' },
+      { label: t('loanConfig.loanProducts.optionBusiness'), value: 'BUSINESS' },
+      { label: t('loanConfig.loanProducts.optionEducation'), value: 'EDUCATION' },
+      { label: t('loanConfig.loanProducts.optionOther'), value: 'OTHER' }
     ]
   },
   {
     name: 'currency',
+    label: t('loanConfig.loanProducts.currencyLabel'),
     type: 'select',
     required: true,
     wrapper: 'half',
@@ -218,7 +246,7 @@ const fields: FieldDef[] = [
   },
   {
     name: 'minAmount',
-    label: 'Min amount',
+    label: t('loanConfig.loanProducts.minAmountLabel'),
     type: 'number',
     required: true,
     min: 0,
@@ -227,7 +255,7 @@ const fields: FieldDef[] = [
   },
   {
     name: 'maxAmount',
-    label: 'Max amount',
+    label: t('loanConfig.loanProducts.maxAmountLabel'),
     type: 'number',
     required: true,
     min: 0,
@@ -236,7 +264,7 @@ const fields: FieldDef[] = [
   },
   {
     name: 'minTerm',
-    label: 'Min term (months)',
+    label: t('loanConfig.loanProducts.minTermLabel'),
     type: 'number',
     required: true,
     min: 1,
@@ -244,7 +272,7 @@ const fields: FieldDef[] = [
   },
   {
     name: 'maxTerm',
-    label: 'Max term (months)',
+    label: t('loanConfig.loanProducts.maxTermLabel'),
     type: 'number',
     required: true,
     min: 1,
@@ -252,26 +280,33 @@ const fields: FieldDef[] = [
   },
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'DRAFT',
     wrapper: 'half',
     options: [
-      { label: 'Draft', value: 'DRAFT' },
-      { label: 'Published', value: 'PUBLISHED' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('loanConfig.loanProducts.statusDraft'), value: 'DRAFT' },
+      { label: t('loanConfig.loanProducts.statusPublished'), value: 'PUBLISHED' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   },
-  { name: 'effectiveFrom', label: 'Effective from', type: 'date', required: true, wrapper: 'half' },
   {
-    name: 'effectiveTo',
-    label: 'Effective to',
+    name: 'effectiveFrom',
+    label: t('loanConfig.shared.effectiveFromLabel'),
     type: 'date',
-    hint: 'Leave blank for open-ended',
+    required: true,
     wrapper: 'half'
   },
-  { name: 'description', type: 'textarea' }
-]
+  {
+    name: 'effectiveTo',
+    label: t('loanConfig.shared.effectiveToLabel'),
+    type: 'date',
+    hint: t('loanConfig.shared.effectiveToHint'),
+    wrapper: 'half'
+  },
+  { name: 'description', label: t('loanConfig.shared.descriptionLabel'), type: 'textarea' }
+])
 
 const {
   showCreate,
@@ -290,7 +325,7 @@ const {
   confirmDelete,
   onDelete
 } = useCrudModals<LoanProductResponse, LoanProductRequest>('/loan-products', refresh, {
-  entityName: 'Loan product',
+  entityName: t('loanConfig.entities.loanProduct'),
   createDefaults: () => ({
     name: '',
     code: '',

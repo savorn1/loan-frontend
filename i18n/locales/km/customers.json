@@ -1,0 +1,381 @@
+{
+  "customers": {
+    "entities": {
+      "identity": "អត្តសញ្ញាណ",
+      "address": "អាសយដ្ឋាន",
+      "contact": "អ្នកទំនាក់ទំនង",
+      "employment": "ការងារ",
+      "income": "ប្រាក់ចំណូល",
+      "relationship": "ទំនាក់ទំនង"
+    },
+    "list": {
+      "title": "អតិថិជន",
+      "newCustomer": "អតិថិជនថ្មី",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ ឬអ៊ីមែល...",
+      "totalOne": "អតិថិជន ១នាក់",
+      "totalOther": "អតិថិជន {count} នាក់",
+      "emptyTitle": "មិនទាន់មានអតិថិជនទេ",
+      "emptyDescription": "បន្ថែមអតិថិជនដំបូងរបស់អ្នក ដើម្បីចាប់ផ្តើមបង្កើតកម្ចីសម្រាប់ពួកគេ។",
+      "toastCreated": "អតិថិជនត្រូវបានបង្កើត",
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "firstName": "នាមខ្លួន",
+        "lastName": "នាមត្រកូល",
+        "email": "អ៊ីមែល",
+        "phone": "ទូរស័ព្ទ",
+        "created": "កាលបង្កើត"
+      }
+    },
+    "detail": {
+      "backToCustomers": "ត្រឡប់ទៅអតិថិជនវិញ",
+      "details": "ព័ត៌មានលម្អិត",
+      "loans": "កម្ចី",
+      "noLoansTitle": "មិនទាន់មានកម្ចីទេ",
+      "noLoansDescription": "អតិថិជននេះមិនទាន់មានកម្ចីនៅក្នុងកំណត់ត្រាទេ។",
+      "loanColumns": {
+        "id": "លេខសម្គាល់",
+        "principal": "ប្រាក់ដើម",
+        "term": "រយៈពេល (ខែ)",
+        "status": "ស្ថានភាព",
+        "created": "កាលបង្កើត"
+      },
+      "add": "បន្ថែម",
+      "toastRiskProfileSaved": "ទម្រង់ហានិភ័យត្រូវបានរក្សាទុក",
+      "toastPreferencesSaved": "ចំណូលចិត្តត្រូវបានរក្សាទុក",
+      "toastUpdated": "អតិថិជនត្រូវបានធ្វើបច្ចុប្បន្នភាព",
+      "toastDeleted": "អតិថិជនត្រូវបានលុប",
+      "deleteCustomerTitle": "លុបអតិថិជននេះ?",
+      "deleteCustomerDescription": "សកម្មភាពនេះនឹងលុប {name} ជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+      "identity": {
+        "cardTitle": "អត្តសញ្ញាណ (KYC)",
+        "addButton": "បន្ថែមអត្តសញ្ញាណ",
+        "emptyTitle": "មិនទាន់មានឯកសារអត្តសញ្ញាណទេ",
+        "emptyDescription": "បន្ថែមអត្តសញ្ញាណប័ណ្ណ លិខិតឆ្លងដែន ឬប័ណ្ណបើកបរ សម្រាប់ KYC។",
+        "addModalTitle": "បន្ថែមអត្តសញ្ញាណ",
+        "editModalTitle": "កែសម្រួលអត្តសញ្ញាណ",
+        "deleteTitle": "លុបអត្តសញ្ញាណនេះ?",
+        "deleteDescription": "សកម្មភាពនេះនឹងលុបឯកសារអត្តសញ្ញាណជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+        "columns": {
+          "type": "ប្រភេទ",
+          "number": "លេខ",
+          "issuingCountry": "ប្រទេសចេញផ្តល់",
+          "issued": "ថ្ងៃចេញ",
+          "expires": "ថ្ងៃផុតកំណត់",
+          "status": "ស្ថានភាព"
+        },
+        "fields": {
+          "type": "ប្រភេទ",
+          "number": "លេខ",
+          "issuingCountry": "ប្រទេសចេញផ្តល់",
+          "status": "ស្ថានភាព",
+          "issueDate": "កាលបរិច្ឆេទចេញ",
+          "expiryDate": "កាលបរិច្ឆេទផុតកំណត់"
+        },
+        "options": {
+          "nationalId": "អត្តសញ្ញាណប័ណ្ណ",
+          "passport": "លិខិតឆ្លងដែន",
+          "driverLicense": "ប័ណ្ណបើកបរ",
+          "expired": "ផុតកំណត់",
+          "revoked": "ត្រូវបានដកហូត"
+        }
+      },
+      "address": {
+        "cardTitle": "អាសយដ្ឋាន",
+        "addButton": "បន្ថែមអាសយដ្ឋាន",
+        "emptyTitle": "មិនទាន់មានអាសយដ្ឋានទេ",
+        "emptyDescription": "បន្ថែមអាសយដ្ឋានបច្ចុប្បន្ន អចិន្ត្រៃយ៍ ឬអាសយដ្ឋានការិយាល័យ។",
+        "addModalTitle": "បន្ថែមអាសយដ្ឋាន",
+        "editModalTitle": "កែសម្រួលអាសយដ្ឋាន",
+        "deleteTitle": "លុបអាសយដ្ឋាននេះ?",
+        "deleteDescription": "សកម្មភាពនេះនឹងលុបអាសយដ្ឋានជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+        "columns": {
+          "type": "ប្រភេទ",
+          "location": "ទីតាំង",
+          "postalCode": "លេខតំបន់",
+          "primary": "សំខាន់"
+        },
+        "fields": {
+          "type": "ប្រភេទ",
+          "primaryAddress": "អាសយដ្ឋានសំខាន់",
+          "country": "ប្រទេស",
+          "province": "ខេត្ត/រាជធានី",
+          "district": "ស្រុក/ខណ្ឌ",
+          "commune": "ឃុំ/សង្កាត់",
+          "village": "ភូមិ",
+          "street": "ផ្លូវ",
+          "postalCode": "លេខតំបន់"
+        },
+        "options": {
+          "current": "បច្ចុប្បន្ន",
+          "permanent": "អចិន្ត្រៃយ៍",
+          "office": "ការិយាល័យ"
+        }
+      },
+      "contact": {
+        "cardTitle": "អ្នកទំនាក់ទំនង",
+        "addButton": "បន្ថែមអ្នកទំនាក់ទំនង",
+        "emptyTitle": "មិនទាន់មានអ្នកទំនាក់ទំនងទេ",
+        "emptyDescription": "បន្ថែមអ្នកទំនាក់ទំនងសង្គ្រោះបន្ទាន់ ឬអ្នកយោង សម្រាប់អតិថិជននេះ។",
+        "addModalTitle": "បន្ថែមអ្នកទំនាក់ទំនង",
+        "editModalTitle": "កែសម្រួលអ្នកទំនាក់ទំនង",
+        "deleteTitle": "លុបអ្នកទំនាក់ទំនងនេះ?",
+        "deleteDescription": "សកម្មភាពនេះនឹងលុបអ្នកទំនាក់ទំនងជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+        "columns": {
+          "name": "ឈ្មោះ",
+          "relationship": "ទំនាក់ទំនង",
+          "phone": "ទូរស័ព្ទ",
+          "email": "អ៊ីមែល",
+          "address": "អាសយដ្ឋាន"
+        },
+        "fields": {
+          "name": "ឈ្មោះ",
+          "relationship": "ទំនាក់ទំនង",
+          "phone": "ទូរស័ព្ទ",
+          "email": "អ៊ីមែល",
+          "address": "អាសយដ្ឋាន"
+        }
+      },
+      "employment": {
+        "cardTitle": "ការងារ",
+        "addButton": "បន្ថែមការងារ",
+        "emptyTitle": "មិនទាន់មានទិន្នន័យការងារទេ",
+        "emptyDescription": "បន្ថែមព័ត៌មាននិយោជក និងប្រាក់ចំណូលរបស់អតិថិជន។",
+        "addModalTitle": "បន្ថែមការងារ",
+        "editModalTitle": "កែសម្រួលការងារ",
+        "deleteTitle": "លុបកំណត់ត្រាការងារនេះ?",
+        "deleteDescription": "សកម្មភាពនេះនឹងលុបកំណត់ត្រាការងារជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+        "columns": {
+          "company": "ក្រុមហ៊ុន",
+          "occupation": "មុខរបរ",
+          "type": "ប្រភេទ",
+          "salary": "ប្រាក់បៀវត្សរ៍",
+          "startDate": "ថ្ងៃចាប់ផ្តើម",
+          "status": "ស្ថានភាព"
+        },
+        "fields": {
+          "companyName": "ឈ្មោះក្រុមហ៊ុន",
+          "occupation": "មុខរបរ",
+          "type": "ប្រភេទ",
+          "status": "ស្ថានភាព",
+          "salary": "ប្រាក់បៀវត្សរ៍",
+          "currency": "រូបិយប័ណ្ណ",
+          "currencyHint": "ឧទាហរណ៍៖ USD",
+          "startDate": "ថ្ងៃចាប់ផ្តើម"
+        },
+        "options": {
+          "fullTime": "ពេញម៉ោង",
+          "partTime": "មិនពេញម៉ោង",
+          "selfEmployed": "ធ្វើការខ្លួនឯង",
+          "contract": "កិច្ចសន្យា",
+          "unemployed": "គ្មានការងារធ្វើ"
+        }
+      },
+      "income": {
+        "cardTitle": "ប្រាក់ចំណូល",
+        "addButton": "បន្ថែមប្រាក់ចំណូល",
+        "emptyTitle": "មិនទាន់មានប្រាក់ចំណូលទេ",
+        "emptyDescription": "បន្ថែមប្រភពប្រាក់ចំណូល ដូចជាប្រាក់បៀវត្សរ៍ អាជីវកម្ម ឬផ្សេងទៀត។",
+        "addModalTitle": "បន្ថែមប្រាក់ចំណូល",
+        "editModalTitle": "កែសម្រួលប្រាក់ចំណូល",
+        "deleteTitle": "លុបកំណត់ត្រាប្រាក់ចំណូលនេះ?",
+        "deleteDescription": "សកម្មភាពនេះនឹងលុបកំណត់ត្រាប្រាក់ចំណូលជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+        "columns": {
+          "type": "ប្រភេទ",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "frequency": "ភាពញឹកញាប់"
+        },
+        "fields": {
+          "type": "ប្រភេទ",
+          "frequency": "ភាពញឹកញាប់",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "currency": "រូបិយប័ណ្ណ",
+          "currencyHint": "ឧទាហរណ៍៖ USD"
+        },
+        "options": {
+          "salary": "ប្រាក់បៀវត្សរ៍",
+          "business": "អាជីវកម្ម",
+          "rental": "ការជួល",
+          "investment": "ការវិនិយោគ",
+          "pension": "សោធន",
+          "other": "ផ្សេងទៀត",
+          "daily": "ប្រចាំថ្ងៃ",
+          "weekly": "ប្រចាំសប្តាហ៍",
+          "biweekly": "រៀងរាល់ពីរសប្តាហ៍",
+          "monthly": "ប្រចាំខែ",
+          "annually": "ប្រចាំឆ្នាំ"
+        }
+      },
+      "relationship": {
+        "cardTitle": "ទំនាក់ទំនង",
+        "addButton": "បន្ថែមទំនាក់ទំនង",
+        "emptyTitle": "មិនទាន់មានទំនាក់ទំនងទេ",
+        "emptyDescription": "ភ្ជាប់អតិថិជននេះទៅអតិថិជនផ្សេងទៀត (ឧទាហរណ៍ ប្តី/ប្រពន្ធ អ្នកធានា)។",
+        "addModalTitle": "បន្ថែមទំនាក់ទំនង",
+        "editModalTitle": "កែសម្រួលទំនាក់ទំនង",
+        "deleteTitle": "លុបទំនាក់ទំនងនេះ?",
+        "deleteDescription": "សកម្មភាពនេះនឹងលុបទំនាក់ទំនងជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+        "columns": {
+          "relatedCustomer": "អតិថិជនពាក់ព័ន្ធ",
+          "type": "ប្រភេទ"
+        },
+        "fields": {
+          "relatedCustomer": "អតិថិជនពាក់ព័ន្ធ",
+          "searchPlaceholder": "ស្វែងរកអតិថិជន…",
+          "type": "ប្រភេទ"
+        },
+        "options": {
+          "spouse": "ប្តី/ប្រពន្ធ",
+          "parent": "ឪពុកម្តាយ",
+          "child": "កូន",
+          "sibling": "បងប្អូន",
+          "businessPartner": "ដៃគូអាជីវកម្ម",
+          "guarantor": "អ្នកធានា",
+          "other": "ផ្សេងទៀត"
+        }
+      },
+      "riskProfile": {
+        "cardTitle": "ទម្រង់ហានិភ័យ (AML/KYC)",
+        "fields": {
+          "riskLevel": "កម្រិតហានិភ័យ",
+          "amlStatus": "ស្ថានភាព AML",
+          "pep": "បុគ្គលមានតួនាទីនយោបាយ (PEP)",
+          "sanctionChecked": "បានពិនិត្យបញ្ជីទណ្ឌកម្ម",
+          "lastReviewDate": "ថ្ងៃពិនិត្យចុងក្រោយ"
+        },
+        "options": {
+          "low": "ទាប",
+          "medium": "មធ្យម",
+          "high": "ខ្ពស់",
+          "clear": "ស្អាត",
+          "flagged": "ត្រូវបានសម្គាល់",
+          "underReview": "កំពុងពិនិត្យ",
+          "yes": "បាទ/ចាស",
+          "no": "ទេ"
+        }
+      },
+      "preferences": {
+        "cardTitle": "ចំណូលចិត្ត",
+        "fields": {
+          "language": "ភាសា",
+          "languageHint": "ឧទាហរណ៍៖ en, km",
+          "currency": "រូបិយប័ណ្ណ",
+          "currencyHint": "ឧទាហរណ៍៖ USD",
+          "notificationMethod": "វិធីជូនដំណឹង"
+        },
+        "options": {
+          "email": "អ៊ីមែល",
+          "sms": "សារ SMS",
+          "phone": "ទូរស័ព្ទ",
+          "none": "គ្មាន"
+        }
+      },
+      "auditLog": {
+        "cardTitle": "កំណត់ត្រាសវនកម្ម",
+        "emptyTitle": "មិនទាន់មានប្រវត្តិសវនកម្មទេ",
+        "emptyDescription": "ការផ្លាស់ប្តូរលើអតិថិជននេះនឹងបង្ហាញនៅទីនេះ នៅពេលការកត់ត្រាត្រូវបានភ្ជាប់។",
+        "columns": {
+          "when": "ពេលវេលា",
+          "action": "សកម្មភាព",
+          "userId": "លេខសម្គាល់អ្នកប្រើប្រាស់",
+          "oldValue": "តម្លៃចាស់",
+          "newValue": "តម្លៃថ្មី"
+        }
+      }
+    },
+    "form": {
+      "firstName": "នាមខ្លួន",
+      "lastName": "នាមត្រកូល",
+      "email": "អ៊ីមែល",
+      "phone": "ទូរស័ព្ទ",
+      "nationalId": "អត្តសញ្ញាណប័ណ្ណជាតិ",
+      "address": "អាសយដ្ឋាន",
+      "dateOfBirth": "ថ្ងៃខែឆ្នាំកំណើត",
+      "dateOfBirthHint": "ស្រេចចិត្ត"
+    }
+  },
+  "applications": {
+    "list": {
+      "title": "ពាក្យស្នើសុំកម្ចី",
+      "newApplication": "ពាក្យស្នើសុំថ្មី",
+      "searchPlaceholder": "ស្វែងរកតាមអតិថិជន ឬគោលបំណង...",
+      "totalOne": "ពាក្យស្នើសុំ ១",
+      "totalOther": "ពាក្យស្នើសុំ {count}",
+      "emptyTitle": "មិនទាន់មានពាក្យស្នើសុំទេ",
+      "emptyDescriptionFiltered": "សាកល្បងពាក្យស្វែងរក ឬតម្រងស្ថានភាពផ្សេង។",
+      "emptyDescription": "ដាក់ពាក្យស្នើសុំកម្ចីសម្រាប់អតិថិជនណាមួយរបស់អ្នក ដើម្បីចាប់ផ្តើម។",
+      "submit": "ដាក់ស្នើ",
+      "toastCreated": "ពាក្យស្នើសុំត្រូវបានដាក់ស្នើ",
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "customer": "អតិថិជន",
+        "requested": "ចំនួនស្នើសុំ",
+        "term": "រយៈពេល (ខែ)",
+        "status": "ស្ថានភាព",
+        "submitted": "កាលបានដាក់ស្នើ"
+      },
+      "statusOptions": {
+        "all": "គ្រប់ស្ថានភាព",
+        "submitted": "បានដាក់ស្នើ",
+        "underReview": "កំពុងពិនិត្យ",
+        "approved": "បានអនុម័ត",
+        "rejected": "បានច្រានចោល",
+        "withdrawn": "បានដកចេញ"
+      },
+      "fields": {
+        "customer": "អតិថិជន",
+        "searchPlaceholder": "ស្វែងរកអតិថិជន…",
+        "requestedAmount": "ចំនួនទឹកប្រាក់ស្នើសុំ",
+        "requestedAmountHint": "អប្បបរមា ១០០០",
+        "requestedTerm": "រយៈពេលស្នើសុំ (ខែ)",
+        "requestedTermHint": "១ – ៣៦០",
+        "purpose": "គោលបំណង"
+      }
+    },
+    "detail": {
+      "backToApplications": "ត្រឡប់ទៅពាក្យស្នើសុំវិញ",
+      "title": "ពាក្យស្នើសុំ #{id}",
+      "startReview": "ចាប់ផ្តើមពិនិត្យ",
+      "approve": "អនុម័ត",
+      "reject": "ច្រានចោល",
+      "withdraw": "ដកចេញ",
+      "details": "ព័ត៌មានលម្អិត",
+      "customer": "អតិថិជន",
+      "requestedAmount": "ចំនួនទឹកប្រាក់ស្នើសុំ",
+      "requestedTerm": "រយៈពេលស្នើសុំ",
+      "monthsUnit": "ខែ",
+      "purpose": "គោលបំណង",
+      "submitted": "កាលដាក់ស្នើ",
+      "decided": "កាលសម្រេច",
+      "loan": "កម្ចី",
+      "decisions": "ការសម្រេចចិត្ត",
+      "noDecisionsTitle": "មិនទាន់មានការសម្រេចចិត្តទេ",
+      "noDecisionsDescription": "ការអនុម័ត និងការច្រានចោលចំពោះពាក្យស្នើសុំនេះនឹងបង្ហាញនៅទីនេះ។",
+      "documents": "ឯកសារ",
+      "documentTypePlaceholder": "ប្រភេទ (ឧ. ID_PROOF)",
+      "fileNamePlaceholder": "ឈ្មោះឯកសារ",
+      "fileUrlPlaceholder": "តំណឯកសារ",
+      "addDocument": "បន្ថែមឯកសារ",
+      "noDocumentsTitle": "មិនទាន់មានឯកសារទេ",
+      "noDocumentsDescription": "ឯកសារភ្ជាប់ជាមួយពាក្យស្នើសុំនេះនឹងបង្ហាញនៅទីនេះ។",
+      "notes": "កំណត់ចំណាំ",
+      "notePlaceholder": "បន្ថែមកំណត់ចំណាំផ្ទៃក្នុង...",
+      "add": "បន្ថែម",
+      "noNotesTitle": "មិនទាន់មានកំណត់ចំណាំទេ",
+      "noNotesDescription": "កំណត់ចំណាំ និងមតិផ្ទៃក្នុងអំពីពាក្យស្នើសុំនេះនឹងបង្ហាញនៅទីនេះ។",
+      "approveModalTitle": "អនុម័តពាក្យស្នើសុំ",
+      "rejectModalTitle": "ច្រានចោលពាក្យស្នើសុំ",
+      "approvedAmount": "ចំនួនទឹកប្រាក់អនុម័ត",
+      "interestRate": "អត្រាការប្រាក់",
+      "termMonths": "រយៈពេល (ខែ)",
+      "comments": "មតិយោបល់",
+      "withdrawTitle": "ដកចេញពាក្យស្នើសុំនេះ?",
+      "withdrawDescription": "ពាក្យស្នើសុំរបស់អតិថិជននេះនឹងត្រូវបានដកចេញ ហើយមិនអាចត្រូវបានពិនិត្យ ឬអនុម័តទៀតទេ។",
+      "toastUnderReview": "ពាក្យស្នើសុំកំពុងពិនិត្យ",
+      "toastWithdrawn": "ពាក្យស្នើសុំត្រូវបានដកចេញ",
+      "toastApproved": "ពាក្យស្នើសុំត្រូវបានអនុម័ត",
+      "toastRejected": "ពាក្យស្នើសុំត្រូវបានច្រានចោល",
+      "toastDocumentDeleted": "ឯកសារត្រូវបានលុប",
+      "decisionValidationError": "ចំនួនទឹកប្រាក់អនុម័ត អត្រាការប្រាក់ និងរយៈពេល សុទ្ធតែត្រូវការ ដើម្បីអនុម័ត។"
+    }
+  }
+}

@@ -1,31 +1,31 @@
 <template>
   <div>
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Welcome back</h2>
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ t('auth.welcomeBack') }}</h2>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">
-      Sign in to manage loans, customers, and payments.
+      {{ t('auth.signInSubtitle') }}
     </p>
 
     <UForm :state="form" class="space-y-4" @submit="onSubmit">
       <UInput
         v-model="form.username"
-        placeholder="Username"
+        :placeholder="t('auth.usernamePlaceholder')"
         icon="i-heroicons-user"
         size="lg"
         autocomplete="username"
         autofocus
         required
-        aria-label="Username"
+        :aria-label="t('auth.usernamePlaceholder')"
         :ui="{ rounded: 'rounded-full' }"
       />
       <UInput
         v-model="form.password"
         :type="showPassword ? 'text' : 'password'"
-        placeholder="Password"
+        :placeholder="t('auth.passwordPlaceholder')"
         icon="i-heroicons-lock-closed"
         size="lg"
         autocomplete="current-password"
         required
-        aria-label="Password"
+        :aria-label="t('auth.passwordPlaceholder')"
         :ui="{ rounded: 'rounded-full' }"
       >
         <template #trailing>
@@ -33,8 +33,9 @@
             color="gray"
             variant="link"
             :padded="false"
+            class="pointer-events-auto"
             :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
-            :aria-label="showPassword ? 'Hide password' : 'Show password'"
+            :aria-label="showPassword ? t('auth.hidePassword') : t('auth.showPassword')"
             @click="showPassword = !showPassword"
           />
         </template>
@@ -49,13 +50,13 @@
       />
 
       <UButton type="submit" block size="lg" :loading="loading" :ui="{ rounded: 'rounded-full' }">
-        Sign in
+        {{ t('auth.signIn') }}
       </UButton>
     </UForm>
 
     <p class="text-sm text-center mt-6 text-gray-500">
-      No account?
-      <NuxtLink to="/register" class="text-primary-500 font-medium">Sign up</NuxtLink>
+      {{ t('auth.noAccount') }}
+      <NuxtLink to="/register" class="text-primary-500 font-medium">{{ t('auth.signUp') }}</NuxtLink>
     </p>
   </div>
 </template>
@@ -65,6 +66,7 @@ import type { LoginRequest } from '~/features/auth/types'
 
 definePageMeta({ layout: 'auth' })
 
+const { t } = useI18n()
 const { login } = useAuth()
 const form = reactive<LoginRequest>({ username: '', password: '' })
 const loading = ref(false)

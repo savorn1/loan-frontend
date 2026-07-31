@@ -68,8 +68,11 @@
           }}</UBadge>
         </div>
       </div>
-      <div class="flex items-center justify-between">
-        <ColorModeToggle />
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5">
+          <ColorModeToggle />
+          <LanguageSwitcher />
+        </div>
         <div class="flex items-center gap-1">
           <UButton
             size="xs"
@@ -78,13 +81,14 @@
             icon="i-heroicons-key"
             @click="emit('change-password')"
           >
-            Password
+            {{ t('common.password') }}
           </UButton>
           <UButton
             size="xs"
             color="gray"
             variant="ghost"
             icon="i-heroicons-arrow-right-on-rectangle"
+            :aria-label="t('common.logout')"
             @click="emit('logout')"
           />
         </div>
@@ -109,6 +113,8 @@ const emit = defineEmits<{
   'change-password': []
   logout: []
 }>()
+
+const { t } = useI18n()
 
 // Each titled group (module) collapses independently. Until the user
 // explicitly toggles one, it defaults open only if it contains the active

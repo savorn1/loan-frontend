@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Term Templates" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.termTemplates.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Term Template</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.termTemplates.newTermTemplate')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name or code..."
+          :placeholder="t('loanConfig.shared.searchByNameOrCode')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-clock'"
-            :title="search ? 'No matches' : 'No term templates yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.termTemplates.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Add a reusable term (e.g. 12 months) that loan products can select.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.termTemplates.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Term Template</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.termTemplates.newTermTemplate')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Term Template</span>
+          <span class="font-semibold">{{ t('loanConfig.termTemplates.newTermTemplate') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Term Template</span>
+          <span class="font-semibold">{{ t('loanConfig.termTemplates.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="fields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this term template?"
-      description="This permanently removes the term template and cannot be undone."
-      confirm-label="Delete"
+      :title="t('loanConfig.termTemplates.deleteTitle')"
+      :description="t('loanConfig.termTemplates.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -118,6 +122,7 @@
 import type { TermTemplateRequest, TermTemplateResponse } from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const {
@@ -126,14 +131,23 @@ const {
   refresh
 } = await useAsyncData('term-templates', () => api<TermTemplateResponse[]>('/term-templates'))
 
-const columns: ColumnDef<TermTemplateResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'termValue', label: 'Term value', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
+const columns = computed<ColumnDef<TermTemplateResponse>[]>(() => [
+  { key: 'code', label: t('loanConfig.shared.codeColumn'), sortable: true },
+  { key: 'name', label: t('loanConfig.shared.nameColumn'), sortable: true },
+  {
+    key: 'termValue',
+    label: t('loanConfig.termTemplates.termValueColumn'),
+    sortable: true
+  },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
+  {
+    key: 'createdAt',
+    label: t('loanConfig.shared.createdColumn'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(templates, {
   searchFields: ['name', 'code'],
@@ -142,15 +156,17 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(templates, 
 
 const totalLabel = computed(() => {
   const count = templates.value?.length ?? 0
-  return count === 1 ? '1 term template' : `${count} term templates`
+  return count === 1
+    ? t('loanConfig.termTemplates.total.one')
+    : t('loanConfig.termTemplates.total.other', { count })
 })
 
-const fields: FieldDef[] = [
-  { name: 'code', required: true, wrapper: 'half' },
-  { name: 'name', required: true, wrapper: 'half' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'code', label: t('loanConfig.shared.codeColumn'), required: true, wrapper: 'half' },
+  { name: 'name', label: t('loanConfig.shared.nameColumn'), required: true, wrapper: 'half' },
   {
     name: 'termValue',
-    label: 'Term value',
+    label: t('loanConfig.termTemplates.termValueColumn'),
     type: 'number',
     required: true,
     min: 1,
@@ -158,16 +174,17 @@ const fields: FieldDef[] = [
   },
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const {
   showCreate,
@@ -186,7 +203,7 @@ const {
   confirmDelete,
   onDelete
 } = useCrudModals<TermTemplateResponse, TermTemplateRequest>('/term-templates', refresh, {
-  entityName: 'Term template',
+  entityName: t('loanConfig.entities.termTemplate'),
   createDefaults: () => ({ code: '', name: '', termValue: undefined, status: 'ACTIVE' }),
   toForm: (row) => ({
     code: row.code,

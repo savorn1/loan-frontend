@@ -1,0 +1,276 @@
+{
+  "admin": {
+    "entities": {
+      "user": "User",
+      "role": "Role",
+      "permission": "Permission"
+    },
+    "shared": {
+      "loading": "Loading…",
+      "assign": "Assign"
+    },
+    "users": {
+      "title": "User Management",
+      "total": {
+        "one": "1 user",
+        "other": "{count} users"
+      },
+      "newUser": "New User",
+      "searchLabel": "Search username",
+      "searchPlaceholder": "Search...",
+      "roleLabel": "Role",
+      "statusLabel": "Status",
+      "roleOptions": {
+        "all": "All roles",
+        "user": "User",
+        "admin": "Admin"
+      },
+      "statusOptions": {
+        "all": "All statuses",
+        "active": "Active",
+        "disabled": "Disabled"
+      },
+      "columns": {
+        "id": "ID",
+        "username": "Username",
+        "role": "Role",
+        "status": "Status",
+        "created": "Created"
+      },
+      "actions": {
+        "makeAdmin": "Make Admin",
+        "makeUser": "Make User",
+        "disable": "Disable",
+        "enable": "Enable",
+        "roles": "Roles"
+      },
+      "empty": {
+        "title": "No users found",
+        "description": "Try adjusting your search or filters."
+      },
+      "createModalTitle": "New User",
+      "fields": {
+        "username": "Username",
+        "password": "Password",
+        "passwordHint": "At least 6 characters",
+        "role": "Role",
+        "active": "Active"
+      },
+      "deleteConfirmTitle": "Delete user \"{username}\"?",
+      "deleteConfirmDescription": "This action cannot be undone.",
+      "rolesModal": {
+        "title": "Roles — {username}",
+        "emptyTitle": "No roles defined",
+        "emptyDescription": "Create a role first, then assign it to users.",
+        "goToRoles": "Go to roles"
+      },
+      "toast": {
+        "created": "User \"{username}\" created",
+        "roleChanged": "{username} is now {role}",
+        "disabled": "{username} disabled",
+        "enabled": "{username} enabled",
+        "deleted": "User deleted"
+      }
+    },
+    "roles": {
+      "title": "Roles",
+      "total": {
+        "one": "1 role",
+        "other": "{count} roles"
+      },
+      "newRole": "New Role",
+      "searchPlaceholder": "Search by name...",
+      "columns": {
+        "name": "Name",
+        "description": "Description",
+        "permissions": "Permissions",
+        "users": "Users",
+        "created": "Created"
+      },
+      "empty": {
+        "matchesTitle": "No matches",
+        "matchesDescription": "Nothing matches “{query}”.",
+        "emptyTitle": "No roles yet",
+        "emptyDescription": "Create a role (e.g. LOAN_OFFICER) to attach permissions and assign to users."
+      },
+      "createModalTitle": "New Role",
+      "editModalTitle": "Edit Role",
+      "fields": {
+        "name": "Name",
+        "nameHint": "e.g. LOAN_OFFICER",
+        "description": "Description"
+      },
+      "deleteConfirmTitle": "Delete this role?",
+      "deleteConfirmDescription": "This removes it from {userCount} user(s) and {permissionCount} permission assignment(s). This cannot be undone.",
+      "detail": {
+        "backToRoles": "Back to roles",
+        "deleteRole": "Delete role",
+        "detailsHeader": "Details",
+        "permissionsHeader": "Permissions",
+        "allLabel": "All",
+        "emptyPermissionsTitle": "No permissions defined",
+        "emptyPermissionsDescription": "Create permissions first, then attach them to this role.",
+        "goToPermissions": "Go to permissions",
+        "assignedUsersHeader": "Assigned users",
+        "assignUser": "Assign user",
+        "userColumn": "User",
+        "assignedColumn": "Assigned",
+        "removeUser": "Remove",
+        "emptyUsersTitle": "No users assigned",
+        "emptyUsersDescription": "Assign this role to a user to grant them its permissions.",
+        "assignUserModalTitle": "Assign user to {roleName}",
+        "userFieldLabel": "User",
+        "userFieldPlaceholder": "Search users…",
+        "toast": {
+          "updated": "Role updated",
+          "assigned": "User assigned",
+          "removed": "{username} removed from role",
+          "deleted": "Role deleted"
+        }
+      }
+    },
+    "permissions": {
+      "title": "Permissions",
+      "total": {
+        "one": "1 permission",
+        "other": "{count} permissions"
+      },
+      "newPermission": "New Permission",
+      "searchPlaceholder": "Search by name...",
+      "empty": {
+        "matchesTitle": "No matches",
+        "matchesDescription": "Nothing matches “{query}”.",
+        "emptyTitle": "No permissions yet",
+        "emptyDescription": "Define a permission (e.g. LOAN_APPROVE) to attach to roles."
+      },
+      "columns": {
+        "name": "Name",
+        "description": "Description",
+        "created": "Created"
+      },
+      "createModalTitle": "New Permission",
+      "editModalTitle": "Edit Permission",
+      "fields": {
+        "name": "Name",
+        "nameHint": "e.g. LOAN_APPROVE",
+        "description": "Description"
+      },
+      "deleteConfirmTitle": "Delete this permission?",
+      "deleteConfirmDescription": "This removes it from every role it's currently attached to. This cannot be undone."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "total": {
+        "one": "1 notification",
+        "other": "{count} notifications"
+      },
+      "recipientTypeLabel": "Recipient type",
+      "channelLabel": "Channel",
+      "statusLabel": "Status",
+      "recipientTypeOptions": {
+        "all": "All recipients",
+        "customer": "Customer",
+        "user": "User"
+      },
+      "channelOptions": {
+        "all": "All channels",
+        "email": "Email",
+        "sms": "SMS",
+        "push": "Push",
+        "inApp": "In-app"
+      },
+      "statusOptions": {
+        "all": "All statuses",
+        "pending": "Pending",
+        "sent": "Sent",
+        "failed": "Failed"
+      },
+      "columns": {
+        "recipient": "Recipient",
+        "recipientId": "Recipient ID",
+        "channel": "Channel",
+        "subject": "Subject",
+        "message": "Message",
+        "status": "Status",
+        "sent": "Sent",
+        "created": "Created"
+      },
+      "empty": {
+        "title": "No notifications found",
+        "description": "Try adjusting your filters. Reminders are sent automatically by the payment service."
+      }
+    },
+    "reports": {
+      "title": "Reports",
+      "description": "Portfolio risk and disbursement/collection trends.",
+      "statTiles": {
+        "activeLoans": "Active loans",
+        "totalPrincipal": "Total principal",
+        "totalOutstanding": "Total outstanding",
+        "portfolioAtRisk": "Portfolio at risk"
+      },
+      "loansByStatusHeader": "Loans by status",
+      "loanCount": {
+        "one": "1 loan",
+        "other": "{count} loans"
+      },
+      "parByBucketHeader": "Portfolio at risk by bucket",
+      "trendsHeader": "Disbursements & collections",
+      "buckets": {
+        "dpd1_30": "1-30 days",
+        "dpd31_60": "31-60 days",
+        "dpd61_90": "61-90 days",
+        "dpd90plus": "90+ days"
+      },
+      "chartLegend": {
+        "disbursed": "Disbursed",
+        "collected": "Collected"
+      }
+    },
+    "dashboard": {
+      "greetingAnon": "Welcome back 👋",
+      "greetingNamed": "Welcome back, {name} 👋",
+      "morningGreeting": "Good morning!",
+      "afternoonGreeting": "Good afternoon!",
+      "eveningGreeting": "Good evening!",
+      "descriptionSuffix": "Here's what's happening across the loan book.",
+      "statTiles": {
+        "customers": "Customers",
+        "activeLoans": "Active loans",
+        "outstandingBalance": "Outstanding balance",
+        "pendingApplications": "Pending applications",
+        "overduePayments": "Overdue payments",
+        "portfolioAtRisk": "Portfolio at risk"
+      },
+      "portfolioByStatusHeader": "Loan portfolio by status",
+      "dueNext7DaysHeader": "Due in the next 7 days",
+      "empty": {
+        "dueSoonTitle": "Nothing due soon",
+        "dueSoonDescription": "No installments are due in the next 7 days.",
+        "caughtUpTitle": "All caught up",
+        "caughtUpDescription": "No loans are waiting for review right now.",
+        "activityTitle": "Nothing yet",
+        "activityDescription": "Loan and payment activity will show up here."
+      },
+      "trendsHeader": "Disbursements & collections",
+      "chartLegend": {
+        "disbursed": "Disbursed",
+        "collected": "Collected"
+      },
+      "loansAwaitingReviewHeader": "Loans awaiting review",
+      "recentActivityHeader": "Recent activity",
+      "columns": {
+        "id": "ID",
+        "loan": "Loan",
+        "amount": "Amount",
+        "dueDate": "Due date",
+        "status": "Status",
+        "customer": "Customer",
+        "principal": "Principal",
+        "created": "Created"
+      },
+      "loanActivityLabel": "Loan #{id} — {customer}",
+      "paymentActivityLabel": "Payment #{id} on loan #{loanId}"
+    }
+  }
+}

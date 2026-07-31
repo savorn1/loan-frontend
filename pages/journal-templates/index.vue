@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Journal Templates" :description="totalLabel">
+    <PageHeader :title="t('accounting.journalTemplates.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Journal Template</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('accounting.journalTemplates.newJournalTemplate')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -23,11 +25,13 @@
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-document-text"
-            title="No journal templates yet"
-            description="Define the debit/credit legs that fire for a transaction type — e.g. every DISBURSEMENT debits Loan Receivable and credits Cash."
+            :title="t('accounting.journalTemplates.emptyTitle')"
+            :description="t('accounting.journalTemplates.emptyDescription')"
           >
             <template #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Journal Template</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('accounting.journalTemplates.newJournalTemplate')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -41,14 +45,14 @@
     <UModal v-model="showCreate" :ui="{ width: 'sm:max-w-2xl' }">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Journal Template</span>
+          <span class="font-semibold">{{ t('accounting.journalTemplates.newJournalTemplate') }}</span>
         </template>
         <UForm :state="createForm" class="space-y-4" @submit="onCreate">
           <JournalTemplateFields v-model="createForm" />
           <UAlert v-if="error" color="red" variant="subtle" :title="error" />
           <div class="flex justify-end gap-2 pt-2">
-            <UButton color="gray" variant="ghost" @click="showCreate = false">Cancel</UButton>
-            <UButton type="submit" :loading="creating">Create</UButton>
+            <UButton color="gray" variant="ghost" @click="showCreate = false">{{ t('common.cancel') }}</UButton>
+            <UButton type="submit" :loading="creating">{{ t('common.create') }}</UButton>
           </div>
         </UForm>
       </UCard>
@@ -57,14 +61,14 @@
     <UModal v-model="showEdit" :ui="{ width: 'sm:max-w-2xl' }">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Journal Template</span>
+          <span class="font-semibold">{{ t('accounting.journalTemplates.editJournalTemplate') }}</span>
         </template>
         <UForm :state="editForm" class="space-y-4" @submit="onEdit">
           <JournalTemplateFields v-model="editForm" />
           <UAlert v-if="editError" color="red" variant="subtle" :title="editError" />
           <div class="flex justify-end gap-2 pt-2">
-            <UButton color="gray" variant="ghost" @click="showEdit = false">Cancel</UButton>
-            <UButton type="submit" :loading="editing">Save changes</UButton>
+            <UButton color="gray" variant="ghost" @click="showEdit = false">{{ t('common.cancel') }}</UButton>
+            <UButton type="submit" :loading="editing">{{ t('common.saveChanges') }}</UButton>
           </div>
         </UForm>
       </UCard>
@@ -72,9 +76,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this journal template?"
-      description="This permanently removes the template and its lines and cannot be undone."
-      confirm-label="Delete"
+      :title="t('accounting.journalTemplates.deleteConfirmTitle')"
+      :description="t('accounting.journalTemplates.deleteConfirmDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -108,6 +112,7 @@ interface JournalTemplateFormValue {
   lines: JournalTemplateLineRequest[]
 }
 
+const { t } = useI18n()
 const api = useApi()
 const toast = useToast()
 
@@ -119,20 +124,31 @@ const {
   api<JournalTemplateResponse[]>('/journal-templates')
 )
 
-const columns: ColumnDef<JournalTemplateResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'transactionType', label: 'Transaction type', type: 'enum', sortable: true },
-  { key: 'lines', label: 'Lines', value: (row) => row.lines.length },
-  { key: 'status', type: 'status', sortable: true },
+const columns = computed<ColumnDef<JournalTemplateResponse>[]>(() => [
+  { key: 'code', label: t('accounting.journalTemplates.columns.code'), sortable: true },
+  { key: 'name', label: t('accounting.journalTemplates.columns.name'), sortable: true },
+  {
+    key: 'transactionType',
+    label: t('accounting.journalTemplates.columns.transactionType'),
+    type: 'enum',
+    sortable: true
+  },
+  {
+    key: 'lines',
+    label: t('accounting.journalTemplates.columns.lines'),
+    value: (row) => row.lines.length
+  },
+  { key: 'status', label: t('accounting.journalTemplates.columns.status'), type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { page, pageSize, sort, total, rows } = useClientTable(templates, { pageSize: 10 })
 
 const totalLabel = computed(() => {
   const count = templates.value?.length ?? 0
-  return count === 1 ? '1 journal template' : `${count} journal templates`
+  return count === 1
+    ? t('accounting.journalTemplates.totalLabelOne')
+    : t('accounting.journalTemplates.totalLabelOther', { count })
 })
 
 function emptyForm(): JournalTemplateFormValue {
@@ -176,7 +192,7 @@ async function onCreate() {
   error.value = ''
   try {
     await api('/journal-templates', { method: 'POST', body: toPayload(createForm.value) })
-    toast.add({ title: 'Journal template created', color: 'green' })
+    toast.add({ title: t('accounting.journalTemplates.templateCreated'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -222,7 +238,7 @@ async function onEdit() {
       method: 'PUT',
       body: toPayload(editForm.value)
     })
-    toast.add({ title: 'Journal template updated', color: 'green' })
+    toast.add({ title: t('accounting.journalTemplates.templateUpdated'), color: 'green' })
     showEdit.value = false
     await refresh()
   } catch (err) {
@@ -240,7 +256,7 @@ async function onDelete() {
   deleting.value = true
   try {
     await api(`/journal-templates/${confirmDelete.value.id}`, { method: 'DELETE' })
-    toast.add({ title: 'Journal template deleted', color: 'green' })
+    toast.add({ title: t('accounting.journalTemplates.templateDeleted'), color: 'green' })
     confirmDelete.value = null
     await refresh()
   } catch (err) {

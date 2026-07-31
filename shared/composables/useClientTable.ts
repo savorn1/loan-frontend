@@ -1,17 +1,4 @@
-// Client-side search + sort + pagination for the list pages (customers, loans,
-// payments) whose backends return a bare array rather than a paginated response
-// (only /auth/users paginates server-side — see UserFilterRequest/PageResponse).
-//
-// Sorting mirrors UTable's own internal comparator (see @nuxt/ui's Table.vue
-// `defaultSort`) so that pre-sorting the full list before slicing a page out of
-// it stays consistent with the header-click sort UI that UTable renders when a
-// column is marked `sortable: true` and `sort` is bound with `v-model:sort`.
 type SortState = { column: string; direction: 'asc' | 'desc' } | undefined
-
-// `any` here (not `unknown`) matches DataTable's own generic — none of the
-// response types passed as T declare an index signature, so `Record<string,
-// unknown>` fails to satisfy the constraint (see shared/types.ts's ColumnDef
-// for the same issue).
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useClientTable<T extends Record<string, any>>(
   source: Ref<T[] | null | undefined>,

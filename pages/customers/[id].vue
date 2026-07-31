@@ -16,7 +16,7 @@
             size="xs"
             class="mb-0.5 px-0"
           >
-            Back to customers
+            {{ t('customers.detail.backToCustomers') }}
           </UButton>
           <h1 class="text-xl font-bold truncate">
             {{ customer.firstName }} {{ customer.lastName }}
@@ -30,19 +30,19 @@
         icon="i-heroicons-trash"
         @click="confirmDelete = true"
       >
-        Delete
+        {{ t('common.delete') }}
       </UButton>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <UCard>
         <template #header>
-          <span class="font-semibold">Details</span>
+          <span class="font-semibold">{{ t('customers.detail.details') }}</span>
         </template>
         <CustomerForm
           :initial="customer"
           :loading="saving"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           @submit="onUpdate"
         />
       </UCard>
@@ -50,7 +50,7 @@
       <UCard>
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">Loans</span>
+            <span class="font-semibold">{{ t('customers.detail.loans') }}</span>
             <UBadge v-if="loans?.length" color="gray" variant="subtle">{{ loans.length }}</UBadge>
           </div>
         </template>
@@ -63,8 +63,8 @@
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-banknotes"
-              title="No loans yet"
-              description="This customer doesn't have any loans on record."
+              :title="t('customers.detail.noLoansTitle')"
+              :description="t('customers.detail.noLoansDescription')"
             />
           </template>
         </DataTable>
@@ -73,10 +73,10 @@
       <UCard class="lg:col-span-2">
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">Identities (KYC)</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateIdentity"
-              >Add identity</UButton
-            >
+            <span class="font-semibold">{{ t('customers.detail.identity.cardTitle') }}</span>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateIdentity">{{
+              t('customers.detail.identity.addButton')
+            }}</UButton>
           </div>
         </template>
         <DataTable :rows="identities ?? []" :columns="identityColumns" :loading="identitiesPending">
@@ -100,11 +100,13 @@
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-identification"
-              title="No identities on file"
-              description="Add a National ID, Passport or Driver License for KYC."
+              :title="t('customers.detail.identity.emptyTitle')"
+              :description="t('customers.detail.identity.emptyDescription')"
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openCreateIdentity">Add identity</UButton>
+                <UButton icon="i-heroicons-plus" @click="openCreateIdentity">{{
+                  t('customers.detail.identity.addButton')
+                }}</UButton>
               </template>
             </EmptyState>
           </template>
@@ -114,10 +116,10 @@
       <UCard class="lg:col-span-2">
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">Addresses</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateAddress"
-              >Add address</UButton
-            >
+            <span class="font-semibold">{{ t('customers.detail.address.cardTitle') }}</span>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateAddress">{{
+              t('customers.detail.address.addButton')
+            }}</UButton>
           </div>
         </template>
         <DataTable :rows="addresses ?? []" :columns="addressColumns" :loading="addressesPending">
@@ -141,11 +143,13 @@
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-map-pin"
-              title="No addresses on file"
-              description="Add a current, permanent or office address."
+              :title="t('customers.detail.address.emptyTitle')"
+              :description="t('customers.detail.address.emptyDescription')"
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openCreateAddress">Add address</UButton>
+                <UButton icon="i-heroicons-plus" @click="openCreateAddress">{{
+                  t('customers.detail.address.addButton')
+                }}</UButton>
               </template>
             </EmptyState>
           </template>
@@ -155,10 +159,10 @@
       <UCard class="lg:col-span-2">
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">Contacts</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateContact"
-              >Add contact</UButton
-            >
+            <span class="font-semibold">{{ t('customers.detail.contact.cardTitle') }}</span>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateContact">{{
+              t('customers.detail.contact.addButton')
+            }}</UButton>
           </div>
         </template>
         <DataTable :rows="contacts ?? []" :columns="contactColumns" :loading="contactsPending">
@@ -182,11 +186,13 @@
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-user-circle"
-              title="No contacts on file"
-              description="Add an emergency or reference contact for this customer."
+              :title="t('customers.detail.contact.emptyTitle')"
+              :description="t('customers.detail.contact.emptyDescription')"
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openCreateContact">Add contact</UButton>
+                <UButton icon="i-heroicons-plus" @click="openCreateContact">{{
+                  t('customers.detail.contact.addButton')
+                }}</UButton>
               </template>
             </EmptyState>
           </template>
@@ -196,10 +202,10 @@
       <UCard class="lg:col-span-2">
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">Employment</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateEmployment"
-              >Add employment</UButton
-            >
+            <span class="font-semibold">{{ t('customers.detail.employment.cardTitle') }}</span>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateEmployment">{{
+              t('customers.detail.employment.addButton')
+            }}</UButton>
           </div>
         </template>
         <DataTable
@@ -227,13 +233,13 @@
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-briefcase"
-              title="No employment on file"
-              description="Add the customer's employer and income details."
+              :title="t('customers.detail.employment.emptyTitle')"
+              :description="t('customers.detail.employment.emptyDescription')"
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openCreateEmployment"
-                  >Add employment</UButton
-                >
+                <UButton icon="i-heroicons-plus" @click="openCreateEmployment">{{
+                  t('customers.detail.employment.addButton')
+                }}</UButton>
               </template>
             </EmptyState>
           </template>
@@ -243,10 +249,10 @@
       <UCard class="lg:col-span-2">
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">Income</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateIncome"
-              >Add income</UButton
-            >
+            <span class="font-semibold">{{ t('customers.detail.income.cardTitle') }}</span>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateIncome">{{
+              t('customers.detail.income.addButton')
+            }}</UButton>
           </div>
         </template>
         <DataTable :rows="incomes ?? []" :columns="incomeColumns" :loading="incomesPending">
@@ -270,11 +276,13 @@
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-banknotes"
-              title="No income on file"
-              description="Add a salary, business or other income source."
+              :title="t('customers.detail.income.emptyTitle')"
+              :description="t('customers.detail.income.emptyDescription')"
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openCreateIncome">Add income</UButton>
+                <UButton icon="i-heroicons-plus" @click="openCreateIncome">{{
+                  t('customers.detail.income.addButton')
+                }}</UButton>
               </template>
             </EmptyState>
           </template>
@@ -284,10 +292,10 @@
       <UCard class="lg:col-span-2">
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">Relationships</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateRelationship"
-              >Add relationship</UButton
-            >
+            <span class="font-semibold">{{ t('customers.detail.relationship.cardTitle') }}</span>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openCreateRelationship">{{
+              t('customers.detail.relationship.addButton')
+            }}</UButton>
           </div>
         </template>
         <DataTable
@@ -315,13 +323,13 @@
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-users"
-              title="No relationships on file"
-              description="Link this customer to another customer (e.g. spouse, guarantor)."
+              :title="t('customers.detail.relationship.emptyTitle')"
+              :description="t('customers.detail.relationship.emptyDescription')"
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openCreateRelationship"
-                  >Add relationship</UButton
-                >
+                <UButton icon="i-heroicons-plus" @click="openCreateRelationship">{{
+                  t('customers.detail.relationship.addButton')
+                }}</UButton>
               </template>
             </EmptyState>
           </template>
@@ -330,40 +338,40 @@
 
       <UCard class="lg:col-span-2">
         <template #header>
-          <span class="font-semibold">Risk Profile (AML/KYC)</span>
+          <span class="font-semibold">{{ t('customers.detail.riskProfile.cardTitle') }}</span>
         </template>
         <DynamicForm
           v-model="riskProfileForm"
           :fields="riskProfileFields"
           :loading="savingRiskProfile"
-          submit-label="Save"
+          :submit-label="t('common.save')"
           @submit="onSaveRiskProfile"
         />
       </UCard>
 
       <UCard class="lg:col-span-2">
         <template #header>
-          <span class="font-semibold">Preferences</span>
+          <span class="font-semibold">{{ t('customers.detail.preferences.cardTitle') }}</span>
         </template>
         <DynamicForm
           v-model="preferenceForm"
           :fields="preferenceFields"
           :loading="savingPreferences"
-          submit-label="Save"
+          :submit-label="t('common.save')"
           @submit="onSavePreferences"
         />
       </UCard>
 
       <UCard class="lg:col-span-2">
         <template #header>
-          <span class="font-semibold">Audit Log</span>
+          <span class="font-semibold">{{ t('customers.detail.auditLog.cardTitle') }}</span>
         </template>
         <DataTable :rows="auditLogs ?? []" :columns="auditLogColumns" :loading="auditLogsPending">
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-clock"
-              title="No audit history"
-              description="Changes to this customer will appear here once logging is wired up."
+              :title="t('customers.detail.auditLog.emptyTitle')"
+              :description="t('customers.detail.auditLog.emptyDescription')"
             />
           </template>
         </DataTable>
@@ -373,14 +381,14 @@
     <UModal v-model="showCreateIdentity">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add identity</span>
+          <span class="font-semibold">{{ t('customers.detail.identity.addModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="createIdentityForm"
           :fields="identityFields"
           :loading="creatingIdentity"
           :error="identityError"
-          submit-label="Add"
+          :submit-label="t('customers.detail.add')"
           cancelable
           @submit="onCreateIdentity"
           @cancel="showCreateIdentity = false"
@@ -391,14 +399,14 @@
     <UModal v-model="showEditIdentity">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit identity</span>
+          <span class="font-semibold">{{ t('customers.detail.identity.editModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="editIdentityForm"
           :fields="identityFields"
           :loading="editingIdentity"
           :error="editIdentityError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEditIdentity"
           @cancel="showEditIdentity = false"
@@ -408,9 +416,9 @@
 
     <ConfirmModal
       :model-value="confirmDeleteIdentity !== null"
-      title="Delete this identity?"
-      description="This permanently removes the identity document and cannot be undone."
-      confirm-label="Delete"
+      :title="t('customers.detail.identity.deleteTitle')"
+      :description="t('customers.detail.identity.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deletingIdentity"
       @update:model-value="
@@ -424,14 +432,14 @@
     <UModal v-model="showCreateAddress">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add address</span>
+          <span class="font-semibold">{{ t('customers.detail.address.addModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="createAddressForm"
           :fields="addressFields"
           :loading="creatingAddress"
           :error="addressError"
-          submit-label="Add"
+          :submit-label="t('customers.detail.add')"
           cancelable
           @submit="onCreateAddress"
           @cancel="showCreateAddress = false"
@@ -442,14 +450,14 @@
     <UModal v-model="showEditAddress">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit address</span>
+          <span class="font-semibold">{{ t('customers.detail.address.editModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="editAddressForm"
           :fields="addressFields"
           :loading="editingAddress"
           :error="editAddressError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEditAddress"
           @cancel="showEditAddress = false"
@@ -459,9 +467,9 @@
 
     <ConfirmModal
       :model-value="confirmDeleteAddress !== null"
-      title="Delete this address?"
-      description="This permanently removes the address and cannot be undone."
-      confirm-label="Delete"
+      :title="t('customers.detail.address.deleteTitle')"
+      :description="t('customers.detail.address.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deletingAddress"
       @update:model-value="
@@ -475,14 +483,14 @@
     <UModal v-model="showCreateContact">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add contact</span>
+          <span class="font-semibold">{{ t('customers.detail.contact.addModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="createContactForm"
           :fields="contactFields"
           :loading="creatingContact"
           :error="contactError"
-          submit-label="Add"
+          :submit-label="t('customers.detail.add')"
           cancelable
           @submit="onCreateContact"
           @cancel="showCreateContact = false"
@@ -493,14 +501,14 @@
     <UModal v-model="showEditContact">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit contact</span>
+          <span class="font-semibold">{{ t('customers.detail.contact.editModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="editContactForm"
           :fields="contactFields"
           :loading="editingContact"
           :error="editContactError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEditContact"
           @cancel="showEditContact = false"
@@ -510,9 +518,9 @@
 
     <ConfirmModal
       :model-value="confirmDeleteContact !== null"
-      title="Delete this contact?"
-      description="This permanently removes the contact and cannot be undone."
-      confirm-label="Delete"
+      :title="t('customers.detail.contact.deleteTitle')"
+      :description="t('customers.detail.contact.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deletingContact"
       @update:model-value="
@@ -526,14 +534,14 @@
     <UModal v-model="showCreateEmployment">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add employment</span>
+          <span class="font-semibold">{{ t('customers.detail.employment.addModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="createEmploymentForm"
           :fields="employmentFields"
           :loading="creatingEmployment"
           :error="employmentError"
-          submit-label="Add"
+          :submit-label="t('customers.detail.add')"
           cancelable
           @submit="onCreateEmployment"
           @cancel="showCreateEmployment = false"
@@ -544,14 +552,14 @@
     <UModal v-model="showEditEmployment">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit employment</span>
+          <span class="font-semibold">{{ t('customers.detail.employment.editModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="editEmploymentForm"
           :fields="employmentFields"
           :loading="editingEmployment"
           :error="editEmploymentError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEditEmployment"
           @cancel="showEditEmployment = false"
@@ -561,9 +569,9 @@
 
     <ConfirmModal
       :model-value="confirmDeleteEmployment !== null"
-      title="Delete this employment record?"
-      description="This permanently removes the employment record and cannot be undone."
-      confirm-label="Delete"
+      :title="t('customers.detail.employment.deleteTitle')"
+      :description="t('customers.detail.employment.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deletingEmployment"
       @update:model-value="
@@ -577,14 +585,14 @@
     <UModal v-model="showCreateIncome">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add income</span>
+          <span class="font-semibold">{{ t('customers.detail.income.addModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="createIncomeForm"
           :fields="incomeFields"
           :loading="creatingIncome"
           :error="incomeError"
-          submit-label="Add"
+          :submit-label="t('customers.detail.add')"
           cancelable
           @submit="onCreateIncome"
           @cancel="showCreateIncome = false"
@@ -595,14 +603,14 @@
     <UModal v-model="showEditIncome">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit income</span>
+          <span class="font-semibold">{{ t('customers.detail.income.editModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="editIncomeForm"
           :fields="incomeFields"
           :loading="editingIncome"
           :error="editIncomeError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEditIncome"
           @cancel="showEditIncome = false"
@@ -612,9 +620,9 @@
 
     <ConfirmModal
       :model-value="confirmDeleteIncome !== null"
-      title="Delete this income record?"
-      description="This permanently removes the income record and cannot be undone."
-      confirm-label="Delete"
+      :title="t('customers.detail.income.deleteTitle')"
+      :description="t('customers.detail.income.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deletingIncome"
       @update:model-value="
@@ -628,14 +636,14 @@
     <UModal v-model="showCreateRelationship">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add relationship</span>
+          <span class="font-semibold">{{ t('customers.detail.relationship.addModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="createRelationshipForm"
           :fields="relationshipFields"
           :loading="creatingRelationship"
           :error="relationshipError"
-          submit-label="Add"
+          :submit-label="t('customers.detail.add')"
           cancelable
           @submit="onCreateRelationship"
           @cancel="showCreateRelationship = false"
@@ -646,14 +654,16 @@
     <UModal v-model="showEditRelationship">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit relationship</span>
+          <span class="font-semibold">{{
+            t('customers.detail.relationship.editModalTitle')
+          }}</span>
         </template>
         <DynamicForm
           v-model="editRelationshipForm"
           :fields="relationshipFields"
           :loading="editingRelationship"
           :error="editRelationshipError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEditRelationship"
           @cancel="showEditRelationship = false"
@@ -663,9 +673,9 @@
 
     <ConfirmModal
       :model-value="confirmDeleteRelationship !== null"
-      title="Delete this relationship?"
-      description="This permanently removes the relationship and cannot be undone."
-      confirm-label="Delete"
+      :title="t('customers.detail.relationship.deleteTitle')"
+      :description="t('customers.detail.relationship.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deletingRelationship"
       @update:model-value="
@@ -678,9 +688,13 @@
 
     <ConfirmModal
       v-model="confirmDelete"
-      title="Delete customer?"
-      :description="`This permanently removes ${customer.firstName} ${customer.lastName} and cannot be undone.`"
-      confirm-label="Delete"
+      :title="t('customers.detail.deleteCustomerTitle')"
+      :description="
+        t('customers.detail.deleteCustomerDescription', {
+          name: `${customer.firstName} ${customer.lastName}`
+        })
+      "
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @confirm="onDelete"
@@ -714,8 +728,9 @@ import type {
   CustomerRiskProfileResponse
 } from '~/features/customers/types'
 import type { LoanResponse } from '~/features/loans/types'
-import type { ColumnDef, FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const api = useApi()
@@ -1255,10 +1270,10 @@ const relationshipColumns: ColumnDef<CustomerRelationshipResponse>[] = [
 
 // Excludes this customer from the results — a customer can't relate to themselves.
 async function searchOtherCustomers(query: string) {
-  const customers = await api<CustomerResponse[]>('/customers', {
+  const result = await api<PageResponse<CustomerResponse>>('/customers', {
     query: { search: query, size: 20 }
   })
-  return customers
+  return result.content
     .filter((c) => String(c.id) !== customerId)
     .map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
 }

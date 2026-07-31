@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Payment Transactions" :description="totalLabel">
+    <PageHeader :title="t('payments.transactions.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Transaction</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('payments.transactions.newTransaction')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -22,7 +24,7 @@
           icon="i-heroicons-x-mark"
           @click="statusFilter = ''"
         >
-          Clear filter
+          {{ t('payments.transactions.clearFilter') }}
         </UButton>
       </div>
     </UCard>
@@ -40,15 +42,17 @@
         <template #empty-state>
           <EmptyState
             :icon="statusFilter ? 'i-heroicons-magnifying-glass' : 'i-heroicons-arrows-right-left'"
-            :title="statusFilter ? 'No matches' : 'No transactions yet'"
+            :title="statusFilter ? t('common.noMatches') : t('payments.transactions.emptyTitle')"
             :description="
               statusFilter
-                ? 'Try clearing the status filter.'
-                : 'Record a transaction to get started.'
+                ? t('payments.transactions.emptySearchDescription')
+                : t('payments.transactions.emptyDescription')
             "
           >
             <template v-if="!statusFilter" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Transaction</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('payments.transactions.newTransaction')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -62,14 +66,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Transaction</span>
+          <span class="font-semibold">{{ t('payments.transactions.newTransaction') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -89,11 +93,12 @@ import type {
   PaymentTransactionResponse,
   TransactionStatus
 } from '~/features/payments/types'
-import type { ColumnDef, FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
 const router = useRouter()
+const { t } = useI18n()
 
 const {
   data: transactions,
@@ -115,10 +120,13 @@ const { data: gatewaysRaw } = await useAsyncData('payment-transactions-gateways'
 // Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
 // the customer list can be far larger than any dropdown should hold client-side.
 async function searchCustomers(query: string) {
-  const customers = await api<CustomerResponse[]>('/customers', {
+  const result = await api<PageResponse<CustomerResponse>>('/customers', {
     query: { search: query, size: 20 }
   })
-  return customers.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
+  return result.content.map((c) => ({
+    label: `${c.firstName} ${c.lastName} (#${c.id})`,
+    value: c.id
+  }))
 }
 
 const methodOptions = computed(() =>
@@ -137,23 +145,43 @@ const gatewayOptions = computed(() =>
     .map((g) => ({ label: g.name, value: g.id }))
 )
 
-const columns: ColumnDef<PaymentTransactionResponse>[] = [
-  { key: 'paymentNo', label: 'Payment No', sortable: true },
-  { key: 'customerName', label: 'Customer', sortable: true },
-  { key: 'businessType', label: 'Business type', sortable: true },
-  { key: 'amount', type: 'currency', sortable: true, prefix: (row) => `${row.currency} ` },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'requestedAt', label: 'Requested', type: 'datetime', sortable: true },
-  { key: 'completedAt', label: 'Completed', type: 'datetime', sortable: true }
-]
+const columns = computed<ColumnDef<PaymentTransactionResponse>[]>(() => [
+  { key: 'paymentNo', label: t('payments.transactions.columns.paymentNo'), sortable: true },
+  { key: 'customerName', label: t('payments.transactions.columns.customer'), sortable: true },
+  {
+    key: 'businessType',
+    label: t('payments.transactions.columns.businessType'),
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('payments.transactions.columns.amount'),
+    type: 'currency',
+    sortable: true,
+    prefix: (row) => `${row.currency} `
+  },
+  { key: 'status', label: t('payments.transactions.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'requestedAt',
+    label: t('payments.transactions.columns.requested'),
+    type: 'datetime',
+    sortable: true
+  },
+  {
+    key: 'completedAt',
+    label: t('payments.transactions.columns.completed'),
+    type: 'datetime',
+    sortable: true
+  }
+])
 
-const statusOptions: { label: string; value: TransactionStatus | '' }[] = [
-  { label: 'All statuses', value: '' },
-  { label: 'Pending', value: 'PENDING' },
-  { label: 'Success', value: 'SUCCESS' },
-  { label: 'Failed', value: 'FAILED' },
-  { label: 'Refunded', value: 'REFUNDED' }
-]
+const statusOptions = computed<{ label: string; value: TransactionStatus | '' }[]>(() => [
+  { label: t('payments.transactions.statusOptions.all'), value: '' },
+  { label: t('payments.transactions.statusOptions.pending'), value: 'PENDING' },
+  { label: t('payments.transactions.statusOptions.success'), value: 'SUCCESS' },
+  { label: t('payments.transactions.statusOptions.failed'), value: 'FAILED' },
+  { label: t('payments.transactions.statusOptions.refunded'), value: 'REFUNDED' }
+])
 const statusFilter = ref<TransactionStatus | ''>('')
 
 const filteredByStatus = computed(() =>
@@ -166,7 +194,9 @@ const { page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
 
 const totalLabel = computed(() => {
   const count = transactions.value?.length ?? 0
-  return count === 1 ? '1 transaction' : `${count} transactions`
+  return count === 1
+    ? t('payments.transactions.totalLabelOne')
+    : t('payments.transactions.totalLabelOther', { count })
 })
 
 const showCreate = ref(false)
@@ -176,41 +206,42 @@ const error = ref('')
 const fields = computed<FieldDef[]>(() => [
   {
     name: 'customerId',
-    label: 'Customer',
+    label: t('payments.transactions.fields.customer'),
     type: 'relationship',
     required: true,
     search: searchCustomers,
-    placeholder: 'Search customers…'
+    placeholder: t('payments.transactions.fields.customerPlaceholder')
   },
   {
     name: 'paymentMethodId',
-    label: 'Payment method',
+    label: t('payments.transactions.fields.paymentMethod'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: methodOptions.value,
-    placeholder: 'Select a method'
+    placeholder: t('payments.transactions.fields.paymentMethodPlaceholder')
   },
   {
     name: 'paymentChannelId',
-    label: 'Payment channel',
+    label: t('payments.transactions.fields.paymentChannel'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: channelOptions.value,
-    placeholder: 'Select a channel'
+    placeholder: t('payments.transactions.fields.paymentChannelPlaceholder')
   },
   {
     name: 'paymentGatewayId',
-    label: 'Payment gateway',
+    label: t('payments.transactions.fields.paymentGateway'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: gatewayOptions.value,
-    placeholder: 'Select a gateway'
+    placeholder: t('payments.transactions.fields.paymentGatewayPlaceholder')
   },
   {
     name: 'currency',
+    label: t('payments.transactions.fields.currency'),
     type: 'select',
     required: true,
     default: 'USD',
@@ -222,19 +253,28 @@ const fields = computed<FieldDef[]>(() => [
   },
   {
     name: 'amount',
+    label: t('payments.transactions.fields.amount'),
     type: 'currency',
     required: true,
     wrapper: 'half'
   },
   {
     name: 'businessType',
-    label: 'Business type',
+    label: t('payments.transactions.fields.businessType'),
     required: true,
     wrapper: 'half',
-    placeholder: 'e.g. LOAN_PAYMENT'
+    placeholder: t('payments.transactions.fields.businessTypePlaceholder')
   },
-  { name: 'businessReference', label: 'Business reference', wrapper: 'half' },
-  { name: 'referenceNo', label: 'Reference no.', wrapper: 'half' }
+  {
+    name: 'businessReference',
+    label: t('payments.transactions.fields.businessReference'),
+    wrapper: 'half'
+  },
+  {
+    name: 'referenceNo',
+    label: t('payments.transactions.fields.referenceNo'),
+    wrapper: 'half'
+  }
 ])
 
 const createForm = ref<Record<string, any>>({})
@@ -274,7 +314,7 @@ async function onCreate(values: Record<string, any>) {
       method: 'POST',
       body: payload
     })
-    toast.add({ title: 'Transaction created', color: 'green' })
+    toast.add({ title: t('payments.transactions.created'), color: 'green' })
     showCreate.value = false
     await refresh()
     await router.push(`/payment-transactions/${created.id}`)

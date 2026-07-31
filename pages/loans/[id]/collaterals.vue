@@ -3,9 +3,9 @@
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Collateral</span>
+          <span class="font-semibold">{{ t('loans.collaterals.title') }}</span>
           <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >Add collateral</UButton
+            >{{ t('loans.collaterals.add') }}</UButton
           >
         </div>
       </template>
@@ -19,17 +19,17 @@
             :loading="releasing === row.id"
             @click="onRelease(row.id)"
           >
-            Release
+            {{ t('loans.collaterals.release') }}
           </UButton>
         </template>
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-shield-check"
-            title="No collateral pledged"
-            description="Record assets pledged as security for this loan — property, vehicles, equipment or a cash deposit."
+            :title="t('loans.collaterals.empty.title')"
+            :description="t('loans.collaterals.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Add collateral</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.collaterals.add') }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -39,7 +39,7 @@
         v-if="totalPledged"
         class="pt-4 mt-2 border-t border-gray-200 dark:border-gray-800 text-sm flex justify-between"
       >
-        <span class="text-gray-500">Total pledged value</span>
+        <span class="text-gray-500">{{ t('loans.collaterals.totalPledged') }}</span>
         <span class="font-semibold">{{ formatCurrency(totalPledged) }}</span>
       </div>
     </UCard>
@@ -47,14 +47,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add collateral</span>
+          <span class="font-semibold">{{ t('loans.collaterals.add') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Add"
+          :submit-label="t('loans.collaterals.submit')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -72,6 +72,7 @@ const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 
@@ -89,40 +90,41 @@ const totalPledged = computed(() =>
     .reduce((sum, c) => sum + c.estimatedValue, 0)
 )
 
-const columns: ColumnDef<LoanCollateralResponse>[] = [
-  { key: 'type', type: 'enum' },
-  { key: 'description' },
-  { key: 'estimatedValue', label: 'Value', type: 'currency' },
-  { key: 'reference' },
-  { key: 'status', type: 'status' },
-  { key: 'createdAt', label: 'Created', type: 'datetime' },
-  { key: 'actions', label: '' }
-]
+const columns = computed<ColumnDef<LoanCollateralResponse>[]>(() => [
+  { key: 'type', label: t('loans.collaterals.columns.type'), type: 'enum' },
+  { key: 'description', label: t('loans.collaterals.columns.description') },
+  { key: 'estimatedValue', label: t('loans.collaterals.columns.value'), type: 'currency' },
+  { key: 'reference', label: t('loans.collaterals.columns.reference') },
+  { key: 'status', label: t('loans.collaterals.columns.status'), type: 'status' },
+  { key: 'createdAt', label: t('loans.collaterals.columns.created'), type: 'datetime' },
+  { key: 'actions', label: t('loans.collaterals.columns.actions') }
+])
 
-const fields: FieldDef[] = [
+const fields = computed<FieldDef[]>(() => [
   {
     name: 'type',
+    label: t('loans.collaterals.fields.type'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: [
-      { label: 'Real estate', value: 'REAL_ESTATE' },
-      { label: 'Vehicle', value: 'VEHICLE' },
-      { label: 'Equipment', value: 'EQUIPMENT' },
-      { label: 'Cash deposit', value: 'CASH_DEPOSIT' },
-      { label: 'Other', value: 'OTHER' }
+      { label: t('loans.collaterals.typeOptions.realEstate'), value: 'REAL_ESTATE' },
+      { label: t('loans.collaterals.typeOptions.vehicle'), value: 'VEHICLE' },
+      { label: t('loans.collaterals.typeOptions.equipment'), value: 'EQUIPMENT' },
+      { label: t('loans.collaterals.typeOptions.cashDeposit'), value: 'CASH_DEPOSIT' },
+      { label: t('loans.collaterals.typeOptions.other'), value: 'OTHER' }
     ]
   },
   {
     name: 'estimatedValue',
-    label: 'Estimated value',
+    label: t('loans.collaterals.fields.estimatedValue'),
     type: 'currency',
     required: true,
     wrapper: 'half'
   },
-  { name: 'description', type: 'textarea', required: true },
-  { name: 'reference' }
-]
+  { name: 'description', label: t('loans.collaterals.fields.description'), type: 'textarea', required: true },
+  { name: 'reference', label: t('loans.collaterals.fields.reference') }
+])
 
 const showCreate = ref(false)
 const creating = ref(false)
@@ -147,7 +149,7 @@ async function onCreate(values: Record<string, any>) {
       reference: values.reference || undefined
     }
     await api(`/loans/${loanId}/collaterals`, { method: 'POST', body: payload })
-    toast.add({ title: 'Collateral recorded', color: 'green' })
+    toast.add({ title: t('loans.collaterals.toast.recorded'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -161,7 +163,7 @@ async function onRelease(collateralId: number) {
   releasing.value = collateralId
   try {
     await api(`/loans/${loanId}/collaterals/${collateralId}/release`, { method: 'PUT' })
-    toast.add({ title: 'Collateral released', color: 'green' })
+    toast.add({ title: t('loans.collaterals.toast.released'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

@@ -11,7 +11,47 @@ export default defineNuxtConfig({
   devServer: {
     port: Number(process.env.NUXT_PORT) || 3000
   },
-  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/eslint'],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/eslint', '@nuxtjs/i18n'],
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        name: 'English',
+        files: [
+          'en/common.json',
+          'en/accounting.json',
+          'en/loan-config.json',
+          'en/customers.json',
+          'en/loans-a.json',
+          'en/loans-b.json',
+          'en/payments.json',
+          'en/collections.json',
+          'en/admin.json'
+        ]
+      },
+      {
+        code: 'km',
+        name: 'ខ្មែរ',
+        files: [
+          'km/common.json',
+          'km/accounting.json',
+          'km/loan-config.json',
+          'km/customers.json',
+          'km/loans-a.json',
+          'km/loans-b.json',
+          'km/payments.json',
+          'km/collections.json',
+          'km/admin.json'
+        ]
+      }
+    ],
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_locale'
+    }
+  },
   // Colors passed to UBadge/UProgress/UButton dynamically (computed refs in
   // StatusBadge, ConfirmModal callers, etc.) aren't visible to Nuxt UI's
   // static safelist scan — list them so their Tailwind classes are generated.
@@ -73,6 +113,7 @@ export default defineNuxtConfig({
         '/api/rule-templates/**': { proxy: `${apiBase}/api/rule-templates/**` },
         '/api/document-templates/**': { proxy: `${apiBase}/api/document-templates/**` },
         '/api/payments/**': { proxy: `${apiBase}/api/payments/**` },
+        '/api/notifications/**': { proxy: `${apiBase}/api/notifications/**` },
         '/api/gl-accounts/**': { proxy: `${apiBase}/api/gl-accounts/**` },
         '/api/journal-templates/**': { proxy: `${apiBase}/api/journal-templates/**` },
         '/api/accounting-schemes/**': { proxy: `${apiBase}/api/accounting-schemes/**` },

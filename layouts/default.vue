@@ -62,66 +62,116 @@
 const auth = useAuth()
 const { username, role, isAdmin } = storeToRefs(auth)
 const { logout } = auth
+const { t } = useI18n()
 
 const groups = computed(() => [
   {
     links: [
-      { label: 'Customers', to: '/customers', icon: 'i-heroicons-users' },
-      { label: 'Applications', to: '/applications', icon: 'i-heroicons-document-text' },
-      { label: 'Loans', to: '/loans', icon: 'i-heroicons-banknotes' },
-      { label: 'Payments', to: '/payments', icon: 'i-heroicons-credit-card' },
-      { label: 'Payment methods', to: '/payment-methods', icon: 'i-heroicons-wallet' },
-      { label: 'Payment channels', to: '/payment-channels', icon: 'i-heroicons-signal' },
-      { label: 'Payment gateways', to: '/payment-gateways', icon: 'i-heroicons-globe-alt' },
-      { label: 'Transactions', to: '/payment-transactions', icon: 'i-heroicons-arrows-right-left' },
-      ...(isAdmin.value ? [{ label: 'Users', to: '/users', icon: 'i-heroicons-shield-check' }] : [])
+      { label: t('nav.customers'), to: '/customers', icon: 'i-heroicons-users' },
+      { label: t('nav.applications'), to: '/applications', icon: 'i-heroicons-document-text' },
+      { label: t('nav.loans'), to: '/loans', icon: 'i-heroicons-banknotes' },
+      { label: t('nav.reports'), to: '/reports', icon: 'i-heroicons-chart-bar-square' },
+      { label: t('nav.notifications'), to: '/notifications', icon: 'i-heroicons-bell' }
+    ]
+  },
+  ...(isAdmin.value
+    ? [
+        {
+          title: t('nav.userManagement'),
+          icon: 'i-heroicons-shield-check',
+          links: [
+            { label: t('nav.users'), to: '/users', icon: 'i-heroicons-user-group' },
+            { label: t('nav.roles'), to: '/roles', icon: 'i-heroicons-identification' },
+            { label: t('nav.permissions'), to: '/permissions', icon: 'i-heroicons-key' }
+          ]
+        }
+      ]
+    : []),
+  {
+    title: t('nav.payment'),
+    icon: 'i-heroicons-credit-card',
+    links: [
+      { label: t('nav.payments'), to: '/payments', icon: 'i-heroicons-credit-card' },
+      { label: t('nav.collections'), to: '/collections', icon: 'i-heroicons-phone' },
+      {
+        label: t('nav.transactions'),
+        to: '/payment-transactions',
+        icon: 'i-heroicons-arrows-right-left'
+      },
+      { label: t('nav.paymentMethods'), to: '/payment-methods', icon: 'i-heroicons-wallet' },
+      { label: t('nav.paymentChannels'), to: '/payment-channels', icon: 'i-heroicons-signal' },
+      { label: t('nav.paymentGateways'), to: '/payment-gateways', icon: 'i-heroicons-globe-alt' }
     ]
   },
   {
-    title: 'Accounting',
+    title: t('nav.accounting'),
     icon: 'i-heroicons-calculator',
     links: [
-      { label: 'Journal Entries', to: '/journal-entries', icon: 'i-heroicons-book-open' },
-      { label: 'General Ledger', to: '/general-ledger', icon: 'i-heroicons-book-open' },
-      { label: 'Trial Balance', to: '/trial-balance', icon: 'i-heroicons-scale' },
-      { label: 'Chart of Accounts', to: '/gl-accounts', icon: 'i-heroicons-list-bullet' },
-      { label: 'Journal Templates', to: '/journal-templates', icon: 'i-heroicons-document-text' },
-      { label: 'Accounting Schemes', to: '/accounting-schemes', icon: 'i-heroicons-link' },
-      { label: 'Financial Periods', to: '/financial-periods', icon: 'i-heroicons-calendar-days' }
+      { label: t('nav.journalEntries'), to: '/journal-entries', icon: 'i-heroicons-book-open' },
+      { label: t('nav.generalLedger'), to: '/general-ledger', icon: 'i-heroicons-book-open' },
+      { label: t('nav.trialBalance'), to: '/trial-balance', icon: 'i-heroicons-scale' },
+      { label: t('nav.chartOfAccounts'), to: '/gl-accounts', icon: 'i-heroicons-list-bullet' },
+      {
+        label: t('nav.journalTemplates'),
+        to: '/journal-templates',
+        icon: 'i-heroicons-document-text'
+      },
+      { label: t('nav.accountingSchemes'), to: '/accounting-schemes', icon: 'i-heroicons-link' },
+      {
+        label: t('nav.financialPeriods'),
+        to: '/financial-periods',
+        icon: 'i-heroicons-calendar-days'
+      }
     ]
   },
   {
-    title: 'Loan Configuration',
+    title: t('nav.loanConfiguration'),
     icon: 'i-heroicons-adjustments-horizontal',
     links: [
-      { label: 'Loan Products', to: '/loan-products', icon: 'i-heroicons-clipboard-document-list' },
       {
-        label: 'Product Interest Schemes',
+        label: t('nav.loanProducts'),
+        to: '/loan-products',
+        icon: 'i-heroicons-clipboard-document-list'
+      },
+      {
+        label: t('nav.productInterestSchemes'),
         to: '/loan-product-interest-schemes',
         icon: 'i-heroicons-chart-bar'
       },
       {
-        label: 'Product Fee Schemes',
+        label: t('nav.productFeeSchemes'),
         to: '/loan-product-fee-schemes',
         icon: 'i-heroicons-banknotes'
       },
-      { label: 'Product Terms', to: '/loan-product-terms', icon: 'i-heroicons-calendar-days' },
       {
-        label: 'Product Rules',
+        label: t('nav.productTerms'),
+        to: '/loan-product-terms',
+        icon: 'i-heroicons-calendar-days'
+      },
+      {
+        label: t('nav.productRules'),
         to: '/loan-product-rules',
         icon: 'i-heroicons-clipboard-document-check'
       },
-      { label: 'Product Documents', to: '/loan-product-documents', icon: 'i-heroicons-folder' },
-      { label: 'Interest Schemes', to: '/interest-schemes', icon: 'i-heroicons-chart-bar-square' },
-      { label: 'Fee Schemes', to: '/fee-schemes', icon: 'i-heroicons-currency-dollar' },
-      { label: 'Term Templates', to: '/term-templates', icon: 'i-heroicons-clock' },
       {
-        label: 'Rule Templates',
+        label: t('nav.productDocuments'),
+        to: '/loan-product-documents',
+        icon: 'i-heroicons-folder'
+      },
+      {
+        label: t('nav.interestSchemes'),
+        to: '/interest-schemes',
+        icon: 'i-heroicons-chart-bar-square'
+      },
+      { label: t('nav.feeSchemes'), to: '/fee-schemes', icon: 'i-heroicons-currency-dollar' },
+      { label: t('nav.termTemplates'), to: '/term-templates', icon: 'i-heroicons-clock' },
+      {
+        label: t('nav.ruleTemplates'),
         to: '/rule-templates',
         icon: 'i-heroicons-adjustments-horizontal'
       },
       {
-        label: 'Document Templates',
+        label: t('nav.documentTemplates'),
         to: '/document-templates',
         icon: 'i-heroicons-document-duplicate'
       }

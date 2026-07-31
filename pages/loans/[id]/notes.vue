@@ -1,18 +1,18 @@
 <template>
   <UCard>
     <template #header>
-      <span class="font-semibold">Notes</span>
+      <span class="font-semibold">{{ t('loans.notes.title') }}</span>
     </template>
 
     <UForm :state="form" class="flex items-start gap-2 mb-6" @submit="onCreate">
       <UTextarea
         v-model="form.note"
         :rows="2"
-        placeholder="Add an internal note..."
+        :placeholder="t('loans.notes.placeholder')"
         class="flex-1"
         required
       />
-      <UButton type="submit" :loading="creating" :disabled="!form.note.trim()">Add</UButton>
+      <UButton type="submit" :loading="creating" :disabled="!form.note.trim()">{{ t('loans.notes.add') }}</UButton>
     </UForm>
 
     <ol v-if="(notes ?? []).length" class="space-y-4">
@@ -30,8 +30,8 @@
     <EmptyState
       v-else
       icon="i-heroicons-chat-bubble-left-right"
-      title="No notes yet"
-      description="Internal notes and comments about this loan will appear here."
+      :title="t('loans.notes.empty.title')"
+      :description="t('loans.notes.empty.description')"
     />
   </UCard>
 </template>
@@ -42,6 +42,7 @@ import type { LoanNoteRequest, LoanNoteResponse } from '~/features/loans/types'
 const route = useRoute()
 const api = useApi()
 const toast = useToast()
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 

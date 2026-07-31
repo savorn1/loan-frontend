@@ -7,19 +7,15 @@
 
 <script setup lang="ts">
 const props = defineProps<{ status: string }>()
-
-// Maps loan/payment/penalty/settlement/transaction/document statuses to a
-// badge color + icon. Covers LoanStatus, PaymentStatus, PenaltyStatus,
-// SettlementStatus, TransactionStatus, LoanProductStatus and
-// LoanDocumentStatus, which share several values (e.g. PENDING).
-// Positive statuses are teal (not green) so they stay visually distinct from
-// the emerald brand color used on buttons/links (see app.config.ts).
 type StatusColor = 'teal' | 'red' | 'gray' | 'orange'
 
 const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   APPROVED: { color: 'teal', icon: 'i-heroicons-check-circle' },
   ACTIVE: { color: 'teal', icon: 'i-heroicons-bolt' },
   OPEN: { color: 'teal', icon: 'i-heroicons-lock-open' },
+  IN_PROGRESS: { color: 'orange', icon: 'i-heroicons-arrow-path' },
+  RESOLVED: { color: 'teal', icon: 'i-heroicons-check-circle' },
+  SENT: { color: 'teal', icon: 'i-heroicons-paper-airplane' },
   PUBLISHED: { color: 'teal', icon: 'i-heroicons-check-circle' },
   POSTED: { color: 'teal', icon: 'i-heroicons-check-circle' },
   DRAFT: { color: 'gray', icon: 'i-heroicons-pencil' },
@@ -44,7 +40,11 @@ const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   SUBMITTED: { color: 'gray', icon: 'i-heroicons-paper-airplane' },
   UNDER_REVIEW: { color: 'orange', icon: 'i-heroicons-magnifying-glass' },
   WITHDRAWN: { color: 'gray', icon: 'i-heroicons-arrow-uturn-left' },
-  PENDING: { color: 'orange', icon: 'i-heroicons-clock' }
+  PENDING: { color: 'orange', icon: 'i-heroicons-clock' },
+  KEPT: { color: 'teal', icon: 'i-heroicons-check-circle' },
+  BROKEN: { color: 'red', icon: 'i-heroicons-x-circle' },
+  PARTIAL: { color: 'orange', icon: 'i-heroicons-adjustments-horizontal' },
+  DELIVERED: { color: 'teal', icon: 'i-heroicons-check-badge' }
 }
 
 const DEFAULT_META: { color: StatusColor; icon: string } = {

@@ -1,0 +1,280 @@
+{
+  "accounting": {
+    "entities": {
+      "accountingScheme": "Accounting scheme",
+      "financialPeriod": "Financial period",
+      "glAccount": "GL account",
+      "journalTemplate": "Journal template"
+    },
+    "accountingSchemes": {
+      "title": "Accounting Schemes",
+      "totalLabelOne": "1 accounting scheme",
+      "totalLabelOther": "{count} accounting schemes",
+      "newAccountingScheme": "New Accounting Scheme",
+      "editAccountingScheme": "Edit Accounting Scheme",
+      "emptyTitle": "No accounting schemes yet",
+      "emptyDescription": "Bind a journal template's symbolic account role (e.g. CASH) to a real GL account for a given currency.",
+      "deleteConfirmTitle": "Delete this accounting scheme?",
+      "deleteConfirmDescription": "This permanently removes the binding and cannot be undone.",
+      "columns": {
+        "journalTemplate": "Journal template",
+        "role": "Role",
+        "glAccount": "GL account",
+        "currency": "Currency",
+        "status": "Status"
+      },
+      "fields": {
+        "journalTemplate": "Journal template",
+        "accountRole": "Account role",
+        "accountRoleHint": "Pick a journal template first",
+        "glAccount": "GL account",
+        "currency": "Currency",
+        "status": "Status"
+      }
+    },
+    "financialPeriods": {
+      "title": "Financial Periods",
+      "totalLabelOne": "1 financial period",
+      "totalLabelOther": "{count} financial periods",
+      "newFinancialPeriod": "New Financial Period",
+      "editFinancialPeriod": "Edit Financial Period",
+      "emptyTitle": "No financial periods yet",
+      "emptyDescription": "Every journal entry posts against the period covering its transaction date.",
+      "closePeriod": "Close period",
+      "closePeriodConfirmTitle": "Close this financial period?",
+      "closePeriodConfirmDescription": "Once closed, no new journal entries can be posted or reversed against this period. This cannot be undone.",
+      "periodClosed": "Financial period closed",
+      "deleteConfirmTitle": "Delete this financial period?",
+      "deleteConfirmDescription": "This permanently removes the period and cannot be undone.",
+      "columns": {
+        "period": "Period",
+        "status": "Status"
+      },
+      "fields": {
+        "periodName": "Period name",
+        "periodNamePlaceholder": "e.g. 2026-07",
+        "startDate": "Start date",
+        "endDate": "End date"
+      }
+    },
+    "generalLedger": {
+      "title": "General Ledger",
+      "description": "Balances and posted activity for a single GL account within a financial period.",
+      "glAccount": "GL account",
+      "glAccountPlaceholder": "Select an account",
+      "financialPeriod": "Financial period",
+      "financialPeriodPlaceholder": "Select a period",
+      "openingBalance": "Opening balance",
+      "periodDebit": "Period debit",
+      "periodCredit": "Period credit",
+      "closingBalance": "Closing balance",
+      "emptyTitleNoActivity": "No posted activity",
+      "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected period.",
+      "emptyTitlePick": "Pick an account and period",
+      "emptyDescriptionPick": "Select a GL account and a financial period above to view its ledger.",
+      "columns": {
+        "date": "Date",
+        "entryNo": "Entry no.",
+        "description": "Description",
+        "side": "Side",
+        "amount": "Amount",
+        "balance": "Balance"
+      }
+    },
+    "glAccounts": {
+      "title": "Chart of Accounts",
+      "totalLabelOne": "1 GL account",
+      "totalLabelOther": "{count} GL accounts",
+      "newGlAccount": "New GL Account",
+      "editGlAccount": "Edit GL Account",
+      "searchPlaceholder": "Search by number or name...",
+      "emptyTitle": "No GL accounts yet",
+      "emptyDescription": "Set up the chart of accounts that journal entries post against.",
+      "deleteConfirmTitle": "Delete this GL account?",
+      "deleteConfirmDescription": "This permanently removes the account and cannot be undone. Accounts with child accounts cannot be deleted.",
+      "columns": {
+        "accountNo": "Account no.",
+        "name": "Name",
+        "parent": "Parent",
+        "type": "Type",
+        "normalBalance": "Normal balance",
+        "currency": "Currency",
+        "postable": "Postable",
+        "status": "Status"
+      },
+      "fields": {
+        "accountNo": "Account number",
+        "accountName": "Account name",
+        "parentAccount": "Parent account",
+        "parentAccountHint": "Leave blank for a top-level account",
+        "accountType": "Account type",
+        "normalBalance": "Normal balance",
+        "currency": "Currency",
+        "allowPosting": "Allow direct posting",
+        "status": "Status"
+      },
+      "accountTypes": {
+        "asset": "Asset",
+        "liability": "Liability",
+        "equity": "Equity",
+        "income": "Income",
+        "expense": "Expense"
+      }
+    },
+    "journalEntries": {
+      "title": "Journal Entries",
+      "totalLabelOne": "1 journal entry",
+      "totalLabelOther": "{count} journal entries",
+      "newJournalEntry": "New Journal Entry",
+      "emptyTitle": "No journal entries yet",
+      "emptyDescription": "Record a journal entry to start tracking the general ledger.",
+      "entryCreated": "Journal entry created as draft",
+      "backToList": "Back to journal entries",
+      "detailTitle": "Journal Entry {entryNo}",
+      "post": "Post",
+      "reverse": "Reverse",
+      "entryPosted": "Journal entry posted",
+      "entryReversed": "Journal entry reversed",
+      "validationMissingFields": "Please fill in the transaction type, date and currency.",
+      "columns": {
+        "entryNo": "Entry no.",
+        "type": "Type",
+        "date": "Date",
+        "period": "Period",
+        "reference": "Reference",
+        "status": "Status",
+        "created": "Created",
+        "account": "Account",
+        "side": "Side",
+        "amount": "Amount",
+        "description": "Description"
+      },
+      "fields": {
+        "transactionType": "Transaction type",
+        "transactionDate": "Transaction date",
+        "currency": "Currency",
+        "currencyPlaceholder": "e.g. USD",
+        "reference": "Reference",
+        "referenceHint": "Opaque pointer back to the upstream event, e.g. a loan id",
+        "referencePlaceholder": "Reference ID",
+        "description": "Description",
+        "lines": "Lines",
+        "addLine": "Add line",
+        "account": "Account",
+        "amount": "Amount",
+        "debitsCredits": "Debits {debit} · Credits {credit}",
+        "mustBalance": "— must balance before saving"
+      },
+      "details": {
+        "title": "Details",
+        "status": "Status",
+        "transactionType": "Transaction type",
+        "date": "Date",
+        "financialPeriod": "Financial period",
+        "currency": "Currency",
+        "reference": "Reference",
+        "postedAt": "Posted at",
+        "postedBy": "Posted by",
+        "description": "Description"
+      },
+      "linesCard": {
+        "title": "Lines",
+        "debitsCredits": "Debits {debit} · Credits {credit}"
+      },
+      "auditLog": {
+        "title": "Audit log",
+        "when": "When",
+        "action": "Action",
+        "by": "By",
+        "details": "Details"
+      }
+    },
+    "journalTemplates": {
+      "title": "Journal Templates",
+      "totalLabelOne": "1 journal template",
+      "totalLabelOther": "{count} journal templates",
+      "newJournalTemplate": "New Journal Template",
+      "editJournalTemplate": "Edit Journal Template",
+      "emptyTitle": "No journal templates yet",
+      "emptyDescription": "Define the debit/credit legs that fire for a transaction type — e.g. every DISBURSEMENT debits Loan Receivable and credits Cash.",
+      "deleteConfirmTitle": "Delete this journal template?",
+      "deleteConfirmDescription": "This permanently removes the template and its lines and cannot be undone.",
+      "templateCreated": "Journal template created",
+      "templateUpdated": "Journal template updated",
+      "templateDeleted": "Journal template deleted",
+      "columns": {
+        "code": "Code",
+        "name": "Name",
+        "transactionType": "Transaction type",
+        "lines": "Lines",
+        "status": "Status"
+      },
+      "fields": {
+        "code": "Code",
+        "name": "Name",
+        "transactionType": "Transaction type",
+        "status": "Status",
+        "description": "Description",
+        "lines": "Lines",
+        "addLine": "Add line",
+        "accountRole": "Account role",
+        "accountRolePlaceholder": "Account role (e.g. CASH)",
+        "lineDescription": "Description",
+        "lineDescriptionPlaceholder": "Description",
+        "rolesHint": "Roles are symbolic (e.g. CASH, LOAN_RECEIVABLE) — an accounting scheme binds each one to a real GL account per currency."
+      }
+    },
+    "transactionTypes": {
+      "disbursement": "Disbursement",
+      "principalPayment": "Principal payment",
+      "interestPayment": "Interest payment",
+      "feeCharge": "Fee charge",
+      "penaltyCharge": "Penalty charge",
+      "loanWriteOff": "Loan write-off",
+      "paymentReversal": "Payment reversal"
+    },
+    "entrySides": {
+      "debit": "Debit",
+      "credit": "Credit"
+    },
+    "trialBalance": {
+      "title": "Trial Balance",
+      "description": "Posted debit/credit totals per GL account for a financial period.",
+      "financialPeriod": "Financial period",
+      "financialPeriodPlaceholder": "Select a period",
+      "liveReport": "Live report",
+      "totalDebit": "Total debit",
+      "totalCredit": "Total credit",
+      "balanced": "Balanced",
+      "outOfBalance": "Out of balance",
+      "periodOnlyNote": "This period's activity only — no carryforward from prior periods. Generate a snapshot below for the cumulative, ending-balance view.",
+      "emptyTitleNoActivity": "No posted activity",
+      "emptyDescriptionNoActivity": "No accounts have posted journal entries in the selected period.",
+      "emptyTitlePick": "Pick a financial period",
+      "emptyDescriptionPick": "Select a financial period above to view its trial balance.",
+      "snapshots": "Snapshots",
+      "generateSnapshot": "Generate snapshot",
+      "snapshotGenerated": "Trial balance snapshot generated",
+      "snapshotsEmptyTitleNoActivity": "No snapshots yet",
+      "snapshotsEmptyDescriptionNoActivity": "Generate a snapshot to freeze this period for audit purposes.",
+      "snapshotsEmptyTitlePick": "Pick a financial period",
+      "snapshotsEmptyDescriptionPick": "Select a financial period above to see its snapshots.",
+      "backToList": "Back to trial balance",
+      "snapshotTitle": "Trial Balance Snapshot — {period}",
+      "generatedAt": "Generated at",
+      "generatedBy": "Generated by",
+      "accounts": "Accounts",
+      "columns": {
+        "accountNo": "Account no.",
+        "accountName": "Account name",
+        "debit": "Debit",
+        "credit": "Credit",
+        "balance": "Balance",
+        "generated": "Generated",
+        "by": "By",
+        "totalDebit": "Total debit",
+        "totalCredit": "Total credit"
+      }
+    }
+  }
+}

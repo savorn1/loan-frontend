@@ -3,17 +3,17 @@
     <UCard v-if="writeoff">
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Write-off</span>
+          <span class="font-semibold">{{ t('loans.writeoff.title') }}</span>
           <StatusBadge :status="writeoff.status" />
         </div>
       </template>
 
       <dl class="grid grid-cols-2 gap-y-3 text-sm mb-4">
-        <dt class="text-gray-500">Amount</dt>
+        <dt class="text-gray-500">{{ t('loans.writeoff.labels.amount') }}</dt>
         <dd class="font-semibold">{{ formatCurrency(writeoff.amount) }}</dd>
-        <dt class="text-gray-500">Write-off date</dt>
+        <dt class="text-gray-500">{{ t('loans.writeoff.labels.date') }}</dt>
         <dd>{{ formatDate(writeoff.writeoffDate) }}</dd>
-        <dt class="text-gray-500">Reason</dt>
+        <dt class="text-gray-500">{{ t('loans.writeoff.labels.reason') }}</dt>
         <dd>{{ writeoff.reason }}</dd>
       </dl>
 
@@ -23,16 +23,16 @@
         :loading="completing"
         @click="onComplete"
       >
-        Mark completed
+        {{ t('loans.writeoff.markCompleted') }}
       </UButton>
     </UCard>
 
     <UCard v-else>
       <template #header>
-        <span class="font-semibold">Write off this loan</span>
+        <span class="font-semibold">{{ t('loans.writeoff.writeoffTitle') }}</span>
       </template>
       <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        No write-off has been recorded for this loan yet.
+        {{ t('loans.writeoff.noWriteoff') }}
       </p>
       <DynamicForm
         v-if="isAdmin"
@@ -40,7 +40,7 @@
         :fields="fields"
         :loading="creating"
         :error="error"
-        submit-label="Record write-off"
+        :submit-label="t('loans.writeoff.submit')"
         @submit="onCreate"
       />
     </UCard>
@@ -55,6 +55,7 @@ const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 
@@ -70,11 +71,17 @@ const { data: writeoff, refresh } = await useAsyncData(`loan-${loanId}-writeoff`
 
 const today = new Date().toISOString().slice(0, 10)
 
-const fields: FieldDef[] = [
-  { name: 'amount', type: 'currency', required: true },
-  { name: 'writeoffDate', label: 'Write-off date', type: 'date', required: true, default: today },
-  { name: 'reason', type: 'textarea', required: true }
-]
+const fields = computed<FieldDef[]>(() => [
+  { name: 'amount', label: t('loans.writeoff.fields.amount'), type: 'currency', required: true },
+  {
+    name: 'writeoffDate',
+    label: t('loans.writeoff.fields.writeoffDate'),
+    type: 'date',
+    required: true,
+    default: today
+  },
+  { name: 'reason', label: t('loans.writeoff.fields.reason'), type: 'textarea', required: true }
+])
 
 const creating = ref(false)
 const completing = ref(false)
@@ -91,7 +98,7 @@ async function onCreate(values: Record<string, any>) {
       reason: values.reason
     }
     await api(`/loans/${loanId}/writeoff`, { method: 'POST', body: payload })
-    toast.add({ title: 'Write-off recorded', color: 'green' })
+    toast.add({ title: t('loans.writeoff.toast.recorded'), color: 'green' })
     await refresh()
   } catch (err) {
     error.value = apiErrorMessage(err)
@@ -104,7 +111,7 @@ async function onComplete() {
   completing.value = true
   try {
     await api(`/loans/${loanId}/writeoff/complete`, { method: 'PUT' })
-    toast.add({ title: 'Write-off completed', color: 'green' })
+    toast.add({ title: t('loans.writeoff.toast.completed'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

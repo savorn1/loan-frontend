@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Accounting Schemes" :description="totalLabel">
+    <PageHeader :title="t('accounting.accountingSchemes.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Accounting Scheme</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('accounting.accountingSchemes.newAccountingScheme')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -23,11 +25,13 @@
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-link"
-            title="No accounting schemes yet"
-            description="Bind a journal template's symbolic account role (e.g. CASH) to a real GL account for a given currency."
+            :title="t('accounting.accountingSchemes.emptyTitle')"
+            :description="t('accounting.accountingSchemes.emptyDescription')"
           >
             <template #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Accounting Scheme</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('accounting.accountingSchemes.newAccountingScheme')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -41,14 +45,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Accounting Scheme</span>
+          <span class="font-semibold">{{ t('accounting.accountingSchemes.newAccountingScheme') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="createFields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -59,14 +63,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Accounting Scheme</span>
+          <span class="font-semibold">{{ t('accounting.accountingSchemes.editAccountingScheme') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="editFields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -76,9 +80,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this accounting scheme?"
-      description="This permanently removes the binding and cannot be undone."
-      confirm-label="Delete"
+      :title="t('accounting.accountingSchemes.deleteConfirmTitle')"
+      :description="t('accounting.accountingSchemes.deleteConfirmDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -100,6 +104,7 @@ import type {
 } from '~/features/accounting/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const {
@@ -134,35 +139,37 @@ function rolesFor(templateId: number | undefined) {
   return roles.map((r) => ({ label: r, value: r }))
 }
 
-const columns: ColumnDef<AccountingSchemeResponse>[] = [
+const columns = computed<ColumnDef<AccountingSchemeResponse>[]>(() => [
   {
     key: 'journalTemplateId',
-    label: 'Journal template',
+    label: t('accounting.accountingSchemes.columns.journalTemplate'),
     value: (row) => templateLabel(row.journalTemplateId)
   },
-  { key: 'accountRole', label: 'Role' },
-  { key: 'glAccountNo', label: 'GL account' },
-  { key: 'currency', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
+  { key: 'accountRole', label: t('accounting.accountingSchemes.columns.role') },
+  { key: 'glAccountNo', label: t('accounting.accountingSchemes.columns.glAccount') },
+  { key: 'currency', label: t('accounting.accountingSchemes.columns.currency'), sortable: true },
+  { key: 'status', label: t('accounting.accountingSchemes.columns.status'), type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { page, pageSize, sort, total, rows } = useClientTable(schemes, { pageSize: 15 })
 
 const totalLabel = computed(() => {
   const count = schemes.value?.length ?? 0
-  return count === 1 ? '1 accounting scheme' : `${count} accounting schemes`
+  return count === 1
+    ? t('accounting.accountingSchemes.totalLabelOne')
+    : t('accounting.accountingSchemes.totalLabelOther', { count })
 })
 
-const statusOptions = [
-  { label: 'Active', value: 'ACTIVE' },
-  { label: 'Inactive', value: 'INACTIVE' }
-]
+const statusOptions = computed(() => [
+  { label: t('common.active'), value: 'ACTIVE' },
+  { label: t('common.inactive'), value: 'INACTIVE' }
+])
 
 const createFields = computed<FieldDef[]>(() => [
   {
     name: 'journalTemplateId',
-    label: 'Journal template',
+    label: t('accounting.accountingSchemes.fields.journalTemplate'),
     type: 'select',
     required: true,
     wrapper: 'half',
@@ -170,36 +177,37 @@ const createFields = computed<FieldDef[]>(() => [
   },
   {
     name: 'accountRole',
-    label: 'Account role',
+    label: t('accounting.accountingSchemes.fields.accountRole'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: rolesFor(createForm.value.journalTemplateId),
-    hint: 'Pick a journal template first'
+    hint: t('accounting.accountingSchemes.fields.accountRoleHint')
   },
   {
     name: 'glAccountId',
-    label: 'GL account',
+    label: t('accounting.accountingSchemes.fields.glAccount'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: glAccountOptions.value
   },
-  { name: 'currency', required: true, wrapper: 'half' },
+  { name: 'currency', label: t('accounting.accountingSchemes.fields.currency'), required: true, wrapper: 'half' },
   {
     name: 'status',
+    label: t('accounting.accountingSchemes.fields.status'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
-    options: statusOptions
+    options: statusOptions.value
   }
 ])
 
 const editFields = computed<FieldDef[]>(() => [
   {
     name: 'journalTemplateId',
-    label: 'Journal template',
+    label: t('accounting.accountingSchemes.fields.journalTemplate'),
     type: 'select',
     required: true,
     wrapper: 'half',
@@ -207,7 +215,7 @@ const editFields = computed<FieldDef[]>(() => [
   },
   {
     name: 'accountRole',
-    label: 'Account role',
+    label: t('accounting.accountingSchemes.fields.accountRole'),
     type: 'select',
     required: true,
     wrapper: 'half',
@@ -215,14 +223,21 @@ const editFields = computed<FieldDef[]>(() => [
   },
   {
     name: 'glAccountId',
-    label: 'GL account',
+    label: t('accounting.accountingSchemes.fields.glAccount'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: glAccountOptions.value
   },
-  { name: 'currency', required: true, wrapper: 'half' },
-  { name: 'status', type: 'select', required: true, wrapper: 'half', options: statusOptions }
+  { name: 'currency', label: t('accounting.accountingSchemes.fields.currency'), required: true, wrapper: 'half' },
+  {
+    name: 'status',
+    label: t('accounting.accountingSchemes.fields.status'),
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: statusOptions.value
+  }
 ])
 
 const {
@@ -245,7 +260,7 @@ const {
   '/accounting-schemes',
   refresh,
   {
-    entityName: 'Accounting scheme',
+    entityName: t('accounting.entities.accountingScheme'),
     createDefaults: () => ({
       journalTemplateId: undefined,
       accountRole: undefined,

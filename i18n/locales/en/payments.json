@@ -1,0 +1,207 @@
+{
+  "payments": {
+    "entities": {
+      "paymentMethod": "Payment method",
+      "paymentChannel": "Payment channel",
+      "paymentGateway": "Payment gateway"
+    },
+    "methods": {
+      "title": "Payment Methods",
+      "totalLabelOne": "1 payment method",
+      "totalLabelOther": "{count} payment methods",
+      "searchPlaceholder": "Search by name or code...",
+      "newPaymentMethod": "New Payment Method",
+      "editPaymentMethod": "Edit Payment Method",
+      "emptyTitle": "No payment methods yet",
+      "emptyDescription": "Add a payment method to start recording transactions against it.",
+      "deleteConfirmTitle": "Delete this payment method?",
+      "deleteConfirmDescription": "This permanently removes the payment method and cannot be undone.",
+      "columns": {
+        "code": "Code",
+        "name": "Name",
+        "type": "Type",
+        "status": "Status",
+        "created": "Created"
+      },
+      "fields": {
+        "code": "Code",
+        "name": "Name",
+        "type": "Type",
+        "status": "Status"
+      },
+      "types": {
+        "cash": "Cash",
+        "bankTransfer": "Bank transfer",
+        "creditCard": "Credit card",
+        "mobileWallet": "Mobile wallet",
+        "cheque": "Cheque"
+      }
+    },
+    "channels": {
+      "title": "Payment Channels",
+      "totalLabelOne": "1 payment channel",
+      "totalLabelOther": "{count} payment channels",
+      "searchPlaceholder": "Search by name or code...",
+      "newPaymentChannel": "New Payment Channel",
+      "editPaymentChannel": "Edit Payment Channel",
+      "emptyTitle": "No payment channels yet",
+      "emptyDescription": "Add a payment channel to record which route a payment came in through.",
+      "deleteConfirmTitle": "Delete this payment channel?",
+      "deleteConfirmDescription": "This permanently removes the payment channel and cannot be undone.",
+      "columns": {
+        "code": "Code",
+        "name": "Name",
+        "channelType": "Channel type",
+        "status": "Status",
+        "created": "Created"
+      },
+      "fields": {
+        "code": "Code",
+        "name": "Name",
+        "channelType": "Channel type",
+        "status": "Status"
+      }
+    },
+    "gateways": {
+      "title": "Payment Gateways",
+      "totalLabelOne": "1 payment gateway",
+      "totalLabelOther": "{count} payment gateways",
+      "searchPlaceholder": "Search by name or code...",
+      "newPaymentGateway": "New Payment Gateway",
+      "editPaymentGateway": "Edit Payment Gateway",
+      "emptyTitle": "No payment gateways yet",
+      "emptyDescription": "Add a payment gateway (external provider) that a payment channel can connect through.",
+      "deleteConfirmTitle": "Delete this payment gateway?",
+      "deleteConfirmDescription": "This permanently removes the payment gateway and cannot be undone.",
+      "columns": {
+        "code": "Code",
+        "name": "Name",
+        "provider": "Provider",
+        "status": "Status",
+        "created": "Created"
+      },
+      "fields": {
+        "code": "Code",
+        "name": "Name",
+        "provider": "Provider",
+        "status": "Status",
+        "apiUrl": "API URL"
+      }
+    },
+    "transactions": {
+      "title": "Payment Transactions",
+      "totalLabelOne": "1 transaction",
+      "totalLabelOther": "{count} transactions",
+      "newTransaction": "New Transaction",
+      "clearFilter": "Clear filter",
+      "emptyTitle": "No transactions yet",
+      "emptyDescription": "Record a transaction to get started.",
+      "emptySearchDescription": "Try clearing the status filter.",
+      "created": "Transaction created",
+      "statusOptions": {
+        "all": "All statuses",
+        "pending": "Pending",
+        "success": "Success",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "columns": {
+        "paymentNo": "Payment No",
+        "customer": "Customer",
+        "businessType": "Business type",
+        "amount": "Amount",
+        "status": "Status",
+        "requested": "Requested",
+        "completed": "Completed"
+      },
+      "fields": {
+        "customer": "Customer",
+        "customerPlaceholder": "Search customers…",
+        "paymentMethod": "Payment method",
+        "paymentMethodPlaceholder": "Select a method",
+        "paymentChannel": "Payment channel",
+        "paymentChannelPlaceholder": "Select a channel",
+        "paymentGateway": "Payment gateway",
+        "paymentGatewayPlaceholder": "Select a gateway",
+        "currency": "Currency",
+        "amount": "Amount",
+        "businessType": "Business type",
+        "businessTypePlaceholder": "e.g. LOAN_PAYMENT",
+        "businessReference": "Business reference",
+        "referenceNo": "Reference no."
+      },
+      "detail": {
+        "backToList": "Back to transactions",
+        "detailTitle": "Transaction {paymentNo}",
+        "markSuccess": "Mark success",
+        "markFailed": "Mark failed",
+        "refund": "Refund",
+        "detailsTitle": "Details",
+        "customer": "Customer",
+        "paymentMethod": "Payment method",
+        "paymentChannel": "Payment channel",
+        "paymentGateway": "Payment gateway",
+        "businessType": "Business type",
+        "businessReference": "Business reference",
+        "amount": "Amount",
+        "referenceNo": "Reference no.",
+        "requested": "Requested",
+        "completed": "Completed",
+        "itemsTitle": "Items",
+        "itemColumns": {
+          "referenceType": "Reference type",
+          "referenceId": "Reference ID",
+          "amount": "Amount"
+        },
+        "emptyItemsTitle": "No items",
+        "emptyItemsDescription": "This transaction isn't split across multiple business entities.",
+        "statusUpdated": "Transaction marked {status}",
+        "statusWords": {
+          "success": "success",
+          "failed": "failed",
+          "refunded": "refunded"
+        }
+      }
+    },
+    "list": {
+      "title": "Payments",
+      "totalLabelOne": "1 payment",
+      "totalLabelOther": "{count} payments",
+      "newPayment": "New Payment",
+      "filterByLoanPlaceholder": "Filter by loan",
+      "clearFilters": "Clear filters",
+      "markPaid": "Mark paid",
+      "emptyTitle": "No payments found",
+      "emptyDescription": "Payments appear here once a schedule is generated or created manually.",
+      "emptySearchDescription": "Try clearing the loan or status filter.",
+      "deleteConfirmTitle": "Delete this payment?",
+      "deleteConfirmDescription": "This removes the installment from the schedule. This action cannot be undone.",
+      "created": "Payment created",
+      "markedPaid": "Payment marked as paid",
+      "deleted": "Payment deleted",
+      "statusOptions": {
+        "all": "All statuses",
+        "pending": "Pending",
+        "paid": "Paid",
+        "overdue": "Overdue"
+      },
+      "columns": {
+        "id": "ID",
+        "loan": "Loan",
+        "installmentNumber": "#",
+        "amount": "Amount",
+        "due": "Due",
+        "status": "Status",
+        "created": "Created"
+      },
+      "fields": {
+        "loan": "Loan",
+        "loanPlaceholder": "Select a loan",
+        "amount": "Amount",
+        "dueDate": "Due date",
+        "dueDatePlaceholder": "Select due date",
+        "note": "Note"
+      }
+    }
+  }
+}

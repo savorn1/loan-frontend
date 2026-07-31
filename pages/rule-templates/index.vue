@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Rule Templates" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.ruleTemplates.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Rule Template</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.ruleTemplates.newRuleTemplate')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name or code..."
+          :placeholder="t('loanConfig.shared.searchByNameOrCode')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-adjustments-horizontal'"
-            :title="search ? 'No matches' : 'No rule templates yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.ruleTemplates.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Add a reusable eligibility rule (e.g. Min Credit Score 650) that loan products can select.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.ruleTemplates.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Rule Template</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.ruleTemplates.newRuleTemplate')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Rule Template</span>
+          <span class="font-semibold">{{ t('loanConfig.ruleTemplates.newRuleTemplate') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Rule Template</span>
+          <span class="font-semibold">{{ t('loanConfig.ruleTemplates.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="fields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this rule template?"
-      description="This permanently removes the rule template and cannot be undone."
-      confirm-label="Delete"
+      :title="t('loanConfig.ruleTemplates.deleteTitle')"
+      :description="t('loanConfig.ruleTemplates.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -118,6 +122,7 @@
 import type { RuleTemplateRequest, RuleTemplateResponse } from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const {
@@ -126,15 +131,20 @@ const {
   refresh
 } = await useAsyncData('rule-templates', () => api<RuleTemplateResponse[]>('/rule-templates'))
 
-const columns: ColumnDef<RuleTemplateResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'field', type: 'enum', sortable: true },
-  { key: 'operator', type: 'enum', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
+const columns = computed<ColumnDef<RuleTemplateResponse>[]>(() => [
+  { key: 'code', label: t('loanConfig.shared.codeColumn'), sortable: true },
+  { key: 'name', label: t('loanConfig.shared.nameColumn'), sortable: true },
+  { key: 'field', label: t('loanConfig.shared.fieldColumn'), type: 'enum', sortable: true },
+  { key: 'operator', label: t('loanConfig.shared.operatorColumn'), type: 'enum', sortable: true },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
+  {
+    key: 'createdAt',
+    label: t('loanConfig.shared.createdColumn'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(templates, {
   searchFields: ['name', 'code'],
@@ -143,68 +153,85 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(templates, 
 
 const totalLabel = computed(() => {
   const count = templates.value?.length ?? 0
-  return count === 1 ? '1 rule template' : `${count} rule templates`
+  return count === 1
+    ? t('loanConfig.ruleTemplates.total.one')
+    : t('loanConfig.ruleTemplates.total.other', { count })
 })
 
-const fields: FieldDef[] = [
-  { name: 'code', required: true, wrapper: 'half' },
-  { name: 'name', required: true, wrapper: 'half' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'code', label: t('loanConfig.shared.codeColumn'), required: true, wrapper: 'half' },
+  { name: 'name', label: t('loanConfig.shared.nameColumn'), required: true, wrapper: 'half' },
   {
     name: 'field',
+    label: t('loanConfig.shared.fieldColumn'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: [
-      { label: 'Credit score', value: 'CREDIT_SCORE' },
-      { label: 'Monthly income', value: 'MONTHLY_INCOME' },
-      { label: 'Age', value: 'AGE' },
-      { label: 'Employment status', value: 'EMPLOYMENT_STATUS' },
-      { label: 'Existing loan count', value: 'EXISTING_LOAN_COUNT' },
-      { label: 'Debt to income ratio', value: 'DEBT_TO_INCOME_RATIO' }
+      { label: t('loanConfig.ruleTemplates.optionCreditScore'), value: 'CREDIT_SCORE' },
+      { label: t('loanConfig.ruleTemplates.optionMonthlyIncome'), value: 'MONTHLY_INCOME' },
+      { label: t('loanConfig.ruleTemplates.optionAge'), value: 'AGE' },
+      { label: t('loanConfig.ruleTemplates.optionEmploymentStatus'), value: 'EMPLOYMENT_STATUS' },
+      {
+        label: t('loanConfig.ruleTemplates.optionExistingLoanCount'),
+        value: 'EXISTING_LOAN_COUNT'
+      },
+      {
+        label: t('loanConfig.ruleTemplates.optionDebtToIncomeRatio'),
+        value: 'DEBT_TO_INCOME_RATIO'
+      }
     ]
   },
   {
     name: 'operator',
+    label: t('loanConfig.shared.operatorColumn'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: [
-      { label: 'Equals', value: 'EQUALS' },
-      { label: 'Not equals', value: 'NOT_EQUALS' },
-      { label: 'Greater than', value: 'GREATER_THAN' },
-      { label: 'Greater than or equal', value: 'GREATER_THAN_OR_EQUAL' },
-      { label: 'Less than', value: 'LESS_THAN' },
-      { label: 'Less than or equal', value: 'LESS_THAN_OR_EQUAL' },
-      { label: 'Between', value: 'BETWEEN' },
-      { label: 'In', value: 'IN' }
+      { label: t('loanConfig.ruleTemplates.optionEquals'), value: 'EQUALS' },
+      { label: t('loanConfig.ruleTemplates.optionNotEquals'), value: 'NOT_EQUALS' },
+      { label: t('loanConfig.ruleTemplates.optionGreaterThan'), value: 'GREATER_THAN' },
+      {
+        label: t('loanConfig.ruleTemplates.optionGreaterThanOrEqual'),
+        value: 'GREATER_THAN_OR_EQUAL'
+      },
+      { label: t('loanConfig.ruleTemplates.optionLessThan'), value: 'LESS_THAN' },
+      {
+        label: t('loanConfig.ruleTemplates.optionLessThanOrEqual'),
+        value: 'LESS_THAN_OR_EQUAL'
+      },
+      { label: t('loanConfig.ruleTemplates.optionBetween'), value: 'BETWEEN' },
+      { label: t('loanConfig.ruleTemplates.optionIn'), value: 'IN' }
     ]
   },
   {
     name: 'value',
-    label: 'Value',
+    label: t('loanConfig.shared.valueColumn'),
     required: true,
     wrapper: 'half',
-    hint: 'Lower bound for BETWEEN, comma-separated list for IN'
+    hint: t('loanConfig.ruleTemplates.valueHint')
   },
   {
     name: 'value2',
-    label: 'Value 2',
+    label: t('loanConfig.ruleTemplates.value2Label'),
     wrapper: 'half',
-    hint: 'Upper bound — required only when operator is BETWEEN'
+    hint: t('loanConfig.ruleTemplates.value2Hint')
   },
-  { name: 'description', type: 'textarea' },
+  { name: 'description', label: t('loanConfig.shared.descriptionLabel'), type: 'textarea' },
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const {
   showCreate,
@@ -223,7 +250,7 @@ const {
   confirmDelete,
   onDelete
 } = useCrudModals<RuleTemplateResponse, RuleTemplateRequest>('/rule-templates', refresh, {
-  entityName: 'Rule template',
+  entityName: t('loanConfig.entities.ruleTemplate'),
   createDefaults: () => ({
     code: '',
     name: '',

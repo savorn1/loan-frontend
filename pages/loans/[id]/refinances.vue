@@ -3,9 +3,9 @@
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Refinances</span>
+          <span class="font-semibold">{{ t('loans.refinances.title') }}</span>
           <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >Add refinance</UButton
+            >{{ t('loans.refinances.add') }}</UButton
           >
         </div>
       </template>
@@ -14,11 +14,11 @@
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-arrows-right-left"
-            title="No refinances"
-            description="Log that this loan was replaced by a new loan — create the replacement loan first, then link it here."
+            :title="t('loans.refinances.empty.title')"
+            :description="t('loans.refinances.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Add refinance</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.refinances.add') }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -28,14 +28,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add refinance</span>
+          <span class="font-semibold">{{ t('loans.refinances.add') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Add"
+          :submit-label="t('loans.refinances.submit')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -51,12 +51,13 @@ import type {
   LoanRefinanceResponse,
   LoanResponse
 } from '~/features/loans/types'
-import type { ColumnDef, FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 
@@ -68,39 +69,39 @@ const {
   api<LoanRefinanceResponse[]>(`/loans/${loanId}/refinances`)
 )
 const { data: allLoans } = await useAsyncData(`loan-${loanId}-refinances-loans`, () =>
-  api<LoanResponse[]>('/loans')
+  api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
 )
 
 const loanOptions = computed(() =>
-  (allLoans.value ?? [])
+  (allLoans.value?.content ?? [])
     .filter((l) => String(l.id) !== loanId)
     .map((l) => ({ label: `#${l.id} — ${l.customerName} (${l.status})`, value: l.id }))
 )
 
-const columns: ColumnDef<LoanRefinanceResponse>[] = [
-  { key: 'effectiveDate', label: 'Effective', type: 'date' },
+const columns = computed<ColumnDef<LoanRefinanceResponse>[]>(() => [
+  { key: 'effectiveDate', label: t('loans.refinances.columns.effective'), type: 'date' },
   {
     key: 'newLoanId',
-    label: 'Replacement loan',
+    label: t('loans.refinances.columns.newLoanId'),
     type: 'link',
     href: (row) => `/loans/${row.newLoanId}`,
     prefix: () => '#'
   },
-  { key: 'reason' },
-  { key: 'createdAt', label: 'Created', type: 'datetime' }
-]
+  { key: 'reason', label: t('loans.refinances.columns.reason') },
+  { key: 'createdAt', label: t('loans.refinances.columns.created'), type: 'datetime' }
+])
 
 const fields = computed<FieldDef[]>(() => [
   {
     name: 'newLoanId',
-    label: 'Replacement loan',
+    label: t('loans.refinances.fields.newLoanId'),
     type: 'select',
     required: true,
     options: loanOptions.value,
-    placeholder: 'Select the new loan'
+    placeholder: t('loans.refinances.fields.newLoanIdPlaceholder')
   },
-  { name: 'effectiveDate', type: 'date', required: true },
-  { name: 'reason', type: 'textarea', required: true }
+  { name: 'effectiveDate', label: t('loans.refinances.fields.effectiveDate'), type: 'date', required: true },
+  { name: 'reason', label: t('loans.refinances.fields.reason'), type: 'textarea', required: true }
 ])
 
 const showCreate = ref(false)
@@ -124,7 +125,7 @@ async function onCreate(values: Record<string, any>) {
       reason: values.reason
     }
     await api(`/loans/${loanId}/refinances`, { method: 'POST', body: payload })
-    toast.add({ title: 'Refinance recorded', color: 'green' })
+    toast.add({ title: t('loans.refinances.toast.recorded'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {

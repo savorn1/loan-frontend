@@ -25,27 +25,27 @@
         <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-white/15 backdrop-blur">
           <UIcon name="i-heroicons-banknotes" class="w-5 h-5" />
         </span>
-        <span class="font-bold text-lg tracking-tight">Loan Management System</span>
+        <span class="font-bold text-lg tracking-tight">{{ t('app.name') }}</span>
       </NuxtLink>
 
       <div class="relative max-w-sm">
-        <h1 class="text-4xl font-bold leading-tight mb-4">Hey, Hello!</h1>
+        <h1 class="text-4xl font-bold leading-tight mb-4">{{ t('auth.heroTitle') }}</h1>
         <p class="text-lg font-medium text-white/90 mb-3">
-          Manage every loan, customer, and payment in one place.
+          {{ t('auth.heroSubtitle') }}
         </p>
         <p class="text-sm text-white/70">
-          Track applications from request to payoff, keep the payment schedule on track, and give
-          your team one shared source of truth.
+          {{ t('auth.heroDescription') }}
         </p>
       </div>
 
-      <p class="relative text-xs text-white/60">&copy; {{ year }} Loan Management System</p>
+      <p class="relative text-xs text-white/60">&copy; {{ year }} {{ t('app.name') }}</p>
     </div>
 
     <!-- Form panel -->
     <div class="flex-1 flex items-center justify-center px-6 py-12 relative">
-      <div class="absolute top-4 right-4">
+      <div class="absolute top-4 right-4 flex items-center gap-1.5">
         <ColorModeToggle />
+        <LanguageSwitcher />
       </div>
 
       <div class="w-full max-w-sm">
@@ -55,7 +55,7 @@
           >
             <UIcon name="i-heroicons-banknotes" class="w-6 h-6" />
           </span>
-          <h1 class="text-xl font-bold text-gray-900 dark:text-white">Loan Management System</h1>
+          <h1 class="text-xl font-bold text-gray-900 dark:text-white">{{ t('app.name') }}</h1>
         </div>
         <slot />
       </div>
@@ -64,5 +64,6 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
 const year = new Date().getFullYear()
 </script>

@@ -4,7 +4,7 @@
     color="gray"
     variant="ghost"
     size="xs"
-    :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+    :aria-label="isDark ? t('common.switchToLight') : t('common.switchToDark')"
     @click="toggle"
   />
 </template>
@@ -15,6 +15,7 @@
 // localStorage and syncs the `dark`/`light` class on <html> that Tailwind's
 // `darkMode: 'class'` strategy (set by Nuxt UI) reads.
 const colorMode = useColorMode()
+const { t } = useI18n()
 
 const isDark = computed(() => colorMode.value === 'dark')
 

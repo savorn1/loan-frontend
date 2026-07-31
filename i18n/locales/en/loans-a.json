@@ -1,0 +1,430 @@
+{
+  "loans": {
+    "list": {
+      "title": "Loans",
+      "newLoan": "New Loan",
+      "searchPlaceholder": "Search by customer or purpose...",
+      "totalOne": "1 loan",
+      "totalOther": "{count} loans",
+      "statusFilter": {
+        "all": "All statuses",
+        "pending": "Pending",
+        "approved": "Approved",
+        "active": "Active",
+        "rejected": "Rejected",
+        "closed": "Closed"
+      },
+      "columns": {
+        "id": "ID",
+        "customer": "Customer",
+        "principal": "Principal",
+        "rate": "Rate",
+        "term": "Term (mo)",
+        "status": "Status",
+        "created": "Created"
+      },
+      "empty": {
+        "noLoansTitle": "No loans yet",
+        "noMatchesDescription": "Try a different search term or status filter.",
+        "noLoansDescription": "Create a loan for one of your customers to get started."
+      },
+      "modalTitle": "New Loan",
+      "fields": {
+        "customer": "Customer",
+        "customerPlaceholder": "Search customers…",
+        "principalHint": "Minimum 1000",
+        "interestRate": "Interest rate",
+        "interestRateHint": "0.01 – 100",
+        "term": "Term (months)",
+        "termHint": "1 – 360",
+        "purpose": "Purpose"
+      },
+      "toastCreated": "Loan created"
+    },
+    "shell": {
+      "backToLoans": "Back to loans",
+      "loanTitle": "Loan #{id}",
+      "actions": {
+        "approve": "Approve",
+        "reject": "Reject",
+        "disburse": "Disburse"
+      },
+      "confirm": {
+        "approve": {
+          "title": "Approve this loan?",
+          "description": "The loan moves to APPROVED and becomes eligible for disbursement.",
+          "confirmLabel": "Approve"
+        },
+        "reject": {
+          "title": "Reject this loan?",
+          "description": "This is final — a rejected loan cannot be approved later.",
+          "confirmLabel": "Reject"
+        },
+        "disburse": {
+          "title": "Disburse this loan?",
+          "description": "Funds are marked as released, the amortization schedule is generated, and the loan becomes ACTIVE. This cannot be undone.",
+          "confirmLabel": "Disburse"
+        }
+      },
+      "toast": {
+        "approved": "Loan approved",
+        "rejected": "Loan rejected",
+        "disbursed": "Loan disbursed"
+      },
+      "tabGroups": {
+        "overview": "Overview",
+        "money": "Money",
+        "related": "Related",
+        "history": "History"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "contract": "Contract",
+        "schedule": "Schedule",
+        "payments": "Payments",
+        "transactions": "Transactions",
+        "disbursements": "Disbursements",
+        "interest": "Interest",
+        "fees": "Fees",
+        "penalties": "Penalties",
+        "adjustments": "Adjustments",
+        "settlement": "Settlement",
+        "writeoff": "Write-off",
+        "collateral": "Collateral",
+        "guarantors": "Guarantors",
+        "statusHistory": "Status history",
+        "restructures": "Restructures",
+        "refinances": "Refinances",
+        "notes": "Notes",
+        "documents": "Documents"
+      }
+    },
+    "overview": {
+      "detailsTitle": "Details",
+      "paidOff": "Paid off",
+      "fields": {
+        "customer": "Customer",
+        "principal": "Principal",
+        "interestRate": "Interest rate",
+        "term": "Term",
+        "monthlyInstallment": "Monthly installment",
+        "outstandingBalance": "Outstanding balance",
+        "purpose": "Purpose",
+        "maturityDate": "Maturity date",
+        "approved": "Approved",
+        "disbursed": "Disbursed"
+      },
+      "months": "{count} months",
+      "applyPaymentTitle": "Apply payment to balance",
+      "amount": "Amount",
+      "applyPaymentButton": "Apply payment",
+      "applyPaymentHint": "Only available for active loans.",
+      "scheduleTitle": "Payment schedule",
+      "generateScheduleButton": "Generate schedule",
+      "markPaidButton": "Mark paid",
+      "empty": {
+        "title": "No payment schedule yet",
+        "descriptionActive": "Generate an amortization schedule to start tracking installments.",
+        "descriptionOther": "A schedule is generated automatically once the loan is disbursed."
+      },
+      "columns": {
+        "installmentNumber": "#",
+        "due": "Due",
+        "amount": "Amount",
+        "status": "Status",
+        "paidOn": "Paid on",
+        "created": "Created"
+      },
+      "toast": {
+        "applied": "Payment applied",
+        "scheduleGenerated": "Schedule generated",
+        "markedPaid": "Payment marked as paid"
+      }
+    },
+    "contract": {
+      "contractTermsTitle": "Contract terms",
+      "fields": {
+        "customer": "Customer",
+        "principal": "Principal",
+        "interestRate": "Interest rate",
+        "term": "Term",
+        "monthlyInstallment": "Monthly installment",
+        "outstandingBalance": "Outstanding balance",
+        "maturityDate": "Maturity date",
+        "approved": "Approved",
+        "disbursed": "Disbursed",
+        "closed": "Closed",
+        "purpose": "Purpose"
+      },
+      "months": "{count} months",
+      "repaymentScheduleTitle": "Repayment schedule",
+      "scheduleColumns": {
+        "installmentNumber": "#",
+        "due": "Due",
+        "total": "Total",
+        "outstanding": "Outstanding",
+        "status": "Status"
+      },
+      "scheduleEmpty": {
+        "title": "No schedule generated",
+        "description": "Generated on disbursement and each restructure — see the Schedule tab for prior versions."
+      },
+      "paymentsTitle": "Payments",
+      "totalLabel": "Total {amount}",
+      "paymentColumns": {
+        "date": "Date",
+        "amount": "Amount",
+        "method": "Method",
+        "reference": "Reference"
+      },
+      "paymentsEmpty": {
+        "title": "No payments recorded",
+        "description": "Payments recorded on the Payments tab appear here."
+      },
+      "collateralTitle": "Collateral",
+      "pledgedLabel": "{amount} pledged",
+      "collateralColumns": {
+        "type": "Type",
+        "description": "Description",
+        "value": "Value",
+        "status": "Status"
+      },
+      "collateralEmpty": {
+        "title": "No collateral pledged",
+        "description": "Assets recorded on the Collateral tab appear here."
+      },
+      "guarantorsTitle": "Guarantors",
+      "guarantorColumns": {
+        "name": "Name",
+        "phone": "Phone",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "guarantorsEmpty": {
+        "title": "No guarantors",
+        "description": "Guarantors recorded on the Guarantors tab appear here."
+      },
+      "statusHistoryTitle": "Status history",
+      "statusColumns": {
+        "from": "From",
+        "to": "To",
+        "note": "Note",
+        "changedBy": "Changed by",
+        "changedAt": "Changed"
+      },
+      "statusHistoryEmpty": {
+        "title": "No status changes yet",
+        "description": "Every approve, reject, disburse or close action on this loan is logged here."
+      },
+      "disbursementsTitle": "Disbursements",
+      "disbursementColumns": {
+        "date": "Date",
+        "amount": "Amount",
+        "method": "Method",
+        "reference": "Reference"
+      },
+      "disbursementsEmpty": {
+        "title": "No disbursements yet",
+        "description": "Record each release of funds for this loan on the Disbursements tab."
+      },
+      "restructuresTitle": "Restructures",
+      "restructureColumns": {
+        "effective": "Effective",
+        "newTerm": "New term",
+        "newTermSuffix": " months",
+        "newRate": "New rate",
+        "reason": "Reason"
+      },
+      "restructuresEmpty": {
+        "title": "No restructures",
+        "description": "Term or rate changes recorded on the Restructures tab appear here."
+      },
+      "settlementTitle": "Settlement",
+      "settlementFields": {
+        "amount": "Amount",
+        "date": "Date",
+        "note": "Note"
+      },
+      "settlementEmpty": {
+        "title": "Not settled",
+        "description": "This loan has no settlement on record."
+      },
+      "writeoffTitle": "Write-off",
+      "writeoffFields": {
+        "amount": "Amount",
+        "date": "Date",
+        "reason": "Reason"
+      },
+      "writeoffEmpty": {
+        "title": "Not written off",
+        "description": "This loan has no write-off on record."
+      }
+    },
+    "schedule": {
+      "title": "Repayment schedule",
+      "generatedLabel": "Generated {date}",
+      "installments": "{count} installments",
+      "empty": {
+        "title": "No schedule generated",
+        "description": "An amortization schedule is generated automatically once the loan is disbursed or restructured."
+      },
+      "columns": {
+        "installmentNumber": "#",
+        "due": "Due",
+        "principal": "Principal",
+        "interest": "Interest",
+        "total": "Total",
+        "outstanding": "Outstanding",
+        "status": "Status"
+      }
+    },
+    "payments": {
+      "title": "Payments",
+      "recordButton": "Record payment",
+      "viewAllocationsButton": "View allocations",
+      "empty": {
+        "title": "No payments recorded",
+        "description": "Record money received against this loan — it's automatically allocated across the repayment schedule."
+      },
+      "totalPaidLabel": "Total paid",
+      "modalTitle": "Record payment",
+      "allocationModalTitle": "Allocation breakdown",
+      "columns": {
+        "date": "Date",
+        "amount": "Amount",
+        "method": "Method",
+        "reference": "Reference",
+        "created": "Created"
+      },
+      "allocationColumns": {
+        "installmentNumber": "Installment #",
+        "principal": "Principal",
+        "interest": "Interest",
+        "penalty": "Penalty"
+      },
+      "fields": {
+        "amount": "Amount",
+        "date": "Date",
+        "method": "Method",
+        "reference": "Reference"
+      },
+      "methodOptions": {
+        "bankTransfer": "Bank transfer",
+        "cash": "Cash",
+        "cheque": "Cheque",
+        "mobileWallet": "Mobile wallet"
+      },
+      "submitLabel": "Record",
+      "toastRecorded": "Payment recorded"
+    },
+    "transactions": {
+      "title": "Transactions",
+      "empty": {
+        "title": "No transactions yet",
+        "description": "Every disbursement, payment, penalty/fee payment, adjustment, write-off and settlement on this loan is logged here."
+      },
+      "columns": {
+        "date": "Date",
+        "type": "Type",
+        "amount": "Amount",
+        "description": "Description",
+        "balanceAfter": "Balance after"
+      }
+    },
+    "disbursements": {
+      "title": "Disbursements",
+      "addButton": "Add disbursement",
+      "empty": {
+        "title": "No disbursements yet",
+        "description": "Record each release of funds for this loan — a single disbursement or several staged releases."
+      },
+      "totalLabel": "Total disbursed",
+      "modalTitle": "Add disbursement",
+      "columns": {
+        "date": "Date",
+        "amount": "Amount",
+        "method": "Method",
+        "reference": "Reference",
+        "created": "Created"
+      },
+      "fields": {
+        "amount": "Amount",
+        "date": "Date",
+        "method": "Method",
+        "reference": "Reference"
+      },
+      "methodOptions": {
+        "bankTransfer": "Bank transfer",
+        "cash": "Cash",
+        "cheque": "Cheque",
+        "mobileWallet": "Mobile wallet"
+      },
+      "submitLabel": "Add",
+      "toastRecorded": "Disbursement recorded"
+    },
+    "interest": {
+      "title": "Interest accruals",
+      "addButton": "Add accrual",
+      "empty": {
+        "title": "No interest accruals",
+        "description": "Interest accrual entries for this loan will appear here."
+      },
+      "modalTitle": "Add interest accrual",
+      "columns": {
+        "id": "ID",
+        "periodStart": "Period start",
+        "periodEnd": "Period end",
+        "rate": "Rate",
+        "amount": "Amount",
+        "accrued": "Accrued",
+        "created": "Created"
+      },
+      "fields": {
+        "periodStart": "Period start",
+        "periodEnd": "Period end",
+        "rate": "Rate",
+        "amount": "Amount"
+      },
+      "submitLabel": "Add",
+      "toastAdded": "Interest accrual added"
+    },
+    "fees": {
+      "title": "Fees",
+      "addButton": "Add fee",
+      "markPaidButton": "Mark paid",
+      "waiveButton": "Waive",
+      "empty": {
+        "title": "No fees",
+        "description": "Charges applied to this loan — processing, insurance, administration and other fees."
+      },
+      "totalLabel": "Total fees",
+      "modalTitle": "Add fee",
+      "columns": {
+        "type": "Type",
+        "charged": "Charged",
+        "amount": "Amount",
+        "description": "Description",
+        "status": "Status",
+        "created": "Created"
+      },
+      "fields": {
+        "type": "Type",
+        "amount": "Amount",
+        "chargedDate": "Charged date",
+        "description": "Description"
+      },
+      "typeOptions": {
+        "processing": "Processing",
+        "insurance": "Insurance",
+        "administration": "Administration",
+        "other": "Other"
+      },
+      "submitLabel": "Add",
+      "toast": {
+        "added": "Fee added",
+        "markedPaid": "Fee marked as paid",
+        "waived": "Fee waived"
+      }
+    }
+  }
+}

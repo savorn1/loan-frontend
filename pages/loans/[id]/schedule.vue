@@ -3,7 +3,7 @@
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Repayment schedule</span>
+          <span class="font-semibold">{{ t('loans.schedule.title') }}</span>
           <USelectMenu
             v-if="scheduleOptions.length > 1"
             v-model="selectedScheduleId"
@@ -19,17 +19,19 @@
         v-if="selectedSchedule"
         class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4"
       >
-        <span>Generated {{ formatDateTime(selectedSchedule.generatedAt) }}</span>
+        <span>{{
+          t('loans.schedule.generatedLabel', { date: formatDateTime(selectedSchedule.generatedAt) })
+        }}</span>
         <StatusBadge :status="selectedSchedule.status" />
-        <span>{{ selectedSchedule.totalInstallments }} installments</span>
+        <span>{{ t('loans.schedule.installments', { count: selectedSchedule.totalInstallments }) }}</span>
       </div>
 
       <DataTable :rows="details ?? []" :columns="columns" :loading="detailsPending">
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-calendar-days"
-            title="No schedule generated"
-            description="An amortization schedule is generated automatically once the loan is disbursed or restructured."
+            :title="t('loans.schedule.empty.title')"
+            :description="t('loans.schedule.empty.description')"
           />
         </template>
       </DataTable>
@@ -45,6 +47,7 @@
 import type { LoanScheduleResponse, LoanScheduleDetailResponse } from '~/features/loans/types'
 import type { ColumnDef } from '~/shared/types'
 
+const { t } = useI18n()
 const route = useRoute()
 const api = useApi()
 
@@ -80,13 +83,17 @@ const { data: details, pending: detailsPending } = await useAsyncData(
   { watch: [selectedScheduleId] }
 )
 
-const columns: ColumnDef<LoanScheduleDetailResponse>[] = [
-  { key: 'installmentNumber', label: '#' },
-  { key: 'dueDate', label: 'Due', type: 'date' },
-  { key: 'principalAmount', label: 'Principal', type: 'currency' },
-  { key: 'interestAmount', label: 'Interest', type: 'currency' },
-  { key: 'totalAmount', label: 'Total', type: 'currency' },
-  { key: 'outstandingBalance', label: 'Outstanding', type: 'currency' },
-  { key: 'status', type: 'status' }
-]
+const columns = computed<ColumnDef<LoanScheduleDetailResponse>[]>(() => [
+  { key: 'installmentNumber', label: t('loans.schedule.columns.installmentNumber') },
+  { key: 'dueDate', label: t('loans.schedule.columns.due'), type: 'date' },
+  { key: 'principalAmount', label: t('loans.schedule.columns.principal'), type: 'currency' },
+  { key: 'interestAmount', label: t('loans.schedule.columns.interest'), type: 'currency' },
+  { key: 'totalAmount', label: t('loans.schedule.columns.total'), type: 'currency' },
+  {
+    key: 'outstandingBalance',
+    label: t('loans.schedule.columns.outstanding'),
+    type: 'currency'
+  },
+  { key: 'status', label: t('loans.schedule.columns.status'), type: 'status' }
+])
 </script>

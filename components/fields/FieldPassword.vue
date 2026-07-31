@@ -14,6 +14,7 @@
         color="gray"
         variant="link"
         :padded="false"
+        class="pointer-events-auto"
         :icon="visible ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
         :aria-label="visible ? 'Hide password' : 'Show password'"
         @click="visible = !visible"
@@ -27,8 +28,5 @@ import type { FieldDef } from '~/shared/types'
 
 defineProps<{ field: FieldDef }>()
 const model = defineModel<any>()
-
-// Visibility toggle comes free with the dedicated component — one of the
-// upsides of the per-type split.
 const visible = ref(false)
 </script>

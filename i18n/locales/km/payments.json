@@ -1,0 +1,207 @@
+{
+  "payments": {
+    "entities": {
+      "paymentMethod": "វិធីទូទាត់",
+      "paymentChannel": "ប៉ុស្តិ៍ទូទាត់",
+      "paymentGateway": "ច្រកទូទាត់"
+    },
+    "methods": {
+      "title": "វិធីទូទាត់",
+      "totalLabelOne": "១ វិធីទូទាត់",
+      "totalLabelOther": "{count} វិធីទូទាត់",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ ឬកូដ...",
+      "newPaymentMethod": "វិធីទូទាត់ថ្មី",
+      "editPaymentMethod": "កែសម្រួលវិធីទូទាត់",
+      "emptyTitle": "មិនទាន់មានវិធីទូទាត់ទេ",
+      "emptyDescription": "បន្ថែមវិធីទូទាត់មួយ ដើម្បីចាប់ផ្តើមកត់ត្រាប្រតិបត្តិការតាមរយៈវា។",
+      "deleteConfirmTitle": "លុបវិធីទូទាត់នេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបវិធីទូទាត់នេះជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+      "columns": {
+        "code": "កូដ",
+        "name": "ឈ្មោះ",
+        "type": "ប្រភេទ",
+        "status": "ស្ថានភាព",
+        "created": "បង្កើតនៅ"
+      },
+      "fields": {
+        "code": "កូដ",
+        "name": "ឈ្មោះ",
+        "type": "ប្រភេទ",
+        "status": "ស្ថានភាព"
+      },
+      "types": {
+        "cash": "សាច់ប្រាក់",
+        "bankTransfer": "ការផ្ទេរប្រាក់តាមធនាគារ",
+        "creditCard": "កាតឥណទាន",
+        "mobileWallet": "កាបូបលុយចល័ត",
+        "cheque": "សែក"
+      }
+    },
+    "channels": {
+      "title": "ប៉ុស្តិ៍ទូទាត់",
+      "totalLabelOne": "១ ប៉ុស្តិ៍ទូទាត់",
+      "totalLabelOther": "{count} ប៉ុស្តិ៍ទូទាត់",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ ឬកូដ...",
+      "newPaymentChannel": "ប៉ុស្តិ៍ទូទាត់ថ្មី",
+      "editPaymentChannel": "កែសម្រួលប៉ុស្តិ៍ទូទាត់",
+      "emptyTitle": "មិនទាន់មានប៉ុស្តិ៍ទូទាត់ទេ",
+      "emptyDescription": "បន្ថែមប៉ុស្តិ៍ទូទាត់មួយ ដើម្បីកត់ត្រាផ្លូវដែលការទូទាត់ចូលមក។",
+      "deleteConfirmTitle": "លុបប៉ុស្តិ៍ទូទាត់នេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបប៉ុស្តិ៍ទូទាត់នេះជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+      "columns": {
+        "code": "កូដ",
+        "name": "ឈ្មោះ",
+        "channelType": "ប្រភេទប៉ុស្តិ៍",
+        "status": "ស្ថានភាព",
+        "created": "បង្កើតនៅ"
+      },
+      "fields": {
+        "code": "កូដ",
+        "name": "ឈ្មោះ",
+        "channelType": "ប្រភេទប៉ុស្តិ៍",
+        "status": "ស្ថានភាព"
+      }
+    },
+    "gateways": {
+      "title": "ច្រកទូទាត់",
+      "totalLabelOne": "១ ច្រកទូទាត់",
+      "totalLabelOther": "{count} ច្រកទូទាត់",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ ឬកូដ...",
+      "newPaymentGateway": "ច្រកទូទាត់ថ្មី",
+      "editPaymentGateway": "កែសម្រួលច្រកទូទាត់",
+      "emptyTitle": "មិនទាន់មានច្រកទូទាត់ទេ",
+      "emptyDescription": "បន្ថែមច្រកទូទាត់មួយ (អ្នកផ្តល់សេវាខាងក្រៅ) ដែលប៉ុស្តិ៍ទូទាត់អាចភ្ជាប់តាមរយៈវាបាន។",
+      "deleteConfirmTitle": "លុបច្រកទូទាត់នេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបច្រកទូទាត់នេះជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+      "columns": {
+        "code": "កូដ",
+        "name": "ឈ្មោះ",
+        "provider": "អ្នកផ្តល់សេវា",
+        "status": "ស្ថានភាព",
+        "created": "បង្កើតនៅ"
+      },
+      "fields": {
+        "code": "កូដ",
+        "name": "ឈ្មោះ",
+        "provider": "អ្នកផ្តល់សេវា",
+        "status": "ស្ថានភាព",
+        "apiUrl": "អាសយដ្ឋាន API"
+      }
+    },
+    "transactions": {
+      "title": "ប្រតិបត្តិការទូទាត់",
+      "totalLabelOne": "១ ប្រតិបត្តិការ",
+      "totalLabelOther": "{count} ប្រតិបត្តិការ",
+      "newTransaction": "ប្រតិបត្តិការថ្មី",
+      "clearFilter": "សម្អាតតម្រង",
+      "emptyTitle": "មិនទាន់មានប្រតិបត្តិការទេ",
+      "emptyDescription": "កត់ត្រាប្រតិបត្តិការមួយ ដើម្បីចាប់ផ្តើម។",
+      "emptySearchDescription": "សូមព្យាយាមសម្អាតតម្រងស្ថានភាព។",
+      "created": "ប្រតិបត្តិការត្រូវបានបង្កើត",
+      "statusOptions": {
+        "all": "ស្ថានភាពទាំងអស់",
+        "pending": "កំពុងរង់ចាំ",
+        "success": "ជោគជ័យ",
+        "failed": "បរាជ័យ",
+        "refunded": "បានសងប្រាក់វិញ"
+      },
+      "columns": {
+        "paymentNo": "លេខទូទាត់",
+        "customer": "អតិថិជន",
+        "businessType": "ប្រភេទអាជីវកម្ម",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "status": "ស្ថានភាព",
+        "requested": "ស្នើសុំនៅ",
+        "completed": "បញ្ចប់នៅ"
+      },
+      "fields": {
+        "customer": "អតិថិជន",
+        "customerPlaceholder": "ស្វែងរកអតិថិជន...",
+        "paymentMethod": "វិធីទូទាត់",
+        "paymentMethodPlaceholder": "ជ្រើសរើសវិធីមួយ",
+        "paymentChannel": "ប៉ុស្តិ៍ទូទាត់",
+        "paymentChannelPlaceholder": "ជ្រើសរើសប៉ុស្តិ៍មួយ",
+        "paymentGateway": "ច្រកទូទាត់",
+        "paymentGatewayPlaceholder": "ជ្រើសរើសច្រកមួយ",
+        "currency": "រូបិយប័ណ្ណ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "businessType": "ប្រភេទអាជីវកម្ម",
+        "businessTypePlaceholder": "ឧទាហរណ៍ LOAN_PAYMENT",
+        "businessReference": "លេខយោងអាជីវកម្ម",
+        "referenceNo": "លេខយោង"
+      },
+      "detail": {
+        "backToList": "ត្រឡប់ទៅប្រតិបត្តិការ",
+        "detailTitle": "ប្រតិបត្តិការ {paymentNo}",
+        "markSuccess": "សម្គាល់ថាជោគជ័យ",
+        "markFailed": "សម្គាល់ថាបរាជ័យ",
+        "refund": "សងប្រាក់វិញ",
+        "detailsTitle": "ព័ត៌មានលម្អិត",
+        "customer": "អតិថិជន",
+        "paymentMethod": "វិធីទូទាត់",
+        "paymentChannel": "ប៉ុស្តិ៍ទូទាត់",
+        "paymentGateway": "ច្រកទូទាត់",
+        "businessType": "ប្រភេទអាជីវកម្ម",
+        "businessReference": "លេខយោងអាជីវកម្ម",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "referenceNo": "លេខយោង",
+        "requested": "ស្នើសុំនៅ",
+        "completed": "បញ្ចប់នៅ",
+        "itemsTitle": "ធាតុ",
+        "itemColumns": {
+          "referenceType": "ប្រភេទឯកសារយោង",
+          "referenceId": "លេខសម្គាល់ឯកសារយោង",
+          "amount": "ចំនួនទឹកប្រាក់"
+        },
+        "emptyItemsTitle": "គ្មានធាតុ",
+        "emptyItemsDescription": "ប្រតិបត្តិការនេះមិនត្រូវបានបំបែកទៅច្រើនអង្គភាពអាជីវកម្មទេ។",
+        "statusUpdated": "ប្រតិបត្តិការត្រូវបានសម្គាល់ថា {status}",
+        "statusWords": {
+          "success": "ជោគជ័យ",
+          "failed": "បរាជ័យ",
+          "refunded": "បានសងប្រាក់វិញ"
+        }
+      }
+    },
+    "list": {
+      "title": "ការទូទាត់ប្រាក់",
+      "totalLabelOne": "១ ការទូទាត់",
+      "totalLabelOther": "{count} ការទូទាត់",
+      "newPayment": "ការទូទាត់ថ្មី",
+      "filterByLoanPlaceholder": "ត្រងតាមកម្ចី",
+      "clearFilters": "សម្អាតតម្រង",
+      "markPaid": "សម្គាល់ថាបានទូទាត់",
+      "emptyTitle": "រកមិនឃើញការទូទាត់ទេ",
+      "emptyDescription": "ការទូទាត់នឹងបង្ហាញនៅទីនេះនៅពេលកាលវិភាគត្រូវបានបង្កើត ឬបង្កើតដោយដៃ។",
+      "emptySearchDescription": "សូមព្យាយាមសម្អាតតម្រងកម្ចី ឬស្ថានភាព។",
+      "deleteConfirmTitle": "លុបការទូទាត់នេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងដកការទូទាត់នេះចេញពីកាលវិភាគ។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
+      "created": "ការទូទាត់ត្រូវបានបង្កើត",
+      "markedPaid": "ការទូទាត់ត្រូវបានសម្គាល់ថាបានទូទាត់",
+      "deleted": "ការទូទាត់ត្រូវបានលុប",
+      "statusOptions": {
+        "all": "ស្ថានភាពទាំងអស់",
+        "pending": "កំពុងរង់ចាំ",
+        "paid": "បានទូទាត់",
+        "overdue": "ហួសកំណត់"
+      },
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "loan": "កម្ចី",
+        "installmentNumber": "#",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "due": "កំណត់ត្រូវទូទាត់",
+        "status": "ស្ថានភាព",
+        "created": "បង្កើតនៅ"
+      },
+      "fields": {
+        "loan": "កម្ចី",
+        "loanPlaceholder": "ជ្រើសរើសកម្ចីមួយ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "dueDate": "កាលបរិច្ឆេទកំណត់",
+        "dueDatePlaceholder": "ជ្រើសរើសកាលបរិច្ឆេទកំណត់",
+        "note": "កំណត់ចំណាំ"
+      }
+    }
+  }
+}

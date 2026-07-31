@@ -1,9 +1,4 @@
-// The Create/Edit/Delete modal trio behind every simple "list + modal" admin
-// page (fee schemes, templates, payment methods, interest schemes, ...) —
-// three near-identical state machines that only differ in the API base path
-// and how a row maps to <DynamicForm> values and back to a request payload.
-// Same "declarative data + a couple of callbacks" shape as ColumnDef/FieldDef,
-// applied to a whole page's CRUD wiring instead of one column/field.
+
 export function useCrudModals<
   TResponse extends { id: string | number },
   TRequest = Record<string, any>
@@ -11,7 +6,7 @@ export function useCrudModals<
   basePath: string,
   refresh: () => Promise<void> | void,
   options: {
-    /** Used in create/update/delete toast messages, e.g. 'Fee scheme'. */
+    /** Used in create/update/delete toast messages — pass a translated name, e.g. t('accounting.entities.feeScheme'). */
     entityName: string
     /** Initial createForm value each time the Create modal is opened. */
     createDefaults: () => Record<string, any>
@@ -23,6 +18,7 @@ export function useCrudModals<
 ) {
   const api = useApi()
   const toast = useToast()
+  const { t } = useI18n()
 
   const showCreate = ref(false)
   const creating = ref(false)
@@ -40,7 +36,7 @@ export function useCrudModals<
     error.value = ''
     try {
       await api(basePath, { method: 'POST', body: options.toPayload(values) })
-      toast.add({ title: `${options.entityName} created`, color: 'green' })
+      toast.add({ title: t('common.entityCreated', { entity: options.entityName }), color: 'green' })
       showCreate.value = false
       await refresh()
     } catch (err) {
@@ -72,7 +68,7 @@ export function useCrudModals<
         method: 'PUT',
         body: options.toPayload(values)
       })
-      toast.add({ title: `${options.entityName} updated`, color: 'green' })
+      toast.add({ title: t('common.entityUpdated', { entity: options.entityName }), color: 'green' })
       showEdit.value = false
       await refresh()
     } catch (err) {
@@ -90,7 +86,7 @@ export function useCrudModals<
     deleting.value = true
     try {
       await api(`${basePath}/${confirmDelete.value.id}`, { method: 'DELETE' })
-      toast.add({ title: `${options.entityName} deleted`, color: 'green' })
+      toast.add({ title: t('common.entityDeleted', { entity: options.entityName }), color: 'green' })
       confirmDelete.value = null
       await refresh()
     } catch (err) {

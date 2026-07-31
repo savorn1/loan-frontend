@@ -3,9 +3,9 @@
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Penalties</span>
+          <span class="font-semibold">{{ t('loans.penalties.title') }}</span>
           <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >Add penalty</UButton
+            >{{ t('loans.penalties.add') }}</UButton
           >
         </div>
       </template>
@@ -20,7 +20,7 @@
               :loading="marking === row.id"
               @click="onMarkPaid(row.id)"
             >
-              Mark paid
+              {{ t('loans.penalties.markPaid') }}
             </UButton>
             <UButton
               v-if="isAdmin && row.status === 'PENDING'"
@@ -30,18 +30,18 @@
               :loading="waiving === row.id"
               @click="onWaive(row.id)"
             >
-              Waive
+              {{ t('loans.penalties.waive') }}
             </UButton>
           </div>
         </template>
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-exclamation-triangle"
-            title="No penalties"
-            description="This loan has no penalties or late fees on record."
+            :title="t('loans.penalties.empty.title')"
+            :description="t('loans.penalties.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Add penalty</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.penalties.add') }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -51,14 +51,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add penalty</span>
+          <span class="font-semibold">{{ t('loans.penalties.add') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Add"
+          :submit-label="t('loans.penalties.submit')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -76,6 +76,7 @@ const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 
@@ -87,21 +88,27 @@ const {
   api<LoanPenaltyResponse[]>(`/loans/${loanId}/penalties`)
 )
 
-const columns: ColumnDef<LoanPenaltyResponse>[] = [
-  { key: 'id', label: 'ID' },
-  { key: 'appliedDate', label: 'Applied', type: 'date' },
-  { key: 'reason' },
-  { key: 'amount', type: 'currency' },
-  { key: 'status', type: 'status' },
-  { key: 'createdAt', label: 'Created', type: 'datetime' },
-  { key: 'actions', label: '', class: 'text-right' }
-]
+const columns = computed<ColumnDef<LoanPenaltyResponse>[]>(() => [
+  { key: 'id', label: t('loans.penalties.columns.id') },
+  { key: 'appliedDate', label: t('loans.penalties.columns.applied'), type: 'date' },
+  { key: 'reason', label: t('loans.penalties.columns.reason') },
+  { key: 'amount', label: t('loans.penalties.columns.amount'), type: 'currency' },
+  { key: 'status', label: t('loans.penalties.columns.status'), type: 'status' },
+  { key: 'createdAt', label: t('loans.penalties.columns.created'), type: 'datetime' },
+  { key: 'actions', label: t('loans.penalties.columns.actions'), class: 'text-right' }
+])
 
-const fields: FieldDef[] = [
-  { name: 'appliedDate', type: 'date', required: true, placeholder: 'Select date' },
-  { name: 'amount', type: 'currency', required: true },
-  { name: 'reason', type: 'textarea', required: true }
-]
+const fields = computed<FieldDef[]>(() => [
+  {
+    name: 'appliedDate',
+    label: t('loans.penalties.fields.appliedDate'),
+    type: 'date',
+    required: true,
+    placeholder: t('loans.penalties.fields.appliedDatePlaceholder')
+  },
+  { name: 'amount', label: t('loans.penalties.fields.amount'), type: 'currency', required: true },
+  { name: 'reason', label: t('loans.penalties.fields.reason'), type: 'textarea', required: true }
+])
 
 const showCreate = ref(false)
 const creating = ref(false)
@@ -126,7 +133,7 @@ async function onCreate(values: Record<string, any>) {
       appliedDate: values.appliedDate
     }
     await api(`/loans/${loanId}/penalties`, { method: 'POST', body: payload })
-    toast.add({ title: 'Penalty added', color: 'green' })
+    toast.add({ title: t('loans.penalties.toast.added'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -140,7 +147,7 @@ async function onMarkPaid(id: number) {
   marking.value = id
   try {
     await api(`/loans/${loanId}/penalties/${id}/pay`, { method: 'PUT' })
-    toast.add({ title: 'Penalty marked as paid', color: 'green' })
+    toast.add({ title: t('loans.penalties.toast.markedPaid'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
@@ -153,7 +160,7 @@ async function onWaive(id: number) {
   waiving.value = id
   try {
     await api(`/loans/${loanId}/penalties/${id}/waive`, { method: 'PUT' })
-    toast.add({ title: 'Penalty waived', color: 'green' })
+    toast.add({ title: t('loans.penalties.toast.waived'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

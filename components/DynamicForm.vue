@@ -14,9 +14,9 @@
 
     <div class="flex justify-end gap-2 pt-2">
       <UButton v-if="cancelable" color="gray" variant="ghost" @click="emit('cancel')"
-        >Cancel</UButton
+        >{{ t('common.cancel') }}</UButton
       >
-      <UButton type="submit" :loading="loading">{{ submitLabel }}</UButton>
+      <UButton type="submit" :loading="loading">{{ submitLabel || t('common.save') }}</UButton>
     </div>
   </UForm>
 </template>
@@ -26,6 +26,8 @@
 // equivalent. The parent owns the value object via v-model; `default` values
 // from field defs are applied once for keys the model doesn't have yet.
 import type { FieldDef } from '~/shared/types'
+
+const { t } = useI18n()
 
 const props = withDefaults(
   defineProps<{
@@ -37,7 +39,7 @@ const props = withDefaults(
   }>(),
   {
     loading: false,
-    submitLabel: 'Save',
+    submitLabel: '',
     cancelable: false,
     error: ''
   }
@@ -82,7 +84,7 @@ const missingField = ref<FieldDef | null>(null)
 const displayError = computed(() => {
   if (missingField.value) {
     const label = missingField.value.label ?? missingField.value.name
-    return `Please fill in "${label}"`
+    return t('common.pleaseFillIn', { label })
   }
   return props.error
 })

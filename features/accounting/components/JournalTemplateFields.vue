@@ -1,13 +1,17 @@
 <template>
   <div class="space-y-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <UFormGroup label="Code" name="code" required>
+      <UFormGroup :label="t('accounting.journalTemplates.fields.code')" name="code" required>
         <UInput v-model="model.code" />
       </UFormGroup>
-      <UFormGroup label="Name" name="name" required>
+      <UFormGroup :label="t('accounting.journalTemplates.fields.name')" name="name" required>
         <UInput v-model="model.name" />
       </UFormGroup>
-      <UFormGroup label="Transaction type" name="transactionType" required>
+      <UFormGroup
+        :label="t('accounting.journalTemplates.fields.transactionType')"
+        name="transactionType"
+        required
+      >
         <USelectMenu
           v-model="model.transactionType"
           :options="transactionTypeOptions"
@@ -15,7 +19,7 @@
           value-attribute="value"
         />
       </UFormGroup>
-      <UFormGroup label="Status" name="status" required>
+      <UFormGroup :label="t('accounting.journalTemplates.fields.status')" name="status" required>
         <USelectMenu
           v-model="model.status"
           :options="statusOptions"
@@ -25,22 +29,22 @@
       </UFormGroup>
     </div>
 
-    <UFormGroup label="Description" name="description">
+    <UFormGroup :label="t('accounting.journalTemplates.fields.description')" name="description">
       <UTextarea v-model="model.description" />
     </UFormGroup>
 
     <div>
       <div class="flex items-center justify-between mb-2">
-        <span class="text-sm font-medium">Lines</span>
+        <span class="text-sm font-medium">{{ t('accounting.journalTemplates.fields.lines') }}</span>
         <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine"
-          >Add line</UButton
+          >{{ t('accounting.journalTemplates.fields.addLine') }}</UButton
         >
       </div>
       <div class="space-y-2">
         <div v-for="(line, i) in model.lines" :key="i" class="flex items-center gap-2">
           <UInput
             v-model="line.accountRole"
-            placeholder="Account role (e.g. CASH)"
+            :placeholder="t('accounting.journalTemplates.fields.accountRolePlaceholder')"
             class="flex-1"
           />
           <USelectMenu
@@ -50,7 +54,11 @@
             value-attribute="value"
             class="w-32"
           />
-          <UInput v-model="line.description" placeholder="Description" class="flex-1" />
+          <UInput
+            v-model="line.description"
+            :placeholder="t('accounting.journalTemplates.fields.lineDescriptionPlaceholder')"
+            class="flex-1"
+          />
           <UButton
             size="2xs"
             color="red"
@@ -62,8 +70,7 @@
         </div>
       </div>
       <p class="text-xs mt-2 text-gray-500">
-        Roles are symbolic (e.g. CASH, LOAN_RECEIVABLE) — an accounting scheme binds each one to a
-        real GL account per currency.
+        {{ t('accounting.journalTemplates.fields.rolesHint') }}
       </p>
     </div>
   </div>
@@ -83,25 +90,26 @@ interface JournalTemplateFormValue {
   lines: JournalTemplateLineRequest[]
 }
 
+const { t } = useI18n()
 const model = defineModel<JournalTemplateFormValue>({ required: true })
 
-const transactionTypeOptions = [
-  { label: 'Disbursement', value: 'DISBURSEMENT' },
-  { label: 'Principal payment', value: 'PRINCIPAL_PAYMENT' },
-  { label: 'Interest payment', value: 'INTEREST_PAYMENT' },
-  { label: 'Fee charge', value: 'FEE_CHARGE' },
-  { label: 'Penalty charge', value: 'PENALTY_CHARGE' },
-  { label: 'Loan write-off', value: 'LOAN_WRITE_OFF' },
-  { label: 'Payment reversal', value: 'PAYMENT_REVERSAL' }
-]
-const entrySideOptions = [
-  { label: 'Debit', value: 'DEBIT' },
-  { label: 'Credit', value: 'CREDIT' }
-]
-const statusOptions = [
-  { label: 'Active', value: 'ACTIVE' },
-  { label: 'Inactive', value: 'INACTIVE' }
-]
+const transactionTypeOptions = computed(() => [
+  { label: t('accounting.transactionTypes.disbursement'), value: 'DISBURSEMENT' },
+  { label: t('accounting.transactionTypes.principalPayment'), value: 'PRINCIPAL_PAYMENT' },
+  { label: t('accounting.transactionTypes.interestPayment'), value: 'INTEREST_PAYMENT' },
+  { label: t('accounting.transactionTypes.feeCharge'), value: 'FEE_CHARGE' },
+  { label: t('accounting.transactionTypes.penaltyCharge'), value: 'PENALTY_CHARGE' },
+  { label: t('accounting.transactionTypes.loanWriteOff'), value: 'LOAN_WRITE_OFF' },
+  { label: t('accounting.transactionTypes.paymentReversal'), value: 'PAYMENT_REVERSAL' }
+])
+const entrySideOptions = computed(() => [
+  { label: t('accounting.entrySides.debit'), value: 'DEBIT' },
+  { label: t('accounting.entrySides.credit'), value: 'CREDIT' }
+])
+const statusOptions = computed(() => [
+  { label: t('common.active'), value: 'ACTIVE' },
+  { label: t('common.inactive'), value: 'INACTIVE' }
+])
 
 function addLine() {
   model.value.lines.push({

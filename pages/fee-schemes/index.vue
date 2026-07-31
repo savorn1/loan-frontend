@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Fee Schemes" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.feeSchemes.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Fee Scheme</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.feeSchemes.newFeeScheme')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name or code..."
+          :placeholder="t('loanConfig.shared.searchByNameOrCode')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-currency-dollar'"
-            :title="search ? 'No matches' : 'No fee schemes yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.feeSchemes.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Add a reusable fee scheme (a bundle of fee line items) that loan products can select.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.feeSchemes.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Fee Scheme</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.feeSchemes.newFeeScheme')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Fee Scheme</span>
+          <span class="font-semibold">{{ t('loanConfig.feeSchemes.newFeeScheme') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Fee Scheme</span>
+          <span class="font-semibold">{{ t('loanConfig.feeSchemes.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="fields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this fee scheme?"
-      description="This permanently removes the fee scheme and cannot be undone."
-      confirm-label="Delete"
+      :title="t('loanConfig.feeSchemes.deleteTitle')"
+      :description="t('loanConfig.feeSchemes.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -118,6 +122,7 @@
 import type { FeeSchemeRequest, FeeSchemeResponse } from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const {
@@ -126,13 +131,18 @@ const {
   refresh
 } = await useAsyncData('fee-schemes', () => api<FeeSchemeResponse[]>('/fee-schemes'))
 
-const columns: ColumnDef<FeeSchemeResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
+const columns = computed<ColumnDef<FeeSchemeResponse>[]>(() => [
+  { key: 'code', label: t('loanConfig.shared.codeColumn'), sortable: true },
+  { key: 'name', label: t('loanConfig.shared.nameColumn'), sortable: true },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
+  {
+    key: 'createdAt',
+    label: t('loanConfig.shared.createdColumn'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(schemes, {
   searchFields: ['name', 'code'],
@@ -141,24 +151,27 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(schemes, {
 
 const totalLabel = computed(() => {
   const count = schemes.value?.length ?? 0
-  return count === 1 ? '1 fee scheme' : `${count} fee schemes`
+  return count === 1
+    ? t('loanConfig.feeSchemes.total.one')
+    : t('loanConfig.feeSchemes.total.other', { count })
 })
 
-const fields: FieldDef[] = [
-  { name: 'code', required: true, wrapper: 'half' },
-  { name: 'name', required: true, wrapper: 'half' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'code', label: t('loanConfig.shared.codeColumn'), required: true, wrapper: 'half' },
+  { name: 'name', label: t('loanConfig.shared.nameColumn'), required: true, wrapper: 'half' },
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const {
   showCreate,
@@ -177,7 +190,7 @@ const {
   confirmDelete,
   onDelete
 } = useCrudModals<FeeSchemeResponse, FeeSchemeRequest>('/fee-schemes', refresh, {
-  entityName: 'Fee scheme',
+  entityName: t('loanConfig.entities.feeScheme'),
   createDefaults: () => ({ code: '', name: '', status: 'ACTIVE' }),
   toForm: (row) => ({ code: row.code, name: row.name, status: row.status }),
   toPayload: (values) => ({ code: values.code, name: values.name, status: values.status })

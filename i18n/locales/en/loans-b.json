@@ -1,0 +1,275 @@
+{
+  "loans": {
+    "penalties": {
+      "title": "Penalties",
+      "add": "Add penalty",
+      "markPaid": "Mark paid",
+      "waive": "Waive",
+      "empty": {
+        "title": "No penalties",
+        "description": "This loan has no penalties or late fees on record."
+      },
+      "columns": {
+        "id": "ID",
+        "applied": "Applied",
+        "reason": "Reason",
+        "amount": "Amount",
+        "status": "Status",
+        "created": "Created",
+        "actions": ""
+      },
+      "fields": {
+        "appliedDate": "Applied date",
+        "appliedDatePlaceholder": "Select date",
+        "amount": "Amount",
+        "reason": "Reason"
+      },
+      "submit": "Add",
+      "toast": {
+        "added": "Penalty added",
+        "markedPaid": "Penalty marked as paid",
+        "waived": "Penalty waived"
+      }
+    },
+    "adjustments": {
+      "title": "Adjustments",
+      "add": "Add adjustment",
+      "empty": {
+        "title": "No adjustments",
+        "description": "Manual balance corrections or write-offs for this loan will appear here."
+      },
+      "columns": {
+        "id": "ID",
+        "date": "Date",
+        "type": "Type",
+        "reason": "Reason",
+        "amount": "Amount"
+      },
+      "typeOptions": {
+        "credit": "Credit (reduces balance)",
+        "debit": "Debit (increases balance)"
+      },
+      "fields": {
+        "type": "Type",
+        "amount": "Amount",
+        "reason": "Reason"
+      },
+      "submit": "Add",
+      "toast": {
+        "added": "Adjustment added"
+      }
+    },
+    "settlement": {
+      "title": "Settlement",
+      "markCompleted": "Mark completed",
+      "labels": {
+        "amount": "Settlement amount",
+        "date": "Settlement date",
+        "note": "Note"
+      },
+      "settleTitle": "Settle this loan",
+      "noSettlement": "No settlement has been recorded for this loan yet.",
+      "fields": {
+        "settlementAmount": "Settlement amount",
+        "settlementDate": "Settlement date",
+        "note": "Note"
+      },
+      "submit": "Record settlement",
+      "toast": {
+        "recorded": "Settlement recorded",
+        "completed": "Settlement completed"
+      }
+    },
+    "writeoff": {
+      "title": "Write-off",
+      "markCompleted": "Mark completed",
+      "labels": {
+        "amount": "Amount",
+        "date": "Write-off date",
+        "reason": "Reason"
+      },
+      "writeoffTitle": "Write off this loan",
+      "noWriteoff": "No write-off has been recorded for this loan yet.",
+      "fields": {
+        "amount": "Amount",
+        "writeoffDate": "Write-off date",
+        "reason": "Reason"
+      },
+      "submit": "Record write-off",
+      "toast": {
+        "recorded": "Write-off recorded",
+        "completed": "Write-off completed"
+      }
+    },
+    "collaterals": {
+      "title": "Collateral",
+      "add": "Add collateral",
+      "release": "Release",
+      "empty": {
+        "title": "No collateral pledged",
+        "description": "Record assets pledged as security for this loan — property, vehicles, equipment or a cash deposit."
+      },
+      "totalPledged": "Total pledged value",
+      "columns": {
+        "type": "Type",
+        "description": "Description",
+        "value": "Value",
+        "reference": "Reference",
+        "status": "Status",
+        "created": "Created",
+        "actions": ""
+      },
+      "typeOptions": {
+        "realEstate": "Real estate",
+        "vehicle": "Vehicle",
+        "equipment": "Equipment",
+        "cashDeposit": "Cash deposit",
+        "other": "Other"
+      },
+      "fields": {
+        "type": "Type",
+        "estimatedValue": "Estimated value",
+        "description": "Description",
+        "reference": "Reference"
+      },
+      "submit": "Add",
+      "toast": {
+        "recorded": "Collateral recorded",
+        "released": "Collateral released"
+      }
+    },
+    "guarantors": {
+      "title": "Guarantors",
+      "add": "Add guarantor",
+      "release": "Release",
+      "empty": {
+        "title": "No guarantors",
+        "description": "Add a third party backing repayment of this loan."
+      },
+      "columns": {
+        "name": "Name",
+        "phone": "Phone",
+        "relationship": "Relationship",
+        "guaranteedAmount": "Guaranteed amount",
+        "status": "Status",
+        "created": "Created",
+        "actions": ""
+      },
+      "fields": {
+        "name": "Name",
+        "phone": "Phone",
+        "relationship": "Relationship",
+        "guaranteedAmount": "Guaranteed amount",
+        "guaranteedAmountHint": "Optional — leave blank if unspecified"
+      },
+      "submit": "Add",
+      "toast": {
+        "added": "Guarantor added",
+        "released": "Guarantor released"
+      }
+    },
+    "statusHistory": {
+      "title": "Status history",
+      "empty": {
+        "title": "No status changes yet",
+        "description": "Every approve, reject, disburse or close action on this loan is logged here."
+      }
+    },
+    "restructures": {
+      "title": "Restructures",
+      "add": "Add restructure",
+      "empty": {
+        "title": "No restructures",
+        "description": "Log a change to this loan's term or rate — e.g. a hardship extension or rate adjustment."
+      },
+      "columns": {
+        "effective": "Effective",
+        "newTerm": "New term",
+        "newTermSuffix": " months",
+        "newRate": "New rate",
+        "reason": "Reason",
+        "created": "Created"
+      },
+      "fields": {
+        "newTermMonths": "New term (months)",
+        "newInterestRate": "New interest rate",
+        "newInterestRateHint": "Optional — leave blank to keep the current rate",
+        "effectiveDate": "Effective date",
+        "reason": "Reason"
+      },
+      "submit": "Add",
+      "toast": {
+        "recorded": "Restructure recorded"
+      }
+    },
+    "refinances": {
+      "title": "Refinances",
+      "add": "Add refinance",
+      "empty": {
+        "title": "No refinances",
+        "description": "Log that this loan was replaced by a new loan — create the replacement loan first, then link it here."
+      },
+      "columns": {
+        "effective": "Effective",
+        "newLoanId": "Replacement loan",
+        "reason": "Reason",
+        "created": "Created"
+      },
+      "fields": {
+        "newLoanId": "Replacement loan",
+        "newLoanIdPlaceholder": "Select the new loan",
+        "effectiveDate": "Effective date",
+        "reason": "Reason"
+      },
+      "submit": "Add",
+      "toast": {
+        "recorded": "Refinance recorded"
+      }
+    },
+    "notes": {
+      "title": "Notes",
+      "placeholder": "Add an internal note...",
+      "add": "Add",
+      "empty": {
+        "title": "No notes yet",
+        "description": "Internal notes and comments about this loan will appear here."
+      }
+    },
+    "documents": {
+      "title": "Documents",
+      "add": "Add document",
+      "empty": {
+        "title": "No documents tracked",
+        "description": "Track the documents this applicant needs to submit and their verification status."
+      },
+      "columns": {
+        "name": "Name",
+        "status": "Status",
+        "notes": "Notes",
+        "created": "Created",
+        "actions": ""
+      },
+      "statusOptions": {
+        "pending": "Pending",
+        "submitted": "Submitted",
+        "verified": "Verified",
+        "rejected": "Rejected"
+      },
+      "fields": {
+        "name": "Name",
+        "status": "Status",
+        "notes": "Notes"
+      },
+      "submit": "Add",
+      "confirmDelete": {
+        "title": "Delete this document?",
+        "description": "This removes it from the loan's document list. This action cannot be undone."
+      },
+      "toast": {
+        "added": "Document added",
+        "statusUpdated": "Document status updated",
+        "deleted": "Document deleted"
+      }
+    }
+  }
+}

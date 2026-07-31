@@ -1,7 +1,7 @@
 <template>
   <UCard>
     <template #header>
-      <span class="font-semibold">Status history</span>
+      <span class="font-semibold">{{ t('loans.statusHistory.title') }}</span>
     </template>
 
     <ol v-if="(history ?? []).length" class="space-y-4">
@@ -32,8 +32,8 @@
     <EmptyState
       v-else
       icon="i-heroicons-clock"
-      title="No status changes yet"
-      description="Every approve, reject, disburse or close action on this loan is logged here."
+      :title="t('loans.statusHistory.empty.title')"
+      :description="t('loans.statusHistory.empty.description')"
     />
   </UCard>
 </template>
@@ -43,6 +43,7 @@ import type { LoanStatusHistoryResponse } from '~/features/loans/types'
 
 const route = useRoute()
 const api = useApi()
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 

@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Loan Product Documents" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.loanProductDocuments.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">Assign Document</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.loanProductDocuments.assignDocument')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by product or document..."
+          :placeholder="t('loanConfig.loanProductDocuments.searchPlaceholder')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-document-check'"
-            :title="search ? 'No matches' : 'No document assignments yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.loanProductDocuments.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Assign a reusable document template to a loan product\'s checklist.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.loanProductDocuments.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Assign Document</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.loanProductDocuments.assignDocument')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Assign Document</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProductDocuments.assignDocument') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="createFields"
           :loading="creating"
           :error="error"
-          submit-label="Assign"
+          :submit-label="t('loanConfig.shared.assign')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Document Assignment</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProductDocuments.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="editFields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Remove this assignment?"
-      description="This removes the document from the loan product's checklist. This action cannot be undone."
-      confirm-label="Remove"
+      :title="t('loanConfig.shared.removeConfirmTitle')"
+      :description="t('loanConfig.loanProductDocuments.removeDescription')"
+      :confirm-label="t('loanConfig.shared.removeLabel')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -123,6 +127,7 @@ import type {
 import type { DocumentTemplateResponse } from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 const toast = useToast()
 
@@ -153,25 +158,29 @@ const templateOptions = computed(() =>
   (templates.value ?? []).map((t) => ({ label: `${t.name} (${t.code})`, value: t.id }))
 )
 
-const columns: ColumnDef<LoanProductDocumentResponse>[] = [
-  { key: 'loanProductId', label: 'Loan product', value: (row) => productLabel(row.loanProductId) },
+const columns = computed<ColumnDef<LoanProductDocumentResponse>[]>(() => [
+  {
+    key: 'loanProductId',
+    label: t('loanConfig.shared.loanProductColumn'),
+    value: (row) => productLabel(row.loanProductId)
+  },
   {
     key: 'documentTemplateName',
-    label: 'Document',
+    label: t('loanConfig.loanProductDocuments.documentColumn'),
     value: (row) => `${row.documentTemplateName} (${row.documentTemplateCode})`
   },
   {
     key: 'required',
-    label: 'Required',
+    label: t('loanConfig.shared.requiredLabel'),
     type: 'boolean',
-    trueLabel: 'Required',
-    falseLabel: 'Optional',
+    trueLabel: t('loanConfig.shared.requiredLabel'),
+    falseLabel: t('loanConfig.shared.optionalLabel'),
     trueColor: 'teal',
     falseColor: 'gray'
   },
-  { key: 'status', type: 'status', sortable: true },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(
   computed(() =>

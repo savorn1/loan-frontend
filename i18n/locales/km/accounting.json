@@ -1,0 +1,280 @@
+{
+  "accounting": {
+    "entities": {
+      "accountingScheme": "គ្រោងការណ៍គណនេយ្យ",
+      "financialPeriod": "រយៈពេលហិរញ្ញវត្ថុ",
+      "glAccount": "គណនីបញ្ជីមេ",
+      "journalTemplate": "គំរូទិនានុប្បវត្តិ"
+    },
+    "accountingSchemes": {
+      "title": "គ្រោងការណ៍គណនេយ្យ",
+      "totalLabelOne": "គ្រោងការណ៍គណនេយ្យ ១",
+      "totalLabelOther": "គ្រោងការណ៍គណនេយ្យ {count}",
+      "newAccountingScheme": "គ្រោងការណ៍គណនេយ្យថ្មី",
+      "editAccountingScheme": "កែសម្រួលគ្រោងការណ៍គណនេយ្យ",
+      "emptyTitle": "មិនទាន់មានគ្រោងការណ៍គណនេយ្យនៅឡើយទេ",
+      "emptyDescription": "ភ្ជាប់តួនាទីគណនីនិមិត្តសញ្ញា (ឧទាហរណ៍ CASH) របស់គំរូទិនានុប្បវត្តិទៅនឹងគណនីបញ្ជីមេពិតប្រាកដសម្រាប់រូបិយប័ណ្ណជាក់លាក់មួយ។",
+      "deleteConfirmTitle": "លុបគ្រោងការណ៍គណនេយ្យនេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបការភ្ជាប់នេះជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+      "columns": {
+        "journalTemplate": "គំរូទិនានុប្បវត្តិ",
+        "role": "តួនាទី",
+        "glAccount": "គណនីបញ្ជីមេ",
+        "currency": "រូបិយប័ណ្ណ",
+        "status": "ស្ថានភាព"
+      },
+      "fields": {
+        "journalTemplate": "គំរូទិនានុប្បវត្តិ",
+        "accountRole": "តួនាទីគណនី",
+        "accountRoleHint": "ជ្រើសរើសគំរូទិនានុប្បវត្តិជាមុនសិន",
+        "glAccount": "គណនីបញ្ជីមេ",
+        "currency": "រូបិយប័ណ្ណ",
+        "status": "ស្ថានភាព"
+      }
+    },
+    "financialPeriods": {
+      "title": "រយៈពេលហិរញ្ញវត្ថុ",
+      "totalLabelOne": "រយៈពេលហិរញ្ញវត្ថុ ១",
+      "totalLabelOther": "រយៈពេលហិរញ្ញវត្ថុ {count}",
+      "newFinancialPeriod": "រយៈពេលហិរញ្ញវត្ថុថ្មី",
+      "editFinancialPeriod": "កែសម្រួលរយៈពេលហិរញ្ញវត្ថុ",
+      "emptyTitle": "មិនទាន់មានរយៈពេលហិរញ្ញវត្ថុនៅឡើយទេ",
+      "emptyDescription": "ធាតុទិនានុប្បវត្តិទាំងអស់ត្រូវបានកត់ត្រាទៅលើរយៈពេលដែលគ្របដណ្តប់កាលបរិច្ឆេទប្រតិបត្តិការរបស់វា។",
+      "closePeriod": "បិទរយៈពេល",
+      "closePeriodConfirmTitle": "បិទរយៈពេលហិរញ្ញវត្ថុនេះ?",
+      "closePeriodConfirmDescription": "នៅពេលបិទរួច ធាតុទិនានុប្បវត្តិថ្មីមិនអាចត្រូវបានកត់ត្រា ឬបញ្ច្រាសទៅលើរយៈពេលនេះបានទៀតទេ។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
+      "periodClosed": "រយៈពេលហិរញ្ញវត្ថុត្រូវបានបិទ",
+      "deleteConfirmTitle": "លុបរយៈពេលហិរញ្ញវត្ថុនេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបរយៈពេលនេះជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+      "columns": {
+        "period": "រយៈពេល",
+        "status": "ស្ថានភាព"
+      },
+      "fields": {
+        "periodName": "ឈ្មោះរយៈពេល",
+        "periodNamePlaceholder": "ឧទាហរណ៍ 2026-07",
+        "startDate": "កាលបរិច្ឆេទចាប់ផ្តើម",
+        "endDate": "កាលបរិច្ឆេទបញ្ចប់"
+      }
+    },
+    "generalLedger": {
+      "title": "បញ្ជីមេទូទៅ",
+      "description": "សមតុល្យ និងសកម្មភាពដែលបានកត់ត្រាសម្រាប់គណនីបញ្ជីមេមួយក្នុងអំឡុងរយៈពេលហិរញ្ញវត្ថុមួយ។",
+      "glAccount": "គណនីបញ្ជីមេ",
+      "glAccountPlaceholder": "ជ្រើសរើសគណនី",
+      "financialPeriod": "រយៈពេលហិរញ្ញវត្ថុ",
+      "financialPeriodPlaceholder": "ជ្រើសរើសរយៈពេល",
+      "openingBalance": "សមតុល្យបើកគណនី",
+      "periodDebit": "ឥណពន្ធរយៈពេល",
+      "periodCredit": "ឥណទានរយៈពេល",
+      "closingBalance": "សមតុល្យបិទគណនី",
+      "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
+      "emptyDescriptionNoActivity": "គណនីនេះមិនមានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
+      "emptyTitlePick": "ជ្រើសរើសគណនី និងរយៈពេល",
+      "emptyDescriptionPick": "ជ្រើសរើសគណនីបញ្ជីមេ និងរយៈពេលហិរញ្ញវត្ថុខាងលើ ដើម្បីមើលបញ្ជីមេរបស់វា។",
+      "columns": {
+        "date": "កាលបរិច្ឆេទ",
+        "entryNo": "លេខធាតុ",
+        "description": "ការពិពណ៌នា",
+        "side": "ភាគី",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "balance": "សមតុល្យ"
+      }
+    },
+    "glAccounts": {
+      "title": "គម្រោងគណនី",
+      "totalLabelOne": "គណនីបញ្ជីមេ ១",
+      "totalLabelOther": "គណនីបញ្ជីមេ {count}",
+      "newGlAccount": "គណនីបញ្ជីមេថ្មី",
+      "editGlAccount": "កែសម្រួលគណនីបញ្ជីមេ",
+      "searchPlaceholder": "ស្វែងរកតាមលេខ ឬឈ្មោះ...",
+      "emptyTitle": "មិនទាន់មានគណនីបញ្ជីមេនៅឡើយទេ",
+      "emptyDescription": "រៀបចំគម្រោងគណនីដែលធាតុទិនានុប្បវត្តិនឹងកត់ត្រាទៅលើ។",
+      "deleteConfirmTitle": "លុបគណនីបញ្ជីមេនេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបគណនីនេះជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។ គណនីដែលមានគណនីរងមិនអាចលុបបានទេ។",
+      "columns": {
+        "accountNo": "លេខគណនី",
+        "name": "ឈ្មោះ",
+        "parent": "គណនីមេ",
+        "type": "ប្រភេទ",
+        "normalBalance": "សមតុល្យធម្មតា",
+        "currency": "រូបិយប័ណ្ណ",
+        "postable": "អាចកត់ត្រាបាន",
+        "status": "ស្ថានភាព"
+      },
+      "fields": {
+        "accountNo": "លេខគណនី",
+        "accountName": "ឈ្មោះគណនី",
+        "parentAccount": "គណនីមេ",
+        "parentAccountHint": "ទុកទទេសម្រាប់គណនីកម្រិតកំពូល",
+        "accountType": "ប្រភេទគណនី",
+        "normalBalance": "សមតុល្យធម្មតា",
+        "currency": "រូបិយប័ណ្ណ",
+        "allowPosting": "អនុញ្ញាតឱ្យកត់ត្រាដោយផ្ទាល់",
+        "status": "ស្ថានភាព"
+      },
+      "accountTypes": {
+        "asset": "ទ្រព្យសកម្ម",
+        "liability": "បំណុល",
+        "equity": "មូលធន",
+        "income": "ចំណូល",
+        "expense": "ចំណាយ"
+      }
+    },
+    "journalEntries": {
+      "title": "ធាតុទិនានុប្បវត្តិ",
+      "totalLabelOne": "ធាតុទិនានុប្បវត្តិ ១",
+      "totalLabelOther": "ធាតុទិនានុប្បវត្តិ {count}",
+      "newJournalEntry": "ធាតុទិនានុប្បវត្តិថ្មី",
+      "emptyTitle": "មិនទាន់មានធាតុទិនានុប្បវត្តិនៅឡើយទេ",
+      "emptyDescription": "កត់ត្រាធាតុទិនានុប្បវត្តិមួយ ដើម្បីចាប់ផ្តើមតាមដានបញ្ជីមេទូទៅ។",
+      "entryCreated": "ធាតុទិនានុប្បវត្តិត្រូវបានបង្កើតជាសេចក្តីព្រាង",
+      "backToList": "ត្រឡប់ទៅធាតុទិនានុប្បវត្តិ",
+      "detailTitle": "ធាតុទិនានុប្បវត្តិ {entryNo}",
+      "post": "កត់ត្រា",
+      "reverse": "បញ្ច្រាស",
+      "entryPosted": "ធាតុទិនានុប្បវត្តិត្រូវបានកត់ត្រា",
+      "entryReversed": "ធាតុទិនានុប្បវត្តិត្រូវបានបញ្ច្រាស",
+      "validationMissingFields": "សូមបំពេញប្រភេទប្រតិបត្តិការ កាលបរិច្ឆេទ និងរូបិយប័ណ្ណ។",
+      "columns": {
+        "entryNo": "លេខធាតុ",
+        "type": "ប្រភេទ",
+        "date": "កាលបរិច្ឆេទ",
+        "period": "រយៈពេល",
+        "reference": "សេចក្តីយោង",
+        "status": "ស្ថានភាព",
+        "created": "បង្កើតនៅ",
+        "account": "គណនី",
+        "side": "ភាគី",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "description": "ការពិពណ៌នា"
+      },
+      "fields": {
+        "transactionType": "ប្រភេទប្រតិបត្តិការ",
+        "transactionDate": "កាលបរិច្ឆេទប្រតិបត្តិការ",
+        "currency": "រូបិយប័ណ្ណ",
+        "currencyPlaceholder": "ឧទាហរណ៍ USD",
+        "reference": "សេចក្តីយោង",
+        "referenceHint": "សេចក្តីយោងត្រឡប់ទៅព្រឹត្តិការណ៍ដើមកំណើត ដូចជាលេខសម្គាល់កម្ចីជាដើម",
+        "referencePlaceholder": "លេខសម្គាល់សេចក្តីយោង",
+        "description": "ការពិពណ៌នា",
+        "lines": "ជួរដេក",
+        "addLine": "បន្ថែមជួរដេក",
+        "account": "គណនី",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "debitsCredits": "ឥណពន្ធ {debit} · ឥណទាន {credit}",
+        "mustBalance": "— ត្រូវតែស្មើគ្នាមុននឹងរក្សាទុក"
+      },
+      "details": {
+        "title": "ព័ត៌មានលម្អិត",
+        "status": "ស្ថានភាព",
+        "transactionType": "ប្រភេទប្រតិបត្តិការ",
+        "date": "កាលបរិច្ឆេទ",
+        "financialPeriod": "រយៈពេលហិរញ្ញវត្ថុ",
+        "currency": "រូបិយប័ណ្ណ",
+        "reference": "សេចក្តីយោង",
+        "postedAt": "កត់ត្រានៅ",
+        "postedBy": "កត់ត្រាដោយ",
+        "description": "ការពិពណ៌នា"
+      },
+      "linesCard": {
+        "title": "ជួរដេក",
+        "debitsCredits": "ឥណពន្ធ {debit} · ឥណទាន {credit}"
+      },
+      "auditLog": {
+        "title": "កំណត់ហេតុសវនកម្ម",
+        "when": "នៅពេល",
+        "action": "សកម្មភាព",
+        "by": "ដោយ",
+        "details": "ព័ត៌មានលម្អិត"
+      }
+    },
+    "journalTemplates": {
+      "title": "គំរូទិនានុប្បវត្តិ",
+      "totalLabelOne": "គំរូទិនានុប្បវត្តិ ១",
+      "totalLabelOther": "គំរូទិនានុប្បវត្តិ {count}",
+      "newJournalTemplate": "គំរូទិនានុប្បវត្តិថ្មី",
+      "editJournalTemplate": "កែសម្រួលគំរូទិនានុប្បវត្តិ",
+      "emptyTitle": "មិនទាន់មានគំរូទិនានុប្បវត្តិនៅឡើយទេ",
+      "emptyDescription": "កំណត់ភាគីឥណពន្ធ/ឥណទានដែលកើតឡើងសម្រាប់ប្រភេទប្រតិបត្តិការមួយ — ឧទាហរណ៍ រាល់ DISBURSEMENT នីមួយៗឥណពន្ធទៅគណនីត្រូវទទួលពីកម្ចី ហើយឥណទានទៅសាច់ប្រាក់។",
+      "deleteConfirmTitle": "លុបគំរូទិនានុប្បវត្តិនេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបគំរូនេះ និងជួរដេករបស់វាជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+      "templateCreated": "គំរូទិនានុប្បវត្តិត្រូវបានបង្កើត",
+      "templateUpdated": "គំរូទិនានុប្បវត្តិត្រូវបានធ្វើបច្ចុប្បន្នភាព",
+      "templateDeleted": "គំរូទិនានុប្បវត្តិត្រូវបានលុប",
+      "columns": {
+        "code": "កូដ",
+        "name": "ឈ្មោះ",
+        "transactionType": "ប្រភេទប្រតិបត្តិការ",
+        "lines": "ជួរដេក",
+        "status": "ស្ថានភាព"
+      },
+      "fields": {
+        "code": "កូដ",
+        "name": "ឈ្មោះ",
+        "transactionType": "ប្រភេទប្រតិបត្តិការ",
+        "status": "ស្ថានភាព",
+        "description": "ការពិពណ៌នា",
+        "lines": "ជួរដេក",
+        "addLine": "បន្ថែមជួរដេក",
+        "accountRole": "តួនាទីគណនី",
+        "accountRolePlaceholder": "តួនាទីគណនី (ឧទាហរណ៍ CASH)",
+        "lineDescription": "ការពិពណ៌នា",
+        "lineDescriptionPlaceholder": "ការពិពណ៌នា",
+        "rolesHint": "តួនាទីជានិមិត្តសញ្ញា (ឧទាហរណ៍ CASH, LOAN_RECEIVABLE) — គ្រោងការណ៍គណនេយ្យនឹងភ្ជាប់នីមួយៗទៅនឹងគណនីបញ្ជីមេពិតប្រាកដសម្រាប់រូបិយប័ណ្ណនីមួយៗ។"
+      }
+    },
+    "transactionTypes": {
+      "disbursement": "ការផ្តល់ប្រាក់កម្ចី",
+      "principalPayment": "ការទូទាត់ប្រាក់ដើម",
+      "interestPayment": "ការទូទាត់ការប្រាក់",
+      "feeCharge": "ការគិតកម្រៃ",
+      "penaltyCharge": "ការគិតពិន័យ",
+      "loanWriteOff": "ការលុបចោលកម្ចី",
+      "paymentReversal": "ការបញ្ច្រាសការទូទាត់"
+    },
+    "entrySides": {
+      "debit": "ឥណពន្ធ",
+      "credit": "ឥណទាន"
+    },
+    "trialBalance": {
+      "title": "តារាងសមតុល្យសាកល្បង",
+      "description": "ចំនួនសរុបឥណពន្ធ/ឥណទានដែលបានកត់ត្រាសម្រាប់គណនីបញ្ជីមេនីមួយៗក្នុងរយៈពេលហិរញ្ញវត្ថុមួយ។",
+      "financialPeriod": "រយៈពេលហិរញ្ញវត្ថុ",
+      "financialPeriodPlaceholder": "ជ្រើសរើសរយៈពេល",
+      "liveReport": "របាយការណ៍បន្តផ្ទាល់",
+      "totalDebit": "ឥណពន្ធសរុប",
+      "totalCredit": "ឥណទានសរុប",
+      "balanced": "មានតុល្យភាព",
+      "outOfBalance": "គ្មានតុល្យភាព",
+      "periodOnlyNote": "សកម្មភាពរបស់រយៈពេលនេះតែប៉ុណ្ណោះ — គ្មានការលាតត្រដាងបន្តពីរយៈពេលមុនទេ។ បង្កើតរូបថតខាងក្រោមសម្រាប់ទិដ្ឋភាពសមតុល្យបញ្ចប់ដែលបូកបញ្ចូលគ្នា។",
+      "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
+      "emptyDescriptionNoActivity": "គ្មានគណនីណាមួយមានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
+      "emptyTitlePick": "ជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុ",
+      "emptyDescriptionPick": "ជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុខាងលើ ដើម្បីមើលតារាងសមតុល្យសាកល្បងរបស់វា។",
+      "snapshots": "រូបថត",
+      "generateSnapshot": "បង្កើតរូបថត",
+      "snapshotGenerated": "រូបថតតារាងសមតុល្យសាកល្បងត្រូវបានបង្កើត",
+      "snapshotsEmptyTitleNoActivity": "មិនទាន់មានរូបថតនៅឡើយទេ",
+      "snapshotsEmptyDescriptionNoActivity": "បង្កើតរូបថតមួយ ដើម្បីបង្កកររយៈពេលនេះសម្រាប់គោលបំណងសវនកម្ម។",
+      "snapshotsEmptyTitlePick": "ជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុ",
+      "snapshotsEmptyDescriptionPick": "ជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុខាងលើ ដើម្បីមើលរូបថតរបស់វា។",
+      "backToList": "ត្រឡប់ទៅតារាងសមតុល្យសាកល្បង",
+      "snapshotTitle": "រូបថតតារាងសមតុល្យសាកល្បង — {period}",
+      "generatedAt": "បង្កើតនៅ",
+      "generatedBy": "បង្កើតដោយ",
+      "accounts": "គណនី",
+      "columns": {
+        "accountNo": "លេខគណនី",
+        "accountName": "ឈ្មោះគណនី",
+        "debit": "ឥណពន្ធ",
+        "credit": "ឥណទាន",
+        "balance": "សមតុល្យ",
+        "generated": "បង្កើតនៅ",
+        "by": "ដោយ",
+        "totalDebit": "ឥណពន្ធសរុប",
+        "totalCredit": "ឥណទានសរុប"
+      }
+    }
+  }
+}

@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Payments" :description="totalLabel">
+    <PageHeader :title="t('payments.list.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Payment</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('payments.list.newPayment')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -13,7 +15,7 @@
           :options="loanOptions"
           option-attribute="label"
           searchable
-          placeholder="Filter by loan"
+          :placeholder="t('payments.list.filterByLoanPlaceholder')"
           class="max-w-xs w-full sm:w-auto"
         />
         <USelectMenu
@@ -30,7 +32,7 @@
           icon="i-heroicons-x-mark"
           @click="clearFilters"
         >
-          Clear filters
+          {{ t('payments.list.clearFilters') }}
         </UButton>
       </div>
     </UCard>
@@ -46,7 +48,7 @@
               :loading="markingPaid === row.id"
               @click="onMarkPaid(row.id)"
             >
-              Mark paid
+              {{ t('payments.list.markPaid') }}
             </UButton>
             <UButton
               v-if="isAdmin"
@@ -61,15 +63,17 @@
         <template #empty-state>
           <EmptyState
             :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-credit-card'"
-            :title="hasFilters ? 'No matches' : 'No payments found'"
+            :title="hasFilters ? t('common.noMatches') : t('payments.list.emptyTitle')"
             :description="
               hasFilters
-                ? 'Try clearing the loan or status filter.'
-                : 'Payments appear here once a schedule is generated or created manually.'
+                ? t('payments.list.emptySearchDescription')
+                : t('payments.list.emptyDescription')
             "
           >
             <template v-if="!hasFilters" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Payment</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('payments.list.newPayment')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -83,14 +87,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Payment</span>
+          <span class="font-semibold">{{ t('payments.list.newPayment') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="paymentFields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -100,9 +104,9 @@
 
     <ConfirmModal
       :model-value="confirmDeleteId !== null"
-      title="Delete this payment?"
-      description="This removes the installment from the schedule. This action cannot be undone."
-      confirm-label="Delete"
+      :title="t('payments.list.deleteConfirmTitle')"
+      :description="t('payments.list.deleteConfirmDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -118,10 +122,11 @@
 <script setup lang="ts">
 import type { LoanResponse } from '~/features/loans/types'
 import type { PaymentRequest, PaymentResponse, PaymentStatus } from '~/features/payments/types'
-import type { ColumnDef, FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
+const { t } = useI18n()
 const { isAdmin } = storeToRefs(useAuth())
 
 type LoanOption = { label: string; value: number }
@@ -134,27 +139,35 @@ const {
   refresh
 } = await useAsyncData(
   'payments',
-  () =>
-    filterLoan.value
-      ? api<PaymentResponse[]>(`/payments/loan/${filterLoan.value.value}`)
-      : api<PaymentResponse[]>('/payments'),
+  async () => {
+    // /payments/loan/{id} already returns a bare list (unpaginated by design);
+    // /payments itself paginates, so fetch a large page and take its content —
+    // this page aggregates/filters across the whole result set client-side.
+    if (filterLoan.value) {
+      return api<PaymentResponse[]>(`/payments/loan/${filterLoan.value.value}`)
+    }
+    const page = await api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } })
+    return page.content
+  },
   { watch: [filterLoan] }
 )
-const { data: loansRaw } = await useAsyncData('payments-loans', () => api<LoanResponse[]>('/loans'))
+const { data: loansRaw } = await useAsyncData('payments-loans', () =>
+  api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
+)
 
 const loanOptions = computed<LoanOption[]>(() =>
-  (loansRaw.value ?? []).map((l) => ({
+  (loansRaw.value?.content ?? []).map((l) => ({
     label: `#${l.id} — ${l.customerName} (${l.status})`,
     value: l.id
   }))
 )
 
-const statusOptions: { label: string; value: PaymentStatus | '' }[] = [
-  { label: 'All statuses', value: '' },
-  { label: 'Pending', value: 'PENDING' },
-  { label: 'Paid', value: 'PAID' },
-  { label: 'Overdue', value: 'OVERDUE' }
-]
+const statusOptions = computed<{ label: string; value: PaymentStatus | '' }[]>(() => [
+  { label: t('payments.list.statusOptions.all'), value: '' },
+  { label: t('payments.list.statusOptions.pending'), value: 'PENDING' },
+  { label: t('payments.list.statusOptions.paid'), value: 'PAID' },
+  { label: t('payments.list.statusOptions.overdue'), value: 'OVERDUE' }
+])
 const statusFilter = ref<PaymentStatus | ''>('')
 
 const filteredByStatus = computed(() =>
@@ -169,7 +182,9 @@ const hasFilters = computed(() => !!filterLoan.value || !!statusFilter.value)
 
 const totalLabel = computed(() => {
   const count = payments.value?.length ?? 0
-  return count === 1 ? '1 payment' : `${count} payments`
+  return count === 1
+    ? t('payments.list.totalLabelOne')
+    : t('payments.list.totalLabelOther', { count })
 })
 
 function clearFilters() {
@@ -177,23 +192,32 @@ function clearFilters() {
   statusFilter.value = ''
 }
 
-const columns: ColumnDef<PaymentResponse>[] = [
-  { key: 'id', label: 'ID', sortable: true },
+const columns = computed<ColumnDef<PaymentResponse>[]>(() => [
+  { key: 'id', label: t('payments.list.columns.id'), sortable: true },
   {
     key: 'loanId',
-    label: 'Loan',
+    label: t('payments.list.columns.loan'),
     type: 'link',
     sortable: true,
     href: (row) => `/loans/${row.loanId}`,
     prefix: () => '#'
   },
-  { key: 'installmentNumber', label: '#', sortable: true },
-  { key: 'amount', type: 'currency', sortable: true },
-  { key: 'dueDate', label: 'Due', type: 'date', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
+  {
+    key: 'installmentNumber',
+    label: t('payments.list.columns.installmentNumber'),
+    sortable: true
+  },
+  { key: 'amount', label: t('payments.list.columns.amount'), type: 'currency', sortable: true },
+  { key: 'dueDate', label: t('payments.list.columns.due'), type: 'date', sortable: true },
+  { key: 'status', label: t('payments.list.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'createdAt',
+    label: t('payments.list.columns.created'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const showCreate = ref(false)
 const creating = ref(false)
@@ -207,15 +231,21 @@ const confirmDeleteId = ref<number | null>(null)
 const paymentFields = computed<FieldDef[]>(() => [
   {
     name: 'loanId',
-    label: 'Loan',
+    label: t('payments.list.fields.loan'),
     type: 'select',
     required: true,
     options: loanOptions.value,
-    placeholder: 'Select a loan'
+    placeholder: t('payments.list.fields.loanPlaceholder')
   },
-  { name: 'amount', type: 'currency', required: true },
-  { name: 'dueDate', type: 'date', required: true, placeholder: 'Select due date' },
-  { name: 'note', type: 'text' }
+  { name: 'amount', label: t('payments.list.fields.amount'), type: 'currency', required: true },
+  {
+    name: 'dueDate',
+    label: t('payments.list.fields.dueDate'),
+    type: 'date',
+    required: true,
+    placeholder: t('payments.list.fields.dueDatePlaceholder')
+  },
+  { name: 'note', label: t('payments.list.fields.note'), type: 'text' }
 ])
 
 const createForm = ref<Record<string, any>>({})
@@ -237,7 +267,7 @@ async function onCreate(values: Record<string, any>) {
       note: values.note || undefined
     }
     await api('/payments', { method: 'POST', body: payload })
-    toast.add({ title: 'Payment created', color: 'green' })
+    toast.add({ title: t('payments.list.created'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -251,7 +281,7 @@ async function onMarkPaid(id: number) {
   markingPaid.value = id
   try {
     await api(`/payments/${id}/pay`, { method: 'PUT' })
-    toast.add({ title: 'Payment marked as paid', color: 'green' })
+    toast.add({ title: t('payments.list.markedPaid'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

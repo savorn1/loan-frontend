@@ -1,0 +1,276 @@
+{
+  "admin": {
+    "entities": {
+      "user": "អ្នកប្រើប្រាស់",
+      "role": "តួនាទី",
+      "permission": "សិទ្ធិ"
+    },
+    "shared": {
+      "loading": "កំពុងផ្ទុក…",
+      "assign": "ផ្តល់"
+    },
+    "users": {
+      "title": "ការគ្រប់គ្រងអ្នកប្រើប្រាស់",
+      "total": {
+        "one": "អ្នកប្រើប្រាស់ ១ នាក់",
+        "other": "អ្នកប្រើប្រាស់ {count} នាក់"
+      },
+      "newUser": "អ្នកប្រើប្រាស់ថ្មី",
+      "searchLabel": "ស្វែងរកឈ្មោះអ្នកប្រើប្រាស់",
+      "searchPlaceholder": "ស្វែងរក...",
+      "roleLabel": "តួនាទី",
+      "statusLabel": "ស្ថានភាព",
+      "roleOptions": {
+        "all": "គ្រប់តួនាទី",
+        "user": "អ្នកប្រើប្រាស់",
+        "admin": "អ្នកគ្រប់គ្រង"
+      },
+      "statusOptions": {
+        "all": "គ្រប់ស្ថានភាព",
+        "active": "សកម្ម",
+        "disabled": "បិទដំណើរការ"
+      },
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "username": "ឈ្មោះអ្នកប្រើប្រាស់",
+        "role": "តួនាទី",
+        "status": "ស្ថានភាព",
+        "created": "បង្កើតនៅ"
+      },
+      "actions": {
+        "makeAdmin": "ធ្វើជាអ្នកគ្រប់គ្រង",
+        "makeUser": "ធ្វើជាអ្នកប្រើប្រាស់",
+        "disable": "បិទដំណើរការ",
+        "enable": "បើកដំណើរការ",
+        "roles": "តួនាទី"
+      },
+      "empty": {
+        "title": "រកមិនឃើញអ្នកប្រើប្រាស់ទេ",
+        "description": "សូមសាកល្បងកែសម្រួលការស្វែងរក ឬតម្រង។"
+      },
+      "createModalTitle": "អ្នកប្រើប្រាស់ថ្មី",
+      "fields": {
+        "username": "ឈ្មោះអ្នកប្រើប្រាស់",
+        "password": "ពាក្យសម្ងាត់",
+        "passwordHint": "យ៉ាងតិច ៦ តួអក្សរ",
+        "role": "តួនាទី",
+        "active": "សកម្ម"
+      },
+      "deleteConfirmTitle": "លុបអ្នកប្រើប្រាស់ \"{username}\"?",
+      "deleteConfirmDescription": "សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
+      "rolesModal": {
+        "title": "តួនាទី — {username}",
+        "emptyTitle": "មិនទាន់មានតួនាទីកំណត់ទេ",
+        "emptyDescription": "សូមបង្កើតតួនាទីជាមុនសិន រួចផ្តល់ទៅអ្នកប្រើប្រាស់។",
+        "goToRoles": "ទៅកាន់តួនាទី"
+      },
+      "toast": {
+        "created": "អ្នកប្រើប្រាស់ \"{username}\" ត្រូវបានបង្កើត",
+        "roleChanged": "{username} ឥឡូវនេះក្លាយជា {role}",
+        "disabled": "{username} ត្រូវបានបិទដំណើរការ",
+        "enabled": "{username} ត្រូវបានបើកដំណើរការ",
+        "deleted": "អ្នកប្រើប្រាស់ត្រូវបានលុប"
+      }
+    },
+    "roles": {
+      "title": "តួនាទី",
+      "total": {
+        "one": "តួនាទី ១",
+        "other": "តួនាទី {count}"
+      },
+      "newRole": "តួនាទីថ្មី",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ...",
+      "columns": {
+        "name": "ឈ្មោះ",
+        "description": "ការពិពណ៌នា",
+        "permissions": "សិទ្ធិ",
+        "users": "អ្នកប្រើប្រាស់",
+        "created": "បង្កើតនៅ"
+      },
+      "empty": {
+        "matchesTitle": "គ្មានលទ្ធផលត្រូវគ្នា",
+        "matchesDescription": "គ្មានអ្វីត្រូវគ្នានឹង “{query}”។",
+        "emptyTitle": "មិនទាន់មានតួនាទីទេ",
+        "emptyDescription": "បង្កើតតួនាទីមួយ (ឧ. LOAN_OFFICER) ដើម្បីភ្ជាប់សិទ្ធិ និងផ្តល់ទៅអ្នកប្រើប្រាស់។"
+      },
+      "createModalTitle": "តួនាទីថ្មី",
+      "editModalTitle": "កែសម្រួលតួនាទី",
+      "fields": {
+        "name": "ឈ្មោះ",
+        "nameHint": "ឧ. LOAN_OFFICER",
+        "description": "ការពិពណ៌នា"
+      },
+      "deleteConfirmTitle": "លុបតួនាទីនេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបវាចេញពីអ្នកប្រើប្រាស់ {userCount} នាក់ និងសិទ្ធិ {permissionCount} ដែលបានផ្តល់។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
+      "detail": {
+        "backToRoles": "ត្រឡប់ទៅតួនាទី",
+        "deleteRole": "លុបតួនាទី",
+        "detailsHeader": "ព័ត៌មានលម្អិត",
+        "permissionsHeader": "សិទ្ធិ",
+        "allLabel": "ទាំងអស់",
+        "emptyPermissionsTitle": "មិនទាន់មានសិទ្ធិកំណត់ទេ",
+        "emptyPermissionsDescription": "សូមបង្កើតសិទ្ធិជាមុនសិន រួចភ្ជាប់ទៅតួនាទីនេះ។",
+        "goToPermissions": "ទៅកាន់សិទ្ធិ",
+        "assignedUsersHeader": "អ្នកប្រើប្រាស់ដែលបានផ្តល់",
+        "assignUser": "ផ្តល់ទៅអ្នកប្រើប្រាស់",
+        "userColumn": "អ្នកប្រើប្រាស់",
+        "assignedColumn": "ផ្តល់នៅ",
+        "removeUser": "លុបចេញ",
+        "emptyUsersTitle": "មិនទាន់មានអ្នកប្រើប្រាស់ត្រូវបានផ្តល់ទេ",
+        "emptyUsersDescription": "ផ្តល់តួនាទីនេះទៅអ្នកប្រើប្រាស់ម្នាក់ ដើម្បីផ្តល់សិទ្ធិឲ្យពួកគេ។",
+        "assignUserModalTitle": "ផ្តល់អ្នកប្រើប្រាស់ទៅ {roleName}",
+        "userFieldLabel": "អ្នកប្រើប្រាស់",
+        "userFieldPlaceholder": "ស្វែងរកអ្នកប្រើប្រាស់…",
+        "toast": {
+          "updated": "តួនាទីត្រូវបានធ្វើបច្ចុប្បន្នភាព",
+          "assigned": "អ្នកប្រើប្រាស់ត្រូវបានផ្តល់",
+          "removed": "{username} ត្រូវបានលុបចេញពីតួនាទី",
+          "deleted": "តួនាទីត្រូវបានលុប"
+        }
+      }
+    },
+    "permissions": {
+      "title": "សិទ្ធិ",
+      "total": {
+        "one": "សិទ្ធិ ១",
+        "other": "សិទ្ធិ {count}"
+      },
+      "newPermission": "សិទ្ធិថ្មី",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ...",
+      "empty": {
+        "matchesTitle": "គ្មានលទ្ធផលត្រូវគ្នា",
+        "matchesDescription": "គ្មានអ្វីត្រូវគ្នានឹង “{query}”។",
+        "emptyTitle": "មិនទាន់មានសិទ្ធិទេ",
+        "emptyDescription": "កំណត់សិទ្ធិមួយ (ឧ. LOAN_APPROVE) ដើម្បីភ្ជាប់ទៅតួនាទី។"
+      },
+      "columns": {
+        "name": "ឈ្មោះ",
+        "description": "ការពិពណ៌នា",
+        "created": "បង្កើតនៅ"
+      },
+      "createModalTitle": "សិទ្ធិថ្មី",
+      "editModalTitle": "កែសម្រួលសិទ្ធិ",
+      "fields": {
+        "name": "ឈ្មោះ",
+        "nameHint": "ឧ. LOAN_APPROVE",
+        "description": "ការពិពណ៌នា"
+      },
+      "deleteConfirmTitle": "លុបសិទ្ធិនេះ?",
+      "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបវាចេញពីគ្រប់តួនាទីដែលកំពុងភ្ជាប់ជាមួយ។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។"
+    },
+    "notifications": {
+      "title": "ការជូនដំណឹង",
+      "total": {
+        "one": "ការជូនដំណឹង ១",
+        "other": "ការជូនដំណឹង {count}"
+      },
+      "recipientTypeLabel": "ប្រភេទអ្នកទទួល",
+      "channelLabel": "ប៉ុស្តិ៍",
+      "statusLabel": "ស្ថានភាព",
+      "recipientTypeOptions": {
+        "all": "គ្រប់អ្នកទទួល",
+        "customer": "អតិថិជន",
+        "user": "អ្នកប្រើប្រាស់"
+      },
+      "channelOptions": {
+        "all": "គ្រប់ប៉ុស្តិ៍",
+        "email": "អ៊ីមែល",
+        "sms": "សារ SMS",
+        "push": "ការជូនដំណឹង Push",
+        "inApp": "ក្នុងកម្មវិធី"
+      },
+      "statusOptions": {
+        "all": "គ្រប់ស្ថានភាព",
+        "pending": "កំពុងរង់ចាំ",
+        "sent": "បានផ្ញើ",
+        "failed": "បរាជ័យ"
+      },
+      "columns": {
+        "recipient": "អ្នកទទួល",
+        "recipientId": "លេខសម្គាល់អ្នកទទួល",
+        "channel": "ប៉ុស្តិ៍",
+        "subject": "ប្រធានបទ",
+        "message": "សារ",
+        "status": "ស្ថានភាព",
+        "sent": "ផ្ញើនៅ",
+        "created": "បង្កើតនៅ"
+      },
+      "empty": {
+        "title": "រកមិនឃើញការជូនដំណឹងទេ",
+        "description": "សូមសាកល្បងកែសម្រួលតម្រង។ ការរំលឹកត្រូវបានផ្ញើដោយស្វ័យប្រវត្តិដោយសេវាទូទាត់។"
+      }
+    },
+    "reports": {
+      "title": "របាយការណ៍",
+      "description": "ហានិភ័យផលប័ត្រ និងនិន្នាការចេញផ្តល់ប្រាក់កម្ចី/ការប្រមូលបំណុល។",
+      "statTiles": {
+        "activeLoans": "កម្ចីសកម្ម",
+        "totalPrincipal": "ប្រាក់ដើមសរុប",
+        "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប",
+        "portfolioAtRisk": "ផលប័ត្រប្រថុយប្រថាន"
+      },
+      "loansByStatusHeader": "កម្ចីតាមស្ថានភាព",
+      "loanCount": {
+        "one": "កម្ចី ១",
+        "other": "កម្ចី {count}"
+      },
+      "parByBucketHeader": "ផលប័ត្រប្រថុយប្រថាន តាមក្រុមអាយុកាលកន្លងផុតកំណត់",
+      "trendsHeader": "ការចេញផ្តល់ប្រាក់កម្ចី និងការប្រមូលបំណុល",
+      "buckets": {
+        "dpd1_30": "១-៣០ ថ្ងៃ",
+        "dpd31_60": "៣១-៦០ ថ្ងៃ",
+        "dpd61_90": "៦១-៩០ ថ្ងៃ",
+        "dpd90plus": "លើសពី ៩០ ថ្ងៃ"
+      },
+      "chartLegend": {
+        "disbursed": "បានចេញផ្តល់",
+        "collected": "បានប្រមូល"
+      }
+    },
+    "dashboard": {
+      "greetingAnon": "សូមស្វាគមន៍ការត្រឡប់មកវិញ 👋",
+      "greetingNamed": "សូមស្វាគមន៍ការត្រឡប់មកវិញ {name} 👋",
+      "morningGreeting": "អរុណសួស្តី!",
+      "afternoonGreeting": "ទិវាសួស្តី!",
+      "eveningGreeting": "សាយណ្ហសួស្តី!",
+      "descriptionSuffix": "នេះជាអ្វីដែលកំពុងកើតឡើងនៅក្នុងផលប័ត្រកម្ចីរបស់អ្នក។",
+      "statTiles": {
+        "customers": "អតិថិជន",
+        "activeLoans": "កម្ចីសកម្ម",
+        "outstandingBalance": "ចំនួនប្រាក់នៅសល់",
+        "pendingApplications": "ពាក្យស្នើសុំកំពុងរង់ចាំ",
+        "overduePayments": "ការទូទាត់ហួសកំណត់",
+        "portfolioAtRisk": "ផលប័ត្រប្រថុយប្រថាន"
+      },
+      "portfolioByStatusHeader": "ផលប័ត្រកម្ចីតាមស្ថានភាព",
+      "dueNext7DaysHeader": "ត្រូវទូទាត់ក្នុងរយៈពេល ៧ ថ្ងៃខាងមុខ",
+      "empty": {
+        "dueSoonTitle": "គ្មានអ្វីត្រូវទូទាត់ឆាប់ៗនេះទេ",
+        "dueSoonDescription": "គ្មានការទូទាត់ណាមួយត្រូវផុតកំណត់ក្នុងរយៈពេល ៧ ថ្ងៃខាងមុខទេ។",
+        "caughtUpTitle": "រួចរាល់ទាំងអស់",
+        "caughtUpDescription": "គ្មានកម្ចីណាមួយកំពុងរង់ចាំការត្រួតពិនិត្យទេឥឡូវនេះ។",
+        "activityTitle": "មិនទាន់មានអ្វីនៅឡើយទេ",
+        "activityDescription": "សកម្មភាពកម្ចី និងការទូទាត់នឹងបង្ហាញនៅទីនេះ។"
+      },
+      "trendsHeader": "ការចេញផ្តល់ប្រាក់កម្ចី និងការប្រមូលបំណុល",
+      "chartLegend": {
+        "disbursed": "បានចេញផ្តល់",
+        "collected": "បានប្រមូល"
+      },
+      "loansAwaitingReviewHeader": "កម្ចីរង់ចាំការត្រួតពិនិត្យ",
+      "recentActivityHeader": "សកម្មភាពថ្មីៗ",
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "loan": "កម្ចី",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "dueDate": "កាលបរិច្ឆេទផុតកំណត់",
+        "status": "ស្ថានភាព",
+        "customer": "អតិថិជន",
+        "principal": "ប្រាក់ដើម",
+        "created": "បង្កើតនៅ"
+      },
+      "loanActivityLabel": "កម្ចី #{id} — {customer}",
+      "paymentActivityLabel": "ការទូទាត់ #{id} លើកម្ចី #{loanId}"
+    }
+  }
+}

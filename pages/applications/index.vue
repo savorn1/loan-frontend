@@ -91,25 +91,29 @@ import type {
   ApplicationResponse,
   ApplicationStatus
 } from '~/features/loans/types'
-import type { ColumnDef, FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
 const router = useRouter()
 
 const {
-  data: applications,
+  data: applicationsRaw,
   pending,
   refresh
-} = await useAsyncData('applications', () => api<ApplicationResponse[]>('/loans/applications'))
+} = await useAsyncData('applications', () =>
+  api<PageResponse<ApplicationResponse>>('/loans/applications', { query: { size: 1000 } })
+)
+
+const applications = computed(() => applicationsRaw.value?.content ?? [])
 
 // Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
 // the customer list can be far larger than any dropdown should hold client-side.
 async function searchCustomers(query: string) {
-  const customers = await api<CustomerResponse[]>('/customers', {
+  const result = await api<PageResponse<CustomerResponse>>('/customers', {
     query: { search: query, size: 20 }
   })
-  return customers.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
+  return result.content.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
 }
 
 const columns: ColumnDef<ApplicationResponse>[] = [

@@ -7,17 +7,19 @@
       size="xs"
       class="mb-1 px-0"
     >
-      Back to journal entries
+      {{ t('accounting.journalEntries.backToList') }}
     </UButton>
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-xl font-bold">Journal Entry {{ entry.entryNo ?? `#${entry.id}` }}</h1>
+      <h1 class="text-xl font-bold">
+        {{ t('accounting.journalEntries.detailTitle', { entryNo: entry.entryNo ?? `#${entry.id}` }) }}
+      </h1>
       <div class="flex gap-2">
         <UButton
           v-if="entry.status === 'DRAFT'"
           icon="i-heroicons-check-circle"
           :loading="posting"
           @click="onPost"
-          >Post</UButton
+          >{{ t('accounting.journalEntries.post') }}</UButton
         >
         <UButton
           v-if="entry.status === 'POSTED'"
@@ -27,7 +29,7 @@
           :loading="reversing"
           @click="onReverse"
         >
-          Reverse
+          {{ t('accounting.journalEntries.reverse') }}
         </UButton>
       </div>
     </div>
@@ -35,20 +37,20 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <UCard class="lg:col-span-1">
         <template #header>
-          <span class="font-semibold">Details</span>
+          <span class="font-semibold">{{ t('accounting.journalEntries.details.title') }}</span>
         </template>
         <dl class="grid grid-cols-2 gap-y-3 text-sm">
-          <dt class="text-gray-500">Status</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.status') }}</dt>
           <dd><StatusBadge :status="entry.status" /></dd>
-          <dt class="text-gray-500">Transaction type</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.transactionType') }}</dt>
           <dd>{{ formatEnum(entry.transactionType) }}</dd>
-          <dt class="text-gray-500">Date</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.date') }}</dt>
           <dd>{{ formatDate(entry.transactionDate) }}</dd>
-          <dt class="text-gray-500">Financial period</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.financialPeriod') }}</dt>
           <dd>{{ entry.financialPeriodName }}</dd>
-          <dt class="text-gray-500">Currency</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.currency') }}</dt>
           <dd>{{ entry.currency }}</dd>
-          <dt class="text-gray-500">Reference</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.reference') }}</dt>
           <dd>
             {{
               entry.referenceType
@@ -56,11 +58,11 @@
                 : entry.referenceId || '—'
             }}
           </dd>
-          <dt class="text-gray-500">Posted at</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.postedAt') }}</dt>
           <dd>{{ formatDateTime(entry.postedAt) }}</dd>
-          <dt class="text-gray-500">Posted by</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.postedBy') }}</dt>
           <dd>{{ entry.postedBy ?? '—' }}</dd>
-          <dt class="text-gray-500">Description</dt>
+          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.description') }}</dt>
           <dd class="col-span-1">{{ entry.description || '—' }}</dd>
         </dl>
       </UCard>
@@ -68,11 +70,13 @@
       <UCard class="lg:col-span-2">
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">Lines</span>
-            <span class="text-xs text-gray-500"
-              >Debits {{ formatCurrency(totalDebit) }} · Credits
-              {{ formatCurrency(totalCredit) }}</span
-            >
+            <span class="font-semibold">{{ t('accounting.journalEntries.linesCard.title') }}</span>
+            <span class="text-xs text-gray-500">{{
+              t('accounting.journalEntries.linesCard.debitsCredits', {
+                debit: formatCurrency(totalDebit),
+                credit: formatCurrency(totalCredit)
+              })
+            }}</span>
           </div>
         </template>
         <DataTable :rows="entry.lines" :columns="lineColumns" />
@@ -81,7 +85,7 @@
 
     <UCard class="mt-6">
       <template #header>
-        <span class="font-semibold">Audit log</span>
+        <span class="font-semibold">{{ t('accounting.journalEntries.auditLog.title') }}</span>
       </template>
       <DataTable :rows="auditLogs ?? []" :columns="auditColumns" />
     </UCard>
@@ -99,6 +103,7 @@ import type {
 } from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
+const { t } = useI18n()
 const route = useRoute()
 const api = useApi()
 const toast = useToast()
@@ -113,24 +118,24 @@ const { data: auditLogs, refresh: refreshAuditLogs } = await useAsyncData(
   () => api<JournalAuditLogResponse[]>(`/journal-entries/${entryId}/audit-logs`)
 )
 
-const lineColumns: ColumnDef<JournalEntryLineResponse>[] = [
-  { key: 'glAccountNo', label: 'Account' },
+const lineColumns = computed<ColumnDef<JournalEntryLineResponse>[]>(() => [
+  { key: 'glAccountNo', label: t('accounting.journalEntries.columns.account') },
   {
     key: 'entrySide',
-    label: 'Side',
+    label: t('accounting.journalEntries.columns.side'),
     type: 'badge',
     color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
   },
-  { key: 'amount', type: 'currency' },
-  { key: 'description' }
-]
+  { key: 'amount', label: t('accounting.journalEntries.columns.amount'), type: 'currency' },
+  { key: 'description', label: t('accounting.journalEntries.columns.description') }
+])
 
-const auditColumns: ColumnDef<JournalAuditLogResponse>[] = [
-  { key: 'performedAt', label: 'When', type: 'datetime', sortable: true },
-  { key: 'action', type: 'enum' },
-  { key: 'performedBy', label: 'By' },
-  { key: 'details' }
-]
+const auditColumns = computed<ColumnDef<JournalAuditLogResponse>[]>(() => [
+  { key: 'performedAt', label: t('accounting.journalEntries.auditLog.when'), type: 'datetime', sortable: true },
+  { key: 'action', label: t('accounting.journalEntries.auditLog.action'), type: 'enum' },
+  { key: 'performedBy', label: t('accounting.journalEntries.auditLog.by') },
+  { key: 'details', label: t('accounting.journalEntries.auditLog.details') }
+])
 
 const totalDebit = computed(() =>
   (entry.value?.lines ?? [])
@@ -148,7 +153,7 @@ async function onPost() {
   posting.value = true
   try {
     await api(`/journal-entries/${entryId}/post`, { method: 'POST' })
-    toast.add({ title: 'Journal entry posted', color: 'green' })
+    toast.add({ title: t('accounting.journalEntries.entryPosted'), color: 'green' })
     await Promise.all([refresh(), refreshAuditLogs()])
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
@@ -164,7 +169,7 @@ async function onReverse() {
     const reversal = await api<JournalEntryResponse>(`/journal-entries/${entryId}/reverse`, {
       method: 'POST'
     })
-    toast.add({ title: 'Journal entry reversed', color: 'green' })
+    toast.add({ title: t('accounting.journalEntries.entryReversed'), color: 'green' })
     await navigateTo(`/journal-entries/${reversal.id}`)
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

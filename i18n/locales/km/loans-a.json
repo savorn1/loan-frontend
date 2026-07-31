@@ -1,0 +1,430 @@
+{
+  "loans": {
+    "list": {
+      "title": "កម្ចី",
+      "newLoan": "កម្ចីថ្មី",
+      "searchPlaceholder": "ស្វែងរកតាមអតិថិជន ឬគោលបំណង...",
+      "totalOne": "កម្ចី ១",
+      "totalOther": "កម្ចី {count}",
+      "statusFilter": {
+        "all": "គ្រប់ស្ថានភាព",
+        "pending": "កំពុងរង់ចាំ",
+        "approved": "បានអនុម័ត",
+        "active": "សកម្ម",
+        "rejected": "បានបដិសេធ",
+        "closed": "បានបិទ"
+      },
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "customer": "អតិថិជន",
+        "principal": "ប្រាក់ដើម",
+        "rate": "អត្រា",
+        "term": "រយៈពេល (ខែ)",
+        "status": "ស្ថានភាព",
+        "created": "បានបង្កើត"
+      },
+      "empty": {
+        "noLoansTitle": "មិនទាន់មានកម្ចីទេ",
+        "noMatchesDescription": "សូមសាកល្បងពាក្យស្វែងរក ឬតម្រងស្ថានភាពផ្សេង។",
+        "noLoansDescription": "បង្កើតកម្ចីសម្រាប់អតិថិជនណាមួយរបស់អ្នកដើម្បីចាប់ផ្តើម។"
+      },
+      "modalTitle": "កម្ចីថ្មី",
+      "fields": {
+        "customer": "អតិថិជន",
+        "customerPlaceholder": "ស្វែងរកអតិថិជន…",
+        "principalHint": "អប្បបរមា ១០០០",
+        "interestRate": "អត្រាការប្រាក់",
+        "interestRateHint": "០.០១ – ១០០",
+        "term": "រយៈពេល (ខែ)",
+        "termHint": "១ – ៣៦០",
+        "purpose": "គោលបំណង"
+      },
+      "toastCreated": "កម្ចីត្រូវបានបង្កើត"
+    },
+    "shell": {
+      "backToLoans": "ត្រឡប់ទៅកម្ចី",
+      "loanTitle": "កម្ចី #{id}",
+      "actions": {
+        "approve": "អនុម័ត",
+        "reject": "បដិសេធ",
+        "disburse": "ចេញប្រាក់"
+      },
+      "confirm": {
+        "approve": {
+          "title": "អនុម័តកម្ចីនេះឬ?",
+          "description": "កម្ចីនេះនឹងប្តូរទៅស្ថានភាព APPROVED និងមានលក្ខណៈគ្រប់គ្រាន់សម្រាប់ការចេញប្រាក់។",
+          "confirmLabel": "អនុម័ត"
+        },
+        "reject": {
+          "title": "បដិសេធកម្ចីនេះឬ?",
+          "description": "សកម្មភាពនេះជាទីបញ្ចប់ — កម្ចីដែលត្រូវបានបដិសេធនឹងមិនអាចយកមកអនុម័តវិញបានទេ។",
+          "confirmLabel": "បដិសេធ"
+        },
+        "disburse": {
+          "title": "ចេញប្រាក់កម្ចីនេះឬ?",
+          "description": "ប្រាក់នឹងត្រូវបានកត់ត្រាថាបានចេញ កាលវិភាគទូទាត់នឹងត្រូវបានបង្កើត ហើយកម្ចីនឹងក្លាយជា ACTIVE។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
+          "confirmLabel": "ចេញប្រាក់"
+        }
+      },
+      "toast": {
+        "approved": "កម្ចីត្រូវបានអនុម័ត",
+        "rejected": "កម្ចីត្រូវបានបដិសេធ",
+        "disbursed": "កម្ចីត្រូវបានចេញប្រាក់"
+      },
+      "tabGroups": {
+        "overview": "ទិដ្ឋភាពទូទៅ",
+        "money": "ហិរញ្ញវត្ថុ",
+        "related": "ពាក់ព័ន្ធ",
+        "history": "ប្រវត្តិ"
+      },
+      "tabs": {
+        "overview": "ទិដ្ឋភាពទូទៅ",
+        "contract": "កិច្ចសន្យា",
+        "schedule": "កាលវិភាគ",
+        "payments": "ការទូទាត់ប្រាក់",
+        "transactions": "ប្រតិបត្តិការ",
+        "disbursements": "ការចេញប្រាក់",
+        "interest": "ការប្រាក់",
+        "fees": "កម្រៃ",
+        "penalties": "ការពិន័យ",
+        "adjustments": "ការកែតម្រូវ",
+        "settlement": "ការទូទាត់សម្រេច",
+        "writeoff": "លុបចោលបំណុល",
+        "collateral": "វត្ថុបញ្ចាំ",
+        "guarantors": "អ្នកធានា",
+        "statusHistory": "ប្រវត្តិស្ថានភាព",
+        "restructures": "ការរៀបចំរចនាសម្ព័ន្ធឡើងវិញ",
+        "refinances": "ការផ្តល់ហិរញ្ញប្បទានឡើងវិញ",
+        "notes": "កំណត់ចំណាំ",
+        "documents": "ឯកសារ"
+      }
+    },
+    "overview": {
+      "detailsTitle": "ព័ត៌មានលម្អិត",
+      "paidOff": "បានទូទាត់",
+      "fields": {
+        "customer": "អតិថិជន",
+        "principal": "ប្រាក់ដើម",
+        "interestRate": "អត្រាការប្រាក់",
+        "term": "រយៈពេល",
+        "monthlyInstallment": "ការទូទាត់ប្រចាំខែ",
+        "outstandingBalance": "សមតុល្យនៅសល់",
+        "purpose": "គោលបំណង",
+        "maturityDate": "កាលបរិច្ឆេទផុតកំណត់",
+        "approved": "បានអនុម័ត",
+        "disbursed": "បានចេញប្រាក់"
+      },
+      "months": "{count} ខែ",
+      "applyPaymentTitle": "អនុវត្តការទូទាត់ទៅសមតុល្យ",
+      "amount": "ចំនួនទឹកប្រាក់",
+      "applyPaymentButton": "អនុវត្តការទូទាត់",
+      "applyPaymentHint": "មានតែសម្រាប់កម្ចីសកម្មប៉ុណ្ណោះ។",
+      "scheduleTitle": "កាលវិភាគទូទាត់",
+      "generateScheduleButton": "បង្កើតកាលវិភាគ",
+      "markPaidButton": "សម្គាល់ថាបានទូទាត់",
+      "empty": {
+        "title": "មិនទាន់មានកាលវិភាគទូទាត់ទេ",
+        "descriptionActive": "បង្កើតកាលវិភាគទូទាត់បំណុលដើម្បីចាប់ផ្តើមតាមដានការទូទាត់។",
+        "descriptionOther": "កាលវិភាគនឹងត្រូវបានបង្កើតដោយស្វ័យប្រវត្តិនៅពេលកម្ចីត្រូវបានចេញប្រាក់។"
+      },
+      "columns": {
+        "installmentNumber": "#",
+        "due": "កាលកំណត់",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "status": "ស្ថានភាព",
+        "paidOn": "បានទូទាត់នៅ",
+        "created": "បានបង្កើត"
+      },
+      "toast": {
+        "applied": "ការទូទាត់ត្រូវបានអនុវត្ត",
+        "scheduleGenerated": "កាលវិភាគត្រូវបានបង្កើត",
+        "markedPaid": "ការទូទាត់ត្រូវបានសម្គាល់ថាបានទូទាត់"
+      }
+    },
+    "contract": {
+      "contractTermsTitle": "លក្ខខណ្ឌកិច្ចសន្យា",
+      "fields": {
+        "customer": "អតិថិជន",
+        "principal": "ប្រាក់ដើម",
+        "interestRate": "អត្រាការប្រាក់",
+        "term": "រយៈពេល",
+        "monthlyInstallment": "ការទូទាត់ប្រចាំខែ",
+        "outstandingBalance": "សមតុល្យនៅសល់",
+        "maturityDate": "កាលបរិច្ឆេទផុតកំណត់",
+        "approved": "បានអនុម័ត",
+        "disbursed": "បានចេញប្រាក់",
+        "closed": "បានបិទ",
+        "purpose": "គោលបំណង"
+      },
+      "months": "{count} ខែ",
+      "repaymentScheduleTitle": "កាលវិភាគទូទាត់សង",
+      "scheduleColumns": {
+        "installmentNumber": "#",
+        "due": "កាលកំណត់",
+        "total": "សរុប",
+        "outstanding": "នៅសល់",
+        "status": "ស្ថានភាព"
+      },
+      "scheduleEmpty": {
+        "title": "មិនទាន់មានកាលវិភាគ",
+        "description": "បង្កើតនៅពេលចេញប្រាក់ និងរាល់ការរៀបចំរចនាសម្ព័ន្ធឡើងវិញនីមួយៗ — សូមមើលផ្ទាំង កាលវិភាគ សម្រាប់កំណែមុនៗ។"
+      },
+      "paymentsTitle": "ការទូទាត់ប្រាក់",
+      "totalLabel": "សរុប {amount}",
+      "paymentColumns": {
+        "date": "កាលបរិច្ឆេទ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "method": "វិធីសាស្ត្រ",
+        "reference": "លេខយោង"
+      },
+      "paymentsEmpty": {
+        "title": "មិនទាន់មានការទូទាត់ត្រូវបានកត់ត្រា",
+        "description": "ការទូទាត់ដែលបានកត់ត្រានៅផ្ទាំង ការទូទាត់ប្រាក់ នឹងបង្ហាញនៅទីនេះ។"
+      },
+      "collateralTitle": "វត្ថុបញ្ចាំ",
+      "pledgedLabel": "{amount} បានបញ្ចាំ",
+      "collateralColumns": {
+        "type": "ប្រភេទ",
+        "description": "ការពិពណ៌នា",
+        "value": "តម្លៃ",
+        "status": "ស្ថានភាព"
+      },
+      "collateralEmpty": {
+        "title": "មិនទាន់មានវត្ថុបញ្ចាំ",
+        "description": "ទ្រព្យសម្បត្តិដែលបានកត់ត្រានៅផ្ទាំង វត្ថុបញ្ចាំ នឹងបង្ហាញនៅទីនេះ។"
+      },
+      "guarantorsTitle": "អ្នកធានា",
+      "guarantorColumns": {
+        "name": "ឈ្មោះ",
+        "phone": "លេខទូរស័ព្ទ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "status": "ស្ថានភាព"
+      },
+      "guarantorsEmpty": {
+        "title": "មិនទាន់មានអ្នកធានា",
+        "description": "អ្នកធានាដែលបានកត់ត្រានៅផ្ទាំង អ្នកធានា នឹងបង្ហាញនៅទីនេះ។"
+      },
+      "statusHistoryTitle": "ប្រវត្តិស្ថានភាព",
+      "statusColumns": {
+        "from": "ពី",
+        "to": "ទៅ",
+        "note": "កំណត់ចំណាំ",
+        "changedBy": "ផ្លាស់ប្តូរដោយ",
+        "changedAt": "ពេលផ្លាស់ប្តូរ"
+      },
+      "statusHistoryEmpty": {
+        "title": "មិនទាន់មានការផ្លាស់ប្តូរស្ថានភាពទេ",
+        "description": "រាល់សកម្មភាពអនុម័ត បដិសេធ ចេញប្រាក់ ឬបិទលើកម្ចីនេះត្រូវបានកត់ត្រានៅទីនេះ។"
+      },
+      "disbursementsTitle": "ការចេញប្រាក់",
+      "disbursementColumns": {
+        "date": "កាលបរិច្ឆេទ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "method": "វិធីសាស្ត្រ",
+        "reference": "លេខយោង"
+      },
+      "disbursementsEmpty": {
+        "title": "មិនទាន់មានការចេញប្រាក់ទេ",
+        "description": "កត់ត្រារាល់ការចេញប្រាក់សម្រាប់កម្ចីនេះនៅផ្ទាំង ការចេញប្រាក់។"
+      },
+      "restructuresTitle": "ការរៀបចំរចនាសម្ព័ន្ធឡើងវិញ",
+      "restructureColumns": {
+        "effective": "ចូលជាធរមាន",
+        "newTerm": "រយៈពេលថ្មី",
+        "newTermSuffix": " ខែ",
+        "newRate": "អត្រាថ្មី",
+        "reason": "មូលហេតុ"
+      },
+      "restructuresEmpty": {
+        "title": "មិនទាន់មានការរៀបចំរចនាសម្ព័ន្ធឡើងវិញ",
+        "description": "ការផ្លាស់ប្តូររយៈពេល ឬអត្រាការប្រាក់ដែលបានកត់ត្រានៅផ្ទាំង ការរៀបចំរចនាសម្ព័ន្ធឡើងវិញ នឹងបង្ហាញនៅទីនេះ។"
+      },
+      "settlementTitle": "ការទូទាត់សម្រេច",
+      "settlementFields": {
+        "amount": "ចំនួនទឹកប្រាក់",
+        "date": "កាលបរិច្ឆេទ",
+        "note": "កំណត់ចំណាំ"
+      },
+      "settlementEmpty": {
+        "title": "មិនទាន់ទូទាត់សម្រេច",
+        "description": "កម្ចីនេះមិនមានកំណត់ត្រាទូទាត់សម្រេចទេ។"
+      },
+      "writeoffTitle": "លុបចោលបំណុល",
+      "writeoffFields": {
+        "amount": "ចំនួនទឹកប្រាក់",
+        "date": "កាលបរិច្ឆេទ",
+        "reason": "មូលហេតុ"
+      },
+      "writeoffEmpty": {
+        "title": "មិនទាន់ត្រូវបានលុបចោល",
+        "description": "កម្ចីនេះមិនមានកំណត់ត្រាលុបចោលបំណុលទេ។"
+      }
+    },
+    "schedule": {
+      "title": "កាលវិភាគទូទាត់សង",
+      "generatedLabel": "បានបង្កើតនៅ {date}",
+      "installments": "{count} ការទូទាត់",
+      "empty": {
+        "title": "មិនទាន់មានកាលវិភាគ",
+        "description": "កាលវិភាគទូទាត់បំណុលនឹងត្រូវបានបង្កើតដោយស្វ័យប្រវត្តិនៅពេលកម្ចីត្រូវបានចេញប្រាក់ ឬរៀបចំរចនាសម្ព័ន្ធឡើងវិញ។"
+      },
+      "columns": {
+        "installmentNumber": "#",
+        "due": "កាលកំណត់",
+        "principal": "ប្រាក់ដើម",
+        "interest": "ការប្រាក់",
+        "total": "សរុប",
+        "outstanding": "នៅសល់",
+        "status": "ស្ថានភាព"
+      }
+    },
+    "payments": {
+      "title": "ការទូទាត់ប្រាក់",
+      "recordButton": "កត់ត្រាការទូទាត់",
+      "viewAllocationsButton": "មើលការបែងចែក",
+      "empty": {
+        "title": "មិនទាន់មានការទូទាត់ត្រូវបានកត់ត្រា",
+        "description": "កត់ត្រាប្រាក់ដែលទទួលបានសម្រាប់កម្ចីនេះ — វានឹងត្រូវបានបែងចែកដោយស្វ័យប្រវត្តិទៅតាមកាលវិភាគទូទាត់សង។"
+      },
+      "totalPaidLabel": "សរុបបានទូទាត់",
+      "modalTitle": "កត់ត្រាការទូទាត់",
+      "allocationModalTitle": "ការបំបែកការបែងចែក",
+      "columns": {
+        "date": "កាលបរិច្ឆេទ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "method": "វិធីសាស្ត្រ",
+        "reference": "លេខយោង",
+        "created": "បានបង្កើត"
+      },
+      "allocationColumns": {
+        "installmentNumber": "ការទូទាត់ជុំទី",
+        "principal": "ប្រាក់ដើម",
+        "interest": "ការប្រាក់",
+        "penalty": "ការពិន័យ"
+      },
+      "fields": {
+        "amount": "ចំនួនទឹកប្រាក់",
+        "date": "កាលបរិច្ឆេទ",
+        "method": "វិធីសាស្ត្រ",
+        "reference": "លេខយោង"
+      },
+      "methodOptions": {
+        "bankTransfer": "ផ្ទេរប្រាក់តាមធនាគារ",
+        "cash": "សាច់ប្រាក់",
+        "cheque": "មូលប្បទានប័ត្រ",
+        "mobileWallet": "កាបូបចល័ត"
+      },
+      "submitLabel": "កត់ត្រា",
+      "toastRecorded": "ការទូទាត់ត្រូវបានកត់ត្រា"
+    },
+    "transactions": {
+      "title": "ប្រតិបត្តិការ",
+      "empty": {
+        "title": "មិនទាន់មានប្រតិបត្តិការទេ",
+        "description": "រាល់ការចេញប្រាក់ ការទូទាត់ ការទូទាត់ការពិន័យ/កម្រៃ ការកែតម្រូវ ការលុបចោលបំណុល និងការទូទាត់សម្រេចលើកម្ចីនេះត្រូវបានកត់ត្រានៅទីនេះ។"
+      },
+      "columns": {
+        "date": "កាលបរិច្ឆេទ",
+        "type": "ប្រភេទ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "description": "ការពិពណ៌នា",
+        "balanceAfter": "សមតុល្យបន្ទាប់"
+      }
+    },
+    "disbursements": {
+      "title": "ការចេញប្រាក់",
+      "addButton": "បន្ថែមការចេញប្រាក់",
+      "empty": {
+        "title": "មិនទាន់មានការចេញប្រាក់ទេ",
+        "description": "កត់ត្រារាល់ការចេញប្រាក់សម្រាប់កម្ចីនេះ — ជាការចេញប្រាក់តែមួយដង ឬច្រើនដងតាមដំណាក់កាល។"
+      },
+      "totalLabel": "សរុបបានចេញ",
+      "modalTitle": "បន្ថែមការចេញប្រាក់",
+      "columns": {
+        "date": "កាលបរិច្ឆេទ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "method": "វិធីសាស្ត្រ",
+        "reference": "លេខយោង",
+        "created": "បានបង្កើត"
+      },
+      "fields": {
+        "amount": "ចំនួនទឹកប្រាក់",
+        "date": "កាលបរិច្ឆេទ",
+        "method": "វិធីសាស្ត្រ",
+        "reference": "លេខយោង"
+      },
+      "methodOptions": {
+        "bankTransfer": "ផ្ទេរប្រាក់តាមធនាគារ",
+        "cash": "សាច់ប្រាក់",
+        "cheque": "មូលប្បទានប័ត្រ",
+        "mobileWallet": "កាបូបចល័ត"
+      },
+      "submitLabel": "បន្ថែម",
+      "toastRecorded": "ការចេញប្រាក់ត្រូវបានកត់ត្រា"
+    },
+    "interest": {
+      "title": "ការបូកបន្ថែមការប្រាក់",
+      "addButton": "បន្ថែមការបូកបន្ថែម",
+      "empty": {
+        "title": "មិនទាន់មានការបូកបន្ថែមការប្រាក់ទេ",
+        "description": "កំណត់ត្រាបូកបន្ថែមការប្រាក់សម្រាប់កម្ចីនេះនឹងបង្ហាញនៅទីនេះ។"
+      },
+      "modalTitle": "បន្ថែមការបូកបន្ថែមការប្រាក់",
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "periodStart": "ចាប់ផ្តើមកំឡុងពេល",
+        "periodEnd": "បញ្ចប់កំឡុងពេល",
+        "rate": "អត្រា",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "accrued": "បានបូកបន្ថែម",
+        "created": "បានបង្កើត"
+      },
+      "fields": {
+        "periodStart": "ចាប់ផ្តើមកំឡុងពេល",
+        "periodEnd": "បញ្ចប់កំឡុងពេល",
+        "rate": "អត្រា",
+        "amount": "ចំនួនទឹកប្រាក់"
+      },
+      "submitLabel": "បន្ថែម",
+      "toastAdded": "ការបូកបន្ថែមការប្រាក់ត្រូវបានបន្ថែម"
+    },
+    "fees": {
+      "title": "កម្រៃ",
+      "addButton": "បន្ថែមកម្រៃ",
+      "markPaidButton": "សម្គាល់ថាបានទូទាត់",
+      "waiveButton": "លើកលែង",
+      "empty": {
+        "title": "មិនទាន់មានកម្រៃទេ",
+        "description": "កម្រៃដែលបានគិតលើកម្ចីនេះ — កម្រៃដំណើរការ ធានារ៉ាប់រង រដ្ឋបាល និងកម្រៃផ្សេងទៀត។"
+      },
+      "totalLabel": "សរុបកម្រៃ",
+      "modalTitle": "បន្ថែមកម្រៃ",
+      "columns": {
+        "type": "ប្រភេទ",
+        "charged": "បានគិតកម្រៃ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "description": "ការពិពណ៌នា",
+        "status": "ស្ថានភាព",
+        "created": "បានបង្កើត"
+      },
+      "fields": {
+        "type": "ប្រភេទ",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "chargedDate": "កាលបរិច្ឆេទគិតកម្រៃ",
+        "description": "ការពិពណ៌នា"
+      },
+      "typeOptions": {
+        "processing": "ដំណើរការ",
+        "insurance": "ធានារ៉ាប់រង",
+        "administration": "រដ្ឋបាល",
+        "other": "ផ្សេងទៀត"
+      },
+      "submitLabel": "បន្ថែម",
+      "toast": {
+        "added": "កម្រៃត្រូវបានបន្ថែម",
+        "markedPaid": "កម្រៃត្រូវបានសម្គាល់ថាបានទូទាត់",
+        "waived": "កម្រៃត្រូវបានលើកលែង"
+      }
+    }
+  }
+}

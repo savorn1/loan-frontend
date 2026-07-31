@@ -3,12 +3,12 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
       <UCard class="lg:col-span-2">
         <template #header>
-          <span class="font-semibold">Details</span>
+          <span class="font-semibold">{{ t('loans.overview.detailsTitle') }}</span>
         </template>
 
         <div v-if="loan.status === 'ACTIVE' || loan.status === 'CLOSED'" class="mb-5">
           <div class="flex items-center justify-between text-sm mb-1.5">
-            <span class="text-gray-500">Paid off</span>
+            <span class="text-gray-500">{{ t('loans.overview.paidOff') }}</span>
             <span class="font-medium text-gray-900 dark:text-white">{{ payoffPercent }}%</span>
           </div>
           <UProgress
@@ -19,42 +19,42 @@
         </div>
 
         <dl class="grid grid-cols-2 gap-y-3 text-sm">
-          <dt class="text-gray-500">Customer</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.customer') }}</dt>
           <dd>
             <NuxtLink :to="`/customers/${loan.customerId}`" class="text-primary-500">{{
               loan.customerName
             }}</NuxtLink>
           </dd>
-          <dt class="text-gray-500">Principal</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.principal') }}</dt>
           <dd>{{ formatCurrency(loan.principal) }}</dd>
-          <dt class="text-gray-500">Interest rate</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.interestRate') }}</dt>
           <dd>{{ loan.interestRate }}%</dd>
-          <dt class="text-gray-500">Term</dt>
-          <dd>{{ loan.termMonths }} months</dd>
-          <dt class="text-gray-500">Monthly installment</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.term') }}</dt>
+          <dd>{{ t('loans.overview.months', { count: loan.termMonths }) }}</dd>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.monthlyInstallment') }}</dt>
           <dd>{{ formatCurrency(loan.monthlyInstallment) }}</dd>
-          <dt class="text-gray-500">Outstanding balance</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.outstandingBalance') }}</dt>
           <dd class="font-semibold">{{ formatCurrency(loan.outstandingBalance) }}</dd>
-          <dt class="text-gray-500">Purpose</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.purpose') }}</dt>
           <dd>{{ loan.purpose || '—' }}</dd>
-          <dt class="text-gray-500">Maturity date</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.maturityDate') }}</dt>
           <dd>{{ formatDate(loan.maturityDate) }}</dd>
-          <dt class="text-gray-500">Approved</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.approved') }}</dt>
           <dd>{{ formatDateTime(loan.approvedAt) }}</dd>
-          <dt class="text-gray-500">Disbursed</dt>
+          <dt class="text-gray-500">{{ t('loans.overview.fields.disbursed') }}</dt>
           <dd>{{ formatDateTime(loan.disbursedAt) }}</dd>
         </dl>
       </UCard>
 
       <UCard>
         <template #header>
-          <span class="font-semibold">Apply payment to balance</span>
+          <span class="font-semibold">{{ t('loans.overview.applyPaymentTitle') }}</span>
         </template>
         <!-- Directly reduces loan.outstandingBalance via loan-service. Distinct
              from the installment ledger in the "Payments" tab below, which is
              tracked separately in payment-service. -->
         <UForm :state="paymentForm" class="space-y-3" @submit="onApplyPayment">
-          <UFormGroup label="Amount" name="amount" required>
+          <UFormGroup :label="t('loans.overview.amount')" name="amount" required>
             <UInput
               v-model.number="paymentForm.amount"
               type="number"
@@ -69,10 +69,10 @@
             :loading="applyingPayment"
             :disabled="loan.status !== 'ACTIVE'"
           >
-            Apply payment
+            {{ t('loans.overview.applyPaymentButton') }}
           </UButton>
           <p v-if="loan.status !== 'ACTIVE'" class="text-xs text-gray-500">
-            Only available for active loans.
+            {{ t('loans.overview.applyPaymentHint') }}
           </p>
         </UForm>
       </UCard>
@@ -81,7 +81,7 @@
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Payment schedule</span>
+          <span class="font-semibold">{{ t('loans.overview.scheduleTitle') }}</span>
           <UButton
             v-if="isAdmin && loan.status === 'ACTIVE' && (payments ?? []).length === 0"
             size="xs"
@@ -89,7 +89,7 @@
             :loading="generatingSchedule"
             @click="onGenerateSchedule"
           >
-            Generate schedule
+            {{ t('loans.overview.generateScheduleButton') }}
           </UButton>
         </div>
       </template>
@@ -102,17 +102,17 @@
             :loading="markingPaid === row.id"
             @click="onMarkPaid(row.id)"
           >
-            Mark paid
+            {{ t('loans.overview.markPaidButton') }}
           </UButton>
         </template>
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-calendar-days"
-            title="No payment schedule yet"
+            :title="t('loans.overview.empty.title')"
             :description="
               loan.status === 'ACTIVE'
-                ? 'Generate an amortization schedule to start tracking installments.'
-                : 'A schedule is generated automatically once the loan is disbursed.'
+                ? t('loans.overview.empty.descriptionActive')
+                : t('loans.overview.empty.descriptionOther')
             "
           />
         </template>
@@ -129,6 +129,7 @@ import type { ApplyLoanPaymentRequest, LoanResponse } from '~/features/loans/typ
 import type { PaymentResponse } from '~/features/payments/types'
 import type { ColumnDef } from '~/shared/types'
 
+const { t } = useI18n()
 const route = useRoute()
 const api = useApi()
 const toast = useToast()
@@ -159,22 +160,22 @@ const generatingSchedule = ref(false)
 const markingPaid = ref<number | null>(null)
 const paymentForm = reactive({ amount: 0 })
 
-const paymentColumns: ColumnDef<PaymentResponse>[] = [
-  { key: 'installmentNumber', label: '#' },
-  { key: 'dueDate', label: 'Due', type: 'date' },
-  { key: 'amount', type: 'currency' },
-  { key: 'status', type: 'status' },
-  { key: 'paidAt', label: 'Paid on', type: 'date' },
-  { key: 'createdAt', label: 'Created', type: 'datetime' },
+const paymentColumns = computed<ColumnDef<PaymentResponse>[]>(() => [
+  { key: 'installmentNumber', label: t('loans.overview.columns.installmentNumber') },
+  { key: 'dueDate', label: t('loans.overview.columns.due'), type: 'date' },
+  { key: 'amount', label: t('loans.overview.columns.amount'), type: 'currency' },
+  { key: 'status', label: t('loans.overview.columns.status'), type: 'status' },
+  { key: 'paidAt', label: t('loans.overview.columns.paidOn'), type: 'date' },
+  { key: 'createdAt', label: t('loans.overview.columns.created'), type: 'datetime' },
   { key: 'actions', label: '' }
-]
+])
 
 async function onApplyPayment() {
   applyingPayment.value = true
   try {
     const payload: ApplyLoanPaymentRequest = { amount: paymentForm.amount }
     await api(`/loans/${loanId}/apply-payment`, { method: 'PUT', body: payload })
-    toast.add({ title: 'Payment applied', color: 'green' })
+    toast.add({ title: t('loans.overview.toast.applied'), color: 'green' })
     paymentForm.amount = 0
     await refresh()
   } catch (err) {
@@ -193,7 +194,7 @@ async function onGenerateSchedule() {
       method: 'POST',
       body: { loanId: Number(loanId), installments }
     })
-    toast.add({ title: 'Schedule generated', color: 'green' })
+    toast.add({ title: t('loans.overview.toast.scheduleGenerated'), color: 'green' })
     await refreshPayments()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
@@ -206,7 +207,7 @@ async function onMarkPaid(paymentId: number) {
   markingPaid.value = paymentId
   try {
     await api(`/payments/${paymentId}/pay`, { method: 'PUT' })
-    toast.add({ title: 'Payment marked as paid', color: 'green' })
+    toast.add({ title: t('loans.overview.toast.markedPaid'), color: 'green' })
     await refreshPayments()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

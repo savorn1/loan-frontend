@@ -2,7 +2,7 @@
   <div class="flex flex-wrap items-center justify-between gap-4">
     <div class="flex flex-wrap items-center gap-4">
       <span class="text-sm font-medium text-primary-500 dark:text-primary-400 whitespace-nowrap">
-        Showing {{ shownCount }} of {{ total }}
+        {{ t('common.showingOfTotal', { shown: shownCount, total }) }}
       </span>
 
       <div class="flex items-center gap-1">
@@ -13,7 +13,7 @@
           @click="page = page - 1"
         >
           <UIcon name="i-heroicons-chevron-left" class="w-4 h-4" />
-          Previous
+          {{ t('common.previous') }}
         </button>
 
         <template v-for="(item, i) in pageItems" :key="i">
@@ -39,7 +39,7 @@
           :disabled="page >= pageCount"
           @click="page = page + 1"
         >
-          Next
+          {{ t('common.next') }}
           <UIcon name="i-heroicons-chevron-right" class="w-4 h-4" />
         </button>
       </div>
@@ -54,7 +54,9 @@
         size="sm"
         class="w-20"
       />
-      <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">/ Page</span>
+      <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{{
+        t('common.perPage')
+      }}</span>
     </div>
   </div>
 </template>
@@ -65,6 +67,8 @@
 // client-side pagination (a bare array sliced locally); server-paginated
 // lists (e.g. /auth/users) fetch a page at a time and don't have a full
 // `total` to slice against the same way.
+const { t } = useI18n()
+
 const props = withDefaults(
   defineProps<{
     total: number

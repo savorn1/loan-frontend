@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Interest Schemes" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.interestSchemes.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Interest Scheme</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.interestSchemes.newInterestScheme')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name or code..."
+          :placeholder="t('loanConfig.shared.searchByNameOrCode')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-chart-bar-square'"
-            :title="search ? 'No matches' : 'No interest schemes yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.interestSchemes.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Add a reusable interest scheme (e.g. Standard Reducing Balance) that loan products can select.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.interestSchemes.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Interest Scheme</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.interestSchemes.newInterestScheme')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Interest Scheme</span>
+          <span class="font-semibold">{{ t('loanConfig.interestSchemes.newInterestScheme') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Interest Scheme</span>
+          <span class="font-semibold">{{ t('loanConfig.interestSchemes.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="fields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this interest scheme?"
-      description="This permanently removes the interest scheme and cannot be undone."
-      confirm-label="Delete"
+      :title="t('loanConfig.interestSchemes.deleteTitle')"
+      :description="t('loanConfig.interestSchemes.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -121,6 +125,7 @@ import type {
 } from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const {
@@ -129,15 +134,30 @@ const {
   refresh
 } = await useAsyncData('interest-schemes', () => api<InterestSchemeResponse[]>('/interest-schemes'))
 
-const columns: ColumnDef<InterestSchemeResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'interestType', label: 'Type', type: 'enum', sortable: true },
-  { key: 'calculationMethod', label: 'Calculation', type: 'enum', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
+const columns = computed<ColumnDef<InterestSchemeResponse>[]>(() => [
+  { key: 'code', label: t('loanConfig.shared.codeColumn'), sortable: true },
+  { key: 'name', label: t('loanConfig.shared.nameColumn'), sortable: true },
+  {
+    key: 'interestType',
+    label: t('loanConfig.shared.typeColumn'),
+    type: 'enum',
+    sortable: true
+  },
+  {
+    key: 'calculationMethod',
+    label: t('loanConfig.interestSchemes.calculationColumn'),
+    type: 'enum',
+    sortable: true
+  },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
+  {
+    key: 'createdAt',
+    label: t('loanConfig.shared.createdColumn'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(schemes, {
   searchFields: ['name', 'code'],
@@ -146,47 +166,50 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(schemes, {
 
 const totalLabel = computed(() => {
   const count = schemes.value?.length ?? 0
-  return count === 1 ? '1 interest scheme' : `${count} interest schemes`
+  return count === 1
+    ? t('loanConfig.interestSchemes.total.one')
+    : t('loanConfig.interestSchemes.total.other', { count })
 })
 
-const fields: FieldDef[] = [
-  { name: 'code', required: true, wrapper: 'half' },
-  { name: 'name', required: true, wrapper: 'half' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'code', label: t('loanConfig.shared.codeColumn'), required: true, wrapper: 'half' },
+  { name: 'name', label: t('loanConfig.shared.nameColumn'), required: true, wrapper: 'half' },
   {
     name: 'interestType',
-    label: 'Interest type',
+    label: t('loanConfig.interestSchemes.interestTypeFieldLabel'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: [
-      { label: 'Flat', value: 'FLAT' },
-      { label: 'Reducing balance', value: 'REDUCING' }
+      { label: t('loanConfig.interestSchemes.optionFlat'), value: 'FLAT' },
+      { label: t('loanConfig.interestSchemes.optionReducingBalance'), value: 'REDUCING' }
     ]
   },
   {
     name: 'calculationMethod',
-    label: 'Day-count convention',
+    label: t('loanConfig.interestSchemes.calculationMethodFieldLabel'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: [
-      { label: 'Actual/365', value: 'ACTUAL_365' },
-      { label: 'Actual/360', value: 'ACTUAL_360' },
-      { label: '30/360', value: 'THIRTY_360' }
+      { label: t('loanConfig.interestSchemes.optionActual365'), value: 'ACTUAL_365' },
+      { label: t('loanConfig.interestSchemes.optionActual360'), value: 'ACTUAL_360' },
+      { label: t('loanConfig.interestSchemes.optionThirty360'), value: 'THIRTY_360' }
     ]
   },
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const {
   showCreate,
@@ -205,7 +228,7 @@ const {
   confirmDelete,
   onDelete
 } = useCrudModals<InterestSchemeResponse, InterestSchemeRequest>('/interest-schemes', refresh, {
-  entityName: 'Interest scheme',
+  entityName: t('loanConfig.entities.interestScheme'),
   createDefaults: () => ({
     code: '',
     name: '',

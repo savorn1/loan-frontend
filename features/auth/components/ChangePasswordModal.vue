@@ -2,14 +2,14 @@
   <UModal v-model="open">
     <UCard>
       <template #header>
-        <span class="font-semibold">Change Password</span>
+        <span class="font-semibold">{{ t('auth.changePassword') }}</span>
       </template>
       <DynamicForm
         v-model="form"
         :fields="fields"
         :loading="loading"
         :error="error"
-        submit-label="Update password"
+        :submit-label="t('auth.updatePassword')"
         cancelable
         @submit="onSubmit"
         @cancel="open = false"
@@ -19,23 +19,32 @@
 </template>
 
 <script setup lang="ts">
-// Declarative form on the shared <DynamicForm>/<Field> system. The confirm
-// field is form-only (Backpack would call it a "fake" field) — it's stripped
-// from the payload before hitting the API. FieldPassword provides its own
-// visibility toggle per input.
+
 import type { ChangePasswordRequest } from '~/features/auth/types'
 import type { FieldDef } from '~/shared/types'
 
 const open = defineModel<boolean>({ default: false })
 
+const { t } = useI18n()
 const { changePassword } = useAuth()
 const toast = useToast()
 
-const fields: FieldDef[] = [
-  { name: 'currentPassword', type: 'password', required: true },
-  { name: 'newPassword', type: 'password', required: true, hint: 'At least 6 characters' },
-  { name: 'confirmPassword', label: 'Confirm new password', type: 'password', required: true }
-]
+const fields = computed<FieldDef[]>(() => [
+  { name: 'currentPassword', label: t('auth.currentPassword'), type: 'password', required: true },
+  {
+    name: 'newPassword',
+    label: t('auth.newPassword'),
+    type: 'password',
+    required: true,
+    hint: t('auth.newPasswordHint')
+  },
+  {
+    name: 'confirmPassword',
+    label: t('auth.confirmNewPassword'),
+    type: 'password',
+    required: true
+  }
+])
 
 const form = ref<Record<string, any>>({})
 const loading = ref(false)
@@ -51,7 +60,7 @@ watch(open, (value) => {
 async function onSubmit(values: Record<string, any>) {
   error.value = ''
   if (values.newPassword !== values.confirmPassword) {
-    error.value = 'New password and confirmation do not match.'
+    error.value = t('auth.newPasswordMismatch')
     return
   }
   loading.value = true
@@ -61,7 +70,7 @@ async function onSubmit(values: Record<string, any>) {
       newPassword: values.newPassword
     }
     await changePassword(payload)
-    toast.add({ title: 'Password updated', color: 'green' })
+    toast.add({ title: t('auth.passwordUpdated'), color: 'green' })
     open.value = false
   } catch (err) {
     error.value = apiErrorMessage(err)

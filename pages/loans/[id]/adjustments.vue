@@ -3,9 +3,9 @@
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Adjustments</span>
+          <span class="font-semibold">{{ t('loans.adjustments.title') }}</span>
           <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >Add adjustment</UButton
+            >{{ t('loans.adjustments.add') }}</UButton
           >
         </div>
       </template>
@@ -14,11 +14,11 @@
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-adjustments-horizontal"
-            title="No adjustments"
-            description="Manual balance corrections or write-offs for this loan will appear here."
+            :title="t('loans.adjustments.empty.title')"
+            :description="t('loans.adjustments.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Add adjustment</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.adjustments.add') }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -28,14 +28,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add adjustment</span>
+          <span class="font-semibold">{{ t('loans.adjustments.add') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Add"
+          :submit-label="t('loans.adjustments.submit')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -53,6 +53,7 @@ const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 
@@ -64,27 +65,33 @@ const {
   api<LoanAdjustmentResponse[]>(`/loans/${loanId}/adjustments`)
 )
 
-const columns: ColumnDef<LoanAdjustmentResponse>[] = [
-  { key: 'id', label: 'ID' },
-  { key: 'createdAt', label: 'Date', type: 'datetime' },
-  { key: 'type', type: 'badge', color: (row) => (row.type === 'CREDIT' ? 'teal' : 'orange') },
-  { key: 'reason' },
-  { key: 'amount', type: 'currency' }
-]
+const columns = computed<ColumnDef<LoanAdjustmentResponse>[]>(() => [
+  { key: 'id', label: t('loans.adjustments.columns.id') },
+  { key: 'createdAt', label: t('loans.adjustments.columns.date'), type: 'datetime' },
+  {
+    key: 'type',
+    label: t('loans.adjustments.columns.type'),
+    type: 'badge',
+    color: (row) => (row.type === 'CREDIT' ? 'teal' : 'orange')
+  },
+  { key: 'reason', label: t('loans.adjustments.columns.reason') },
+  { key: 'amount', label: t('loans.adjustments.columns.amount'), type: 'currency' }
+])
 
-const fields: FieldDef[] = [
+const fields = computed<FieldDef[]>(() => [
   {
     name: 'type',
+    label: t('loans.adjustments.fields.type'),
     type: 'select',
     required: true,
     options: [
-      { label: 'Credit (reduces balance)', value: 'CREDIT' },
-      { label: 'Debit (increases balance)', value: 'DEBIT' }
+      { label: t('loans.adjustments.typeOptions.credit'), value: 'CREDIT' },
+      { label: t('loans.adjustments.typeOptions.debit'), value: 'DEBIT' }
     ]
   },
-  { name: 'amount', type: 'currency', required: true },
-  { name: 'reason', type: 'textarea', required: true }
-]
+  { name: 'amount', label: t('loans.adjustments.fields.amount'), type: 'currency', required: true },
+  { name: 'reason', label: t('loans.adjustments.fields.reason'), type: 'textarea', required: true }
+])
 
 const showCreate = ref(false)
 const creating = ref(false)
@@ -107,7 +114,7 @@ async function onCreate(values: Record<string, any>) {
       reason: values.reason
     }
     await api(`/loans/${loanId}/adjustments`, { method: 'POST', body: payload })
-    toast.add({ title: 'Adjustment added', color: 'green' })
+    toast.add({ title: t('loans.adjustments.toast.added'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {

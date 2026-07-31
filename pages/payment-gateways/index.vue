@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Payment Gateways" :description="totalLabel">
+    <PageHeader :title="t('payments.gateways.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Gateway</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('payments.gateways.newPaymentGateway')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name or code..."
+          :placeholder="t('payments.gateways.searchPlaceholder')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-globe-alt'"
-            :title="search ? 'No matches' : 'No payment gateways yet'"
+            :title="search ? t('common.noMatches') : t('payments.gateways.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Add a payment gateway (external provider) that a payment channel can connect through.'
+                ? t('common.nothingMatches', { query: search })
+                : t('payments.gateways.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Payment Gateway</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('payments.gateways.newPaymentGateway')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Payment Gateway</span>
+          <span class="font-semibold">{{ t('payments.gateways.newPaymentGateway') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Payment Gateway</span>
+          <span class="font-semibold">{{ t('payments.gateways.editPaymentGateway') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="fields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this payment gateway?"
-      description="This permanently removes the payment gateway and cannot be undone."
-      confirm-label="Delete"
+      :title="t('payments.gateways.deleteConfirmTitle')"
+      :description="t('payments.gateways.deleteConfirmDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -116,54 +120,110 @@
 
 <script setup lang="ts">
 import type { PaymentGatewayRequest, PaymentGatewayResponse } from '~/features/payments/types'
-import type { ColumnDef, FieldDef } from '~/shared/types'
+import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const api = useApi()
+const { t } = useI18n()
+
+const page = ref(1)
+const pageSize = ref(10)
+const search = ref('')
+const sort = ref<{ column: string; direction: 'asc' | 'desc' } | undefined>(undefined)
+
+function buildQuery() {
+  return {
+    page: page.value,
+    size: pageSize.value,
+    search: search.value || undefined,
+    sortBy: sort.value?.column ?? 'createdAt',
+    sortOrder: sort.value?.direction ?? 'desc'
+  }
+}
 
 const {
-  data: gateways,
+  data: gatewaysPage,
   pending,
   refresh
 } = await useAsyncData('payment-gateways', () =>
-  api<PaymentGatewayResponse[]>('/payments/gateways')
+  api<PageResponse<PaymentGatewayResponse>>('/payments/gateways', { query: buildQuery() })
 )
 
-const columns: ColumnDef<PaymentGatewayResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'provider', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
-  { key: 'actions', label: '', class: 'text-right' }
-]
+const rows = computed(() => gatewaysPage.value?.content ?? [])
+const total = computed(() => gatewaysPage.value?.totalElements ?? 0)
 
-const { search, page, pageSize, sort, total, rows } = useClientTable(gateways, {
-  searchFields: ['name', 'code'],
-  pageSize: 10
+watch(page, () => refresh())
+watch(pageSize, () => {
+  page.value = 1
+  refresh()
 })
+watch(
+  sort,
+  () => {
+    page.value = 1
+    refresh()
+  },
+  { deep: true }
+)
+
+// Debounced so we don't fire a request on every keystroke.
+let searchTimer: ReturnType<typeof setTimeout>
+watch(search, () => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => {
+    page.value = 1
+    refresh()
+  }, 400)
+})
+
+const columns = computed<ColumnDef<PaymentGatewayResponse>[]>(() => [
+  { key: 'code', label: t('payments.gateways.columns.code'), sortable: true },
+  { key: 'name', label: t('payments.gateways.columns.name'), sortable: true },
+  { key: 'provider', label: t('payments.gateways.columns.provider'), sortable: true },
+  { key: 'status', label: t('payments.gateways.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'createdAt',
+    label: t('payments.gateways.columns.created'),
+    type: 'datetime',
+    sortable: true
+  },
+  { key: 'actions', label: '', class: 'text-right' }
+])
 
 const totalLabel = computed(() => {
-  const count = gateways.value?.length ?? 0
-  return count === 1 ? '1 payment gateway' : `${count} payment gateways`
+  const count = total.value
+  return count === 1
+    ? t('payments.gateways.totalLabelOne')
+    : t('payments.gateways.totalLabelOther', { count })
 })
 
-const fields: FieldDef[] = [
-  { name: 'code', required: true, wrapper: 'half' },
-  { name: 'name', required: true, wrapper: 'half' },
-  { name: 'provider', required: true, wrapper: 'half' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'code', label: t('payments.gateways.fields.code'), required: true, wrapper: 'half' },
+  { name: 'name', label: t('payments.gateways.fields.name'), required: true, wrapper: 'half' },
+  {
+    name: 'provider',
+    label: t('payments.gateways.fields.provider'),
+    required: true,
+    wrapper: 'half'
+  },
   {
     name: 'status',
+    label: t('payments.gateways.fields.status'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   },
-  { name: 'apiUrl', label: 'API URL', type: 'url', required: true }
-]
+  {
+    name: 'apiUrl',
+    label: t('payments.gateways.fields.apiUrl'),
+    type: 'url',
+    required: true
+  }
+])
 
 const {
   showCreate,
@@ -182,7 +242,7 @@ const {
   confirmDelete,
   onDelete
 } = useCrudModals<PaymentGatewayResponse, PaymentGatewayRequest>('/payments/gateways', refresh, {
-  entityName: 'Payment gateway',
+  entityName: t('payments.entities.paymentGateway'),
   createDefaults: () => ({ code: '', name: '', provider: '', apiUrl: '', status: 'ACTIVE' }),
   toForm: (row) => ({
     code: row.code,

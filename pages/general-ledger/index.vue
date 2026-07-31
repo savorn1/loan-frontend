@@ -1,28 +1,28 @@
 <template>
   <div>
     <PageHeader
-      title="General Ledger"
-      description="Balances and posted activity for a single GL account within a financial period."
+      :title="t('accounting.generalLedger.title')"
+      :description="t('accounting.generalLedger.description')"
     />
 
     <UCard class="mb-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <UFormGroup label="GL account">
+        <UFormGroup :label="t('accounting.generalLedger.glAccount')">
           <USelectMenu
             v-model="glAccountId"
             :options="glAccountOptions"
             option-attribute="label"
             value-attribute="value"
-            placeholder="Select an account"
+            :placeholder="t('accounting.generalLedger.glAccountPlaceholder')"
           />
         </UFormGroup>
-        <UFormGroup label="Financial period">
+        <UFormGroup :label="t('accounting.generalLedger.financialPeriod')">
           <USelectMenu
             v-model="financialPeriodId"
             :options="periodOptions"
             option-attribute="label"
             value-attribute="value"
-            placeholder="Select a period"
+            :placeholder="t('accounting.generalLedger.financialPeriodPlaceholder')"
           />
         </UFormGroup>
       </div>
@@ -30,13 +30,13 @@
 
     <UCard v-if="ledger" class="mb-6">
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 text-sm">
-        <dt class="text-gray-500">Opening balance</dt>
+        <dt class="text-gray-500">{{ t('accounting.generalLedger.openingBalance') }}</dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.openingBalance) }}</dd>
-        <dt class="text-gray-500">Period debit</dt>
+        <dt class="text-gray-500">{{ t('accounting.generalLedger.periodDebit') }}</dt>
         <dd>{{ formatCurrency(ledger.periodDebitTotal) }}</dd>
-        <dt class="text-gray-500">Period credit</dt>
+        <dt class="text-gray-500">{{ t('accounting.generalLedger.periodCredit') }}</dt>
         <dd>{{ formatCurrency(ledger.periodCreditTotal) }}</dd>
-        <dt class="text-gray-500">Closing balance</dt>
+        <dt class="text-gray-500">{{ t('accounting.generalLedger.closingBalance') }}</dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.closingBalance) }}</dd>
       </dl>
     </UCard>
@@ -47,12 +47,14 @@
           <EmptyState
             icon="i-heroicons-book-open"
             :title="
-              glAccountId && financialPeriodId ? 'No posted activity' : 'Pick an account and period'
+              glAccountId && financialPeriodId
+                ? t('accounting.generalLedger.emptyTitleNoActivity')
+                : t('accounting.generalLedger.emptyTitlePick')
             "
             :description="
               glAccountId && financialPeriodId
-                ? 'This account has no posted journal entries in the selected period.'
-                : 'Select a GL account and a financial period above to view its ledger.'
+                ? t('accounting.generalLedger.emptyDescriptionNoActivity')
+                : t('accounting.generalLedger.emptyDescriptionPick')
             "
           />
         </template>
@@ -70,6 +72,7 @@ import type {
 } from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const { data: glAccounts } = await useAsyncData('general-ledger-gl-accounts', () =>
@@ -100,17 +103,17 @@ const { data: ledger, pending } = await useAsyncData(
   { watch: [glAccountId, financialPeriodId] }
 )
 
-const columns: ColumnDef<LedgerLineResponse>[] = [
-  { key: 'transactionDate', label: 'Date', type: 'date' },
-  { key: 'entryNo', label: 'Entry no.' },
-  { key: 'description' },
+const columns = computed<ColumnDef<LedgerLineResponse>[]>(() => [
+  { key: 'transactionDate', label: t('accounting.generalLedger.columns.date'), type: 'date' },
+  { key: 'entryNo', label: t('accounting.generalLedger.columns.entryNo') },
+  { key: 'description', label: t('accounting.generalLedger.columns.description') },
   {
     key: 'entrySide',
-    label: 'Side',
+    label: t('accounting.generalLedger.columns.side'),
     type: 'badge',
     color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
   },
-  { key: 'amount', type: 'currency' },
-  { key: 'runningBalance', label: 'Balance', type: 'currency' }
-]
+  { key: 'amount', label: t('accounting.generalLedger.columns.amount'), type: 'currency' },
+  { key: 'runningBalance', label: t('accounting.generalLedger.columns.balance'), type: 'currency' }
+])
 </script>

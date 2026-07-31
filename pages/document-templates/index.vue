@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Document Templates" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.documentTemplates.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Document Template</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.documentTemplates.newDocumentTemplate')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name or code..."
+          :placeholder="t('loanConfig.shared.searchByNameOrCode')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-document-duplicate'"
-            :title="search ? 'No matches' : 'No document templates yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.documentTemplates.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Add a reusable document requirement (e.g. Payslip) that loan products can select.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.documentTemplates.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Document Template</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.documentTemplates.newDocumentTemplate')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Document Template</span>
+          <span class="font-semibold">{{ t('loanConfig.documentTemplates.newDocumentTemplate') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Document Template</span>
+          <span class="font-semibold">{{ t('loanConfig.documentTemplates.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="fields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Delete this document template?"
-      description="This permanently removes the document template and cannot be undone."
-      confirm-label="Delete"
+      :title="t('loanConfig.documentTemplates.deleteTitle')"
+      :description="t('loanConfig.documentTemplates.deleteDescription')"
+      :confirm-label="t('common.delete')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -121,6 +125,7 @@ import type {
 } from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 
 const {
@@ -131,13 +136,18 @@ const {
   api<DocumentTemplateResponse[]>('/document-templates')
 )
 
-const columns: ColumnDef<DocumentTemplateResponse>[] = [
-  { key: 'code', sortable: true },
-  { key: 'name', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'createdAt', label: 'Created', type: 'datetime', sortable: true },
+const columns = computed<ColumnDef<DocumentTemplateResponse>[]>(() => [
+  { key: 'code', label: t('loanConfig.shared.codeColumn'), sortable: true },
+  { key: 'name', label: t('loanConfig.shared.nameColumn'), sortable: true },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
+  {
+    key: 'createdAt',
+    label: t('loanConfig.shared.createdColumn'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(templates, {
   searchFields: ['name', 'code'],
@@ -146,25 +156,28 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(templates, 
 
 const totalLabel = computed(() => {
   const count = templates.value?.length ?? 0
-  return count === 1 ? '1 document template' : `${count} document templates`
+  return count === 1
+    ? t('loanConfig.documentTemplates.total.one')
+    : t('loanConfig.documentTemplates.total.other', { count })
 })
 
-const fields: FieldDef[] = [
-  { name: 'code', required: true, wrapper: 'half' },
-  { name: 'name', required: true, wrapper: 'half' },
-  { name: 'description', type: 'textarea' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'code', label: t('loanConfig.shared.codeColumn'), required: true, wrapper: 'half' },
+  { name: 'name', label: t('loanConfig.shared.nameColumn'), required: true, wrapper: 'half' },
+  { name: 'description', label: t('loanConfig.shared.descriptionLabel'), type: 'textarea' },
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const {
   showCreate,
@@ -186,7 +199,7 @@ const {
   '/document-templates',
   refresh,
   {
-    entityName: 'Document template',
+    entityName: t('loanConfig.entities.documentTemplate'),
     createDefaults: () => ({ code: '', name: '', description: '', status: 'ACTIVE' }),
     toForm: (row) => ({
       code: row.code,

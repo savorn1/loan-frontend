@@ -1,17 +1,17 @@
 <template>
   <div>
-    <PageHeader title="User Management" :description="totalLabel">
+    <PageHeader :title="t('admin.users.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New User</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('admin.users.newUser') }}</UButton>
       </template>
     </PageHeader>
 
     <UCard class="mb-4">
       <div class="flex flex-wrap items-end gap-4">
-        <UFormGroup label="Search username" class="w-56">
+        <UFormGroup :label="t('admin.users.searchLabel')" class="w-56">
           <UInput
             v-model="filters.username"
-            placeholder="Search..."
+            :placeholder="t('admin.users.searchPlaceholder')"
             icon="i-heroicons-magnifying-glass"
           >
             <template v-if="filters.username" #trailing>
@@ -25,7 +25,7 @@
             </template>
           </UInput>
         </UFormGroup>
-        <UFormGroup label="Role" class="w-40">
+        <UFormGroup :label="t('admin.users.roleLabel')" class="w-40">
           <USelectMenu
             v-model="filters.role"
             :options="roleFilterOptions"
@@ -33,7 +33,7 @@
             value-attribute="value"
           />
         </UFormGroup>
-        <UFormGroup label="Status" class="w-40">
+        <UFormGroup :label="t('admin.users.statusLabel')" class="w-40">
           <USelectMenu
             v-model="filters.active"
             :options="statusFilterOptions"
@@ -56,7 +56,7 @@
               :loading="actingId === row.id && action === 'role'"
               @click="onToggleRole(row)"
             >
-              Make {{ row.role === 'ADMIN' ? 'User' : 'Admin' }}
+              {{ row.role === 'ADMIN' ? t('admin.users.actions.makeUser') : t('admin.users.actions.makeAdmin') }}
             </UButton>
             <UButton
               size="xs"
@@ -66,8 +66,9 @@
               :loading="actingId === row.id && action === 'status'"
               @click="onToggleStatus(row)"
             >
-              {{ row.active ? 'Disable' : 'Enable' }}
+              {{ row.active ? t('admin.users.actions.disable') : t('admin.users.actions.enable') }}
             </UButton>
+            <UButton size="xs" color="gray" variant="ghost" @click="openRoles(row)">{{ t('admin.users.actions.roles') }}</UButton>
             <UButton
               size="xs"
               color="red"
@@ -81,8 +82,8 @@
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-shield-check"
-            title="No users found"
-            description="Try adjusting your search or filters."
+            :title="t('admin.users.empty.title')"
+            :description="t('admin.users.empty.description')"
           />
         </template>
       </DataTable>
@@ -98,14 +99,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New User</span>
+          <span class="font-semibold">{{ t('admin.users.createModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="userFields"
           :loading="creating"
           :error="createError"
-          submit-label="Create"
+          :submit-label="t('common.create')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -123,24 +124,72 @@
     >
       <UCard v-if="confirmDeleteUser">
         <template #header>
-          <span class="font-semibold">Delete user "{{ confirmDeleteUser.username }}"?</span>
+          <span class="font-semibold">{{ t('admin.users.deleteConfirmTitle', { username: confirmDeleteUser.username }) }}</span>
         </template>
-        <p class="text-sm text-gray-500 mb-4">This action cannot be undone.</p>
+        <p class="text-sm text-gray-500 mb-4">{{ t('admin.users.deleteConfirmDescription') }}</p>
         <div class="flex justify-end gap-2">
-          <UButton color="gray" variant="ghost" @click="confirmDeleteUser = null">Cancel</UButton>
-          <UButton color="red" :loading="deleting" @click="onDelete">Delete</UButton>
+          <UButton color="gray" variant="ghost" @click="confirmDeleteUser = null">{{ t('common.cancel') }}</UButton>
+          <UButton color="red" :loading="deleting" @click="onDelete">{{ t('common.delete') }}</UButton>
         </div>
+      </UCard>
+    </UModal>
+
+    <UModal v-model="showRoles">
+      <UCard v-if="rolesTargetUser">
+        <template #header>
+          <span class="font-semibold">{{ t('admin.users.rolesModal.title', { username: rolesTargetUser.username }) }}</span>
+        </template>
+        <div v-if="allRolesPending || userRolesPending" class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          {{ t('admin.shared.loading') }}
+        </div>
+        <ul v-else-if="allRoles.length" class="space-y-2 max-h-80 overflow-y-auto pr-1">
+          <li
+            v-for="r in allRoles"
+            :key="r.id"
+            class="flex items-start gap-2.5 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0"
+          >
+            <UCheckbox
+              :model-value="assignedRoleIds.has(r.id)"
+              :loading="togglingRoleId === r.id"
+              @update:model-value="(v: boolean) => onToggleUserRole(r, v)"
+            />
+            <div class="min-w-0">
+              <p class="text-sm font-medium text-gray-900 dark:text-white">{{ r.name }}</p>
+              <p v-if="r.description" class="text-xs text-gray-500 dark:text-gray-400">
+                {{ r.description }}
+              </p>
+            </div>
+          </li>
+        </ul>
+        <EmptyState
+          v-else
+          icon="i-heroicons-shield-check"
+          :title="t('admin.users.rolesModal.emptyTitle')"
+          :description="t('admin.users.rolesModal.emptyDescription')"
+        >
+          <template #action>
+            <UButton to="/roles" variant="soft">{{ t('admin.users.rolesModal.goToRoles') }}</UButton>
+          </template>
+        </EmptyState>
       </UCard>
     </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { CreateUserRequest, UserFilter, UserResponse } from '~/features/users/types'
+import type {
+  AssignUserRoleRequest,
+  CreateUserRequest,
+  UserFilter,
+  UserResponse,
+  UserRoleResponse
+} from '~/features/users/types'
+import type { RoleResponse } from '~/features/roles/types'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 definePageMeta({ middleware: 'admin' })
 
+const { t } = useI18n()
 const api = useApi()
 const toast = useToast()
 const { username } = storeToRefs(useAuth())
@@ -153,16 +202,16 @@ const filters = reactive({
   active: '' as '' | 'true' | 'false'
 })
 
-const roleFilterOptions = [
-  { label: 'All roles', value: '' },
-  { label: 'User', value: 'USER' },
-  { label: 'Admin', value: 'ADMIN' }
-]
-const statusFilterOptions = [
-  { label: 'All statuses', value: '' },
-  { label: 'Active', value: 'true' },
-  { label: 'Disabled', value: 'false' }
-]
+const roleFilterOptions = computed(() => [
+  { label: t('admin.users.roleOptions.all'), value: '' },
+  { label: t('admin.users.roleOptions.user'), value: 'USER' },
+  { label: t('admin.users.roleOptions.admin'), value: 'ADMIN' }
+])
+const statusFilterOptions = computed(() => [
+  { label: t('admin.users.statusOptions.all'), value: '' },
+  { label: t('admin.users.statusOptions.active'), value: 'true' },
+  { label: t('admin.users.statusOptions.disabled'), value: 'false' }
+])
 
 function buildQuery(): UserFilter {
   return {
@@ -184,7 +233,7 @@ const {
 
 const totalLabel = computed(() => {
   const count = users.value?.totalElements ?? 0
-  return count === 1 ? '1 user' : `${count} users`
+  return count === 1 ? t('admin.users.total.one') : t('admin.users.total.other', { count })
 })
 
 watch(page, () => refresh())
@@ -220,22 +269,27 @@ watch(
   }
 )
 
-const columns: ColumnDef<UserResponse>[] = [
-  { key: 'id', label: 'ID' },
-  { key: 'username', label: 'Username' },
-  { key: 'role', type: 'badge', color: (row) => (row.role === 'ADMIN' ? 'primary' : 'gray') },
+const columns = computed<ColumnDef<UserResponse>[]>(() => [
+  { key: 'id', label: t('admin.users.columns.id') },
+  { key: 'username', label: t('admin.users.columns.username') },
+  {
+    key: 'role',
+    label: t('admin.users.columns.role'),
+    type: 'badge',
+    color: (row) => (row.role === 'ADMIN' ? 'primary' : 'gray')
+  },
   {
     key: 'active',
-    label: 'Status',
+    label: t('admin.users.columns.status'),
     type: 'boolean',
-    trueLabel: 'Active',
-    falseLabel: 'Disabled',
+    trueLabel: t('admin.users.statusOptions.active'),
+    falseLabel: t('admin.users.statusOptions.disabled'),
     trueColor: 'teal',
     falseColor: 'red'
   },
-  { key: 'createdAt', label: 'Created', type: 'datetime' },
+  { key: 'createdAt', label: t('admin.users.columns.created'), type: 'datetime' },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const actingId = ref<number | null>(null)
 const action = ref<'role' | 'status' | null>(null)
@@ -246,20 +300,27 @@ const showCreate = ref(false)
 const creating = ref(false)
 const createError = ref('')
 
-const userFields: FieldDef[] = [
-  { name: 'username', required: true },
-  { name: 'password', type: 'password', required: true, hint: 'At least 6 characters' },
+const userFields = computed<FieldDef[]>(() => [
+  { name: 'username', label: t('admin.users.fields.username'), required: true },
+  {
+    name: 'password',
+    label: t('admin.users.fields.password'),
+    type: 'password',
+    required: true,
+    hint: t('admin.users.fields.passwordHint')
+  },
   {
     name: 'role',
+    label: t('admin.users.fields.role'),
     type: 'select',
     wrapper: 'half',
     options: [
-      { label: 'User', value: 'USER' },
-      { label: 'Admin', value: 'ADMIN' }
+      { label: t('admin.users.roleOptions.user'), value: 'USER' },
+      { label: t('admin.users.roleOptions.admin'), value: 'ADMIN' }
     ]
   },
-  { name: 'active', type: 'switch', wrapper: 'half' }
-]
+  { name: 'active', label: t('admin.users.fields.active'), type: 'switch', wrapper: 'half' }
+])
 
 const createForm = ref<Record<string, any>>({})
 
@@ -274,7 +335,7 @@ async function onCreate(values: Record<string, any>) {
   createError.value = ''
   try {
     await api('/auth/users', { method: 'POST', body: values as CreateUserRequest })
-    toast.add({ title: `User "${values.username}" created`, color: 'green' })
+    toast.add({ title: t('admin.users.toast.created', { username: values.username }), color: 'green' })
     showCreate.value = false
     page.value = 1
     await refresh()
@@ -291,7 +352,9 @@ async function onToggleRole(row: UserResponse) {
   const nextRole = row.role === 'ADMIN' ? 'USER' : 'ADMIN'
   try {
     await api(`/auth/users/${row.id}/role`, { method: 'PUT', body: { role: nextRole } })
-    toast.add({ title: `${row.username} is now ${nextRole}`, color: 'green' })
+    const roleLabel =
+      nextRole === 'ADMIN' ? t('admin.users.roleOptions.admin') : t('admin.users.roleOptions.user')
+    toast.add({ title: t('admin.users.toast.roleChanged', { username: row.username, role: roleLabel }), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
@@ -306,7 +369,12 @@ async function onToggleStatus(row: UserResponse) {
   action.value = 'status'
   try {
     await api(`/auth/users/${row.id}/status`, { method: 'PUT', body: { active: !row.active } })
-    toast.add({ title: `${row.username} ${row.active ? 'disabled' : 'enabled'}`, color: 'green' })
+    toast.add({
+      title: row.active
+        ? t('admin.users.toast.disabled', { username: row.username })
+        : t('admin.users.toast.enabled', { username: row.username }),
+      color: 'green'
+    })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
@@ -321,13 +389,57 @@ async function onDelete() {
   deleting.value = true
   try {
     await api(`/auth/users/${confirmDeleteUser.value.id}`, { method: 'DELETE' })
-    toast.add({ title: 'User deleted', color: 'green' })
+    toast.add({ title: t('admin.users.toast.deleted'), color: 'green' })
     confirmDeleteUser.value = null
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
   } finally {
     deleting.value = false
+  }
+}
+
+// ── Roles (additive RBAC — see features/roles/types.ts) ────────────────────
+const { data: allRolesData, pending: allRolesPending } = await useAsyncData('roles-all', () =>
+  api<RoleResponse[]>('/auth/roles')
+)
+const allRoles = computed(() => allRolesData.value ?? [])
+
+const showRoles = ref(false)
+const rolesTargetUser = ref<UserResponse | null>(null)
+const userRoles = ref<UserRoleResponse[]>([])
+const userRolesPending = ref(false)
+const togglingRoleId = ref<number | null>(null)
+
+const assignedRoleIds = computed(() => new Set(userRoles.value.map((ur) => ur.roleId)))
+
+async function openRoles(row: UserResponse) {
+  rolesTargetUser.value = row
+  showRoles.value = true
+  userRolesPending.value = true
+  try {
+    userRoles.value = await api<UserRoleResponse[]>(`/auth/users/${row.id}/roles`)
+  } finally {
+    userRolesPending.value = false
+  }
+}
+
+async function onToggleUserRole(role: RoleResponse, assign: boolean) {
+  if (!rolesTargetUser.value) return
+  const userId = rolesTargetUser.value.id
+  togglingRoleId.value = role.id
+  try {
+    if (assign) {
+      const payload: AssignUserRoleRequest = { roleId: role.id }
+      await api(`/auth/users/${userId}/roles`, { method: 'POST', body: payload })
+    } else {
+      await api(`/auth/users/${userId}/roles/${role.id}`, { method: 'DELETE' })
+    }
+    userRoles.value = await api<UserRoleResponse[]>(`/auth/users/${userId}/roles`)
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    togglingRoleId.value = null
   }
 }
 </script>

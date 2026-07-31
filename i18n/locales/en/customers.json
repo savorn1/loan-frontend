@@ -1,0 +1,381 @@
+{
+  "customers": {
+    "entities": {
+      "identity": "Identity",
+      "address": "Address",
+      "contact": "Contact",
+      "employment": "Employment",
+      "income": "Income",
+      "relationship": "Relationship"
+    },
+    "list": {
+      "title": "Customers",
+      "newCustomer": "New Customer",
+      "searchPlaceholder": "Search by name or email...",
+      "totalOne": "1 customer",
+      "totalOther": "{count} customers",
+      "emptyTitle": "No customers yet",
+      "emptyDescription": "Add your first customer to start creating loans for them.",
+      "toastCreated": "Customer created",
+      "columns": {
+        "id": "ID",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone",
+        "created": "Created"
+      }
+    },
+    "detail": {
+      "backToCustomers": "Back to customers",
+      "details": "Details",
+      "loans": "Loans",
+      "noLoansTitle": "No loans yet",
+      "noLoansDescription": "This customer doesn't have any loans on record.",
+      "loanColumns": {
+        "id": "ID",
+        "principal": "Principal",
+        "term": "Term (mo)",
+        "status": "Status",
+        "created": "Created"
+      },
+      "add": "Add",
+      "toastRiskProfileSaved": "Risk profile saved",
+      "toastPreferencesSaved": "Preferences saved",
+      "toastUpdated": "Customer updated",
+      "toastDeleted": "Customer deleted",
+      "deleteCustomerTitle": "Delete customer?",
+      "deleteCustomerDescription": "This permanently removes {name} and cannot be undone.",
+      "identity": {
+        "cardTitle": "Identities (KYC)",
+        "addButton": "Add identity",
+        "emptyTitle": "No identities on file",
+        "emptyDescription": "Add a National ID, Passport or Driver License for KYC.",
+        "addModalTitle": "Add identity",
+        "editModalTitle": "Edit identity",
+        "deleteTitle": "Delete this identity?",
+        "deleteDescription": "This permanently removes the identity document and cannot be undone.",
+        "columns": {
+          "type": "Type",
+          "number": "Number",
+          "issuingCountry": "Issuing country",
+          "issued": "Issued",
+          "expires": "Expires",
+          "status": "Status"
+        },
+        "fields": {
+          "type": "Type",
+          "number": "Number",
+          "issuingCountry": "Issuing country",
+          "status": "Status",
+          "issueDate": "Issue date",
+          "expiryDate": "Expiry date"
+        },
+        "options": {
+          "nationalId": "National ID",
+          "passport": "Passport",
+          "driverLicense": "Driver License",
+          "expired": "Expired",
+          "revoked": "Revoked"
+        }
+      },
+      "address": {
+        "cardTitle": "Addresses",
+        "addButton": "Add address",
+        "emptyTitle": "No addresses on file",
+        "emptyDescription": "Add a current, permanent or office address.",
+        "addModalTitle": "Add address",
+        "editModalTitle": "Edit address",
+        "deleteTitle": "Delete this address?",
+        "deleteDescription": "This permanently removes the address and cannot be undone.",
+        "columns": {
+          "type": "Type",
+          "location": "Location",
+          "postalCode": "Postal code",
+          "primary": "Primary"
+        },
+        "fields": {
+          "type": "Type",
+          "primaryAddress": "Primary address",
+          "country": "Country",
+          "province": "Province",
+          "district": "District",
+          "commune": "Commune",
+          "village": "Village",
+          "street": "Street",
+          "postalCode": "Postal code"
+        },
+        "options": {
+          "current": "Current",
+          "permanent": "Permanent",
+          "office": "Office"
+        }
+      },
+      "contact": {
+        "cardTitle": "Contacts",
+        "addButton": "Add contact",
+        "emptyTitle": "No contacts on file",
+        "emptyDescription": "Add an emergency or reference contact for this customer.",
+        "addModalTitle": "Add contact",
+        "editModalTitle": "Edit contact",
+        "deleteTitle": "Delete this contact?",
+        "deleteDescription": "This permanently removes the contact and cannot be undone.",
+        "columns": {
+          "name": "Name",
+          "relationship": "Relationship",
+          "phone": "Phone",
+          "email": "Email",
+          "address": "Address"
+        },
+        "fields": {
+          "name": "Name",
+          "relationship": "Relationship",
+          "phone": "Phone",
+          "email": "Email",
+          "address": "Address"
+        }
+      },
+      "employment": {
+        "cardTitle": "Employment",
+        "addButton": "Add employment",
+        "emptyTitle": "No employment on file",
+        "emptyDescription": "Add the customer's employer and income details.",
+        "addModalTitle": "Add employment",
+        "editModalTitle": "Edit employment",
+        "deleteTitle": "Delete this employment record?",
+        "deleteDescription": "This permanently removes the employment record and cannot be undone.",
+        "columns": {
+          "company": "Company",
+          "occupation": "Occupation",
+          "type": "Type",
+          "salary": "Salary",
+          "startDate": "Start date",
+          "status": "Status"
+        },
+        "fields": {
+          "companyName": "Company name",
+          "occupation": "Occupation",
+          "type": "Type",
+          "status": "Status",
+          "salary": "Salary",
+          "currency": "Currency",
+          "currencyHint": "e.g. USD",
+          "startDate": "Start date"
+        },
+        "options": {
+          "fullTime": "Full time",
+          "partTime": "Part time",
+          "selfEmployed": "Self employed",
+          "contract": "Contract",
+          "unemployed": "Unemployed"
+        }
+      },
+      "income": {
+        "cardTitle": "Income",
+        "addButton": "Add income",
+        "emptyTitle": "No income on file",
+        "emptyDescription": "Add a salary, business or other income source.",
+        "addModalTitle": "Add income",
+        "editModalTitle": "Edit income",
+        "deleteTitle": "Delete this income record?",
+        "deleteDescription": "This permanently removes the income record and cannot be undone.",
+        "columns": {
+          "type": "Type",
+          "amount": "Amount",
+          "frequency": "Frequency"
+        },
+        "fields": {
+          "type": "Type",
+          "frequency": "Frequency",
+          "amount": "Amount",
+          "currency": "Currency",
+          "currencyHint": "e.g. USD"
+        },
+        "options": {
+          "salary": "Salary",
+          "business": "Business",
+          "rental": "Rental",
+          "investment": "Investment",
+          "pension": "Pension",
+          "other": "Other",
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "biweekly": "Biweekly",
+          "monthly": "Monthly",
+          "annually": "Annually"
+        }
+      },
+      "relationship": {
+        "cardTitle": "Relationships",
+        "addButton": "Add relationship",
+        "emptyTitle": "No relationships on file",
+        "emptyDescription": "Link this customer to another customer (e.g. spouse, guarantor).",
+        "addModalTitle": "Add relationship",
+        "editModalTitle": "Edit relationship",
+        "deleteTitle": "Delete this relationship?",
+        "deleteDescription": "This permanently removes the relationship and cannot be undone.",
+        "columns": {
+          "relatedCustomer": "Related customer",
+          "type": "Type"
+        },
+        "fields": {
+          "relatedCustomer": "Related customer",
+          "searchPlaceholder": "Search customers…",
+          "type": "Type"
+        },
+        "options": {
+          "spouse": "Spouse",
+          "parent": "Parent",
+          "child": "Child",
+          "sibling": "Sibling",
+          "businessPartner": "Business partner",
+          "guarantor": "Guarantor",
+          "other": "Other"
+        }
+      },
+      "riskProfile": {
+        "cardTitle": "Risk Profile (AML/KYC)",
+        "fields": {
+          "riskLevel": "Risk level",
+          "amlStatus": "AML status",
+          "pep": "Politically exposed person (PEP)",
+          "sanctionChecked": "Sanctions screening completed",
+          "lastReviewDate": "Last review date"
+        },
+        "options": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High",
+          "clear": "Clear",
+          "flagged": "Flagged",
+          "underReview": "Under review",
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "preferences": {
+        "cardTitle": "Preferences",
+        "fields": {
+          "language": "Language",
+          "languageHint": "e.g. en, km",
+          "currency": "Currency",
+          "currencyHint": "e.g. USD",
+          "notificationMethod": "Notification method"
+        },
+        "options": {
+          "email": "Email",
+          "sms": "SMS",
+          "phone": "Phone",
+          "none": "None"
+        }
+      },
+      "auditLog": {
+        "cardTitle": "Audit Log",
+        "emptyTitle": "No audit history",
+        "emptyDescription": "Changes to this customer will appear here once logging is wired up.",
+        "columns": {
+          "when": "When",
+          "action": "Action",
+          "userId": "User ID",
+          "oldValue": "Old value",
+          "newValue": "New value"
+        }
+      }
+    },
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "nationalId": "National ID",
+      "address": "Address",
+      "dateOfBirth": "Date of birth",
+      "dateOfBirthHint": "Optional"
+    }
+  },
+  "applications": {
+    "list": {
+      "title": "Loan Applications",
+      "newApplication": "New Application",
+      "searchPlaceholder": "Search by customer or purpose...",
+      "totalOne": "1 application",
+      "totalOther": "{count} applications",
+      "emptyTitle": "No applications yet",
+      "emptyDescriptionFiltered": "Try a different search term or status filter.",
+      "emptyDescription": "Submit a loan application for one of your customers to get started.",
+      "submit": "Submit",
+      "toastCreated": "Application submitted",
+      "columns": {
+        "id": "ID",
+        "customer": "Customer",
+        "requested": "Requested",
+        "term": "Term (mo)",
+        "status": "Status",
+        "submitted": "Submitted"
+      },
+      "statusOptions": {
+        "all": "All statuses",
+        "submitted": "Submitted",
+        "underReview": "Under review",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "withdrawn": "Withdrawn"
+      },
+      "fields": {
+        "customer": "Customer",
+        "searchPlaceholder": "Search customers…",
+        "requestedAmount": "Requested amount",
+        "requestedAmountHint": "Minimum 1000",
+        "requestedTerm": "Requested term (months)",
+        "requestedTermHint": "1 – 360",
+        "purpose": "Purpose"
+      }
+    },
+    "detail": {
+      "backToApplications": "Back to applications",
+      "title": "Application #{id}",
+      "startReview": "Start review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "withdraw": "Withdraw",
+      "details": "Details",
+      "customer": "Customer",
+      "requestedAmount": "Requested amount",
+      "requestedTerm": "Requested term",
+      "monthsUnit": "months",
+      "purpose": "Purpose",
+      "submitted": "Submitted",
+      "decided": "Decided",
+      "loan": "Loan",
+      "decisions": "Decisions",
+      "noDecisionsTitle": "No decisions yet",
+      "noDecisionsDescription": "Approvals and rejections recorded against this application will appear here.",
+      "documents": "Documents",
+      "documentTypePlaceholder": "Type (e.g. ID_PROOF)",
+      "fileNamePlaceholder": "File name",
+      "fileUrlPlaceholder": "File URL",
+      "addDocument": "Add document",
+      "noDocumentsTitle": "No documents yet",
+      "noDocumentsDescription": "Supporting documents submitted with this application will appear here.",
+      "notes": "Notes",
+      "notePlaceholder": "Add an internal note...",
+      "add": "Add",
+      "noNotesTitle": "No notes yet",
+      "noNotesDescription": "Internal notes and comments about this application will appear here.",
+      "approveModalTitle": "Approve application",
+      "rejectModalTitle": "Reject application",
+      "approvedAmount": "Approved amount",
+      "interestRate": "Interest rate",
+      "termMonths": "Term (months)",
+      "comments": "Comments",
+      "withdrawTitle": "Withdraw this application?",
+      "withdrawDescription": "The customer's application is withdrawn and can no longer be reviewed or approved.",
+      "toastUnderReview": "Application under review",
+      "toastWithdrawn": "Application withdrawn",
+      "toastApproved": "Application approved",
+      "toastRejected": "Application rejected",
+      "toastDocumentDeleted": "Document deleted",
+      "decisionValidationError": "Approved amount, interest rate and term are all required to approve."
+    }
+  }
+}

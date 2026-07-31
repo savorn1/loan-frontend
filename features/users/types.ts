@@ -33,3 +33,18 @@ export interface UserFilter {
   page?: number
   size?: number
 }
+
+// ── Additive RBAC roles held by this user (features/roles/types.ts), in
+// addition to their base USER/ADMIN tier (the `role` field above) ──────────
+export interface UserRoleResponse {
+  id: number
+  userId: number
+  username: string
+  roleId: number
+  roleName: string
+  createdAt: string
+}
+
+export interface AssignUserRoleRequest {
+  roleId: number
+}

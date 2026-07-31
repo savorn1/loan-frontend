@@ -3,9 +3,9 @@
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Guarantors</span>
+          <span class="font-semibold">{{ t('loans.guarantors.title') }}</span>
           <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >Add guarantor</UButton
+            >{{ t('loans.guarantors.add') }}</UButton
           >
         </div>
       </template>
@@ -19,17 +19,17 @@
             :loading="releasing === row.id"
             @click="onRelease(row.id)"
           >
-            Release
+            {{ t('loans.guarantors.release') }}
           </UButton>
         </template>
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-user-group"
-            title="No guarantors"
-            description="Add a third party backing repayment of this loan."
+            :title="t('loans.guarantors.empty.title')"
+            :description="t('loans.guarantors.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Add guarantor</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.guarantors.add') }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -39,14 +39,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Add guarantor</span>
+          <span class="font-semibold">{{ t('loans.guarantors.add') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="fields"
           :loading="creating"
           :error="error"
-          submit-label="Add"
+          :submit-label="t('loans.guarantors.submit')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -64,6 +64,7 @@ const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 
@@ -75,28 +76,34 @@ const {
   api<LoanGuarantorResponse[]>(`/loans/${loanId}/guarantors`)
 )
 
-const columns: ColumnDef<LoanGuarantorResponse>[] = [
-  { key: 'name' },
-  { key: 'phone' },
-  { key: 'relationship' },
-  { key: 'guaranteedAmount', label: 'Guaranteed amount', type: 'currency' },
-  { key: 'status', type: 'status' },
-  { key: 'createdAt', label: 'Created', type: 'datetime' },
-  { key: 'actions', label: '' }
-]
+const columns = computed<ColumnDef<LoanGuarantorResponse>[]>(() => [
+  { key: 'name', label: t('loans.guarantors.columns.name') },
+  { key: 'phone', label: t('loans.guarantors.columns.phone') },
+  { key: 'relationship', label: t('loans.guarantors.columns.relationship') },
+  { key: 'guaranteedAmount', label: t('loans.guarantors.columns.guaranteedAmount'), type: 'currency' },
+  { key: 'status', label: t('loans.guarantors.columns.status'), type: 'status' },
+  { key: 'createdAt', label: t('loans.guarantors.columns.created'), type: 'datetime' },
+  { key: 'actions', label: t('loans.guarantors.columns.actions') }
+])
 
-const fields: FieldDef[] = [
-  { name: 'name', required: true, wrapper: 'half' },
-  { name: 'phone', type: 'phone', required: true, wrapper: 'half' },
-  { name: 'relationship', wrapper: 'half' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'name', label: t('loans.guarantors.fields.name'), required: true, wrapper: 'half' },
+  {
+    name: 'phone',
+    label: t('loans.guarantors.fields.phone'),
+    type: 'phone',
+    required: true,
+    wrapper: 'half'
+  },
+  { name: 'relationship', label: t('loans.guarantors.fields.relationship'), wrapper: 'half' },
   {
     name: 'guaranteedAmount',
-    label: 'Guaranteed amount',
+    label: t('loans.guarantors.fields.guaranteedAmount'),
     type: 'currency',
-    hint: 'Optional — leave blank if unspecified',
+    hint: t('loans.guarantors.fields.guaranteedAmountHint'),
     wrapper: 'half'
   }
-]
+])
 
 const showCreate = ref(false)
 const creating = ref(false)
@@ -121,7 +128,7 @@ async function onCreate(values: Record<string, any>) {
       guaranteedAmount: values.guaranteedAmount || undefined
     }
     await api(`/loans/${loanId}/guarantors`, { method: 'POST', body: payload })
-    toast.add({ title: 'Guarantor added', color: 'green' })
+    toast.add({ title: t('loans.guarantors.toast.added'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -135,7 +142,7 @@ async function onRelease(guarantorId: number) {
   releasing.value = guarantorId
   try {
     await api(`/loans/${loanId}/guarantors/${guarantorId}/release`, { method: 'PUT' })
-    toast.add({ title: 'Guarantor released', color: 'green' })
+    toast.add({ title: t('loans.guarantors.toast.released'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

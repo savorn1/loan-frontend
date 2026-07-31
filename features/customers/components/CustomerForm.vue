@@ -3,7 +3,7 @@
     v-model="form"
     :fields="fields"
     :loading="loading"
-    :submit-label="submitLabel ?? 'Save'"
+    :submit-label="submitLabel ?? t('common.save')"
     :cancelable="cancelable"
     @submit="onSubmit"
     @cancel="emit('cancel')"
@@ -11,17 +11,10 @@
 </template>
 
 <script setup lang="ts">
-// Declarative rewrite on top of the Backpack-style <DynamicForm>/<Field>
-// components (shared/components) — same rendered output as the previous
-// hand-written template (2-col name row, icons, DatePicker capped at today),
-// but the field list is now data instead of markup.
 import type { CustomerRequest, CustomerResponse } from '~/features/customers/types'
 import type { FieldDef } from '~/shared/types'
 
 const props = defineProps<{
-  // CustomerResponse (not CustomerRequest) — the only real caller passes an
-  // existing customer to edit, whose optional fields are `| null` (API
-  // response shape) rather than `| undefined` (request shape).
   initial?: Partial<CustomerResponse>
   loading?: boolean
   submitLabel?: string
@@ -30,25 +23,37 @@ const props = defineProps<{
 
 const emit = defineEmits<{ submit: [CustomerRequest]; cancel: [] }>()
 
+const { t } = useI18n()
+
 const now = new Date()
 const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 
-// Labels are omitted where Backpack-style auto-humanization of the name
-// produces the right text ('firstName' → 'First name').
-const fields: FieldDef[] = [
-  { name: 'firstName', required: true, wrapper: 'half' },
-  { name: 'lastName', required: true, wrapper: 'half' },
-  { name: 'email', type: 'email', required: true, icon: 'i-heroicons-envelope' },
-  { name: 'phone', type: 'phone', wrapper: 'half' },
-  { name: 'nationalId', label: 'National ID', icon: 'i-heroicons-identification', wrapper: 'half' },
-  { name: 'address', icon: 'i-heroicons-map-pin' },
+const fields = computed<FieldDef[]>(() => [
+  { name: 'firstName', label: t('customers.form.firstName'), required: true, wrapper: 'half' },
+  { name: 'lastName', label: t('customers.form.lastName'), required: true, wrapper: 'half' },
+  {
+    name: 'email',
+    label: t('customers.form.email'),
+    type: 'email',
+    required: true,
+    icon: 'i-heroicons-envelope'
+  },
+  { name: 'phone', label: t('customers.form.phone'), type: 'phone', wrapper: 'half' },
+  {
+    name: 'nationalId',
+    label: t('customers.form.nationalId'),
+    icon: 'i-heroicons-identification',
+    wrapper: 'half'
+  },
+  { name: 'address', label: t('customers.form.address'), icon: 'i-heroicons-map-pin' },
   {
     name: 'dateOfBirth',
+    label: t('customers.form.dateOfBirth'),
     type: 'dob',
     max: today,
-    hint: 'Optional'
+    hint: t('customers.form.dateOfBirthHint')
   }
-]
+])
 
 const form = ref<Record<string, any>>({
   firstName: props.initial?.firstName ?? '',

@@ -3,17 +3,17 @@
     <UCard v-if="settlement">
       <template #header>
         <div class="flex items-center justify-between">
-          <span class="font-semibold">Settlement</span>
+          <span class="font-semibold">{{ t('loans.settlement.title') }}</span>
           <StatusBadge :status="settlement.status" />
         </div>
       </template>
 
       <dl class="grid grid-cols-2 gap-y-3 text-sm mb-4">
-        <dt class="text-gray-500">Settlement amount</dt>
+        <dt class="text-gray-500">{{ t('loans.settlement.labels.amount') }}</dt>
         <dd class="font-semibold">{{ formatCurrency(settlement.settlementAmount) }}</dd>
-        <dt class="text-gray-500">Settlement date</dt>
+        <dt class="text-gray-500">{{ t('loans.settlement.labels.date') }}</dt>
         <dd>{{ formatDate(settlement.settlementDate) }}</dd>
-        <dt class="text-gray-500">Note</dt>
+        <dt class="text-gray-500">{{ t('loans.settlement.labels.note') }}</dt>
         <dd>{{ settlement.note || '—' }}</dd>
       </dl>
 
@@ -22,16 +22,16 @@
         :loading="completing"
         @click="onComplete"
       >
-        Mark completed
+        {{ t('loans.settlement.markCompleted') }}
       </UButton>
     </UCard>
 
     <UCard v-else>
       <template #header>
-        <span class="font-semibold">Settle this loan</span>
+        <span class="font-semibold">{{ t('loans.settlement.settleTitle') }}</span>
       </template>
       <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        No settlement has been recorded for this loan yet.
+        {{ t('loans.settlement.noSettlement') }}
       </p>
       <DynamicForm
         v-if="isAdmin"
@@ -39,7 +39,7 @@
         :fields="fields"
         :loading="creating"
         :error="error"
-        submit-label="Record settlement"
+        :submit-label="t('loans.settlement.submit')"
         @submit="onCreate"
       />
     </UCard>
@@ -54,6 +54,7 @@ const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { t } = useI18n()
 
 const loanId = route.params.id as string
 
@@ -69,22 +70,22 @@ const { data: settlement, refresh } = await useAsyncData(`loan-${loanId}-settlem
 
 const today = new Date().toISOString().slice(0, 10)
 
-const fields: FieldDef[] = [
+const fields = computed<FieldDef[]>(() => [
   {
     name: 'settlementAmount',
-    label: 'Settlement amount',
+    label: t('loans.settlement.fields.settlementAmount'),
     type: 'currency',
     required: true
   },
   {
     name: 'settlementDate',
-    label: 'Settlement date',
+    label: t('loans.settlement.fields.settlementDate'),
     type: 'date',
     required: true,
     default: today
   },
-  { name: 'note', type: 'textarea' }
-]
+  { name: 'note', label: t('loans.settlement.fields.note'), type: 'textarea' }
+])
 
 const creating = ref(false)
 const completing = ref(false)
@@ -105,7 +106,7 @@ async function onCreate(values: Record<string, any>) {
       note: values.note || undefined
     }
     await api(`/loans/${loanId}/settlement`, { method: 'POST', body: payload })
-    toast.add({ title: 'Settlement recorded', color: 'green' })
+    toast.add({ title: t('loans.settlement.toast.recorded'), color: 'green' })
     await refresh()
   } catch (err) {
     error.value = apiErrorMessage(err)
@@ -118,7 +119,7 @@ async function onComplete() {
   completing.value = true
   try {
     await api(`/loans/${loanId}/settlement/complete`, { method: 'PUT' })
-    toast.add({ title: 'Settlement completed', color: 'green' })
+    toast.add({ title: t('loans.settlement.toast.completed'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
