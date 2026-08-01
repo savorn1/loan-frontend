@@ -18,6 +18,7 @@
               variant="soft"
               icon="i-heroicons-lock-closed"
               :title="t('accounting.financialPeriods.closePeriod')"
+              :aria-label="t('accounting.financialPeriods.closePeriod')"
               @click="confirmClose = row"
             />
             <UButton
@@ -25,6 +26,7 @@
               size="2xs"
               variant="soft"
               icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
               @click="openEdit(row)"
             />
             <UButton
@@ -33,6 +35,7 @@
               color="red"
               variant="soft"
               icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
               @click="confirmDelete = row"
             />
           </div>

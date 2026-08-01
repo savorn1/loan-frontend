@@ -61,7 +61,8 @@
       "actions": {
         "note": "កំណត់ចំណាំ",
         "assign": "ចាត់តាំង",
-        "case": "ករណី"
+        "case": "ករណី",
+        "viewLoan": "មើលកម្ចី"
       },
       "emptyFiltered": {
         "description": "សូមព្យាយាមសម្អាតតម្រង។"

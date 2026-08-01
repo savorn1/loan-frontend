@@ -56,6 +56,7 @@
               color="red"
               variant="soft"
               icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
               @click="confirmDeleteId = row.id"
             />
           </div>

@@ -80,7 +80,12 @@
     "pleaseFillIn": "សូមបំពេញ \"{label}\"",
     "searchEllipsis": "ស្វែងរក…",
     "openMenu": "បើកម៉ឺនុយ",
-    "signedInAs": "បានចូលគណនីជា {username}"
+    "signedInAs": "បានចូលគណនីជា {username}",
+    "clearSearch": "សម្អាតការស្វែងរក"
+  },
+  "errorState": {
+    "title": "មិនអាចផ្ទុកទំព័រនេះបានទេ",
+    "retry": "ព្យាយាមម្តងទៀត"
   },
   "datePicker": {
     "selectDate": "ជ្រើសរើសកាលបរិច្ឆេទ",
@@ -106,7 +111,8 @@
     "clickToUpload": "ចុចដើម្បីផ្ទុកឡើង",
     "orDragAndDrop": "ឬអូសហើយទម្លាក់",
     "upToSize": "រហូតដល់ {size}MB",
-    "exceedsLimit": "\"{name}\" លើសពីដែនកំណត់ {size}MB"
+    "exceedsLimit": "\"{name}\" លើសពីដែនកំណត់ {size}MB",
+    "removeFile": "លុបឯកសារ"
   },
   "auth": {
     "welcomeBack": "សូមស្វាគមន៍ការត្រឡប់មកវិញ",

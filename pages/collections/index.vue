@@ -77,6 +77,7 @@
               color="gray"
               variant="ghost"
               icon="i-heroicons-arrow-top-right-on-square"
+              :aria-label="t('collections.list.actions.viewLoan')"
               :to="`/loans/${row.loanId}`"
             />
           </div>

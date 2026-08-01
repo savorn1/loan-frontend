@@ -19,6 +19,7 @@
               color="gray"
               variant="link"
               icon="i-heroicons-x-mark"
+              :aria-label="t('common.clearSearch')"
               :padded="false"
               @click="search = ''"
             />
@@ -39,6 +40,7 @@
               size="2xs"
               variant="soft"
               icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
               @click.stop="openEdit(row)"
             />
             <UButton
@@ -46,6 +48,7 @@
               color="red"
               variant="soft"
               icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
               @click.stop="confirmDelete = row"
             />
           </div>

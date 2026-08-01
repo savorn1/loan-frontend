@@ -148,6 +148,21 @@
       @confirm="onDeleteRole"
     />
   </div>
+  <div v-else-if="roleError" class="py-8">
+    <ErrorState :title="t('common.errorState.title')" :description="apiErrorMessage(roleError)">
+      <template #action>
+        <UButton
+          size="sm"
+          variant="soft"
+          icon="i-heroicons-arrow-path"
+          :loading="rolePending"
+          @click="refreshRole()"
+        >
+          {{ t('common.errorState.retry') }}
+        </UButton>
+      </template>
+    </ErrorState>
+  </div>
   <div v-else class="flex justify-center py-16">
     <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
   </div>
@@ -175,9 +190,12 @@ const toast = useToast()
 
 const roleId = route.params.id as string
 
-const { data: role, refresh: refreshRole } = await useAsyncData(`role-${roleId}`, () =>
-  api<RoleResponse>(`/auth/roles/${roleId}`)
-)
+const {
+  data: role,
+  error: roleError,
+  pending: rolePending,
+  refresh: refreshRole
+} = await useAsyncData(`role-${roleId}`, () => api<RoleResponse>(`/auth/roles/${roleId}`))
 
 // ── Details ─────────────────────────────────────────────────────────────
 const detailsFields = computed<FieldDef[]>(() => [

@@ -113,6 +113,7 @@
                   color="red"
                   variant="ghost"
                   icon="i-heroicons-x-mark"
+                  :aria-label="t('common.clearSearch')"
                   :disabled="createForm.lines.length <= 2"
                   @click="removeLine(i)"
                 />

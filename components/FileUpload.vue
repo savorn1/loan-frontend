@@ -56,6 +56,7 @@
           color="gray"
           variant="ghost"
           icon="i-heroicons-x-mark"
+          :aria-label="t('fileUpload.removeFile')"
           :disabled="disabled"
           @click="removeAt(index)"
         />

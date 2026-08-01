@@ -19,6 +19,7 @@
                 color="gray"
                 variant="link"
                 icon="i-heroicons-x-mark"
+                :aria-label="t('common.clearSearch')"
                 :padded="false"
                 @click="filters.username = ''"
               />
@@ -75,6 +76,7 @@
               color="red"
               variant="ghost"
               icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
               :disabled="row.username === username"
               @click="confirmDeleteUser = row"
             />

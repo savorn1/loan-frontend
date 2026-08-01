@@ -21,6 +21,7 @@
               color="gray"
               variant="link"
               icon="i-heroicons-x-mark"
+              :aria-label="t('common.clearSearch')"
               :padded="false"
               @click="search = ''"
             />
@@ -37,14 +38,16 @@
               variant="soft"
               icon="i-heroicons-star"
               :title="t('loanConfig.shared.setAsDefault')"
+              :aria-label="t('loanConfig.shared.setAsDefault')"
               @click="onSetDefault(row)"
             />
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
+            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
             <UButton
               size="2xs"
               color="red"
               variant="soft"
               icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
               @click="confirmDelete = row"
             />
           </div>

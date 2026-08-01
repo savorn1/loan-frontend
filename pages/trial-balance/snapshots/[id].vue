@@ -41,6 +41,21 @@
       <DataTable :rows="snapshot.lines" :columns="columns" />
     </UCard>
   </div>
+  <div v-else-if="error" class="py-8">
+    <ErrorState :title="t('common.errorState.title')" :description="apiErrorMessage(error)">
+      <template #action>
+        <UButton
+          size="sm"
+          variant="soft"
+          icon="i-heroicons-arrow-path"
+          :loading="pending"
+          @click="refresh()"
+        >
+          {{ t('common.errorState.retry') }}
+        </UButton>
+      </template>
+    </ErrorState>
+  </div>
   <div v-else class="flex justify-center py-16">
     <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
   </div>
@@ -56,7 +71,12 @@ const api = useApi()
 
 const snapshotId = route.params.id as string
 
-const { data: snapshot } = await useAsyncData(`trial-balance-snapshot-${snapshotId}`, () =>
+const {
+  data: snapshot,
+  error,
+  pending,
+  refresh
+} = await useAsyncData(`trial-balance-snapshot-${snapshotId}`, () =>
   api<TrialBalanceResponse>(`/trial-balance/snapshots/${snapshotId}`)
 )
 

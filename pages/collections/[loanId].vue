@@ -83,6 +83,21 @@
       </UCard>
     </UModal>
   </div>
+  <div v-else-if="loanError" class="py-8">
+    <ErrorState :title="t('common.errorState.title')" :description="apiErrorMessage(loanError)">
+      <template #action>
+        <UButton
+          size="sm"
+          variant="soft"
+          icon="i-heroicons-arrow-path"
+          :loading="loanPending"
+          @click="refreshLoan()"
+        >
+          {{ t('common.errorState.retry') }}
+        </UButton>
+      </template>
+    </ErrorState>
+  </div>
   <div v-else class="flex justify-center py-16">
     <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
   </div>
@@ -110,9 +125,12 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.loanId as string
 
-const { data: loan } = await useAsyncData(`collection-case-${loanId}-loan`, () =>
-  api<LoanResponse>(`/loans/${loanId}`)
-)
+const {
+  data: loan,
+  error: loanError,
+  pending: loanPending,
+  refresh: refreshLoan
+} = await useAsyncData(`collection-case-${loanId}-loan`, () => api<LoanResponse>(`/loans/${loanId}`))
 const { data: collectionCase, refresh: refreshCase } = await useAsyncData(
   `collection-case-${loanId}-case`,
   () => api<CollectionCaseResponse>(`/payments/collections/${loanId}/case`)

@@ -61,7 +61,8 @@
       "actions": {
         "note": "Note",
         "assign": "Assign",
-        "case": "Case"
+        "case": "Case",
+        "viewLoan": "View loan"
       },
       "emptyFiltered": {
         "description": "Try clearing the filters."

@@ -80,7 +80,12 @@
     "pleaseFillIn": "Please fill in \"{label}\"",
     "searchEllipsis": "Search…",
     "openMenu": "Open menu",
-    "signedInAs": "Signed in as {username}"
+    "signedInAs": "Signed in as {username}",
+    "clearSearch": "Clear search"
+  },
+  "errorState": {
+    "title": "Couldn't load this page",
+    "retry": "Retry"
   },
   "datePicker": {
     "selectDate": "Select a date",
@@ -106,7 +111,8 @@
     "clickToUpload": "Click to upload",
     "orDragAndDrop": "or drag and drop",
     "upToSize": "Up to {size}MB",
-    "exceedsLimit": "\"{name}\" exceeds the {size}MB limit"
+    "exceedsLimit": "\"{name}\" exceeds the {size}MB limit",
+    "removeFile": "Remove file"
   },
   "auth": {
     "welcomeBack": "Welcome back",

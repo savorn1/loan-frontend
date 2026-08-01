@@ -86,6 +86,7 @@
                 size="2xs"
                 variant="soft"
                 icon="i-heroicons-pencil"
+                :aria-label="t('common.edit')"
                 @click="openEditIdentity(row)"
               />
               <UButton
@@ -93,6 +94,7 @@
                 color="red"
                 variant="soft"
                 icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
                 @click="confirmDeleteIdentity = row"
               />
             </div>
@@ -129,6 +131,7 @@
                 size="2xs"
                 variant="soft"
                 icon="i-heroicons-pencil"
+                :aria-label="t('common.edit')"
                 @click="openEditAddress(row)"
               />
               <UButton
@@ -136,6 +139,7 @@
                 color="red"
                 variant="soft"
                 icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
                 @click="confirmDeleteAddress = row"
               />
             </div>
@@ -172,6 +176,7 @@
                 size="2xs"
                 variant="soft"
                 icon="i-heroicons-pencil"
+                :aria-label="t('common.edit')"
                 @click="openEditContact(row)"
               />
               <UButton
@@ -179,6 +184,7 @@
                 color="red"
                 variant="soft"
                 icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
                 @click="confirmDeleteContact = row"
               />
             </div>
@@ -219,6 +225,7 @@
                 size="2xs"
                 variant="soft"
                 icon="i-heroicons-pencil"
+                :aria-label="t('common.edit')"
                 @click="openEditEmployment(row)"
               />
               <UButton
@@ -226,6 +233,7 @@
                 color="red"
                 variant="soft"
                 icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
                 @click="confirmDeleteEmployment = row"
               />
             </div>
@@ -262,6 +270,7 @@
                 size="2xs"
                 variant="soft"
                 icon="i-heroicons-pencil"
+                :aria-label="t('common.edit')"
                 @click="openEditIncome(row)"
               />
               <UButton
@@ -269,6 +278,7 @@
                 color="red"
                 variant="soft"
                 icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
                 @click="confirmDeleteIncome = row"
               />
             </div>
@@ -309,6 +319,7 @@
                 size="2xs"
                 variant="soft"
                 icon="i-heroicons-pencil"
+                :aria-label="t('common.edit')"
                 @click="openEditRelationship(row)"
               />
               <UButton
@@ -316,6 +327,7 @@
                 color="red"
                 variant="soft"
                 icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
                 @click="confirmDeleteRelationship = row"
               />
             </div>
@@ -700,6 +712,21 @@
       @confirm="onDelete"
     />
   </div>
+  <div v-else-if="customerError" class="py-8">
+    <ErrorState :title="t('common.errorState.title')" :description="apiErrorMessage(customerError)">
+      <template #action>
+        <UButton
+          size="sm"
+          variant="soft"
+          icon="i-heroicons-arrow-path"
+          :loading="customerPending"
+          @click="refresh()"
+        >
+          {{ t('common.errorState.retry') }}
+        </UButton>
+      </template>
+    </ErrorState>
+  </div>
   <div v-else class="flex justify-center py-16">
     <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
   </div>
@@ -739,9 +766,12 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const customerId = route.params.id as string
 
-const { data: customer, refresh } = await useAsyncData(`customer-${customerId}`, () =>
-  api<CustomerResponse>(`/customers/${customerId}`)
-)
+const {
+  data: customer,
+  error: customerError,
+  pending: customerPending,
+  refresh
+} = await useAsyncData(`customer-${customerId}`, () => api<CustomerResponse>(`/customers/${customerId}`))
 const { data: loans, pending: loansPending } = await useAsyncData(
   `customer-${customerId}-loans`,
   () => api<LoanResponse[]>(`/loans/customer/${customerId}`)

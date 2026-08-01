@@ -22,6 +22,7 @@
                 color="gray"
                 variant="link"
                 icon="i-heroicons-x-mark"
+                :aria-label="t('common.clearSearch')"
                 :padded="false"
                 @click="search = ''"
               />

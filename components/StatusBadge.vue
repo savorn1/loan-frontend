@@ -48,8 +48,8 @@ const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
 }
 
 const DEFAULT_META: { color: StatusColor; icon: string } = {
-  color: 'orange',
-  icon: 'i-heroicons-clock'
+  color: 'gray',
+  icon: 'i-heroicons-question-mark-circle'
 }
 
 const meta = computed(() => STATUS_META[props.status] ?? DEFAULT_META)

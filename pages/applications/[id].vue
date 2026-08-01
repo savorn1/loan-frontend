@@ -162,6 +162,7 @@
                   size="2xs"
                   variant="soft"
                   icon="i-heroicons-check"
+                  :aria-label="t('applications.detail.verifyDocument')"
                   @click="onVerifyDocument(d.id)"
                 />
                 <UButton
@@ -170,6 +171,7 @@
                   color="red"
                   variant="soft"
                   icon="i-heroicons-x-mark"
+                  :aria-label="t('applications.detail.rejectDocument')"
                   @click="onRejectDocument(d.id)"
                 />
                 <UButton
@@ -177,6 +179,7 @@
                   color="red"
                   variant="ghost"
                   icon="i-heroicons-trash"
+                  :aria-label="t('applications.detail.deleteDocument')"
                   @click="onDeleteDocument(d.id)"
                 />
               </template>
@@ -303,6 +306,21 @@
       @confirm="onWithdraw"
     />
   </div>
+  <div v-else-if="error" class="py-8">
+    <ErrorState :title="t('common.errorState.title')" :description="apiErrorMessage(error)">
+      <template #action>
+        <UButton
+          size="sm"
+          variant="soft"
+          icon="i-heroicons-arrow-path"
+          :loading="pending"
+          @click="refresh()"
+        >
+          {{ t('common.errorState.retry') }}
+        </UButton>
+      </template>
+    </ErrorState>
+  </div>
   <div v-else class="flex justify-center py-16">
     <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
   </div>
@@ -325,7 +343,12 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const applicationId = route.params.id as string
 
-const { data: application, refresh } = await useAsyncData(`application-${applicationId}`, () =>
+const {
+  data: application,
+  error,
+  pending,
+  refresh
+} = await useAsyncData(`application-${applicationId}`, () =>
   api<ApplicationResponse>(`/loans/applications/${applicationId}`)
 )
 
