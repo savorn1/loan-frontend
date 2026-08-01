@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Loan Product Fee Schemes" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.loanProductFeeSchemes.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">Assign Fee Scheme</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.loanProductFeeSchemes.assignFeeScheme')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by product or scheme..."
+          :placeholder="t('loanConfig.loanProductFeeSchemes.searchPlaceholder')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-currency-dollar'"
-            :title="search ? 'No matches' : 'No fee scheme assignments yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.loanProductFeeSchemes.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Assign a reusable fee scheme to a loan product, with a priority and validity window.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.loanProductFeeSchemes.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Assign Fee Scheme</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.loanProductFeeSchemes.assignFeeScheme')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Assign Fee Scheme</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProductFeeSchemes.assignFeeScheme') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="createFields"
           :loading="creating"
           :error="error"
-          submit-label="Assign"
+          :submit-label="t('loanConfig.shared.assign')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Fee Scheme Assignment</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProductFeeSchemes.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="editFields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Remove this assignment?"
-      description="This removes the fee scheme from the loan product. This action cannot be undone."
-      confirm-label="Remove"
+      :title="t('loanConfig.shared.removeConfirmTitle')"
+      :description="t('loanConfig.loanProductFeeSchemes.removeDescription')"
+      :confirm-label="t('loanConfig.shared.removeLabel')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -125,6 +129,7 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
+const { t } = useI18n()
 
 const {
   data: mappings,
@@ -153,27 +158,37 @@ const schemeOptions = computed(() =>
   (schemes.value ?? []).map((s) => ({ label: `${s.name} (${s.code})`, value: s.id }))
 )
 
-const columns: ColumnDef<LoanProductFeeSchemeResponse>[] = [
-  { key: 'loanProductId', label: 'Loan product', value: (row) => productLabel(row.loanProductId) },
+const columns = computed<ColumnDef<LoanProductFeeSchemeResponse>[]>(() => [
+  {
+    key: 'loanProductId',
+    label: t('loanConfig.shared.loanProductColumn'),
+    value: (row) => productLabel(row.loanProductId)
+  },
   {
     key: 'feeSchemeName',
-    label: 'Fee scheme',
+    label: t('loanConfig.loanProductFeeSchemes.feeSchemeColumn'),
     value: (row) => `${row.feeSchemeName} (${row.feeSchemeCode})`
   },
-  { key: 'priority', sortable: true },
+  { key: 'priority', label: t('loanConfig.shared.priorityColumn'), sortable: true },
   {
     key: 'isMandatory',
-    label: 'Mandatory',
+    label: t('loanConfig.shared.mandatoryLabel'),
     type: 'boolean',
-    trueLabel: 'Mandatory',
-    falseLabel: 'Optional',
+    trueLabel: t('loanConfig.shared.mandatoryLabel'),
+    falseLabel: t('loanConfig.shared.optionalLabel'),
     trueColor: 'teal',
     falseColor: 'gray'
   },
-  { key: 'effectiveFrom', label: 'Effective', type: 'date', to: 'effectiveTo', toEmpty: 'open' },
-  { key: 'status', type: 'status', sortable: true },
+  {
+    key: 'effectiveFrom',
+    label: t('loanConfig.shared.effectiveColumn'),
+    type: 'date',
+    to: 'effectiveTo',
+    toEmpty: t('loanConfig.shared.openEnded')
+  },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(
   computed(() =>
@@ -187,40 +202,49 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(
 
 const totalLabel = computed(() => {
   const count = mappings.value?.length ?? 0
-  return count === 1 ? '1 assignment' : `${count} assignments`
+  return count === 1
+    ? t('loanConfig.loanProductFeeSchemes.total.one')
+    : t('loanConfig.loanProductFeeSchemes.total.other', { count })
 })
 
 // Shared by both forms; create additionally picks the owning loan product
 // (fixed for the lifetime of the assignment — it's the path param, not part
 // of the request body, so it isn't editable afterwards).
-const commonFields: FieldDef[] = [
-  { name: 'isMandatory', label: 'Mandatory', type: 'switch', wrapper: 'half' },
-  { name: 'priority', type: 'number', required: true, min: 0, wrapper: 'half' },
-  { name: 'effectiveFrom', label: 'Effective from', type: 'date', required: true, wrapper: 'half' },
+const commonFields = computed<FieldDef[]>(() => [
+  { name: 'isMandatory', label: t('loanConfig.shared.mandatoryLabel'), type: 'switch', wrapper: 'half' },
+  { name: 'priority', label: t('loanConfig.shared.priorityColumn'), type: 'number', required: true, min: 0, wrapper: 'half' },
+  {
+    name: 'effectiveFrom',
+    label: t('loanConfig.shared.effectiveFromLabel'),
+    type: 'date',
+    required: true,
+    wrapper: 'half'
+  },
   {
     name: 'effectiveTo',
-    label: 'Effective to',
+    label: t('loanConfig.shared.effectiveToLabel'),
     type: 'date',
-    hint: 'Leave blank for open-ended',
+    hint: t('loanConfig.shared.effectiveToHint'),
     wrapper: 'half'
   },
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const createFields = computed<FieldDef[]>(() => [
   {
     name: 'loanProductId',
-    label: 'Loan product',
+    label: t('loanConfig.shared.loanProductColumn'),
     type: 'select',
     required: true,
     wrapper: 'half',
@@ -228,25 +252,25 @@ const createFields = computed<FieldDef[]>(() => [
   },
   {
     name: 'feeSchemeId',
-    label: 'Fee scheme',
+    label: t('loanConfig.loanProductFeeSchemes.feeSchemeColumn'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: schemeOptions.value
   },
-  ...commonFields
+  ...commonFields.value
 ])
 
 const editFields = computed<FieldDef[]>(() => [
   {
     name: 'feeSchemeId',
-    label: 'Fee scheme',
+    label: t('loanConfig.loanProductFeeSchemes.feeSchemeColumn'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: schemeOptions.value
   },
-  ...commonFields
+  ...commonFields.value
 ])
 
 const showCreate = ref(false)
@@ -287,7 +311,7 @@ async function onCreate(values: Record<string, any>) {
       method: 'POST',
       body: toPayload(values)
     })
-    toast.add({ title: 'Fee scheme assigned', color: 'green' })
+    toast.add({ title: t('loanConfig.loanProductFeeSchemes.feeSchemeAssignedToast'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -329,7 +353,7 @@ async function onEdit(values: Record<string, any>) {
         body: toPayload(values)
       }
     )
-    toast.add({ title: 'Assignment updated', color: 'green' })
+    toast.add({ title: t('loanConfig.shared.assignmentUpdated'), color: 'green' })
     showEdit.value = false
     await refresh()
   } catch (err) {
@@ -350,7 +374,7 @@ async function onDelete() {
       `/loan-products/${confirmDelete.value.loanProductId}/fee-schemes/${confirmDelete.value.id}`,
       { method: 'DELETE' }
     )
-    toast.add({ title: 'Assignment removed', color: 'green' })
+    toast.add({ title: t('loanConfig.shared.assignmentRemoved'), color: 'green' })
     confirmDelete.value = null
     await refresh()
   } catch (err) {

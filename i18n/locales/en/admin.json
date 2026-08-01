@@ -3,7 +3,8 @@
     "entities": {
       "user": "User",
       "role": "Role",
-      "permission": "Permission"
+      "permission": "Permission",
+      "branch": "Branch"
     },
     "shared": {
       "loading": "Loading…",
@@ -35,6 +36,7 @@
         "username": "Username",
         "role": "Role",
         "status": "Status",
+        "branch": "Branch",
         "created": "Created"
       },
       "actions": {
@@ -42,7 +44,8 @@
         "makeUser": "Make User",
         "disable": "Disable",
         "enable": "Enable",
-        "roles": "Roles"
+        "roles": "Roles",
+        "branch": "Branch"
       },
       "empty": {
         "title": "No users found",
@@ -54,7 +57,11 @@
         "password": "Password",
         "passwordHint": "At least 6 characters",
         "role": "Role",
-        "active": "Active"
+        "active": "Active",
+        "branch": "Branch"
+      },
+      "branchOptions": {
+        "none": "No branch"
       },
       "deleteConfirmTitle": "Delete user \"{username}\"?",
       "deleteConfirmDescription": "This action cannot be undone.",
@@ -64,11 +71,15 @@
         "emptyDescription": "Create a role first, then assign it to users.",
         "goToRoles": "Go to roles"
       },
+      "branchModal": {
+        "title": "Branch — {username}"
+      },
       "toast": {
         "created": "User \"{username}\" created",
         "roleChanged": "{username} is now {role}",
         "disabled": "{username} disabled",
         "enabled": "{username} enabled",
+        "branchChanged": "{username}'s branch updated",
         "deleted": "User deleted"
       }
     },
@@ -126,6 +137,55 @@
           "assigned": "User assigned",
           "removed": "{username} removed from role",
           "deleted": "Role deleted"
+        }
+      }
+    },
+    "branches": {
+      "title": "Branches",
+      "total": {
+        "one": "1 branch",
+        "other": "{count} branches"
+      },
+      "newBranch": "New Branch",
+      "searchPlaceholder": "Search by name or code...",
+      "columns": {
+        "code": "Code",
+        "name": "Name",
+        "address": "Address",
+        "phone": "Phone",
+        "status": "Status",
+        "created": "Created"
+      },
+      "empty": {
+        "matchesTitle": "No matches",
+        "matchesDescription": "Nothing matches “{query}”.",
+        "emptyTitle": "No branches yet",
+        "emptyDescription": "Create a branch to assign to users, customers, and loans."
+      },
+      "createModalTitle": "New Branch",
+      "editModalTitle": "Edit Branch",
+      "fields": {
+        "code": "Code",
+        "codeHint": "e.g. PP01",
+        "name": "Name",
+        "address": "Address",
+        "phone": "Phone",
+        "status": "Status"
+      },
+      "deleteConfirmTitle": "Delete branch \"{name}\"?",
+      "deleteConfirmDescription": "Users, customers, and loans referencing this branch will keep the raw id but no longer show a name. This cannot be undone.",
+      "hoursModal": {
+        "title": "Business hours — {name}",
+        "closed": "Closed",
+        "toastSaved": "Business hours updated",
+        "days": {
+          "MONDAY": "Monday",
+          "TUESDAY": "Tuesday",
+          "WEDNESDAY": "Wednesday",
+          "THURSDAY": "Thursday",
+          "FRIDAY": "Friday",
+          "SATURDAY": "Saturday",
+          "SUNDAY": "Sunday"
         }
       }
     },

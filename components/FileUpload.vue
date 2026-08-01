@@ -16,7 +16,8 @@
     >
       <UIcon :name="icon" class="w-8 h-8 text-gray-400 dark:text-gray-500" />
       <p class="text-sm text-gray-600 dark:text-gray-300">
-        <span class="font-medium text-primary-500">Click to upload</span> or drag and drop
+        <span class="font-medium text-primary-500">{{ t('fileUpload.clickToUpload') }}</span>
+        {{ t('fileUpload.orDragAndDrop') }}
       </p>
       <p v-if="hintText" class="text-xs text-gray-400 dark:text-gray-500">{{ hintText }}</p>
       <input
@@ -89,6 +90,7 @@ const props = withDefaults(
 )
 
 const model = defineModel<File | File[] | null>({ default: null })
+const { t } = useI18n()
 
 const inputRef = ref<HTMLInputElement>()
 const isDragging = ref(false)
@@ -100,7 +102,7 @@ const files = computed<File[]>(() => {
 })
 
 const hintText = computed(
-  () => props.hint ?? (props.maxSizeMb ? `Up to ${props.maxSizeMb}MB` : undefined)
+  () => props.hint ?? (props.maxSizeMb ? t('fileUpload.upToSize', { size: props.maxSizeMb }) : undefined)
 )
 
 // Thumbnails for image files only; revoked whenever the selection changes so
@@ -132,7 +134,7 @@ function addFiles(list: FileList | File[]) {
   if (props.maxSizeMb) {
     const tooBig = incoming.find((file) => file.size > props.maxSizeMb! * 1024 * 1024)
     if (tooBig) {
-      error.value = `"${tooBig.name}" exceeds the ${props.maxSizeMb}MB limit`
+      error.value = t('fileUpload.exceedsLimit', { name: tooBig.name, size: props.maxSizeMb })
       return
     }
   }

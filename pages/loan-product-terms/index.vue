@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Loan Product Terms" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.loanProductTerms.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">Assign Term</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.loanProductTerms.assignTerm')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by product or term..."
+          :placeholder="t('loanConfig.loanProductTerms.searchPlaceholder')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -34,7 +36,7 @@
               size="2xs"
               variant="soft"
               icon="i-heroicons-star"
-              title="Set as default"
+              :title="t('loanConfig.shared.setAsDefault')"
               @click="onSetDefault(row)"
             />
             <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" @click="openEdit(row)" />
@@ -50,15 +52,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-clock'"
-            :title="search ? 'No matches' : 'No term assignments yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.loanProductTerms.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Assign a reusable term template to a loan product.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.loanProductTerms.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Assign Term</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.loanProductTerms.assignTerm')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -72,14 +76,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Assign Term</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProductTerms.assignTerm') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="createFields"
           :loading="creating"
           :error="error"
-          submit-label="Assign"
+          :submit-label="t('loanConfig.shared.assign')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -90,14 +94,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Term Assignment</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProductTerms.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="editFields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -107,9 +111,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Remove this assignment?"
-      description="This removes the term from the loan product. This action cannot be undone."
-      confirm-label="Remove"
+      :title="t('loanConfig.shared.removeConfirmTitle')"
+      :description="t('loanConfig.loanProductTerms.removeDescription')"
+      :confirm-label="t('loanConfig.shared.removeLabel')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -133,6 +137,7 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
+const { t } = useI18n()
 
 const {
   data: terms,
@@ -164,24 +169,28 @@ const templateOptions = computed(() =>
   }))
 )
 
-const columns: ColumnDef<LoanProductTermResponse>[] = [
-  { key: 'loanProductId', label: 'Loan product', value: (row) => productLabel(row.loanProductId) },
+const columns = computed<ColumnDef<LoanProductTermResponse>[]>(() => [
+  {
+    key: 'loanProductId',
+    label: t('loanConfig.shared.loanProductColumn'),
+    value: (row) => productLabel(row.loanProductId)
+  },
   {
     key: 'termTemplateName',
-    label: 'Term',
+    label: t('loanConfig.loanProductTerms.termColumn'),
     value: (row) => `${row.termTemplateName} (${row.termTemplateCode}) — ${row.termValue}`
   },
   {
     key: 'isDefault',
-    label: 'Default',
+    label: t('loanConfig.shared.defaultLabel'),
     type: 'boolean',
-    trueLabel: 'Default',
+    trueLabel: t('loanConfig.shared.defaultLabel'),
     falseLabel: '',
     trueColor: 'teal'
   },
-  { key: 'status', type: 'status', sortable: true },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(
   computed(() =>
@@ -195,31 +204,39 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(
 
 const totalLabel = computed(() => {
   const count = terms.value?.length ?? 0
-  return count === 1 ? '1 assignment' : `${count} assignments`
+  return count === 1
+    ? t('loanConfig.loanProductTerms.total.one')
+    : t('loanConfig.loanProductTerms.total.other', { count })
 })
 
 // Shared by both forms; create additionally picks the owning loan product
 // (fixed for the lifetime of the assignment — it's the path param, not part
 // of the request body, so it isn't editable afterwards).
-const commonFields: FieldDef[] = [
-  { name: 'isDefault', label: 'Default term for this product', type: 'switch', wrapper: 'half' },
+const commonFields = computed<FieldDef[]>(() => [
+  {
+    name: 'isDefault',
+    label: t('loanConfig.loanProductTerms.defaultTermFieldLabel'),
+    type: 'switch',
+    wrapper: 'half'
+  },
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const createFields = computed<FieldDef[]>(() => [
   {
     name: 'loanProductId',
-    label: 'Loan product',
+    label: t('loanConfig.shared.loanProductColumn'),
     type: 'select',
     required: true,
     wrapper: 'half',
@@ -227,25 +244,25 @@ const createFields = computed<FieldDef[]>(() => [
   },
   {
     name: 'termTemplateId',
-    label: 'Term template',
+    label: t('loanConfig.loanProductTerms.termTemplateFieldLabel'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: templateOptions.value
   },
-  ...commonFields
+  ...commonFields.value
 ])
 
 const editFields = computed<FieldDef[]>(() => [
   {
     name: 'termTemplateId',
-    label: 'Term template',
+    label: t('loanConfig.loanProductTerms.termTemplateFieldLabel'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: templateOptions.value
   },
-  ...commonFields
+  ...commonFields.value
 ])
 
 const showCreate = ref(false)
@@ -280,7 +297,7 @@ async function onCreate(values: Record<string, any>) {
       method: 'POST',
       body: toPayload(values)
     })
-    toast.add({ title: 'Term assigned', color: 'green' })
+    toast.add({ title: t('loanConfig.loanProductTerms.termAssignedToast'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -316,7 +333,7 @@ async function onEdit(values: Record<string, any>) {
       method: 'PUT',
       body: toPayload(values)
     })
-    toast.add({ title: 'Assignment updated', color: 'green' })
+    toast.add({ title: t('loanConfig.shared.assignmentUpdated'), color: 'green' })
     showEdit.value = false
     await refresh()
   } catch (err) {
@@ -329,7 +346,7 @@ async function onEdit(values: Record<string, any>) {
 async function onSetDefault(row: LoanProductTermResponse) {
   try {
     await api(`/loan-products/${row.loanProductId}/terms/${row.id}/set-default`, { method: 'PUT' })
-    toast.add({ title: 'Default term updated', color: 'green' })
+    toast.add({ title: t('loanConfig.loanProductTerms.setDefaultToast'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
@@ -347,7 +364,7 @@ async function onDelete() {
       `/loan-products/${confirmDelete.value.loanProductId}/terms/${confirmDelete.value.id}`,
       { method: 'DELETE' }
     )
-    toast.add({ title: 'Assignment removed', color: 'green' })
+    toast.add({ title: t('loanConfig.shared.assignmentRemoved'), color: 'green' })
     confirmDelete.value = null
     await refresh()
   } catch (err) {

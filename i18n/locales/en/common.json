@@ -8,10 +8,11 @@
     "loans": "Loans",
     "reports": "Reports",
     "notifications": "Notifications",
-    "userManagement": "User Management",
+    "userManagement": "User",
     "users": "Users",
     "roles": "Roles",
     "permissions": "Permissions",
+    "branches": "Branches",
     "payment": "Payment",
     "payments": "Payments",
     "collections": "Collections",
@@ -27,7 +28,7 @@
     "journalTemplates": "Journal Templates",
     "accountingSchemes": "Accounting Schemes",
     "financialPeriods": "Financial Periods",
-    "loanConfiguration": "Loan Configuration",
+    "loanConfiguration": "Configuration",
     "loanProducts": "Loan Products",
     "productInterestSchemes": "Product Interest Schemes",
     "productFeeSchemes": "Product Fee Schemes",
@@ -39,6 +40,13 @@
     "termTemplates": "Term Templates",
     "ruleTemplates": "Rule Templates",
     "documentTemplates": "Document Templates"
+  },
+  "commandPalette": {
+    "open": "Open search",
+    "placeholder": "Search pages and actions...",
+    "emptyLabel": "No results found",
+    "generalGroup": "General",
+    "actionsGroup": "Actions"
   },
   "common": {
     "save": "Save",
@@ -69,7 +77,36 @@
     "nothingMatches": "Nothing matches “{query}”.",
     "active": "Active",
     "inactive": "Inactive",
-    "pleaseFillIn": "Please fill in \"{label}\""
+    "pleaseFillIn": "Please fill in \"{label}\"",
+    "searchEllipsis": "Search…",
+    "openMenu": "Open menu",
+    "signedInAs": "Signed in as {username}"
+  },
+  "datePicker": {
+    "selectDate": "Select a date",
+    "today": "Today",
+    "clear": "Clear",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "weekdaySu": "Su",
+    "weekdayMo": "Mo",
+    "weekdayTu": "Tu",
+    "weekdayWe": "We",
+    "weekdayTh": "Th",
+    "weekdayFr": "Fr",
+    "weekdaySa": "Sa"
+  },
+  "phoneInput": {
+    "searchCountry": "Search country…",
+    "countryCode": "Country code",
+    "phoneNumber": "Phone number",
+    "codeFallback": "Code"
+  },
+  "fileUpload": {
+    "clickToUpload": "Click to upload",
+    "orDragAndDrop": "or drag and drop",
+    "upToSize": "Up to {size}MB",
+    "exceedsLimit": "\"{name}\" exceeds the {size}MB limit"
   },
   "auth": {
     "welcomeBack": "Welcome back",

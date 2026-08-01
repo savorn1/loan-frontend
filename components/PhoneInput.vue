@@ -7,14 +7,14 @@
       value-attribute="iso2"
       :search-attributes="['name', 'dialCode']"
       searchable
-      searchable-placeholder="Search country…"
+      :searchable-placeholder="t('phoneInput.searchCountry')"
       :disabled="disabled"
       class="w-28 shrink-0"
-      aria-label="Country code"
+      :aria-label="t('phoneInput.countryCode')"
     >
       <template #label>
         <span class="truncate">{{
-          selectedCountry ? `${selectedCountry.flag} ${selectedCountry.dialCode}` : 'Code'
+          selectedCountry ? `${selectedCountry.flag} ${selectedCountry.dialCode}` : t('phoneInput.codeFallback')
         }}</span>
       </template>
       <template #option="{ option }">
@@ -28,7 +28,7 @@
       class="flex-1"
       :placeholder="placeholder"
       :disabled="disabled"
-      aria-label="Phone number"
+      :aria-label="t('phoneInput.phoneNumber')"
     />
   </div>
 </template>
@@ -68,6 +68,8 @@ const COUNTRIES = [
 function toFlagEmoji(iso2: string): string {
   return String.fromCodePoint(...[...iso2].map((ch) => 0x1f1e6 + ch.charCodeAt(0) - 65))
 }
+
+const { t } = useI18n()
 
 const props = withDefaults(
   defineProps<{

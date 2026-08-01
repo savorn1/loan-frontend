@@ -10,23 +10,32 @@
 
     <UCard>
       <template #header>
-        <UInput
-          v-model="search"
-          icon="i-heroicons-magnifying-glass"
-          :placeholder="t('customers.list.searchPlaceholder')"
-          class="max-w-xs"
-          :ui="{ icon: { trailing: { pointer: '' } } }"
-        >
-          <template v-if="search" #trailing>
-            <UButton
-              color="gray"
-              variant="link"
-              icon="i-heroicons-x-mark"
-              :padded="false"
-              @click="search = ''"
-            />
-          </template>
-        </UInput>
+        <div class="flex flex-wrap items-center gap-3">
+          <UInput
+            v-model="search"
+            icon="i-heroicons-magnifying-glass"
+            :placeholder="t('customers.list.searchPlaceholder')"
+            class="max-w-xs"
+            :ui="{ icon: { trailing: { pointer: '' } } }"
+          >
+            <template v-if="search" #trailing>
+              <UButton
+                color="gray"
+                variant="link"
+                icon="i-heroicons-x-mark"
+                :padded="false"
+                @click="search = ''"
+              />
+            </template>
+          </UInput>
+          <USelectMenu
+            v-model="branchFilter"
+            :options="branchFilterOptions"
+            option-attribute="label"
+            value-attribute="value"
+            class="w-48"
+          />
+        </div>
       </template>
 
       <DataTable
@@ -79,6 +88,7 @@
 
 <script setup lang="ts">
 import type { CustomerRequest, CustomerResponse } from '~/features/customers/types'
+import type { BranchResponse } from '~/features/branches/types'
 import type { ColumnDef, PageResponse } from '~/shared/types'
 
 const { t } = useI18n()
@@ -96,6 +106,20 @@ const {
 
 const customers = computed(() => customersRaw.value?.content ?? [])
 
+const { data: branchesData } = await useAsyncData('branches-all', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branchNameById = computed(() => new Map((branchesData.value ?? []).map((b) => [b.id, b.name])))
+
+const branchFilter = ref<number | ''>('')
+const branchFilterOptions = computed(() => [
+  { label: t('customers.list.branchFilterAll'), value: '' },
+  ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+])
+const customersByBranch = computed(() =>
+  branchFilter.value === '' ? customers.value : customers.value.filter((c) => c.branchId === branchFilter.value)
+)
+
 const showCreate = ref(false)
 const creating = ref(false)
 
@@ -106,6 +130,11 @@ const columns = computed<ColumnDef<CustomerResponse>[]>(() => [
   { key: 'email', label: t('customers.list.columns.email'), sortable: true },
   { key: 'phone', label: t('customers.list.columns.phone') },
   {
+    key: 'branchId',
+    label: t('customers.list.columns.branch'),
+    value: (row) => (row.branchId != null ? branchNameById.value.get(row.branchId) ?? row.branchId : '—')
+  },
+  {
     key: 'createdAt',
     label: t('customers.list.columns.created'),
     type: 'datetime',
@@ -113,7 +142,7 @@ const columns = computed<ColumnDef<CustomerResponse>[]>(() => [
   }
 ])
 
-const { search, page, pageSize, sort, total, rows } = useClientTable(customers, {
+const { search, page, pageSize, sort, total, rows } = useClientTable(customersByBranch, {
   searchFields: ['firstName', 'lastName', 'email'],
   pageSize: 10
 })

@@ -32,6 +32,13 @@
             value-attribute="value"
             class="w-40"
           />
+          <USelectMenu
+            v-model="branchFilter"
+            :options="branchFilterOptions"
+            option-attribute="label"
+            value-attribute="value"
+            class="w-48"
+          />
         </div>
       </template>
 
@@ -86,6 +93,7 @@
 
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
+import type { BranchResponse } from '~/features/branches/types'
 import type { LoanRequest, LoanResponse, LoanStatus } from '~/features/loans/types'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
@@ -102,6 +110,16 @@ const {
 
 const loans = computed(() => loansRaw.value?.content ?? [])
 
+const { data: branchesData } = await useAsyncData('branches-all', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branchNameById = computed(() => new Map((branchesData.value ?? []).map((b) => [b.id, b.name])))
+const branchFilterOptions = computed(() => [
+  { label: t('loans.list.branchFilter.all'), value: '' },
+  ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+])
+const branchFilter = ref<number | ''>('')
+
 // Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
 // the customer list can be far larger than any dropdown should hold client-side.
 async function searchCustomers(query: string) {
@@ -114,6 +132,11 @@ async function searchCustomers(query: string) {
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   { key: 'id', label: t('loans.list.columns.id'), sortable: true },
   { key: 'customerName', label: t('loans.list.columns.customer'), sortable: true },
+  {
+    key: 'branchId',
+    label: t('loans.list.columns.branch'),
+    value: (row) => (row.branchId != null ? branchNameById.value.get(row.branchId) ?? row.branchId : '—')
+  },
   { key: 'principal', label: t('loans.list.columns.principal'), type: 'currency', sortable: true },
   { key: 'interestRate', label: t('loans.list.columns.rate'), type: 'percent', sortable: true },
   { key: 'termMonths', label: t('loans.list.columns.term'), sortable: true },
@@ -132,9 +155,9 @@ const statusOptions = computed<{ label: string; value: LoanStatus | '' }[]>(() =
 const statusFilter = ref<LoanStatus | ''>('')
 
 const filteredByStatus = computed(() =>
-  statusFilter.value
-    ? (loans.value ?? []).filter((l) => l.status === statusFilter.value)
-    : loans.value
+  (loans.value ?? [])
+    .filter((l) => !statusFilter.value || l.status === statusFilter.value)
+    .filter((l) => branchFilter.value === '' || l.branchId === branchFilter.value)
 )
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
@@ -142,7 +165,7 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByS
   pageSize: 10
 })
 
-const hasFilters = computed(() => !!search.value || !!statusFilter.value)
+const hasFilters = computed(() => !!search.value || !!statusFilter.value || branchFilter.value !== '')
 
 const totalLabel = computed(() => {
   const count = loans.value?.length ?? 0

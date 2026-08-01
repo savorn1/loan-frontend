@@ -62,11 +62,6 @@
 </template>
 
 <script setup lang="ts">
-// "Showing X of Y" + Previous/Next + numbered pages + adjustable page size —
-// pairs with useClientTable's page/pageSize/total. Only meaningful for
-// client-side pagination (a bare array sliced locally); server-paginated
-// lists (e.g. /auth/users) fetch a page at a time and don't have a full
-// `total` to slice against the same way.
 const { t } = useI18n()
 
 const props = withDefaults(
@@ -91,9 +86,6 @@ const shownCount = computed(() => {
 })
 
 type PageItem = number | 'ellipsis'
-
-// Always shows the first/last page plus a window around the current page,
-// collapsing the rest into an ellipsis once there are more than 7 pages.
 const pageItems = computed<PageItem[]>(() => {
   const count = pageCount.value
   const current = page.value

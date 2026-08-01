@@ -2,15 +2,15 @@
   <div>
     <UCard>
       <template #header>
-        <span class="font-semibold">Transactions</span>
+        <span class="font-semibold">{{ t('loans.transactions.title') }}</span>
       </template>
 
       <DataTable :rows="transactions ?? []" :columns="columns" :loading="pending">
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-banknotes"
-            title="No transactions yet"
-            description="Every disbursement, payment, penalty/fee payment, adjustment, write-off and settlement on this loan is logged here."
+            :title="t('loans.transactions.empty.title')"
+            :description="t('loans.transactions.empty.description')"
           />
         </template>
       </DataTable>
@@ -26,6 +26,7 @@
 import type { LoanTransactionResponse } from '~/features/loans/types'
 import type { ColumnDef } from '~/shared/types'
 
+const { t } = useI18n()
 const route = useRoute()
 const api = useApi()
 
@@ -35,11 +36,15 @@ const { data: transactions, pending } = await useAsyncData(`loan-${loanId}-trans
   api<LoanTransactionResponse[]>(`/loans/${loanId}/transactions`)
 )
 
-const columns: ColumnDef<LoanTransactionResponse>[] = [
-  { key: 'transactionDate', label: 'Date', type: 'date' },
-  { key: 'type', type: 'enum' },
-  { key: 'amount', type: 'currency' },
-  { key: 'description' },
-  { key: 'balanceAfter', label: 'Balance after', type: 'currency' }
-]
+const columns = computed<ColumnDef<LoanTransactionResponse>[]>(() => [
+  { key: 'transactionDate', label: t('loans.transactions.columns.date'), type: 'date' },
+  { key: 'type', label: t('loans.transactions.columns.type'), type: 'enum' },
+  { key: 'amount', label: t('loans.transactions.columns.amount'), type: 'currency' },
+  { key: 'description', label: t('loans.transactions.columns.description') },
+  {
+    key: 'balanceAfter',
+    label: t('loans.transactions.columns.balanceAfter'),
+    type: 'currency'
+  }
+])
 </script>

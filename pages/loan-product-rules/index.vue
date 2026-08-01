@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Loan Product Rules" :description="totalLabel">
+    <PageHeader :title="t('loanConfig.loanProductRules.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">Assign Rule</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('loanConfig.loanProductRules.assignRule')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -11,7 +13,7 @@
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by product or rule..."
+          :placeholder="t('loanConfig.loanProductRules.searchPlaceholder')"
           class="max-w-xs"
         >
           <template v-if="search" #trailing>
@@ -42,15 +44,17 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-shield-check'"
-            :title="search ? 'No matches' : 'No eligibility rule assignments yet'"
+            :title="search ? t('common.noMatches') : t('loanConfig.loanProductRules.emptyTitle')"
             :description="
               search
-                ? `Nothing matches “${search}”.`
-                : 'Assign a reusable eligibility rule to a loan product.'
+                ? t('common.nothingMatches', { query: search })
+                : t('loanConfig.loanProductRules.emptyDescription')
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">Assign Rule</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loanConfig.loanProductRules.assignRule')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -64,14 +68,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">Assign Rule</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProductRules.assignRule') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="createFields"
           :loading="creating"
           :error="error"
-          submit-label="Assign"
+          :submit-label="t('loanConfig.shared.assign')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -82,14 +86,14 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">Edit Rule Assignment</span>
+          <span class="font-semibold">{{ t('loanConfig.loanProductRules.editHeader') }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
           :fields="editFields"
           :loading="editing"
           :error="editError"
-          submit-label="Save changes"
+          :submit-label="t('common.saveChanges')"
           cancelable
           @submit="onEdit"
           @cancel="showEdit = false"
@@ -99,9 +103,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      title="Remove this assignment?"
-      description="This removes the eligibility rule from the loan product. This action cannot be undone."
-      confirm-label="Remove"
+      :title="t('loanConfig.shared.removeConfirmTitle')"
+      :description="t('loanConfig.loanProductRules.removeDescription')"
+      :confirm-label="t('loanConfig.shared.removeLabel')"
       color="red"
       :loading="deleting"
       @update:model-value="
@@ -125,6 +129,7 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const api = useApi()
 const toast = useToast()
+const { t } = useI18n()
 
 const {
   data: rules,
@@ -156,19 +161,23 @@ const templateOptions = computed(() =>
   }))
 )
 
-const columns: ColumnDef<LoanProductRuleResponse>[] = [
-  { key: 'loanProductId', label: 'Loan product', value: (row) => productLabel(row.loanProductId) },
+const columns = computed<ColumnDef<LoanProductRuleResponse>[]>(() => [
+  {
+    key: 'loanProductId',
+    label: t('loanConfig.shared.loanProductColumn'),
+    value: (row) => productLabel(row.loanProductId)
+  },
   {
     key: 'ruleTemplateName',
-    label: 'Rule',
+    label: t('loanConfig.loanProductRules.ruleColumn'),
     value: (row) => `${row.ruleTemplateName} (${row.ruleTemplateCode})`
   },
-  { key: 'field', type: 'enum' },
-  { key: 'operator', type: 'enum' },
-  { key: 'value', label: 'Value', to: 'value2', toEmpty: '' },
-  { key: 'status', type: 'status', sortable: true },
+  { key: 'field', label: t('loanConfig.shared.fieldColumn'), type: 'enum' },
+  { key: 'operator', label: t('loanConfig.shared.operatorColumn'), type: 'enum' },
+  { key: 'value', label: t('loanConfig.shared.valueColumn'), to: 'value2', toEmpty: '' },
+  { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
-]
+])
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(
   computed(() =>
@@ -182,30 +191,33 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(
 
 const totalLabel = computed(() => {
   const count = rules.value?.length ?? 0
-  return count === 1 ? '1 assignment' : `${count} assignments`
+  return count === 1
+    ? t('loanConfig.loanProductRules.total.one')
+    : t('loanConfig.loanProductRules.total.other', { count })
 })
 
 // Shared by both forms; create additionally picks the owning loan product
 // (fixed for the lifetime of the assignment — it's the path param, not part
 // of the request body, so it isn't editable afterwards).
-const commonFields: FieldDef[] = [
+const commonFields = computed<FieldDef[]>(() => [
   {
     name: 'status',
+    label: t('loanConfig.shared.statusColumn'),
     type: 'select',
     required: true,
     default: 'ACTIVE',
     wrapper: 'half',
     options: [
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Inactive', value: 'INACTIVE' }
+      { label: t('common.active'), value: 'ACTIVE' },
+      { label: t('common.inactive'), value: 'INACTIVE' }
     ]
   }
-]
+])
 
 const createFields = computed<FieldDef[]>(() => [
   {
     name: 'loanProductId',
-    label: 'Loan product',
+    label: t('loanConfig.shared.loanProductColumn'),
     type: 'select',
     required: true,
     wrapper: 'half',
@@ -213,25 +225,25 @@ const createFields = computed<FieldDef[]>(() => [
   },
   {
     name: 'ruleTemplateId',
-    label: 'Rule template',
+    label: t('loanConfig.loanProductRules.ruleTemplateFieldLabel'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: templateOptions.value
   },
-  ...commonFields
+  ...commonFields.value
 ])
 
 const editFields = computed<FieldDef[]>(() => [
   {
     name: 'ruleTemplateId',
-    label: 'Rule template',
+    label: t('loanConfig.loanProductRules.ruleTemplateFieldLabel'),
     type: 'select',
     required: true,
     wrapper: 'half',
     options: templateOptions.value
   },
-  ...commonFields
+  ...commonFields.value
 ])
 
 const showCreate = ref(false)
@@ -264,7 +276,7 @@ async function onCreate(values: Record<string, any>) {
       method: 'POST',
       body: toPayload(values)
     })
-    toast.add({ title: 'Rule assigned', color: 'green' })
+    toast.add({ title: t('loanConfig.loanProductRules.ruleAssignedToast'), color: 'green' })
     showCreate.value = false
     await refresh()
   } catch (err) {
@@ -299,7 +311,7 @@ async function onEdit(values: Record<string, any>) {
       method: 'PUT',
       body: toPayload(values)
     })
-    toast.add({ title: 'Assignment updated', color: 'green' })
+    toast.add({ title: t('loanConfig.shared.assignmentUpdated'), color: 'green' })
     showEdit.value = false
     await refresh()
   } catch (err) {
@@ -320,7 +332,7 @@ async function onDelete() {
       `/loan-products/${confirmDelete.value.loanProductId}/rules/${confirmDelete.value.id}`,
       { method: 'DELETE' }
     )
-    toast.add({ title: 'Assignment removed', color: 'green' })
+    toast.add({ title: t('loanConfig.shared.assignmentRemoved'), color: 'green' })
     confirmDelete.value = null
     await refresh()
   } catch (err) {

@@ -12,6 +12,7 @@
     "users": "អ្នកប្រើប្រាស់",
     "roles": "តួនាទី",
     "permissions": "សិទ្ធិ",
+    "branches": "សាខា",
     "payment": "ការទូទាត់",
     "payments": "ការទូទាត់ប្រាក់",
     "collections": "ការប្រមូលបំណុល",
@@ -27,7 +28,7 @@
     "journalTemplates": "គំរូទិនានុប្បវត្តិ",
     "accountingSchemes": "គ្រោងការណ៍គណនេយ្យ",
     "financialPeriods": "រយៈពេលហិរញ្ញវត្ថុ",
-    "loanConfiguration": "ការកំណត់រចនាសម្ព័ន្ធកម្ចី",
+    "loanConfiguration": "ការកំណត់រចនាសម្ព័ន្ធ",
     "loanProducts": "ផលិតផលកម្ចី",
     "productInterestSchemes": "គ្រោងការណ៍ការប្រាក់ផលិតផល",
     "productFeeSchemes": "គ្រោងការណ៍កម្រៃផលិតផល",
@@ -39,6 +40,13 @@
     "termTemplates": "គំរូលក្ខខណ្ឌ",
     "ruleTemplates": "គំរូច្បាប់",
     "documentTemplates": "គំរូឯកសារ"
+  },
+  "commandPalette": {
+    "open": "បើកការស្វែងរក",
+    "placeholder": "ស្វែងរកទំព័រ និងសកម្មភាព...",
+    "emptyLabel": "រកមិនឃើញលទ្ធផលទេ",
+    "generalGroup": "ទូទៅ",
+    "actionsGroup": "សកម្មភាព"
   },
   "common": {
     "save": "រក្សាទុក",
@@ -69,7 +77,36 @@
     "nothingMatches": "គ្មានអ្វីត្រូវគ្នានឹង “{query}”។",
     "active": "សកម្ម",
     "inactive": "អសកម្ម",
-    "pleaseFillIn": "សូមបំពេញ \"{label}\""
+    "pleaseFillIn": "សូមបំពេញ \"{label}\"",
+    "searchEllipsis": "ស្វែងរក…",
+    "openMenu": "បើកម៉ឺនុយ",
+    "signedInAs": "បានចូលគណនីជា {username}"
+  },
+  "datePicker": {
+    "selectDate": "ជ្រើសរើសកាលបរិច្ឆេទ",
+    "today": "ថ្ងៃនេះ",
+    "clear": "សម្អាត",
+    "previousMonth": "ខែមុន",
+    "nextMonth": "ខែក្រោយ",
+    "weekdaySu": "អា",
+    "weekdayMo": "ច",
+    "weekdayTu": "អ",
+    "weekdayWe": "ព",
+    "weekdayTh": "ព្រ",
+    "weekdayFr": "សុ",
+    "weekdaySa": "ស"
+  },
+  "phoneInput": {
+    "searchCountry": "ស្វែងរកប្រទេស…",
+    "countryCode": "កូដប្រទេស",
+    "phoneNumber": "លេខទូរស័ព្ទ",
+    "codeFallback": "កូដ"
+  },
+  "fileUpload": {
+    "clickToUpload": "ចុចដើម្បីផ្ទុកឡើង",
+    "orDragAndDrop": "ឬអូសហើយទម្លាក់",
+    "upToSize": "រហូតដល់ {size}MB",
+    "exceedsLimit": "\"{name}\" លើសពីដែនកំណត់ {size}MB"
   },
   "auth": {
     "welcomeBack": "សូមស្វាគមន៍ការត្រឡប់មកវិញ",

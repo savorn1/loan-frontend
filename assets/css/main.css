@@ -1,8 +1,16 @@
-/* Global styles: page transitions + small delight animations.
-   Kept tiny on purpose — Nuxt UI / Tailwind handle everything else. */
 
-/* Hides the scrollbar on horizontally-scrollable tab bars (e.g. loan detail
-   tabs) while keeping them scrollable via touch/trackpad/shift+wheel. */
+html[lang='en'] {
+  font-size: 15px;
+  line-height: 1.5;
+  font-family: serif;
+}
+
+html[lang='km'] {
+  font-size: 15px;
+  line-height: 1.65;
+  /* font-family: 'Khmer OS Battambang' */
+}
+
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -11,8 +19,6 @@
   display: none;
 }
 
-/* Cross-page transition: opacity-only. Animating transform on a whole page
-   forces large repaints and reads as jank; a short pure fade stays at 60fps. */
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.15s ease;
@@ -22,8 +28,6 @@
   opacity: 0;
 }
 
-/* Gentle float for empty-state icons — slower and softer than Tailwind's
-   built-in animate-bounce. will-change keeps it on the GPU compositor. */
 @keyframes float-soft {
   0%,
   100% {
@@ -38,9 +42,6 @@
   will-change: transform;
 }
 
-/* Slow drifting blobs for the auth layout's branding panel.
-   translateZ(0) promotes each blob to its own compositor layer so the
-   heavy blur() isn't re-rasterized every animation frame. */
 @keyframes blob-drift {
   0%,
   100% {
@@ -65,9 +66,6 @@
   animation-delay: -8s;
 }
 
-/* Card hover lift used by dashboard tiles / clickable cards.
-   Animate only transform (composited) — animating box-shadow repaints the
-   card every frame and stutters; a pseudo-element fading in is smooth. */
 .hover-lift {
   position: relative;
   transition: transform 0.15s ease;

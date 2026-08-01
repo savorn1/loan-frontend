@@ -18,11 +18,6 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-// Renders a whole table from a ColumnDef[] — the Backpack CRUD::addColumns()
-// equivalent. Each column auto-renders via <ColumnValue> based on its `type`;
-// a parent can still override any single column with its own `#key-data` slot
-// (e.g. custom action buttons) exactly like plain <UTable>. Generic over the
-// row type so `@select` comes back typed instead of `Record<string, any>`.
 import type { ColumnDef } from '~/shared/types'
 
 const props = defineProps<{

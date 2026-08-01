@@ -6,6 +6,8 @@ export interface UserResponse {
   username: string
   role: Role
   active: boolean
+  branchId: number | null
+  branchName: string | null
   createdAt: string
   updatedAt: string
 }
@@ -15,6 +17,11 @@ export interface CreateUserRequest {
   password: string
   role: Role
   active: boolean
+  branchId?: number
+}
+
+export interface UpdateBranchRequest {
+  branchId?: number | null
 }
 
 export interface UpdateRoleRequest {

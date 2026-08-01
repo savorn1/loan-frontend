@@ -14,9 +14,13 @@
         "rejected": "Rejected",
         "closed": "Closed"
       },
+      "branchFilter": {
+        "all": "All branches"
+      },
       "columns": {
         "id": "ID",
         "customer": "Customer",
+        "branch": "Branch",
         "principal": "Principal",
         "rate": "Rate",
         "term": "Term (mo)",

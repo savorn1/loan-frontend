@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import type { CustomerRequest, CustomerResponse } from '~/features/customers/types'
+import type { BranchResponse } from '~/features/branches/types'
 import type { FieldDef } from '~/shared/types'
 
 const props = defineProps<{
@@ -24,6 +25,15 @@ const props = defineProps<{
 const emit = defineEmits<{ submit: [CustomerRequest]; cancel: [] }>()
 
 const { t } = useI18n()
+const api = useApi()
+
+const { data: branchesData } = await useAsyncData('branches-all', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branchOptions = computed(() => [
+  { label: t('customers.form.branchNone'), value: '' },
+  ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+])
 
 const now = new Date()
 const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
@@ -52,6 +62,13 @@ const fields = computed<FieldDef[]>(() => [
     type: 'dob',
     max: today,
     hint: t('customers.form.dateOfBirthHint')
+  },
+  {
+    name: 'branchId',
+    label: t('customers.form.branch'),
+    type: 'select',
+    wrapper: 'half',
+    options: branchOptions.value
   }
 ])
 
@@ -62,10 +79,11 @@ const form = ref<Record<string, any>>({
   phone: props.initial?.phone ?? '',
   nationalId: props.initial?.nationalId ?? '',
   address: props.initial?.address ?? '',
-  dateOfBirth: props.initial?.dateOfBirth ?? ''
+  dateOfBirth: props.initial?.dateOfBirth ?? '',
+  branchId: props.initial?.branchId ?? ''
 })
 
 function onSubmit(values: Record<string, any>) {
-  emit('submit', values as CustomerRequest)
+  emit('submit', { ...values, branchId: values.branchId || undefined } as CustomerRequest)
 }
 </script>

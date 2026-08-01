@@ -12,6 +12,7 @@ export interface LoanRequest {
 export interface LoanResponse {
   id: number
   customerId: number
+  branchId: number | null
   customerName: string
   principal: number
   interestRate: number
@@ -439,6 +440,7 @@ export interface ApplicationRequest {
 export interface ApplicationResponse {
   id: number
   customerId: number
+  branchId: number | null
   customerName: string
   requestedAmount: number
   requestedTermMonths: number

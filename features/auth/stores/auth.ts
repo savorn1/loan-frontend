@@ -33,6 +33,8 @@ export const useAuth = defineStore('auth', () => {
     sameSite: 'lax'
   })
   const role = useCookie<Role | null>('auth_role', { default: () => null, sameSite: 'lax' })
+  const branchId = useCookie<number | null>('auth_branch_id', { default: () => null, sameSite: 'lax' })
+  const branchName = useCookie<string | null>('auth_branch_name', { default: () => null, sameSite: 'lax' })
 
   const isAuthenticated = computed(() => !!token.value)
   const isAdmin = computed(() => role.value === 'ADMIN')
@@ -42,6 +44,8 @@ export const useAuth = defineStore('auth', () => {
     refreshToken.value = res.refreshToken
     username.value = res.username
     role.value = res.role
+    branchId.value = res.branchId ?? null
+    branchName.value = res.branchName ?? null
   }
 
   async function login(payload: LoginRequest) {
@@ -88,6 +92,8 @@ export const useAuth = defineStore('auth', () => {
     refreshToken.value = null
     username.value = null
     role.value = null
+    branchId.value = null
+    branchName.value = null
     if (pendingRefreshToken) {
       // Best-effort server-side revocation — the client-side session is already
       // cleared above regardless of whether this call succeeds.
@@ -103,6 +109,8 @@ export const useAuth = defineStore('auth', () => {
     token,
     username,
     role,
+    branchId,
+    branchName,
     isAuthenticated,
     isAdmin,
     login,

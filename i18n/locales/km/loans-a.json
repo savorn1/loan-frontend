@@ -14,9 +14,13 @@
         "rejected": "បានបដិសេធ",
         "closed": "បានបិទ"
       },
+      "branchFilter": {
+        "all": "គ្រប់សាខា"
+      },
       "columns": {
         "id": "លេខសម្គាល់",
         "customer": "អតិថិជន",
+        "branch": "សាខា",
         "principal": "ប្រាក់ដើម",
         "rate": "អត្រា",
         "term": "រយៈពេល (ខែ)",

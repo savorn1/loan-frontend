@@ -69,6 +69,7 @@
               {{ row.active ? t('admin.users.actions.disable') : t('admin.users.actions.enable') }}
             </UButton>
             <UButton size="xs" color="gray" variant="ghost" @click="openRoles(row)">{{ t('admin.users.actions.roles') }}</UButton>
+            <UButton size="xs" color="gray" variant="ghost" @click="openBranch(row)">{{ t('admin.users.actions.branch') }}</UButton>
             <UButton
               size="xs"
               color="red"
@@ -173,6 +174,26 @@
         </EmptyState>
       </UCard>
     </UModal>
+
+    <UModal v-model="showBranch">
+      <UCard v-if="branchTargetUser">
+        <template #header>
+          <span class="font-semibold">{{ t('admin.users.branchModal.title', { username: branchTargetUser.username }) }}</span>
+        </template>
+        <UFormGroup :label="t('admin.users.fields.branch')">
+          <USelectMenu
+            v-model="branchForm.branchId"
+            :options="branchOptions"
+            option-attribute="label"
+            value-attribute="value"
+          />
+        </UFormGroup>
+        <div class="flex justify-end gap-2 mt-4">
+          <UButton color="gray" variant="ghost" @click="showBranch = false">{{ t('common.cancel') }}</UButton>
+          <UButton :loading="savingBranch" @click="onSaveBranch">{{ t('common.saveChanges') }}</UButton>
+        </div>
+      </UCard>
+    </UModal>
   </div>
 </template>
 
@@ -180,11 +201,13 @@
 import type {
   AssignUserRoleRequest,
   CreateUserRequest,
+  UpdateBranchRequest,
   UserFilter,
   UserResponse,
   UserRoleResponse
 } from '~/features/users/types'
 import type { RoleResponse } from '~/features/roles/types'
+import type { BranchResponse } from '~/features/branches/types'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 definePageMeta({ middleware: 'admin' })
@@ -269,9 +292,19 @@ watch(
   }
 )
 
+const { data: branchesData } = await useAsyncData('branches-all', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branches = computed(() => branchesData.value ?? [])
+const branchOptions = computed(() => [
+  { label: t('admin.users.branchOptions.none'), value: '' },
+  ...branches.value.map((b) => ({ label: b.name, value: b.id }))
+])
+
 const columns = computed<ColumnDef<UserResponse>[]>(() => [
   { key: 'id', label: t('admin.users.columns.id') },
   { key: 'username', label: t('admin.users.columns.username') },
+  { key: 'branchName', label: t('admin.users.columns.branch') },
   {
     key: 'role',
     label: t('admin.users.columns.role'),
@@ -319,13 +352,20 @@ const userFields = computed<FieldDef[]>(() => [
       { label: t('admin.users.roleOptions.admin'), value: 'ADMIN' }
     ]
   },
-  { name: 'active', label: t('admin.users.fields.active'), type: 'switch', wrapper: 'half' }
+  { name: 'active', label: t('admin.users.fields.active'), type: 'switch', wrapper: 'half' },
+  {
+    name: 'branchId',
+    label: t('admin.users.fields.branch'),
+    type: 'select',
+    wrapper: 'half',
+    options: branchOptions.value
+  }
 ])
 
 const createForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  createForm.value = { username: '', password: '', role: 'USER', active: true }
+  createForm.value = { username: '', password: '', role: 'USER', active: true, branchId: '' }
   createError.value = ''
   showCreate.value = true
 }
@@ -334,7 +374,8 @@ async function onCreate(values: Record<string, any>) {
   creating.value = true
   createError.value = ''
   try {
-    await api('/auth/users', { method: 'POST', body: values as CreateUserRequest })
+    const payload = { ...values, branchId: values.branchId || undefined } as CreateUserRequest
+    await api('/auth/users', { method: 'POST', body: payload })
     toast.add({ title: t('admin.users.toast.created', { username: values.username }), color: 'green' })
     showCreate.value = false
     page.value = 1
@@ -440,6 +481,34 @@ async function onToggleUserRole(role: RoleResponse, assign: boolean) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
   } finally {
     togglingRoleId.value = null
+  }
+}
+
+// ── Branch assignment ───────────────────────────────────────────────────────
+const showBranch = ref(false)
+const savingBranch = ref(false)
+const branchTargetUser = ref<UserResponse | null>(null)
+const branchForm = reactive<{ branchId: number | '' }>({ branchId: '' })
+
+function openBranch(row: UserResponse) {
+  branchTargetUser.value = row
+  branchForm.branchId = row.branchId ?? ''
+  showBranch.value = true
+}
+
+async function onSaveBranch() {
+  if (!branchTargetUser.value) return
+  savingBranch.value = true
+  try {
+    const payload: UpdateBranchRequest = { branchId: branchForm.branchId || null }
+    await api(`/auth/users/${branchTargetUser.value.id}/branch`, { method: 'PUT', body: payload })
+    toast.add({ title: t('admin.users.toast.branchChanged', { username: branchTargetUser.value.username }), color: 'green' })
+    showBranch.value = false
+    await refresh()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    savingBranch.value = false
   }
 }
 </script>

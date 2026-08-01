@@ -1,8 +1,10 @@
 <template>
   <div>
-    <PageHeader title="Loan Applications" :description="totalLabel">
+    <PageHeader :title="t('applications.list.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">New Application</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('applications.list.newApplication')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -12,7 +14,7 @@
           <UInput
             v-model="search"
             icon="i-heroicons-magnifying-glass"
-            placeholder="Search by customer or purpose..."
+            :placeholder="t('applications.list.searchPlaceholder')"
             class="max-w-xs w-full sm:w-auto"
           >
             <template v-if="search" #trailing>
@@ -32,6 +34,13 @@
             value-attribute="value"
             class="w-40"
           />
+          <USelectMenu
+            v-model="branchFilter"
+            :options="branchFilterOptions"
+            option-attribute="label"
+            value-attribute="value"
+            class="w-48"
+          />
         </div>
       </template>
 
@@ -45,15 +54,17 @@
         <template #empty-state>
           <EmptyState
             :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-document-text'"
-            :title="hasFilters ? 'No matches' : 'No applications yet'"
+            :title="hasFilters ? t('common.noMatches') : t('applications.list.emptyTitle')"
             :description="
               hasFilters
-                ? 'Try a different search term or status filter.'
-                : 'Submit a loan application for one of your customers to get started.'
+                ? t('applications.list.emptyDescriptionFiltered')
+                : t('applications.list.emptyDescription')
             "
           >
             <template v-if="!hasFilters" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">New Application</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('applications.list.newApplication')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -67,14 +78,14 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">New Application</span>
+          <span class="font-semibold">{{ t('applications.list.newApplication') }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
           :fields="applicationFields"
           :loading="creating"
           :error="error"
-          submit-label="Submit"
+          :submit-label="t('applications.list.submit')"
           cancelable
           @submit="onCreate"
           @cancel="showCreate = false"
@@ -86,6 +97,7 @@
 
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
+import type { BranchResponse } from '~/features/branches/types'
 import type {
   ApplicationRequest,
   ApplicationResponse,
@@ -93,6 +105,7 @@ import type {
 } from '~/features/loans/types'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
+const { t } = useI18n()
 const api = useApi()
 const toast = useToast()
 const router = useRouter()
@@ -107,6 +120,16 @@ const {
 
 const applications = computed(() => applicationsRaw.value?.content ?? [])
 
+const { data: branchesData } = await useAsyncData('branches-all', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branchNameById = computed(() => new Map((branchesData.value ?? []).map((b) => [b.id, b.name])))
+const branchFilterOptions = computed(() => [
+  { label: t('applications.list.branchFilter.all'), value: '' },
+  ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+])
+const branchFilter = ref<number | ''>('')
+
 // Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
 // the customer list can be far larger than any dropdown should hold client-side.
 async function searchCustomers(query: string) {
@@ -116,29 +139,44 @@ async function searchCustomers(query: string) {
   return result.content.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
 }
 
-const columns: ColumnDef<ApplicationResponse>[] = [
-  { key: 'id', label: 'ID', sortable: true },
-  { key: 'customerName', label: 'Customer', sortable: true },
-  { key: 'requestedAmount', label: 'Requested', type: 'currency', sortable: true },
-  { key: 'requestedTermMonths', label: 'Term (mo)', sortable: true },
-  { key: 'status', type: 'status', sortable: true },
-  { key: 'submittedAt', label: 'Submitted', type: 'datetime', sortable: true }
-]
+const columns = computed<ColumnDef<ApplicationResponse>[]>(() => [
+  { key: 'id', label: t('applications.list.columns.id'), sortable: true },
+  { key: 'customerName', label: t('applications.list.columns.customer'), sortable: true },
+  {
+    key: 'branchId',
+    label: t('applications.list.columns.branch'),
+    value: (row) => (row.branchId != null ? branchNameById.value.get(row.branchId) ?? row.branchId : '—')
+  },
+  {
+    key: 'requestedAmount',
+    label: t('applications.list.columns.requested'),
+    type: 'currency',
+    sortable: true
+  },
+  { key: 'requestedTermMonths', label: t('applications.list.columns.term'), sortable: true },
+  { key: 'status', label: t('applications.list.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'submittedAt',
+    label: t('applications.list.columns.submitted'),
+    type: 'datetime',
+    sortable: true
+  }
+])
 
-const statusOptions: { label: string; value: ApplicationStatus | '' }[] = [
-  { label: 'All statuses', value: '' },
-  { label: 'Submitted', value: 'SUBMITTED' },
-  { label: 'Under review', value: 'UNDER_REVIEW' },
-  { label: 'Approved', value: 'APPROVED' },
-  { label: 'Rejected', value: 'REJECTED' },
-  { label: 'Withdrawn', value: 'WITHDRAWN' }
-]
+const statusOptions = computed<{ label: string; value: ApplicationStatus | '' }[]>(() => [
+  { label: t('applications.list.statusOptions.all'), value: '' },
+  { label: t('applications.list.statusOptions.submitted'), value: 'SUBMITTED' },
+  { label: t('applications.list.statusOptions.underReview'), value: 'UNDER_REVIEW' },
+  { label: t('applications.list.statusOptions.approved'), value: 'APPROVED' },
+  { label: t('applications.list.statusOptions.rejected'), value: 'REJECTED' },
+  { label: t('applications.list.statusOptions.withdrawn'), value: 'WITHDRAWN' }
+])
 const statusFilter = ref<ApplicationStatus | ''>('')
 
 const filteredByStatus = computed(() =>
-  statusFilter.value
-    ? (applications.value ?? []).filter((a) => a.status === statusFilter.value)
-    : applications.value
+  (applications.value ?? [])
+    .filter((a) => !statusFilter.value || a.status === statusFilter.value)
+    .filter((a) => branchFilter.value === '' || a.branchId === branchFilter.value)
 )
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
@@ -146,46 +184,48 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByS
   pageSize: 10
 })
 
-const hasFilters = computed(() => !!search.value || !!statusFilter.value)
+const hasFilters = computed(() => !!search.value || !!statusFilter.value || branchFilter.value !== '')
 
 const totalLabel = computed(() => {
   const count = applications.value?.length ?? 0
-  return count === 1 ? '1 application' : `${count} applications`
+  return count === 1
+    ? t('applications.list.totalOne')
+    : t('applications.list.totalOther', { count })
 })
 
 const showCreate = ref(false)
 const creating = ref(false)
 const error = ref('')
 
-const applicationFields: FieldDef[] = [
+const applicationFields = computed<FieldDef[]>(() => [
   {
     name: 'customerId',
-    label: 'Customer',
+    label: t('applications.list.fields.customer'),
     type: 'relationship',
     required: true,
     search: searchCustomers,
-    placeholder: 'Search customers…'
+    placeholder: t('applications.list.fields.searchPlaceholder')
   },
   {
     name: 'requestedAmount',
-    label: 'Requested amount',
+    label: t('applications.list.fields.requestedAmount'),
     type: 'currency',
     required: true,
-    hint: 'Minimum 1000',
+    hint: t('applications.list.fields.requestedAmountHint'),
     wrapper: 'half'
   },
   {
     name: 'requestedTermMonths',
-    label: 'Requested term (months)',
+    label: t('applications.list.fields.requestedTerm'),
     type: 'number',
     required: true,
     min: 1,
     max: 360,
-    hint: '1 – 360',
+    hint: t('applications.list.fields.requestedTermHint'),
     wrapper: 'half'
   },
-  { name: 'purpose', type: 'textarea' }
-]
+  { name: 'purpose', label: t('applications.list.fields.purpose'), type: 'textarea' }
+])
 
 const createForm = ref<Record<string, any>>({})
 
@@ -214,7 +254,7 @@ async function onCreate(values: Record<string, any>) {
       method: 'POST',
       body: payload
     })
-    toast.add({ title: 'Application submitted', color: 'green' })
+    toast.add({ title: t('applications.list.toastCreated'), color: 'green' })
     showCreate.value = false
     await refresh()
     await router.push(`/applications/${created.id}`)

@@ -17,12 +17,14 @@
       "emptyTitle": "No customers yet",
       "emptyDescription": "Add your first customer to start creating loans for them.",
       "toastCreated": "Customer created",
+      "branchFilterAll": "All branches",
       "columns": {
         "id": "ID",
         "firstName": "First name",
         "lastName": "Last name",
         "email": "Email",
         "phone": "Phone",
+        "branch": "Branch",
         "created": "Created"
       }
     },
@@ -290,7 +292,9 @@
       "nationalId": "National ID",
       "address": "Address",
       "dateOfBirth": "Date of birth",
-      "dateOfBirthHint": "Optional"
+      "dateOfBirthHint": "Optional",
+      "branch": "Branch",
+      "branchNone": "No branch"
     }
   },
   "applications": {
@@ -305,9 +309,13 @@
       "emptyDescription": "Submit a loan application for one of your customers to get started.",
       "submit": "Submit",
       "toastCreated": "Application submitted",
+      "branchFilter": {
+        "all": "All branches"
+      },
       "columns": {
         "id": "ID",
         "customer": "Customer",
+        "branch": "Branch",
         "requested": "Requested",
         "term": "Term (mo)",
         "status": "Status",

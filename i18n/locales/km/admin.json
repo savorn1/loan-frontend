@@ -3,7 +3,8 @@
     "entities": {
       "user": "អ្នកប្រើប្រាស់",
       "role": "តួនាទី",
-      "permission": "សិទ្ធិ"
+      "permission": "សិទ្ធិ",
+      "branch": "សាខា"
     },
     "shared": {
       "loading": "កំពុងផ្ទុក…",
@@ -35,6 +36,7 @@
         "username": "ឈ្មោះអ្នកប្រើប្រាស់",
         "role": "តួនាទី",
         "status": "ស្ថានភាព",
+        "branch": "សាខា",
         "created": "បង្កើតនៅ"
       },
       "actions": {
@@ -42,7 +44,8 @@
         "makeUser": "ធ្វើជាអ្នកប្រើប្រាស់",
         "disable": "បិទដំណើរការ",
         "enable": "បើកដំណើរការ",
-        "roles": "តួនាទី"
+        "roles": "តួនាទី",
+        "branch": "សាខា"
       },
       "empty": {
         "title": "រកមិនឃើញអ្នកប្រើប្រាស់ទេ",
@@ -54,7 +57,11 @@
         "password": "ពាក្យសម្ងាត់",
         "passwordHint": "យ៉ាងតិច ៦ តួអក្សរ",
         "role": "តួនាទី",
-        "active": "សកម្ម"
+        "active": "សកម្ម",
+        "branch": "សាខា"
+      },
+      "branchOptions": {
+        "none": "គ្មានសាខា"
       },
       "deleteConfirmTitle": "លុបអ្នកប្រើប្រាស់ \"{username}\"?",
       "deleteConfirmDescription": "សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
@@ -64,11 +71,15 @@
         "emptyDescription": "សូមបង្កើតតួនាទីជាមុនសិន រួចផ្តល់ទៅអ្នកប្រើប្រាស់។",
         "goToRoles": "ទៅកាន់តួនាទី"
       },
+      "branchModal": {
+        "title": "សាខា — {username}"
+      },
       "toast": {
         "created": "អ្នកប្រើប្រាស់ \"{username}\" ត្រូវបានបង្កើត",
         "roleChanged": "{username} ឥឡូវនេះក្លាយជា {role}",
         "disabled": "{username} ត្រូវបានបិទដំណើរការ",
         "enabled": "{username} ត្រូវបានបើកដំណើរការ",
+        "branchChanged": "សាខារបស់ {username} ត្រូវបានធ្វើបច្ចុប្បន្នភាព",
         "deleted": "អ្នកប្រើប្រាស់ត្រូវបានលុប"
       }
     },
@@ -126,6 +137,55 @@
           "assigned": "អ្នកប្រើប្រាស់ត្រូវបានផ្តល់",
           "removed": "{username} ត្រូវបានលុបចេញពីតួនាទី",
           "deleted": "តួនាទីត្រូវបានលុប"
+        }
+      }
+    },
+    "branches": {
+      "title": "សាខា",
+      "total": {
+        "one": "សាខា ១",
+        "other": "សាខា {count}"
+      },
+      "newBranch": "សាខាថ្មី",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ ឬលេខកូដ...",
+      "columns": {
+        "code": "លេខកូដ",
+        "name": "ឈ្មោះ",
+        "address": "អាសយដ្ឋាន",
+        "phone": "ទូរស័ព្ទ",
+        "status": "ស្ថានភាព",
+        "created": "បង្កើតនៅ"
+      },
+      "empty": {
+        "matchesTitle": "គ្មានលទ្ធផលត្រូវគ្នា",
+        "matchesDescription": "គ្មានអ្វីត្រូវគ្នានឹង “{query}” ទេ។",
+        "emptyTitle": "មិនទាន់មានសាខាទេ",
+        "emptyDescription": "បង្កើតសាខាមួយ ដើម្បីផ្តល់ទៅឲ្យអ្នកប្រើប្រាស់ អតិថិជន និងកម្ចី។"
+      },
+      "createModalTitle": "សាខាថ្មី",
+      "editModalTitle": "កែសម្រួលសាខា",
+      "fields": {
+        "code": "លេខកូដ",
+        "codeHint": "ឧ. PP01",
+        "name": "ឈ្មោះ",
+        "address": "អាសយដ្ឋាន",
+        "phone": "ទូរស័ព្ទ",
+        "status": "ស្ថានភាព"
+      },
+      "deleteConfirmTitle": "លុបសាខា \"{name}\"?",
+      "deleteConfirmDescription": "អ្នកប្រើប្រាស់ អតិថិជន និងកម្ចីដែលយោងទៅសាខានេះ នឹងរក្សាទុកលេខសម្គាល់ដដែល ប៉ុន្តែនឹងលែងបង្ហាញឈ្មោះទៀតហើយ។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
+      "hoursModal": {
+        "title": "ម៉ោងបើកធ្វើការ — {name}",
+        "closed": "បិទ",
+        "toastSaved": "ម៉ោងបើកធ្វើការត្រូវបានធ្វើបច្ចុប្បន្នភាព",
+        "days": {
+          "MONDAY": "ច័ន្ទ",
+          "TUESDAY": "អង្គារ",
+          "WEDNESDAY": "ពុធ",
+          "THURSDAY": "ព្រហស្បតិ៍",
+          "FRIDAY": "សុក្រ",
+          "SATURDAY": "សៅរ៍",
+          "SUNDAY": "អាទិត្យ"
         }
       }
     },

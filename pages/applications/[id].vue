@@ -7,23 +7,25 @@
       size="xs"
       class="mb-1 px-0"
     >
-      Back to applications
+      {{ t('applications.detail.backToApplications') }}
     </UButton>
     <div class="flex items-center justify-between mb-6">
       <div class="flex items-center gap-3">
-        <h1 class="text-xl font-bold">Application #{{ application.id }}</h1>
+        <h1 class="text-xl font-bold">
+          {{ t('applications.detail.title', { id: application.id }) }}
+        </h1>
         <StatusBadge :status="application.status" />
       </div>
       <div v-if="isAdmin" class="flex gap-2">
         <UButton v-if="application.status === 'SUBMITTED'" variant="soft" @click="onStartReview"
-          >Start review</UButton
+          >{{ t('applications.detail.startReview') }}</UButton
         >
         <UButton
           v-if="application.status === 'SUBMITTED' || application.status === 'UNDER_REVIEW'"
           color="green"
           @click="openDecision('APPROVED')"
         >
-          Approve
+          {{ t('applications.detail.approve') }}
         </UButton>
         <UButton
           v-if="application.status === 'SUBMITTED' || application.status === 'UNDER_REVIEW'"
@@ -31,7 +33,7 @@
           variant="soft"
           @click="openDecision('REJECTED')"
         >
-          Reject
+          {{ t('applications.detail.reject') }}
         </UButton>
       </div>
       <UButton
@@ -40,33 +42,33 @@
         variant="soft"
         @click="confirmWithdraw = true"
       >
-        Withdraw
+        {{ t('applications.detail.withdraw') }}
       </UButton>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
       <UCard class="lg:col-span-1">
         <template #header>
-          <span class="font-semibold">Details</span>
+          <span class="font-semibold">{{ t('applications.detail.details') }}</span>
         </template>
         <dl class="grid grid-cols-2 gap-y-3 text-sm">
-          <dt class="text-gray-500">Customer</dt>
+          <dt class="text-gray-500">{{ t('applications.detail.customer') }}</dt>
           <dd>
             <NuxtLink :to="`/customers/${application.customerId}`" class="text-primary-500">{{
               application.customerName
             }}</NuxtLink>
           </dd>
-          <dt class="text-gray-500">Requested amount</dt>
+          <dt class="text-gray-500">{{ t('applications.detail.requestedAmount') }}</dt>
           <dd>{{ formatCurrency(application.requestedAmount) }}</dd>
-          <dt class="text-gray-500">Requested term</dt>
-          <dd>{{ application.requestedTermMonths }} months</dd>
-          <dt class="text-gray-500">Purpose</dt>
+          <dt class="text-gray-500">{{ t('applications.detail.requestedTerm') }}</dt>
+          <dd>{{ application.requestedTermMonths }} {{ t('applications.detail.monthsUnit') }}</dd>
+          <dt class="text-gray-500">{{ t('applications.detail.purpose') }}</dt>
           <dd>{{ application.purpose || '—' }}</dd>
-          <dt class="text-gray-500">Submitted</dt>
+          <dt class="text-gray-500">{{ t('applications.detail.submitted') }}</dt>
           <dd>{{ formatDateTime(application.submittedAt) }}</dd>
-          <dt class="text-gray-500">Decided</dt>
+          <dt class="text-gray-500">{{ t('applications.detail.decided') }}</dt>
           <dd>{{ formatDateTime(application.decidedAt) }}</dd>
-          <dt class="text-gray-500">Loan</dt>
+          <dt class="text-gray-500">{{ t('applications.detail.loan') }}</dt>
           <dd>
             <NuxtLink
               v-if="application.loanId"
@@ -82,7 +84,7 @@
 
       <UCard class="lg:col-span-2">
         <template #header>
-          <span class="font-semibold">Decisions</span>
+          <span class="font-semibold">{{ t('applications.detail.decisions') }}</span>
         </template>
         <ol v-if="application.approvals.length" class="space-y-4">
           <li
@@ -106,8 +108,8 @@
         <EmptyState
           v-else
           icon="i-heroicons-scale"
-          title="No decisions yet"
-          description="Approvals and rejections recorded against this application will appear here."
+          :title="t('applications.detail.noDecisionsTitle')"
+          :description="t('applications.detail.noDecisionsDescription')"
         />
       </UCard>
     </div>
@@ -115,18 +117,27 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <UCard>
         <template #header>
-          <span class="font-semibold">Documents</span>
+          <span class="font-semibold">{{ t('applications.detail.documents') }}</span>
         </template>
 
         <UForm :state="documentForm" class="space-y-2 mb-6" @submit="onAddDocument">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <UInput v-model="documentForm.documentType" placeholder="Type (e.g. ID_PROOF)" />
-            <UInput v-model="documentForm.fileName" placeholder="File name" />
-            <UInput v-model="documentForm.fileUrl" placeholder="File URL" />
+            <UInput
+              v-model="documentForm.documentType"
+              :placeholder="t('applications.detail.documentTypePlaceholder')"
+            />
+            <UInput
+              v-model="documentForm.fileName"
+              :placeholder="t('applications.detail.fileNamePlaceholder')"
+            />
+            <UInput
+              v-model="documentForm.fileUrl"
+              :placeholder="t('applications.detail.fileUrlPlaceholder')"
+            />
           </div>
           <div class="flex justify-end">
             <UButton type="submit" size="xs" :loading="addingDocument" :disabled="!canAddDocument"
-              >Add document</UButton
+              >{{ t('applications.detail.addDocument') }}</UButton
             >
           </div>
         </UForm>
@@ -175,26 +186,26 @@
         <EmptyState
           v-else
           icon="i-heroicons-document"
-          title="No documents yet"
-          description="Supporting documents submitted with this application will appear here."
+          :title="t('applications.detail.noDocumentsTitle')"
+          :description="t('applications.detail.noDocumentsDescription')"
         />
       </UCard>
 
       <UCard>
         <template #header>
-          <span class="font-semibold">Notes</span>
+          <span class="font-semibold">{{ t('applications.detail.notes') }}</span>
         </template>
 
         <UForm :state="noteForm" class="flex items-start gap-2 mb-6" @submit="onAddNote">
           <UTextarea
             v-model="noteForm.note"
             :rows="2"
-            placeholder="Add an internal note..."
+            :placeholder="t('applications.detail.notePlaceholder')"
             class="flex-1"
             required
           />
           <UButton type="submit" :loading="addingNote" :disabled="!noteForm.note.trim()"
-            >Add</UButton
+            >{{ t('applications.detail.add') }}</UButton
           >
         </UForm>
 
@@ -213,8 +224,8 @@
         <EmptyState
           v-else
           icon="i-heroicons-chat-bubble-left-right"
-          title="No notes yet"
-          description="Internal notes and comments about this application will appear here."
+          :title="t('applications.detail.noNotesTitle')"
+          :description="t('applications.detail.noNotesDescription')"
         />
       </UCard>
     </div>
@@ -223,13 +234,15 @@
       <UCard>
         <template #header>
           <span class="font-semibold">{{
-            decisionForm.decision === 'APPROVED' ? 'Approve application' : 'Reject application'
+            decisionForm.decision === 'APPROVED'
+              ? t('applications.detail.approveModalTitle')
+              : t('applications.detail.rejectModalTitle')
           }}</span>
         </template>
         <UForm :state="decisionForm" class="space-y-4" @submit="onDecide">
           <template v-if="decisionForm.decision === 'APPROVED'">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <UFormGroup label="Approved amount" required>
+              <UFormGroup :label="t('applications.detail.approvedAmount')" required>
                 <UInput
                   v-model.number="decisionForm.approvedAmount"
                   type="number"
@@ -237,7 +250,7 @@
                   step="0.01"
                 />
               </UFormGroup>
-              <UFormGroup label="Interest rate" required>
+              <UFormGroup :label="t('applications.detail.interestRate')" required>
                 <UInput
                   v-model.number="decisionForm.approvedInterestRate"
                   type="number"
@@ -246,7 +259,7 @@
                   step="0.01"
                 />
               </UFormGroup>
-              <UFormGroup label="Term (months)" required>
+              <UFormGroup :label="t('applications.detail.termMonths')" required>
                 <UInput
                   v-model.number="decisionForm.approvedTermMonths"
                   type="number"
@@ -256,18 +269,24 @@
               </UFormGroup>
             </div>
           </template>
-          <UFormGroup label="Comments">
+          <UFormGroup :label="t('applications.detail.comments')">
             <UTextarea v-model="decisionForm.comments" />
           </UFormGroup>
           <UAlert v-if="decisionError" color="red" variant="subtle" :title="decisionError" />
           <div class="flex justify-end gap-2 pt-2">
-            <UButton color="gray" variant="ghost" @click="showDecision = false">Cancel</UButton>
+            <UButton color="gray" variant="ghost" @click="showDecision = false">{{
+              t('common.cancel')
+            }}</UButton>
             <UButton
               type="submit"
               :color="decisionForm.decision === 'APPROVED' ? 'primary' : 'red'"
               :loading="deciding"
             >
-              {{ decisionForm.decision === 'APPROVED' ? 'Approve' : 'Reject' }}
+              {{
+                decisionForm.decision === 'APPROVED'
+                  ? t('applications.detail.approve')
+                  : t('applications.detail.reject')
+              }}
             </UButton>
           </div>
         </UForm>
@@ -276,9 +295,9 @@
 
     <ConfirmModal
       v-model="confirmWithdraw"
-      title="Withdraw this application?"
-      description="The customer's application is withdrawn and can no longer be reviewed or approved."
-      confirm-label="Withdraw"
+      :title="t('applications.detail.withdrawTitle')"
+      :description="t('applications.detail.withdrawDescription')"
+      :confirm-label="t('applications.detail.withdraw')"
       color="red"
       :loading="withdrawing"
       @confirm="onWithdraw"
@@ -298,6 +317,7 @@ import type {
   ApprovalDecision
 } from '~/features/loans/types'
 
+const { t } = useI18n()
 const route = useRoute()
 const api = useApi()
 const toast = useToast()
@@ -324,7 +344,7 @@ const sortedApprovals = computed(() =>
 async function onStartReview() {
   try {
     await api(`/loans/applications/${applicationId}/start-review`, { method: 'PUT' })
-    toast.add({ title: 'Application under review', color: 'green' })
+    toast.add({ title: t('applications.detail.toastUnderReview'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
@@ -337,7 +357,7 @@ async function onWithdraw() {
   withdrawing.value = true
   try {
     await api(`/loans/applications/${applicationId}/withdraw`, { method: 'PUT' })
-    toast.add({ title: 'Application withdrawn', color: 'green' })
+    toast.add({ title: t('applications.detail.toastWithdrawn'), color: 'green' })
     confirmWithdraw.value = false
     await refresh()
   } catch (err) {
@@ -382,7 +402,7 @@ async function onDecide() {
       !decisionForm.approvedInterestRate ||
       !decisionForm.approvedTermMonths)
   ) {
-    decisionError.value = 'Approved amount, interest rate and term are all required to approve.'
+    decisionError.value = t('applications.detail.decisionValidationError')
     return
   }
   deciding.value = true
@@ -400,7 +420,10 @@ async function onDecide() {
     }
     await api(`/loans/applications/${applicationId}/approvals`, { method: 'POST', body: payload })
     toast.add({
-      title: decisionForm.decision === 'APPROVED' ? 'Application approved' : 'Application rejected',
+      title:
+        decisionForm.decision === 'APPROVED'
+          ? t('applications.detail.toastApproved')
+          : t('applications.detail.toastRejected'),
       color: 'green'
     })
     showDecision.value = false
@@ -462,7 +485,7 @@ async function onRejectDocument(documentId: number) {
 async function onDeleteDocument(documentId: number) {
   try {
     await api(`/loans/applications/${applicationId}/documents/${documentId}`, { method: 'DELETE' })
-    toast.add({ title: 'Document deleted', color: 'green' })
+    toast.add({ title: t('applications.detail.toastDocumentDeleted'), color: 'green' })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

@@ -18,6 +18,8 @@ export interface AuthResponse {
   expiresIn: number
   username: string
   role: Role
+  branchId?: number | null
+  branchName?: string | null
 }
 
 export interface RefreshRequest {

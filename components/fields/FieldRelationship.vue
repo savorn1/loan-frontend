@@ -5,7 +5,7 @@
     searchable-lazy
     option-attribute="label"
     value-attribute="value"
-    :placeholder="field.placeholder ?? 'Search…'"
+    :placeholder="field.placeholder ?? t('common.searchEllipsis')"
     :disabled="field.disabled"
     :aria-label="field.label ?? field.name"
   />
@@ -20,6 +20,7 @@ import type { FieldDef } from '~/shared/types'
 
 const props = defineProps<{ field: FieldDef }>()
 const model = defineModel<any>()
+const { t } = useI18n()
 
 // Keep the current value visible even when the latest search results don't
 // include it (e.g. editing an existing record whose related item isn't

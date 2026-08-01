@@ -11,7 +11,7 @@
       <span
         :class="modelValue ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'"
       >
-        {{ modelValue ? formatDate(modelValue) : placeholder }}
+        {{ modelValue ? formatDate(modelValue) : (placeholder ?? t('datePicker.selectDate')) }}
       </span>
     </UButton>
 
@@ -23,7 +23,7 @@
             color="gray"
             variant="ghost"
             size="xs"
-            aria-label="Previous month"
+            :aria-label="t('datePicker.previousMonth')"
             @click="shiftMonth(-1)"
           />
           <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ monthLabel }}</span>
@@ -32,7 +32,7 @@
             color="gray"
             variant="ghost"
             size="xs"
-            aria-label="Next month"
+            :aria-label="t('datePicker.nextMonth')"
             @click="shiftMonth(1)"
           />
         </div>
@@ -64,14 +64,16 @@
         <div
           class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100 dark:border-gray-800"
         >
-          <UButton size="xs" color="gray" variant="ghost" @click="pickToday">Today</UButton>
+          <UButton size="xs" color="gray" variant="ghost" @click="pickToday">{{
+            t('datePicker.today')
+          }}</UButton>
           <UButton
             v-if="clearable && modelValue"
             size="xs"
             color="gray"
             variant="ghost"
             @click="clear"
-            >Clear</UButton
+            >{{ t('datePicker.clear') }}</UButton
           >
         </div>
       </div>
@@ -94,14 +96,24 @@ const props = withDefaults(
   }>(),
   {
     modelValue: '',
-    placeholder: 'Select a date',
+    placeholder: undefined,
     clearable: true
   }
 )
 
 const emit = defineEmits<{ 'update:modelValue': [string] }>()
 
-const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+const { t, locale } = useI18n()
+
+const WEEKDAYS = computed(() => [
+  t('datePicker.weekdaySu'),
+  t('datePicker.weekdayMo'),
+  t('datePicker.weekdayTu'),
+  t('datePicker.weekdayWe'),
+  t('datePicker.weekdayTh'),
+  t('datePicker.weekdayFr'),
+  t('datePicker.weekdaySa')
+])
 
 const open = ref(false)
 
@@ -128,7 +140,10 @@ watch(open, (isOpen) => {
 })
 
 const monthLabel = computed(() =>
-  view.value.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  view.value.toLocaleDateString(locale.value === 'km' ? 'km-KH' : 'en-US', {
+    month: 'long',
+    year: 'numeric'
+  })
 )
 
 const leadingBlanks = computed(() => view.value.getDay())
