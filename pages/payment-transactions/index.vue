@@ -17,19 +17,28 @@
           value-attribute="value"
           class="w-40"
         />
+        <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
         <UButton
-          v-if="statusFilter"
+          v-if="hasFilters"
           variant="ghost"
           color="gray"
           icon="i-heroicons-x-mark"
-          @click="statusFilter = ''"
+          @click="statusFilter = ''; dateFrom = ''; dateTo = ''"
         >
-          {{ t('payments.transactions.clearFilter') }}
+          {{ t('common.clearFilters') }}
         </UButton>
       </div>
     </UCard>
 
     <UCard>
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable
         v-model:sort="sort"
         :rows="rows"
@@ -41,15 +50,15 @@
       >
         <template #empty-state>
           <EmptyState
-            :icon="statusFilter ? 'i-heroicons-magnifying-glass' : 'i-heroicons-arrows-right-left'"
-            :title="statusFilter ? t('common.noMatches') : t('payments.transactions.emptyTitle')"
+            :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-arrows-right-left'"
+            :title="hasFilters ? t('common.noMatches') : t('payments.transactions.emptyTitle')"
             :description="
-              statusFilter
+              hasFilters
                 ? t('payments.transactions.emptySearchDescription')
                 : t('payments.transactions.emptyDescription')
             "
           >
-            <template v-if="!statusFilter" #action>
+            <template v-if="!hasFilters" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">{{
                 t('payments.transactions.newTransaction')
               }}</UButton>
@@ -103,6 +112,7 @@ const { t } = useI18n()
 const {
   data: transactions,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('payment-transactions', () =>
   api<PaymentTransactionResponse[]>('/payments/transactions')
@@ -183,14 +193,17 @@ const statusOptions = computed<{ label: string; value: TransactionStatus | '' }[
   { label: t('payments.transactions.statusOptions.refunded'), value: 'REFUNDED' }
 ])
 const statusFilter = ref<TransactionStatus | ''>('')
+const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
 
 const filteredByStatus = computed(() =>
-  statusFilter.value
-    ? (transactions.value ?? []).filter((t) => t.status === statusFilter.value)
-    : transactions.value
+  (transactions.value ?? [])
+    .filter((t) => !statusFilter.value || t.status === statusFilter.value)
+    .filter((t) => inRange(t.requestedAt))
 )
 
 const { page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, { pageSize: 10 })
+
+const hasFilters = computed(() => !!statusFilter.value || !!dateFrom.value || !!dateTo.value)
 
 const totalLabel = computed(() => {
   const count = transactions.value?.length ?? 0

@@ -1,5 +1,13 @@
 <template>
   <div>
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <UCard v-if="writeoff">
       <template #header>
         <div class="flex items-center justify-between">
@@ -59,7 +67,11 @@ const { t } = useI18n()
 
 const loanId = route.params.id as string
 
-const { data: writeoff, refresh } = await useAsyncData(`loan-${loanId}-writeoff`, async () => {
+const {
+  data: writeoff,
+  error: fetchError,
+  refresh
+} = await useAsyncData(`loan-${loanId}-writeoff`, async () => {
   try {
     return await api<LoanWriteoffResponse>(`/loans/${loanId}/writeoff`)
   } catch (err) {

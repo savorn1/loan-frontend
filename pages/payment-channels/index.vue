@@ -29,6 +29,14 @@
         </UInput>
       </template>
 
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
@@ -145,6 +153,7 @@ function buildQuery() {
 const {
   data: channelsPage,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('payment-channels', () =>
   api<PageResponse<PaymentChannelResponse>>('/payments/channels', { query: buildQuery() })

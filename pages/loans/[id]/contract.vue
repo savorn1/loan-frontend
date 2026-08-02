@@ -1,5 +1,14 @@
 <template>
-  <div v-if="loan" class="space-y-6">
+  <div>
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
+    <div v-if="loan" class="space-y-6">
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
@@ -230,8 +239,9 @@
       </UCard>
     </div>
   </div>
-  <div v-else class="flex justify-center py-16">
-    <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
+    <div v-else class="flex justify-center py-16">
+      <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
+    </div>
   </div>
 </template>
 
@@ -261,7 +271,7 @@ const api = useApi()
 
 const loanId = route.params.id as string
 
-const { data: loan } = await useAsyncData(`loan-${loanId}`, () =>
+const { data: loan, error: fetchError } = await useAsyncData(`loan-${loanId}`, () =>
   api<LoanResponse>(`/loans/${loanId}`)
 )
 

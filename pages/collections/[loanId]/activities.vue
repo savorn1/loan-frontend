@@ -13,6 +13,14 @@
       @submit="onCreate"
     />
 
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <ol v-if="(activities ?? []).length" class="space-y-4 mt-6">
       <li
         v-for="a in activities"
@@ -53,7 +61,11 @@ const { t } = useI18n()
 
 const loanId = route.params.loanId as string
 
-const { data: activities, refresh } = await useAsyncData(`collection-case-${loanId}-activities`, () =>
+const {
+  data: activities,
+  error: fetchError,
+  refresh
+} = await useAsyncData(`collection-case-${loanId}-activities`, () =>
   api<CollectionActivityResponse[]>(`/payments/collections/${loanId}/activities`)
 )
 

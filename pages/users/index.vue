@@ -46,6 +46,14 @@
     </UCard>
 
     <UCard>
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable :rows="users?.content ?? []" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex items-center justify-end gap-1">
@@ -251,6 +259,7 @@ function buildQuery(): UserFilter {
 const {
   data: users,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('users', () =>
   api<PageResponse<UserResponse>>('/auth/users', { query: buildQuery() })

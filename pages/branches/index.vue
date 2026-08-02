@@ -8,24 +8,44 @@
 
     <UCard>
       <template #header>
-        <UInput
-          v-model="search"
-          icon="i-heroicons-magnifying-glass"
-          :placeholder="t('admin.branches.searchPlaceholder')"
-          class="max-w-xs"
-        >
-          <template v-if="search" #trailing>
-            <UButton
-              color="gray"
-              variant="link"
-              icon="i-heroicons-x-mark"
-              :aria-label="t('common.clearSearch')"
-              :padded="false"
-              @click="search = ''"
-            />
-          </template>
-        </UInput>
+        <div class="flex flex-wrap items-center gap-3">
+          <UInput
+            v-model="search"
+            icon="i-heroicons-magnifying-glass"
+            :placeholder="t('admin.branches.searchPlaceholder')"
+            class="max-w-xs"
+          >
+            <template v-if="search" #trailing>
+              <UButton
+                color="gray"
+                variant="link"
+                icon="i-heroicons-x-mark"
+                :aria-label="t('common.clearSearch')"
+                :padded="false"
+                @click="search = ''"
+              />
+            </template>
+          </UInput>
+          <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
+          <UButton
+            v-if="hasFilters"
+            variant="ghost"
+            color="gray"
+            icon="i-heroicons-x-mark"
+            @click="clearFilters"
+          >
+            {{ t('common.clearFilters') }}
+          </UButton>
+        </div>
       </template>
+
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
 
       <DataTable :rows="rows" :columns="columns" :loading="pending">
         <template #status-data="{ row }">
@@ -191,13 +211,15 @@ const toast = useToast()
 const {
   data: branches,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('branches', () => api<BranchResponse[]>('/branches'))
 
 const search = ref('')
+const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
 const filtered = computed(() => {
   const q = search.value.trim().toLowerCase()
-  const list = branches.value ?? []
+  const list = (branches.value ?? []).filter((b) => inRange(b.createdAt))
   if (!q) return list
   return list.filter(
     (b) => b.name.toLowerCase().includes(q) || b.code.toLowerCase().includes(q)
@@ -205,6 +227,14 @@ const filtered = computed(() => {
 })
 
 const { page, pageSize, total, rows } = useClientTable(filtered, { pageSize: 10 })
+
+const hasFilters = computed(() => !!search.value || !!dateFrom.value || !!dateTo.value)
+
+function clearFilters() {
+  search.value = ''
+  dateFrom.value = ''
+  dateTo.value = ''
+}
 
 const totalLabel = computed(() => {
   const count = branches.value?.length ?? 0

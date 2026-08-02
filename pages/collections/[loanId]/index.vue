@@ -1,5 +1,14 @@
 <template>
-  <div v-if="loan" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div>
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
+    <div v-if="loan" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <UCard>
       <template #header>
         <span class="font-semibold">{{ t('collections.overview.loanCard.title') }}</span>
@@ -45,6 +54,7 @@
         <dd>{{ formatDate(collectionCase.nextFollowUpAt) || '—' }}</dd>
       </dl>
     </UCard>
+    </div>
   </div>
 </template>
 
@@ -61,7 +71,7 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.loanId as string
 
-const { data: loan } = await useAsyncData(`collection-case-${loanId}-loan`, () =>
+const { data: loan, error: fetchError } = await useAsyncData(`collection-case-${loanId}-loan`, () =>
   api<LoanResponse>(`/loans/${loanId}`)
 )
 const { data: collectionCase } = await useAsyncData(`collection-case-${loanId}-case`, () =>

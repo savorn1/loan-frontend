@@ -40,8 +40,26 @@
             value-attribute="value"
             class="w-48"
           />
+          <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
+          <UButton
+            v-if="hasFilters"
+            variant="ghost"
+            color="gray"
+            icon="i-heroicons-x-mark"
+            @click="clearFilters"
+          >
+            {{ t('common.clearFilters') }}
+          </UButton>
         </div>
       </template>
+
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
 
       <DataTable
         v-model:sort="sort"
@@ -100,12 +118,12 @@ import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const { t } = useI18n()
 const api = useApi()
-const toast = useToast()
 const router = useRouter()
 
 const {
   data: loansRaw,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('loans', () => api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } }))
 
@@ -154,11 +172,13 @@ const statusOptions = computed<{ label: string; value: LoanStatus | '' }[]>(() =
   { label: t('loans.list.statusFilter.closed'), value: 'CLOSED' }
 ])
 const statusFilter = ref<LoanStatus | ''>('')
+const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
 
 const filteredByStatus = computed(() =>
   (loans.value ?? [])
     .filter((l) => !statusFilter.value || l.status === statusFilter.value)
     .filter((l) => branchFilter.value === '' || l.branchId === branchFilter.value)
+    .filter((l) => inRange(l.createdAt))
 )
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
@@ -166,16 +186,22 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByS
   pageSize: 10
 })
 
-const hasFilters = computed(() => !!search.value || !!statusFilter.value || branchFilter.value !== '')
+const hasFilters = computed(
+  () => !!search.value || !!statusFilter.value || branchFilter.value !== '' || !!dateFrom.value || !!dateTo.value
+)
+
+function clearFilters() {
+  search.value = ''
+  statusFilter.value = ''
+  branchFilter.value = ''
+  dateFrom.value = ''
+  dateTo.value = ''
+}
 
 const totalLabel = computed(() => {
   const count = loans.value?.length ?? 0
   return count === 1 ? t('loans.list.totalOne') : t('loans.list.totalOther', { count })
 })
-
-const showCreate = ref(false)
-const creating = ref(false)
-const error = ref('')
 
 // Declarative field defs for <DynamicForm>; required/select validation is
 // handled by DynamicForm.
@@ -220,40 +246,28 @@ const loanFields = computed<FieldDef[]>(() => [
   { name: 'purpose', label: t('loans.list.fields.purpose'), type: 'textarea' }
 ])
 
-const createForm = ref<Record<string, any>>({})
-
-function openCreate() {
-  createForm.value = {
+const { showCreate, creating, error, createForm, openCreate, onCreate } = useCrudModals<
+  LoanResponse,
+  LoanRequest
+>('/loans', refresh, {
+  entityName: t('loans.entities.loan'),
+  createDefaults: () => ({
     customerId: undefined,
     principal: 1000,
     interestRate: 5,
     termMonths: 12,
     purpose: ''
-  }
-  error.value = ''
-  showCreate.value = true
-}
-
-async function onCreate(values: Record<string, any>) {
-  creating.value = true
-  error.value = ''
-  try {
-    const payload: LoanRequest = {
-      customerId: values.customerId,
-      principal: values.principal,
-      interestRate: values.interestRate,
-      termMonths: values.termMonths,
-      purpose: values.purpose || undefined
-    }
-    const created = await api<LoanResponse>('/loans', { method: 'POST', body: payload })
-    toast.add({ title: t('loans.list.toastCreated'), color: 'green' })
-    showCreate.value = false
-    await refresh()
+  }),
+  toForm: () => ({}),
+  toPayload: (values) => ({
+    customerId: values.customerId,
+    principal: values.principal,
+    interestRate: values.interestRate,
+    termMonths: values.termMonths,
+    purpose: values.purpose || undefined
+  }),
+  onCreated: async (created) => {
     await router.push(`/loans/${created.id}`)
-  } catch (err) {
-    error.value = apiErrorMessage(err)
-  } finally {
-    creating.value = false
   }
-}
+})
 </script>

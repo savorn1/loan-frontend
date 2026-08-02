@@ -4,6 +4,14 @@
       <span class="font-semibold">{{ t('loans.statusHistory.title') }}</span>
     </template>
 
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <ol v-if="(history ?? []).length" class="space-y-4">
       <li v-for="entry in history" :key="entry.id" class="flex items-start gap-3">
         <div class="flex flex-col items-center pt-0.5">
@@ -47,7 +55,8 @@ const { t } = useI18n()
 
 const loanId = route.params.id as string
 
-const { data: history } = await useAsyncData(`loan-${loanId}-status-history`, () =>
-  api<LoanStatusHistoryResponse[]>(`/loans/${loanId}/status-history`)
+const { data: history, error: fetchError } = await useAsyncData(
+  `loan-${loanId}-status-history`,
+  () => api<LoanStatusHistoryResponse[]>(`/loans/${loanId}/status-history`)
 )
 </script>

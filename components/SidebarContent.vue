@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-col h-full">
     <div
-      class="h-16 shrink-0 flex items-center gap-2.5 px-5 border-b border-gray-200 dark:border-gray-800"
+      class="h-16 shrink-0 flex items-center gap-2.5 border-b border-gray-200 dark:border-gray-800"
+      :class="collapsed ? 'justify-center px-0' : 'px-5'"
     >
       <NuxtLink to="/" class="flex items-center gap-2.5">
         <span
@@ -9,10 +10,13 @@
         >
           <UIcon name="i-heroicons-banknotes" class="w-4.5 h-4.5" />
         </span>
-        <span class="font-bold text-gray-900 dark:text-white tracking-tight">LMS</span>
+        <span v-if="!collapsed" class="font-bold text-gray-900 dark:text-white tracking-tight"
+          >LMS</span
+        >
       </NuxtLink>
     </div>
-    <div class="flex-1 px-3 py-4 overflow-y-auto space-y-4">
+
+    <div v-if="!collapsed" class="flex-1 px-3 py-4 overflow-y-auto space-y-4">
       <div v-for="(group, i) in groups" :key="i">
         <button
           v-if="group.title"
@@ -56,6 +60,40 @@
         />
       </div>
     </div>
+
+    <!-- Collapsed: flat icon-only rail, grouping dropped, label shown as a hover tooltip. -->
+    <div v-else class="flex-1 px-2 py-4 overflow-y-auto space-y-1">
+      <UTooltip
+        v-for="link in flatLinks"
+        :key="link.to"
+        :text="link.label"
+        :popper="{ placement: 'right' }"
+      >
+        <NuxtLink
+          :to="link.to"
+          class="w-10 h-10 mx-auto flex items-center justify-center rounded-xl transition-colors"
+          :class="
+            linkIsActive(link)
+              ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-400/10'
+              : 'text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+          "
+        >
+          <UIcon :name="link.icon" class="w-5 h-5 shrink-0" />
+        </NuxtLink>
+      </UTooltip>
+    </div>
+
+    <button
+      type="button"
+      class="h-12 shrink-0 flex items-center justify-center border-t border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+      :aria-label="collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')"
+      @click="collapsed = !collapsed"
+    >
+      <UIcon
+        :name="collapsed ? 'i-heroicons-chevron-double-right' : 'i-heroicons-chevron-double-left'"
+        class="w-4.5 h-4.5"
+      />
+    </button>
   </div>
 </template>
 
@@ -69,11 +107,10 @@ const props = defineProps<{
   }[]
 }>()
 
-// Per-module accent so each collapsible group (User Management, Payment,
-// Accounting, Loan Configuration) reads as its own visual section instead of
-// everything sharing the same primary green. Classes are spelled out in full
-// (never `text-${color}-500`) so Tailwind's static scanner picks them up —
-// it can't see runtime-interpolated class names.
+const collapsed = defineModel<boolean>('collapsed', { default: false })
+
+const { t } = useI18n()
+
 const GROUP_ACCENTS: Record<
   string,
   { headerIcon: string; headerHover: string; active: string; activeIcon: string }
@@ -132,5 +169,11 @@ function isOpen(i: number) {
 
 function toggle(i: number) {
   openOverrides.value[i] = !isOpen(i)
+}
+
+const flatLinks = computed(() => props.groups.flatMap((g) => g.links))
+
+function linkIsActive(link: { to: string }) {
+  return route.path === link.to || route.path.startsWith(`${link.to}/`)
 }
 </script>

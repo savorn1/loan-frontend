@@ -4,6 +4,14 @@
       <span class="font-semibold">{{ t('collections.assignments.title') }}</span>
     </template>
 
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <ol v-if="(assignments ?? []).length" class="space-y-4">
       <li v-for="entry in assignments" :key="entry.id" class="flex items-start gap-3">
         <div class="flex flex-col items-center pt-0.5">
@@ -44,8 +52,9 @@ const { isAdmin } = storeToRefs(useAuth())
 
 const loanId = route.params.loanId as string
 
-const { data: assignments } = await useAsyncData(`collection-case-${loanId}-assignments`, () =>
-  api<CollectionCaseAssignmentResponse[]>(`/payments/collections/${loanId}/assignments`)
+const { data: assignments, error: fetchError } = await useAsyncData(
+  `collection-case-${loanId}-assignments`,
+  () => api<CollectionCaseAssignmentResponse[]>(`/payments/collections/${loanId}/assignments`)
 )
 const { data: usersPage } = await useAsyncData(`collection-case-${loanId}-users`, () =>
   isAdmin.value ? api<PageResponse<UserResponse>>('/auth/users?size=200') : Promise.resolve(null)

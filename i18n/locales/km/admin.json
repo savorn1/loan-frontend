@@ -286,6 +286,34 @@
       "chartLegend": {
         "disbursed": "បានចេញផ្តល់",
         "collected": "បានប្រមូល"
+      },
+      "generalLedgerReportsHeader": "របាយការណ៍បញ្ជីមេទូទៅ",
+      "generalLedgerReportsTiles": {
+        "generalLedger": { "label": "បញ្ជីមេទូទៅ", "description": "សមតុល្យរបស់រាល់គណនីសម្រាប់រយៈពេលមួយ" },
+        "journalReport": { "label": "របាយការណ៍ទិនានុប្បវត្តិ", "description": "ធាតុទិនានុប្បវត្តិដែលអាចច្រោះបាន" },
+        "journalEntryDetails": { "label": "ព័ត៌មានលម្អិតធាតុទិនានុប្បវត្តិ", "description": "ស្វែងរកធាតុមួយតាមលេខ" },
+        "ledgerByAccount": { "label": "បញ្ជីមេតាមគណនី", "description": "សកម្មភាពគណនីមួយសម្រាប់រយៈពេលមួយ" },
+        "ledgerByBranch": { "label": "បញ្ជីមេតាមសាខា", "description": "សកម្មភាពដែលបានកត់ត្រាសម្រាប់សាខាមួយ" },
+        "ledgerByDateRange": { "label": "បញ្ជីមេតាមដែនកាលបរិច្ឆេទ", "description": "គណនីមួយ ក្នុងដែនកាលបរិច្ឆេទផ្ទាល់ខ្លួន" },
+        "accountTransactionHistory": { "label": "ប្រវត្តិប្រតិបត្តិការគណនី", "description": "ដានប្រតិបត្តិការពេញលេញសម្រាប់គណនីមួយ" }
+      },
+      "trialBalanceReportsHeader": "របាយការណ៍តារាងតុល្យការសាកល្បង",
+      "trialBalanceReportsTiles": {
+        "trialBalance": { "label": "តារាងតុល្យការសាកល្បង", "description": "ចំនួនសរុបឥណពន្ធ/ឥណទានដែលបានកត់ត្រាសម្រាប់រយៈពេលមួយ" },
+        "adjustedTrialBalance": { "label": "តារាងតុល្យការសាកល្បងដែលបានកែតម្រូវ", "description": "ចំនួនសរុបឆ្លុះបញ្ចាំងពីរាល់ធាតុដែលបានកត់ត្រាសម្រាប់រយៈពេលមួយ រួមទាំងការកែតម្រូវ" },
+        "closingTrialBalance": { "label": "តារាងតុល្យការសាកល្បងបិទបញ្ជី", "description": "រូបថតថ្មីបំផុត — សមតុល្យបិទបញ្ជីដែលបានប្រមូលបន្ត" }
+      },
+      "financialStatementsHeader": "របាយការណ៍ហិរញ្ញវត្ថុ",
+      "financialStatementsTiles": {
+        "balanceSheet": { "label": "សន្លឹកតុល្យការ", "description": "ទ្រព្យសកម្ម បំណុល និងមូលធន គិតត្រឹមចុងបញ្ចប់នៃរយៈពេលមួយ" },
+        "incomeStatement": { "label": "របាយការណ៍ចំណូល (ប្រាក់ចំណេញ និងខាតបង់)", "description": "ចំណូល និងចំណាយសម្រាប់រយៈពេលមួយ" },
+        "cashFlow": { "label": "របាយការណ៍លំហូរសាច់ប្រាក់", "description": "ចលនាគណនីសាច់ប្រាក់តាមប្រភេទប្រតិបត្តិការ" },
+        "changesInEquity": { "label": "របាយការណ៍ការផ្លាស់ប្តូរមូលធន", "description": "សមតុល្យដើមគ្រា និងចុងគ្រា សម្រាប់គណនីមូលធននីមួយៗ" },
+        "financialPositionReport": { "label": "របាយការណ៍ស្ថានភាពហិរញ្ញវត្ថុ", "description": "ដូចគ្នានឹងសន្លឹកតុល្យការ" }
+      },
+      "reportsTable": {
+        "columns": { "name": "របាយការណ៍", "description": "ការពិពណ៌នា" },
+        "open": "បើក"
       }
     },
     "dashboard": {

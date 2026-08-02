@@ -94,6 +94,117 @@
         </ClientOnly>
       </div>
     </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.generalLedgerReportsHeader') }}</span>
+          <UInput
+            v-model="generalLedgerReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredGeneralLedgerReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: generalLedgerReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.trialBalanceReportsHeader') }}</span>
+          <UInput
+            v-model="trialBalanceReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredTrialBalanceReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: trialBalanceReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.financialStatementsHeader') }}</span>
+          <UInput
+            v-model="financialStatementsSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredFinancialStatementTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: financialStatementsSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
   </div>
 </template>
 
@@ -111,6 +222,7 @@ import {
 import { Line } from 'vue-chartjs'
 import type { CollectionBucket } from '~/features/collections/types'
 import type { LoanStatus } from '~/features/loans/types'
+import type { ColumnDef } from '~/shared/types'
 import type {
   CollectionTrendPoint,
   DisbursementTrendPoint,
@@ -123,6 +235,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip,
 
 const { t } = useI18n()
 const api = useApi()
+const router = useRouter()
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')
 
@@ -239,6 +352,147 @@ const trendChartData = computed(() => ({
     }
   ]
 }))
+
+interface GeneralLedgerReportTile {
+  to: string
+  icon: string
+  label: string
+  description: string
+}
+
+const generalLedgerReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/general-ledger',
+    icon: 'i-heroicons-book-open',
+    label: t('admin.reports.generalLedgerReportsTiles.generalLedger.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.generalLedger.description')
+  },
+  {
+    to: '/reports/general-ledger/journal-report',
+    icon: 'i-heroicons-document-text',
+    label: t('admin.reports.generalLedgerReportsTiles.journalReport.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.journalReport.description')
+  },
+  {
+    to: '/reports/general-ledger/journal-entry-details',
+    icon: 'i-heroicons-magnifying-glass',
+    label: t('admin.reports.generalLedgerReportsTiles.journalEntryDetails.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.journalEntryDetails.description')
+  },
+  {
+    to: '/general-ledger',
+    icon: 'i-heroicons-calculator',
+    label: t('admin.reports.generalLedgerReportsTiles.ledgerByAccount.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.ledgerByAccount.description')
+  },
+  {
+    to: '/reports/general-ledger/ledger-by-branch',
+    icon: 'i-heroicons-building-office-2',
+    label: t('admin.reports.generalLedgerReportsTiles.ledgerByBranch.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.ledgerByBranch.description')
+  },
+  {
+    to: '/reports/general-ledger/ledger-by-date-range',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.generalLedgerReportsTiles.ledgerByDateRange.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.ledgerByDateRange.description')
+  },
+  {
+    to: '/reports/general-ledger/account-transaction-history',
+    icon: 'i-heroicons-clock',
+    label: t('admin.reports.generalLedgerReportsTiles.accountTransactionHistory.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.accountTransactionHistory.description')
+  }
+])
+
+const trialBalanceReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/trial-balance',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.trialBalanceReportsTiles.trialBalance.label'),
+    description: t('admin.reports.trialBalanceReportsTiles.trialBalance.description')
+  },
+  {
+    to: '/reports/trial-balance/adjusted',
+    icon: 'i-heroicons-adjustments-horizontal',
+    label: t('admin.reports.trialBalanceReportsTiles.adjustedTrialBalance.label'),
+    description: t('admin.reports.trialBalanceReportsTiles.adjustedTrialBalance.description')
+  },
+  {
+    to: '/reports/trial-balance/closing',
+    icon: 'i-heroicons-lock-closed',
+    label: t('admin.reports.trialBalanceReportsTiles.closingTrialBalance.label'),
+    description: t('admin.reports.trialBalanceReportsTiles.closingTrialBalance.description')
+  }
+])
+
+function filterReportTiles(tiles: GeneralLedgerReportTile[], query: string) {
+  const q = query.trim().toLowerCase()
+  if (!q) return tiles
+  return tiles.filter((t) => t.label.toLowerCase().includes(q) || t.description.toLowerCase().includes(q))
+}
+
+const generalLedgerReportSearch = ref('')
+const filteredGeneralLedgerReportTiles = computed(() =>
+  filterReportTiles(generalLedgerReportTiles.value, generalLedgerReportSearch.value)
+)
+
+const trialBalanceReportSearch = ref('')
+const filteredTrialBalanceReportTiles = computed(() =>
+  filterReportTiles(trialBalanceReportTiles.value, trialBalanceReportSearch.value)
+)
+
+// "Financial Position Report" is the same statement as "Balance Sheet" under a different
+// (IFRS) name — both tiles link to the same page rather than duplicating the report.
+const financialStatementTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/financial-statements/balance-sheet',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.financialStatementsTiles.balanceSheet.label'),
+    description: t('admin.reports.financialStatementsTiles.balanceSheet.description')
+  },
+  {
+    to: '/reports/financial-statements/income-statement',
+    icon: 'i-heroicons-chart-bar',
+    label: t('admin.reports.financialStatementsTiles.incomeStatement.label'),
+    description: t('admin.reports.financialStatementsTiles.incomeStatement.description')
+  },
+  {
+    to: '/reports/financial-statements/cash-flow',
+    icon: 'i-heroicons-banknotes',
+    label: t('admin.reports.financialStatementsTiles.cashFlow.label'),
+    description: t('admin.reports.financialStatementsTiles.cashFlow.description')
+  },
+  {
+    to: '/reports/financial-statements/changes-in-equity',
+    icon: 'i-heroicons-arrow-trending-up',
+    label: t('admin.reports.financialStatementsTiles.changesInEquity.label'),
+    description: t('admin.reports.financialStatementsTiles.changesInEquity.description')
+  },
+  {
+    to: '/reports/financial-statements/balance-sheet',
+    icon: 'i-heroicons-document-chart-bar',
+    label: t('admin.reports.financialStatementsTiles.financialPositionReport.label'),
+    description: t('admin.reports.financialStatementsTiles.financialPositionReport.description')
+  }
+])
+
+const financialStatementsSearch = ref('')
+const filteredFinancialStatementTiles = computed(() =>
+  filterReportTiles(financialStatementTiles.value, financialStatementsSearch.value)
+)
+
+const reportColumns = computed<ColumnDef<GeneralLedgerReportTile>[]>(() => [
+  { key: 'label', label: t('admin.reports.reportsTable.columns.name') },
+  { key: 'description', label: t('admin.reports.reportsTable.columns.description') },
+  {
+    key: 'actions',
+    label: '',
+    type: 'link',
+    value: () => t('admin.reports.reportsTable.open'),
+    href: (row) => row.to
+  }
+])
 
 const trendChartOptions = computed(() => {
   const gridColor = isDark.value ? '#374151' : '#e5e7eb'

@@ -198,6 +198,7 @@ export interface JournalEntryLineResponse {
 export interface JournalEntryRequest {
   transactionType: TransactionType
   transactionDate: string // ISO date
+  branchId: number
   referenceType?: string
   referenceId?: string
   currency: string
@@ -210,6 +211,7 @@ export interface JournalEntryResponse {
   entryNo: string | null
   transactionType: TransactionType
   transactionDate: string
+  branchId: number | null
   financialPeriodId: number
   financialPeriodName: string
   referenceType: string | null
@@ -272,6 +274,66 @@ export interface GeneralLedgerResponse {
   periodCreditTotal: number
   closingBalance: number
   lines: LedgerLineResponse[]
+}
+
+// ── General Ledger Reports (features/general-ledger-reports pages) ───────────
+// One row per GL account for the "General Ledger" overview report — same
+// balances as GeneralLedgerResponse without the line-level detail.
+//
+//   GET /gl-accounts/ledger-summary?financialPeriodId={id} -> GeneralLedgerSummaryRow[]
+
+export interface GeneralLedgerSummaryRow {
+  glAccountId: number
+  accountNo: string
+  accountName: string
+  openingBalance: number
+  periodDebitTotal: number
+  periodCreditTotal: number
+  closingBalance: number
+}
+
+// Same shape as GeneralLedgerResponse but scoped to a free-form date range instead
+// of a financial period. Backs both "Ledger by Date Range" (dateFrom/dateTo set) and
+// "Account Transaction History" (both omitted -> full history, opening balance 0).
+//
+//   GET /gl-accounts/{id}/ledger-by-date-range?dateFrom={date}&dateTo={date} -> DateRangeLedgerResponse
+
+export interface DateRangeLedgerResponse {
+  glAccountId: number
+  accountNo: string
+  accountName: string
+  dateFrom: string | null
+  dateTo: string | null
+  openingBalance: number
+  periodDebitTotal: number
+  periodCreditTotal: number
+  closingBalance: number
+  lines: LedgerLineResponse[]
+}
+
+// Posted activity across every GL account for a single branch — lines span accounts
+// with different normal-balance directions, so there's no single running balance,
+// only debit/credit totals.
+//
+//   GET /reports/ledger-by-branch?branchId={id}&dateFrom={date}&dateTo={date} -> BranchLedgerResponse
+
+export interface BranchLedgerLineResponse {
+  entryNo: string
+  transactionDate: string
+  glAccountNo: string
+  glAccountName: string
+  description: string | null
+  entrySide: EntrySide
+  amount: number
+}
+
+export interface BranchLedgerResponse {
+  branchId: number
+  dateFrom: string | null
+  dateTo: string | null
+  totalDebit: number
+  totalCredit: number
+  lines: BranchLedgerLineResponse[]
 }
 
 // ── Trial Balance ──────────────────────────────────────────────────────────

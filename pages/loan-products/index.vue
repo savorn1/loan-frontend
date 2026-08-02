@@ -38,6 +38,14 @@
         </div>
       </template>
 
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
@@ -149,6 +157,7 @@ const api = useApi()
 const {
   data: products,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('loan-products', () => api<LoanProductResponse[]>('/loan-products'))
 

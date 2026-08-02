@@ -25,19 +25,28 @@
           value-attribute="value"
           class="w-40"
         />
+        <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
         <UButton
-          v-if="filterLoan || statusFilter"
+          v-if="filterLoan || statusFilter || dateFrom || dateTo"
           variant="ghost"
           color="gray"
           icon="i-heroicons-x-mark"
           @click="clearFilters"
         >
-          {{ t('payments.list.clearFilters') }}
+          {{ t('common.clearFilters') }}
         </UButton>
       </div>
     </UCard>
 
     <UCard>
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
@@ -137,6 +146,7 @@ const filterLoan = ref<LoanOption | undefined>(undefined)
 const {
   data: payments,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData(
   'payments',
@@ -170,16 +180,19 @@ const statusOptions = computed<{ label: string; value: PaymentStatus | '' }[]>((
   { label: t('payments.list.statusOptions.overdue'), value: 'OVERDUE' }
 ])
 const statusFilter = ref<PaymentStatus | ''>('')
+const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
 
 const filteredByStatus = computed(() =>
-  statusFilter.value
-    ? (payments.value ?? []).filter((p) => p.status === statusFilter.value)
-    : payments.value
+  (payments.value ?? [])
+    .filter((p) => !statusFilter.value || p.status === statusFilter.value)
+    .filter((p) => inRange(p.createdAt))
 )
 
 const { page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, { pageSize: 10 })
 
-const hasFilters = computed(() => !!filterLoan.value || !!statusFilter.value)
+const hasFilters = computed(
+  () => !!filterLoan.value || !!statusFilter.value || !!dateFrom.value || !!dateTo.value
+)
 
 const totalLabel = computed(() => {
   const count = payments.value?.length ?? 0
@@ -191,6 +204,8 @@ const totalLabel = computed(() => {
 function clearFilters() {
   filterLoan.value = undefined
   statusFilter.value = ''
+  dateFrom.value = ''
+  dateTo.value = ''
 }
 
 const columns = computed<ColumnDef<PaymentResponse>[]>(() => [

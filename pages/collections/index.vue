@@ -38,6 +38,14 @@
     </UCard>
 
     <UCard>
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #bucket-data="{ row }">
           <UBadge :color="bucketColor(row.bucket)" variant="subtle">{{ bucketLabel(row.bucket) }}</UBadge>
@@ -179,6 +187,7 @@ const { isAdmin } = storeToRefs(useAuth())
 const {
   data: items,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('collections-workqueue', () =>
   api<CollectionWorkqueueItemResponse[]>('/payments/collections')

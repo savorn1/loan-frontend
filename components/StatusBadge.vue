@@ -1,12 +1,13 @@
 <template>
   <UBadge :color="meta.color" variant="subtle" class="gap-1">
     <UIcon :name="meta.icon" class="w-3 h-3" />
-    {{ status }}
+    {{ label }}
   </UBadge>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{ status: string }>()
+const { t, te } = useI18n()
 type StatusColor = 'teal' | 'red' | 'gray' | 'orange'
 
 const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
@@ -41,6 +42,8 @@ const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   UNDER_REVIEW: { color: 'orange', icon: 'i-heroicons-magnifying-glass' },
   WITHDRAWN: { color: 'gray', icon: 'i-heroicons-arrow-uturn-left' },
   PENDING: { color: 'orange', icon: 'i-heroicons-clock' },
+  PENDING_APPROVAL: { color: 'orange', icon: 'i-heroicons-clock' },
+  VOIDED: { color: 'gray', icon: 'i-heroicons-arrow-uturn-left' },
   KEPT: { color: 'teal', icon: 'i-heroicons-check-circle' },
   BROKEN: { color: 'red', icon: 'i-heroicons-x-circle' },
   PARTIAL: { color: 'orange', icon: 'i-heroicons-adjustments-horizontal' },
@@ -53,4 +56,8 @@ const DEFAULT_META: { color: StatusColor; icon: string } = {
 }
 
 const meta = computed(() => STATUS_META[props.status] ?? DEFAULT_META)
+const label = computed(() => {
+  const key = `common.status.${props.status}`
+  return te(key) ? t(key) : props.status
+})
 </script>

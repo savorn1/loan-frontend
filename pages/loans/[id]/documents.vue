@@ -10,6 +10,14 @@
         </div>
       </template>
 
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable :rows="documents ?? []" :columns="columns" :loading="pending">
         <template #status-data="{ row }">
           <USelectMenu
@@ -106,6 +114,7 @@ const loanId = route.params.id as string
 const {
   data: documents,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData(`loan-${loanId}-documents`, () =>
   api<LoanDocumentResponse[]>(`/loans/${loanId}/documents`)

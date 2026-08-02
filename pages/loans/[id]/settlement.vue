@@ -1,5 +1,13 @@
 <template>
   <div>
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <UCard v-if="settlement">
       <template #header>
         <div class="flex items-center justify-between">
@@ -58,7 +66,11 @@ const { t } = useI18n()
 
 const loanId = route.params.id as string
 
-const { data: settlement, refresh } = await useAsyncData(`loan-${loanId}-settlement`, async () => {
+const {
+  data: settlement,
+  error: fetchError,
+  refresh
+} = await useAsyncData(`loan-${loanId}-settlement`, async () => {
   try {
     return await api<LoanSettlementResponse>(`/loans/${loanId}/settlement`)
   } catch (err) {

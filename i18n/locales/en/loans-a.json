@@ -1,5 +1,8 @@
 {
   "loans": {
+    "entities": {
+      "loan": "Loan"
+    },
     "list": {
       "title": "Loans",
       "newLoan": "New Loan",
@@ -342,20 +345,24 @@
         "title": "No disbursements yet",
         "description": "Record each release of funds for this loan — a single disbursement or several staged releases."
       },
-      "totalLabel": "Total disbursed",
+      "totalLabel": "Total disbursed (approved)",
       "modalTitle": "Add disbursement",
       "columns": {
         "date": "Date",
         "amount": "Amount",
         "method": "Method",
         "reference": "Reference",
-        "created": "Created"
+        "created": "Created",
+        "status": "Status",
+        "createdBy": "Created by",
+        "reason": "Reason"
       },
       "fields": {
         "amount": "Amount",
         "date": "Date",
         "method": "Method",
-        "reference": "Reference"
+        "reference": "Reference",
+        "reason": "Reason"
       },
       "methodOptions": {
         "bankTransfer": "Bank transfer",
@@ -364,7 +371,37 @@
         "mobileWallet": "Mobile wallet"
       },
       "submitLabel": "Add",
-      "toastRecorded": "Disbursement recorded"
+      "toastRecorded": "Disbursement recorded",
+      "totalPendingLabel": "Pending approval",
+      "editModalTitle": "Edit disbursement",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "approve": "Approve",
+        "reject": "Reject",
+        "void": "Void"
+      },
+      "confirm": {
+        "delete": {
+          "title": "Delete disbursement",
+          "description": "This pending disbursement will be permanently deleted."
+        },
+        "approve": {
+          "title": "Approve disbursement",
+          "description": "This posts the disbursement to the loan's transaction ledger. Once approved, it can only be corrected by voiding it."
+        },
+        "reject": {
+          "title": "Reject disbursement"
+        },
+        "void": {
+          "title": "Void disbursement"
+        }
+      },
+      "toastUpdated": "Disbursement updated",
+      "toastDeleted": "Disbursement deleted",
+      "toastApproved": "Disbursement approved",
+      "toastRejected": "Disbursement rejected",
+      "toastVoided": "Disbursement voided"
     },
     "interest": {
       "title": "Interest accruals",
@@ -429,6 +466,45 @@
         "markedPaid": "Fee marked as paid",
         "waived": "Fee waived"
       }
+    }
+  },
+  "loanCalculator": {
+    "title": "Loan Calculator",
+    "description": "Estimate a repayment schedule before an application exists.",
+    "inputsCardTitle": "Loan details",
+    "scheduleCardTitle": "Repayment schedule",
+    "calculateButton": "Calculate",
+    "productField": {
+      "label": "Loan product (optional)",
+      "placeholder": "Select a loan product",
+      "hint": "Pre-fills the interest rate and amount/term range from the product's configuration. All fields stay editable."
+    },
+    "flatSchemeNote": "This product's interest scheme is configured as flat-rate. The estimate below still uses standard reducing-balance math, since that's what the system currently applies to every loan regardless of this setting.",
+    "feesOutOfScopeNote": "This estimates principal and interest only — it doesn't include origination, processing, or other fees.",
+    "rangeWarning": "Amount or term is outside this product's configured range ({minAmount}–{maxAmount}, {minTerm}–{maxTerm} months). The estimate below is still calculated, but a real application for this product may be rejected.",
+    "fields": {
+      "amount": "Loan amount",
+      "amountRangeHint": "Product range: {min} – {max}",
+      "termMonths": "Term (months)",
+      "termRangeHint": "Product range: {min} – {max} months",
+      "annualRate": "Annual interest rate",
+      "startDate": "Start date"
+    },
+    "summary": {
+      "installment": "Monthly installment",
+      "totalInterest": "Total interest",
+      "totalPayment": "Total payment"
+    },
+    "scheduleColumns": {
+      "number": "#",
+      "dueDate": "Due date",
+      "principal": "Principal",
+      "interest": "Interest",
+      "amount": "Amount"
+    },
+    "empty": {
+      "title": "No estimate yet",
+      "description": "Fill in the loan details and click Calculate to see the repayment schedule."
     }
   }
 }

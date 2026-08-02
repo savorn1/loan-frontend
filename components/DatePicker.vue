@@ -82,10 +82,6 @@
 </template>
 
 <script setup lang="ts">
-// Dependency-free date picker: UPopover + a plain calendar grid.
-// v-model is an ISO `yyyy-MM-dd` string ('' when empty) so it drops into the
-// existing DTOs (CustomerRequest.dateOfBirth, PaymentRequest.dueDate) without
-// any Date-object/timezone conversion at the call sites.
 const props = withDefaults(
   defineProps<{
     modelValue?: string

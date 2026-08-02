@@ -81,6 +81,7 @@ export default defineNuxtConfig({
     ? {}
     : {
         '/api/auth/**': { proxy: `${apiBase}/api/auth/**` },
+        '/api/branches/**': { proxy: `${apiBase}/api/branches/**` },
         '/api/customers/**': { proxy: `${apiBase}/api/customers/**` },
         '/api/loans/**': { proxy: `${apiBase}/api/loans/**` },
         '/api/loan-products/**': { proxy: `${apiBase}/api/loan-products/**` },
@@ -96,7 +97,8 @@ export default defineNuxtConfig({
         '/api/accounting-schemes/**': { proxy: `${apiBase}/api/accounting-schemes/**` },
         '/api/financial-periods/**': { proxy: `${apiBase}/api/financial-periods/**` },
         '/api/journal-entries/**': { proxy: `${apiBase}/api/journal-entries/**` },
-        '/api/trial-balance/**': { proxy: `${apiBase}/api/trial-balance/**` }
+        '/api/trial-balance/**': { proxy: `${apiBase}/api/trial-balance/**` },
+        '/api/reports/**': { proxy: `${apiBase}/api/reports/**` }
       },
   typescript: {
     strict: true

@@ -32,6 +32,14 @@
     </UCard>
 
     <UCard>
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #empty-state>
           <EmptyState
@@ -87,11 +95,6 @@ const statusOptions = computed(() => [
 ])
 
 function buildQuery(): NotificationFilter {
-  // notification-service does support real server-side pagination, but this
-  // page paginates client-side (useClientTable) over one generously-sized
-  // fetch rather than fetching one page at a time — kept simple since this is
-  // a low-traffic audit view; see pages/users/index.vue for the real-pagination
-  // pattern if this list needs to scale further.
   return {
     recipientType: filters.recipientType || undefined,
     channel: filters.channel || undefined,
@@ -104,6 +107,7 @@ function buildQuery(): NotificationFilter {
 const {
   data: notificationsRaw,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('notifications', () =>
   api<PageResponse<NotificationResponse>>('/notifications', { query: buildQuery() })

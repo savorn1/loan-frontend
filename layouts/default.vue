@@ -2,9 +2,10 @@
   <div class="min-h-screen flex bg-gray-50 dark:bg-gray-950">
     <!-- Desktop sidebar -->
     <aside
-      class="hidden lg:flex w-60 shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex-col"
+      class="hidden lg:flex sticky top-0 h-screen shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex-col transition-all duration-200"
+      :class="sidebarCollapsed ? 'w-16' : 'w-60'"
     >
-      <SidebarContent :groups="groups" />
+      <SidebarContent v-model:collapsed="sidebarCollapsed" :groups="groups" />
     </aside>
 
     <!-- Mobile off-canvas nav -->
@@ -51,6 +52,11 @@ const groups = computed(() => [
     links: [
       { label: t('nav.customers'), to: '/customers', icon: 'i-heroicons-users' },
       { label: t('nav.applications'), to: '/applications', icon: 'i-heroicons-document-text' },
+      {
+        label: t('nav.loanCalculator'),
+        to: '/loan-calculator',
+        icon: 'i-heroicons-calculator'
+      },
       { label: t('nav.loans'), to: '/loans', icon: 'i-heroicons-banknotes' },
       { label: t('nav.reports'), to: '/reports', icon: 'i-heroicons-chart-bar-square' },
       { label: t('nav.notifications'), to: '/notifications', icon: 'i-heroicons-bell' }
@@ -169,6 +175,10 @@ const groups = computed(() => [
 const showChangePassword = ref(false)
 const mobileNavOpen = ref(false)
 const commandPaletteOpen = ref(false)
+const sidebarCollapsed = useCookie<boolean>('sidebar_collapsed', {
+  default: () => false,
+  sameSite: 'lax'
+})
 
 // Close the mobile drawer automatically whenever a nav link is followed.
 const route = useRoute()

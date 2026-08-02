@@ -7,6 +7,14 @@
       </div>
     </template>
 
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <DataTable :rows="promises ?? []" :columns="columns" :loading="pending">
       <template #status-data="{ row }">
         <StatusBadge :status="row.status" />
@@ -91,6 +99,7 @@ const loanId = route.params.loanId as string
 const {
   data: promises,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData(`collection-case-${loanId}-promises`, () =>
   api<CollectionPromiseResponse[]>(`/payments/collections/${loanId}/promises`)

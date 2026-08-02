@@ -26,6 +26,14 @@
       </UInput>
     </UCard>
 
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <EmptyState
       v-if="!pending && groups.length === 0"
       :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-key'"
@@ -131,6 +139,7 @@ const api = useApi()
 const {
   data: permissions,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('permissions', () => api<PermissionResponse[]>('/auth/permissions'))
 
@@ -165,7 +174,13 @@ const groups = computed(() => {
 })
 
 const columns = computed<ColumnDef<PermissionResponse>[]>(() => [
-  { key: 'name', label: t('admin.permissions.columns.name'), sortable: true },
+  {
+    key: 'name',
+    label: t('admin.permissions.columns.name'),
+    type: 'enum',
+    value: (row) => row.action,
+    sortable: true
+  },
   { key: 'description', label: t('admin.permissions.columns.description') },
   { key: 'createdAt', label: t('admin.permissions.columns.created'), type: 'datetime' },
   { key: 'actions', label: '', class: 'text-right' }

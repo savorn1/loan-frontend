@@ -286,6 +286,34 @@
       "chartLegend": {
         "disbursed": "Disbursed",
         "collected": "Collected"
+      },
+      "generalLedgerReportsHeader": "General Ledger Reports",
+      "generalLedgerReportsTiles": {
+        "generalLedger": { "label": "General Ledger", "description": "Every account's balances for a period" },
+        "journalReport": { "label": "Journal Report", "description": "Journal entries with filters" },
+        "journalEntryDetails": { "label": "Journal Entry Details", "description": "Look up one entry by number" },
+        "ledgerByAccount": { "label": "Ledger by Account", "description": "One account's activity for a period" },
+        "ledgerByBranch": { "label": "Ledger by Branch", "description": "Posted activity for a branch" },
+        "ledgerByDateRange": { "label": "Ledger by Date Range", "description": "One account, a custom date range" },
+        "accountTransactionHistory": { "label": "Account Transaction History", "description": "Full transaction trail for an account" }
+      },
+      "trialBalanceReportsHeader": "Trial Balance Reports",
+      "trialBalanceReportsTiles": {
+        "trialBalance": { "label": "Trial Balance", "description": "Live posted debit/credit totals per account for a period" },
+        "adjustedTrialBalance": { "label": "Adjusted Trial Balance", "description": "Totals reflecting every posted entry for a period, including adjustments" },
+        "closingTrialBalance": { "label": "Closing Trial Balance", "description": "Most recent snapshot — rolled-forward closing balances" }
+      },
+      "financialStatementsHeader": "Financial Statements",
+      "financialStatementsTiles": {
+        "balanceSheet": { "label": "Balance Sheet", "description": "Assets, liabilities and equity as of a period's end" },
+        "incomeStatement": { "label": "Income Statement (Profit & Loss)", "description": "Income and expenses for a period" },
+        "cashFlow": { "label": "Cash Flow Statement", "description": "Cash account movements by transaction type" },
+        "changesInEquity": { "label": "Statement of Changes in Equity", "description": "Opening and closing balances per equity account" },
+        "financialPositionReport": { "label": "Financial Position Report", "description": "Same report as Balance Sheet" }
+      },
+      "reportsTable": {
+        "columns": { "name": "Report", "description": "Description" },
+        "open": "Open"
       }
     },
     "dashboard": {

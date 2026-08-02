@@ -9,6 +9,29 @@
     </PageHeader>
 
     <UCard>
+      <template #header>
+        <div class="flex flex-wrap items-center gap-3">
+          <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
+          <UButton
+            v-if="hasFilters"
+            variant="ghost"
+            color="gray"
+            icon="i-heroicons-x-mark"
+            @click="clearFilters"
+          >
+            {{ t('common.clearFilters') }}
+          </UButton>
+        </div>
+      </template>
+
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable
         v-model:sort="sort"
         :rows="rows"
@@ -18,11 +41,11 @@
       >
         <template #empty-state>
           <EmptyState
-            icon="i-heroicons-book-open"
-            :title="t('accounting.journalEntries.emptyTitle')"
+            :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-book-open'"
+            :title="hasFilters ? t('common.noMatches') : t('accounting.journalEntries.emptyTitle')"
             :description="t('accounting.journalEntries.emptyDescription')"
           >
-            <template #action>
+            <template v-if="!hasFilters" #action>
               <UButton icon="i-heroicons-plus" @click="openCreate">{{
                 t('accounting.journalEntries.newJournalEntry')
               }}</UButton>
@@ -54,6 +77,15 @@
             </UFormGroup>
             <UFormGroup :label="t('accounting.journalEntries.fields.transactionDate')" name="transactionDate" required>
               <DatePicker v-model="createForm.transactionDate" />
+            </UFormGroup>
+            <UFormGroup :label="t('accounting.journalEntries.fields.branch')" name="branchId" required>
+              <USelectMenu
+                v-model="createForm.branchId"
+                :options="branchOptions"
+                option-attribute="label"
+                value-attribute="value"
+                :placeholder="t('accounting.journalEntries.fields.branchPlaceholder')"
+              />
             </UFormGroup>
             <UFormGroup :label="t('accounting.journalEntries.fields.currency')" name="currency" required>
               <UInput
@@ -150,6 +182,7 @@ import type {
   JournalEntryResponse,
   TransactionType
 } from '~/features/accounting/types'
+import type { BranchResponse } from '~/features/branches/types'
 import type { ColumnDef } from '~/shared/types'
 
 const { t } = useI18n()
@@ -160,27 +193,47 @@ const router = useRouter()
 const {
   data: entries,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('journal-entries', () => api<JournalEntryResponse[]>('/journal-entries'))
 const { data: glAccounts } = await useAsyncData('journal-entries-gl-accounts', () =>
   api<GlAccountResponse[]>('/gl-accounts')
 )
+const { data: branches } = await useAsyncData('journal-entries-branches', () =>
+  api<BranchResponse[]>('/branches')
+)
 
 const glAccountOptions = computed(() =>
   (glAccounts.value ?? []).map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
 )
+const branchOptions = computed(() => (branches.value ?? []).map((b) => ({ label: b.name, value: b.id })))
+const branchNameById = computed(() => new Map((branches.value ?? []).map((b) => [b.id, b.name])))
 
 const columns = computed<ColumnDef<JournalEntryResponse>[]>(() => [
   { key: 'entryNo', label: t('accounting.journalEntries.columns.entryNo'), sortable: true },
   { key: 'transactionType', label: t('accounting.journalEntries.columns.type'), type: 'enum', sortable: true },
   { key: 'transactionDate', label: t('accounting.journalEntries.columns.date'), type: 'date', sortable: true },
   { key: 'financialPeriodName', label: t('accounting.journalEntries.columns.period') },
+  {
+    key: 'branchId',
+    label: t('accounting.journalEntries.columns.branch'),
+    value: (row) => (row.branchId ? branchNameById.value.get(row.branchId) ?? row.branchId : '—')
+  },
   { key: 'referenceId', label: t('accounting.journalEntries.columns.reference') },
   { key: 'status', label: t('accounting.journalEntries.columns.status'), type: 'status', sortable: true },
   { key: 'createdAt', label: t('accounting.journalEntries.columns.created'), type: 'datetime', sortable: true }
 ])
 
-const { page, pageSize, sort, total, rows } = useClientTable(entries, { pageSize: 10 })
+const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
+const filteredByDate = computed(() => (entries.value ?? []).filter((e) => inRange(e.createdAt)))
+const hasFilters = computed(() => !!dateFrom.value || !!dateTo.value)
+
+function clearFilters() {
+  dateFrom.value = ''
+  dateTo.value = ''
+}
+
+const { page, pageSize, sort, total, rows } = useClientTable(filteredByDate, { pageSize: 10 })
 
 const totalLabel = computed(() => {
   const count = entries.value?.length ?? 0
@@ -220,6 +273,7 @@ function emptyLine(): LineFormValue {
 const createForm = reactive<{
   transactionType: TransactionType | undefined
   transactionDate: string
+  branchId: number | undefined
   currency: string
   referenceId: string
   description: string
@@ -227,6 +281,7 @@ const createForm = reactive<{
 }>({
   transactionType: undefined,
   transactionDate: '',
+  branchId: undefined,
   currency: '',
   referenceId: '',
   description: '',
@@ -259,6 +314,7 @@ function removeLine(index: number) {
 function openCreate() {
   createForm.transactionType = undefined
   createForm.transactionDate = ''
+  createForm.branchId = undefined
   createForm.currency = ''
   createForm.referenceId = ''
   createForm.description = ''
@@ -268,7 +324,7 @@ function openCreate() {
 }
 
 async function onCreate() {
-  if (!createForm.transactionType || !createForm.transactionDate || !createForm.currency) {
+  if (!createForm.transactionType || !createForm.transactionDate || !createForm.branchId || !createForm.currency) {
     error.value = t('accounting.journalEntries.validationMissingFields')
     return
   }
@@ -278,6 +334,7 @@ async function onCreate() {
     const payload: JournalEntryRequest = {
       transactionType: createForm.transactionType,
       transactionDate: createForm.transactionDate,
+      branchId: createForm.branchId,
       currency: createForm.currency,
       referenceId: createForm.referenceId || undefined,
       description: createForm.description || undefined,

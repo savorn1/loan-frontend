@@ -42,8 +42,26 @@
             value-attribute="value"
             class="w-48"
           />
+          <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
+          <UButton
+            v-if="hasFilters"
+            variant="ghost"
+            color="gray"
+            icon="i-heroicons-x-mark"
+            @click="clearFilters"
+          >
+            {{ t('common.clearFilters') }}
+          </UButton>
         </div>
       </template>
+
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
 
       <DataTable
         v-model:sort="sort"
@@ -114,6 +132,7 @@ const router = useRouter()
 const {
   data: applicationsRaw,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('applications', () =>
   api<PageResponse<ApplicationResponse>>('/loans/applications', { query: { size: 1000 } })
@@ -173,11 +192,13 @@ const statusOptions = computed<{ label: string; value: ApplicationStatus | '' }[
   { label: t('applications.list.statusOptions.withdrawn'), value: 'WITHDRAWN' }
 ])
 const statusFilter = ref<ApplicationStatus | ''>('')
+const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
 
 const filteredByStatus = computed(() =>
   (applications.value ?? [])
     .filter((a) => !statusFilter.value || a.status === statusFilter.value)
     .filter((a) => branchFilter.value === '' || a.branchId === branchFilter.value)
+    .filter((a) => inRange(a.createdAt))
 )
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
@@ -185,7 +206,17 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByS
   pageSize: 10
 })
 
-const hasFilters = computed(() => !!search.value || !!statusFilter.value || branchFilter.value !== '')
+const hasFilters = computed(
+  () => !!search.value || !!statusFilter.value || branchFilter.value !== '' || !!dateFrom.value || !!dateTo.value
+)
+
+function clearFilters() {
+  search.value = ''
+  statusFilter.value = ''
+  branchFilter.value = ''
+  dateFrom.value = ''
+  dateTo.value = ''
+}
 
 const totalLabel = computed(() => {
   const count = applications.value?.length ?? 0

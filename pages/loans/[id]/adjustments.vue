@@ -10,6 +10,14 @@
         </div>
       </template>
 
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable :rows="adjustments ?? []" :columns="columns" :loading="pending">
         <template #empty-state>
           <EmptyState
@@ -60,6 +68,7 @@ const loanId = route.params.id as string
 const {
   data: adjustments,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData(`loan-${loanId}-adjustments`, () =>
   api<LoanAdjustmentResponse[]>(`/loans/${loanId}/adjustments`)

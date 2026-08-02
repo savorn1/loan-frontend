@@ -1,5 +1,14 @@
 <template>
-  <div v-if="loan">
+  <div>
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
+    <div v-if="loan">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
       <UCard class="lg:col-span-2">
         <template #header>
@@ -119,8 +128,9 @@
       </DataTable>
     </UCard>
   </div>
-  <div v-else class="flex justify-center py-16">
-    <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
+    <div v-else class="flex justify-center py-16">
+      <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
+    </div>
   </div>
 </template>
 
@@ -136,9 +146,11 @@ const toast = useToast()
 
 const loanId = route.params.id as string
 
-const { data: loan, refresh } = await useAsyncData(`loan-${loanId}`, () =>
-  api<LoanResponse>(`/loans/${loanId}`)
-)
+const {
+  data: loan,
+  error: fetchError,
+  refresh
+} = await useAsyncData(`loan-${loanId}`, () => api<LoanResponse>(`/loans/${loanId}`))
 const payoffPercent = computed(() => {
   if (!loan.value || !loan.value.principal) return 0
   const outstanding = loan.value.outstandingBalance ?? 0

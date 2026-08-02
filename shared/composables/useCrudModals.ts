@@ -14,6 +14,8 @@ export function useCrudModals<
     toForm: (row: TResponse) => Record<string, any>
     /** DynamicForm values -> request body, shared by create and update. */
     toPayload: (values: Record<string, any>) => TRequest
+    /** Called with the created row after a successful create + refresh — e.g. to redirect to its detail page. */
+    onCreated?: (created: TResponse) => void | Promise<void>
   }
 ) {
   const api = useApi()
@@ -35,10 +37,11 @@ export function useCrudModals<
     creating.value = true
     error.value = ''
     try {
-      await api(basePath, { method: 'POST', body: options.toPayload(values) })
+      const created = await api<TResponse>(basePath, { method: 'POST', body: options.toPayload(values) })
       toast.add({ title: t('common.entityCreated', { entity: options.entityName }), color: 'green' })
       showCreate.value = false
       await refresh()
+      await options.onCreated?.(created)
     } catch (err) {
       error.value = apiErrorMessage(err)
     } finally {

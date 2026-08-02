@@ -81,6 +81,102 @@
         "balance": "Balance"
       }
     },
+    "generalLedgerReports": {
+      "generalLedger": {
+        "title": "General Ledger",
+        "description": "Every account's opening, period and closing balances for a financial period.",
+        "financialPeriod": "Financial period",
+        "financialPeriodPlaceholder": "Select a period",
+        "viewLedger": "View ledger",
+        "emptyTitlePick": "Pick a financial period",
+        "emptyDescriptionPick": "Select a financial period above to view every account's balances.",
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "opening": "Opening",
+          "debit": "Debit",
+          "credit": "Credit",
+          "closing": "Closing"
+        }
+      },
+      "journalReport": {
+        "title": "Journal Report",
+        "description": "Journal entries filtered by date, branch, status and transaction type.",
+        "branchFilter": "Branch",
+        "branchFilterAll": "All branches",
+        "statusFilter": "Status",
+        "statusFilterAll": "All statuses"
+      },
+      "journalEntryDetails": {
+        "title": "Journal Entry Details",
+        "description": "Look up a single journal entry by its entry number to view its full detail.",
+        "searchLabel": "Entry number",
+        "searchPlaceholder": "e.g. JE-00000012",
+        "searchButton": "View entry",
+        "notFound": "No journal entry found with that entry number."
+      },
+      "ledgerByBranch": {
+        "title": "Ledger by Branch",
+        "description": "Posted journal activity across every GL account for a single branch.",
+        "branch": "Branch",
+        "branchPlaceholder": "Select a branch",
+        "totalDebit": "Total debit",
+        "totalCredit": "Total credit",
+        "emptyTitlePick": "Pick a branch",
+        "emptyDescriptionPick": "Select a branch above to view its posted activity. Optionally narrow it to a date range.",
+        "emptyTitleNoActivity": "No posted activity",
+        "emptyDescriptionNoActivity": "This branch has no posted journal entries in the selected range.",
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "account": "Account",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount"
+        }
+      },
+      "ledgerByDateRange": {
+        "title": "Ledger by Date Range",
+        "description": "A GL account's balances and posted activity for a custom date range.",
+        "glAccount": "GL account",
+        "glAccountPlaceholder": "Select an account",
+        "dateRangeRequired": "Select both a from and to date to view this account's ledger.",
+        "openingBalance": "Opening balance",
+        "periodDebit": "Debit",
+        "periodCredit": "Credit",
+        "closingBalance": "Closing balance",
+        "emptyTitlePick": "Pick an account and date range",
+        "emptyDescriptionPick": "Select a GL account and a date range above to view its ledger.",
+        "emptyTitleNoActivity": "No posted activity",
+        "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected range.",
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
+      },
+      "accountTransactionHistory": {
+        "title": "Account Transaction History",
+        "description": "The full posted transaction trail for a GL account, optionally narrowed to a date range.",
+        "glAccount": "GL account",
+        "glAccountPlaceholder": "Select an account",
+        "emptyTitlePick": "Pick an account",
+        "emptyDescriptionPick": "Select a GL account above to view its transaction history.",
+        "emptyTitleNoActivity": "No posted activity",
+        "emptyDescriptionNoActivity": "This account has no posted journal entries yet.",
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
+      }
+    },
     "glAccounts": {
       "title": "Chart of Accounts",
       "totalLabelOne": "1 GL account",
@@ -135,12 +231,13 @@
       "reverse": "Reverse",
       "entryPosted": "Journal entry posted",
       "entryReversed": "Journal entry reversed",
-      "validationMissingFields": "Please fill in the transaction type, date and currency.",
+      "validationMissingFields": "Please fill in the transaction type, date, branch and currency.",
       "columns": {
         "entryNo": "Entry no.",
         "type": "Type",
         "date": "Date",
         "period": "Period",
+        "branch": "Branch",
         "reference": "Reference",
         "status": "Status",
         "created": "Created",
@@ -152,6 +249,8 @@
       "fields": {
         "transactionType": "Transaction type",
         "transactionDate": "Transaction date",
+        "branch": "Branch",
+        "branchPlaceholder": "Select a branch",
         "currency": "Currency",
         "currencyPlaceholder": "e.g. USD",
         "reference": "Reference",
@@ -170,6 +269,7 @@
         "status": "Status",
         "transactionType": "Transaction type",
         "date": "Date",
+        "branch": "Branch",
         "financialPeriod": "Financial period",
         "currency": "Currency",
         "reference": "Reference",
@@ -274,6 +374,128 @@
         "by": "By",
         "totalDebit": "Total debit",
         "totalCredit": "Total credit"
+      }
+    },
+    "trialBalanceReports": {
+      "adjustedTrialBalance": {
+        "title": "Adjusted Trial Balance",
+        "description": "Debit/credit totals per GL account reflecting every posted journal entry for a period, including adjustments.",
+        "financialPeriod": "Financial period",
+        "financialPeriodPlaceholder": "Select a period",
+        "note": "This system does not track adjusting entries separately from regular postings — this report reflects every entry posted for the period.",
+        "totalDebit": "Total debit",
+        "totalCredit": "Total credit",
+        "balanced": "Balanced",
+        "outOfBalance": "Out of balance",
+        "emptyTitlePick": "Pick a financial period",
+        "emptyDescriptionPick": "Select a financial period above to view its adjusted trial balance.",
+        "emptyTitleNoActivity": "No posted activity",
+        "emptyDescriptionNoActivity": "No accounts have posted journal entries in the selected period.",
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "debit": "Debit",
+          "credit": "Credit",
+          "balance": "Balance"
+        }
+      },
+      "closingTrialBalance": {
+        "title": "Closing Trial Balance",
+        "description": "The most recent persisted snapshot for a period — rolled-forward closing balances.",
+        "financialPeriod": "Financial period",
+        "financialPeriodPlaceholder": "Select a period",
+        "generatedAt": "Generated at",
+        "generatedBy": "Generated by",
+        "totalDebit": "Total debit",
+        "totalCredit": "Total credit",
+        "balanced": "Balanced",
+        "outOfBalance": "Out of balance",
+        "emptyTitlePick": "Pick a financial period",
+        "emptyDescriptionPick": "Select a financial period above to view its closing trial balance.",
+        "emptyTitleNoSnapshot": "No snapshot generated yet",
+        "emptyDescriptionNoSnapshot": "Generate a snapshot for this period on the Trial Balance page to see its closing balances here.",
+        "goToTrialBalance": "Go to Trial Balance",
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "debit": "Debit",
+          "credit": "Credit",
+          "balance": "Balance"
+        }
+      }
+    },
+    "financialStatements": {
+      "balanceSheet": {
+        "title": "Balance Sheet",
+        "description": "Assets, liabilities and equity as of a financial period's end.",
+        "financialPeriod": "Financial period",
+        "financialPeriodPlaceholder": "Select a period",
+        "assets": "Assets",
+        "liabilities": "Liabilities",
+        "equity": "Equity",
+        "totalAssets": "Total assets",
+        "totalLiabilities": "Total liabilities",
+        "totalEquity": "Total equity",
+        "totalLiabilitiesAndEquity": "Total liabilities and equity",
+        "retainedEarningsLabel": "Retained earnings (net income to date)",
+        "retainedEarningsNote": "Computed from cumulative income and expense activity — this system has no period-close process that posts net income into a retained earnings account, so this line is calculated rather than read from the ledger.",
+        "balanced": "Balanced",
+        "outOfBalance": "Out of balance",
+        "emptyTitlePick": "Pick a financial period",
+        "emptyDescriptionPick": "Select a financial period above to view its balance sheet.",
+        "emptyTitleNoActivity": "No posted activity",
+        "emptyDescriptionNoActivity": "No accounts have posted journal entries as of the selected period.",
+        "columns": { "accountNo": "Account no.", "accountName": "Account name", "balance": "Balance" }
+      },
+      "incomeStatement": {
+        "title": "Income Statement",
+        "description": "Income and expenses for a financial period (Profit & Loss).",
+        "financialPeriod": "Financial period",
+        "financialPeriodPlaceholder": "Select a period",
+        "income": "Income",
+        "expenses": "Expenses",
+        "totalIncome": "Total income",
+        "totalExpenses": "Total expenses",
+        "netIncome": "Net income",
+        "netLoss": "Net loss",
+        "emptyTitlePick": "Pick a financial period",
+        "emptyDescriptionPick": "Select a financial period above to view its income statement.",
+        "emptyTitleNoActivity": "No posted activity",
+        "emptyDescriptionNoActivity": "No income or expense accounts have posted journal entries in the selected period.",
+        "columns": { "accountNo": "Account no.", "accountName": "Account name", "amount": "Amount" }
+      },
+      "cashFlow": {
+        "title": "Cash Flow Statement",
+        "description": "Cash account movements for a date range, grouped by transaction type.",
+        "cashAccount": "Cash account",
+        "cashAccountPlaceholder": "Select the GL account representing cash",
+        "note": "This is a simplified cash movement summary grouped by transaction type — this system doesn't classify postings into operating, investing or financing activities, so it isn't a formal 3-category cash flow statement.",
+        "openingBalance": "Opening cash balance",
+        "netChange": "Net change in cash",
+        "closingBalance": "Closing cash balance",
+        "emptyTitlePick": "Pick a cash account and date range",
+        "emptyDescriptionPick": "Select the GL account representing cash and a date range above.",
+        "emptyTitleNoActivity": "No cash movement",
+        "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected range.",
+        "columns": { "transactionType": "Transaction type", "amount": "Net cash impact" }
+      },
+      "changesInEquity": {
+        "title": "Statement of Changes in Equity",
+        "description": "Opening and closing balances for each equity account over a financial period.",
+        "financialPeriod": "Financial period",
+        "financialPeriodPlaceholder": "Select a period",
+        "netIncomeReference": "Net income for the period (reference — not included in the equity movements below)",
+        "emptyTitlePick": "Pick a financial period",
+        "emptyDescriptionPick": "Select a financial period above to view changes in equity.",
+        "emptyTitleNoActivity": "No equity activity",
+        "emptyDescriptionNoActivity": "No equity accounts have posted journal entries in the selected period.",
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "opening": "Opening balance",
+          "movement": "Net movement",
+          "closing": "Closing balance"
+        }
       }
     }
   }

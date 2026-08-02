@@ -36,8 +36,26 @@
             value-attribute="value"
             class="w-48"
           />
+          <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
+          <UButton
+            v-if="hasFilters"
+            variant="ghost"
+            color="gray"
+            icon="i-heroicons-x-mark"
+            @click="clearFilters"
+          >
+            {{ t('common.clearFilters') }}
+          </UButton>
         </div>
       </template>
+
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
 
       <DataTable
         v-model:sort="sort"
@@ -48,15 +66,15 @@
       >
         <template #empty-state>
           <EmptyState
-            :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-users'"
-            :title="search ? t('common.noMatches') : t('customers.list.emptyTitle')"
+            :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-users'"
+            :title="hasFilters ? t('common.noMatches') : t('customers.list.emptyTitle')"
             :description="
               search
                 ? t('common.nothingMatches', { query: search })
                 : t('customers.list.emptyDescription')
             "
           >
-            <template v-if="!search" #action>
+            <template v-if="!hasFilters" #action>
               <UButton icon="i-heroicons-plus" @click="showCreate = true">{{
                 t('customers.list.newCustomer')
               }}</UButton>
@@ -100,6 +118,7 @@ const router = useRouter()
 const {
   data: customersRaw,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('customers', () =>
   api<PageResponse<CustomerResponse>>('/customers', { query: { size: 1000 } })
@@ -117,8 +136,12 @@ const branchFilterOptions = computed(() => [
   { label: t('customers.list.branchFilterAll'), value: '' },
   ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
 ])
+const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
 const customersByBranch = computed(() =>
-  branchFilter.value === '' ? customers.value : customers.value.filter((c) => c.branchId === branchFilter.value)
+  (branchFilter.value === ''
+    ? customers.value
+    : customers.value.filter((c) => c.branchId === branchFilter.value)
+  ).filter((c) => inRange(c.createdAt))
 )
 
 const showCreate = ref(false)
@@ -147,6 +170,17 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(customersBy
   searchFields: ['firstName', 'lastName', 'email'],
   pageSize: 10
 })
+
+const hasFilters = computed(
+  () => !!search.value || branchFilter.value !== '' || !!dateFrom.value || !!dateTo.value
+)
+
+function clearFilters() {
+  search.value = ''
+  branchFilter.value = ''
+  dateFrom.value = ''
+  dateTo.value = ''
+}
 
 const totalLabel = computed(() => {
   const count = customers.value?.length ?? 0

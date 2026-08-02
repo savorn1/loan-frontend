@@ -10,6 +10,14 @@
         </div>
       </template>
 
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable :rows="payments ?? []" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <UButton
@@ -100,6 +108,7 @@ const loanId = route.params.id as string
 const {
   data: payments,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData(`loan-${loanId}-loan-payments`, () =>
   api<LoanPaymentResponse[]>(`/loans/${loanId}/payments`)

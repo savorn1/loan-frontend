@@ -15,6 +15,14 @@
         </div>
       </template>
 
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <div
         v-if="selectedSchedule"
         class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4"
@@ -53,7 +61,7 @@ const api = useApi()
 
 const loanId = route.params.id as string
 
-const { data: schedules } = await useAsyncData(`loan-${loanId}-schedules`, () =>
+const { data: schedules, error: fetchError } = await useAsyncData(`loan-${loanId}-schedules`, () =>
   api<LoanScheduleResponse[]>(`/loans/${loanId}/schedules`)
 )
 

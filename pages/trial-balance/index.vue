@@ -21,6 +21,14 @@
       <template #header>
         <span class="font-semibold">{{ t('accounting.trialBalance.liveReport') }}</span>
       </template>
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable :rows="rows ?? []" :columns="columns" :loading="pending">
         <template #empty-state>
           <EmptyState
@@ -117,7 +125,7 @@ const periodOptions = computed(() =>
 
 const financialPeriodId = ref<number | undefined>(undefined)
 
-const { data: rows, pending } = await useAsyncData(
+const { data: rows, pending, error: fetchError } = await useAsyncData(
   'trial-balance-rows',
   () => {
     if (!financialPeriodId.value) return Promise.resolve([])

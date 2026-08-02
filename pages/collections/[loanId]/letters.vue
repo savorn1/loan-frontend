@@ -7,6 +7,14 @@
       </div>
     </template>
 
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <DataTable :rows="letters ?? []" :columns="columns" :loading="pending">
       <template #letterType-data="{ row }">
         <UBadge color="gray" variant="subtle">{{ formatEnum(row.letterType) }}</UBadge>
@@ -99,6 +107,7 @@ const loanId = route.params.loanId as string
 const {
   data: letters,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData(`collection-case-${loanId}-letters`, () =>
   api<CollectionLetterResponse[]>(`/payments/collections/${loanId}/letters`)

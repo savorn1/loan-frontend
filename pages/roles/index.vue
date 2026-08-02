@@ -27,6 +27,14 @@
         </UInput>
       </template>
 
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable :rows="rows" :columns="columns" :loading="pending" @select="onSelect">
         <template #permissionCount-data="{ row }">
           <UBadge color="gray" variant="subtle">{{ row.permissionCount }}</UBadge>
@@ -145,6 +153,7 @@ const router = useRouter()
 const {
   data: roles,
   pending,
+  error: fetchError,
   refresh
 } = await useAsyncData('roles', () => api<RoleResponse[]>('/auth/roles'))
 

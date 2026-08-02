@@ -15,6 +15,14 @@
       <UButton type="submit" :loading="creating" :disabled="!form.note.trim()">{{ t('loans.notes.add') }}</UButton>
     </UForm>
 
+    <UAlert
+      v-if="fetchError"
+      color="red"
+      variant="subtle"
+      class="mb-4"
+      :title="apiErrorMessage(fetchError)"
+    />
+
     <ol v-if="(notes ?? []).length" class="space-y-4">
       <li
         v-for="n in sortedNotes"
@@ -46,9 +54,11 @@ const { t } = useI18n()
 
 const loanId = route.params.id as string
 
-const { data: notes, refresh } = await useAsyncData(`loan-${loanId}-notes`, () =>
-  api<LoanNoteResponse[]>(`/loans/${loanId}/notes`)
-)
+const {
+  data: notes,
+  error: fetchError,
+  refresh
+} = await useAsyncData(`loan-${loanId}-notes`, () => api<LoanNoteResponse[]>(`/loans/${loanId}/notes`))
 
 const sortedNotes = computed(() =>
   [...(notes.value ?? [])].sort(

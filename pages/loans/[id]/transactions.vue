@@ -5,6 +5,14 @@
         <span class="font-semibold">{{ t('loans.transactions.title') }}</span>
       </template>
 
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable :rows="transactions ?? []" :columns="columns" :loading="pending">
         <template #empty-state>
           <EmptyState
@@ -32,7 +40,11 @@ const api = useApi()
 
 const loanId = route.params.id as string
 
-const { data: transactions, pending } = await useAsyncData(`loan-${loanId}-transactions`, () =>
+const {
+  data: transactions,
+  pending,
+  error: fetchError
+} = await useAsyncData(`loan-${loanId}-transactions`, () =>
   api<LoanTransactionResponse[]>(`/loans/${loanId}/transactions`)
 )
 

@@ -42,6 +42,14 @@
     </UCard>
 
     <UCard>
+      <UAlert
+        v-if="fetchError"
+        color="red"
+        variant="subtle"
+        class="mb-4"
+        :title="apiErrorMessage(fetchError)"
+      />
+
       <DataTable :rows="ledger?.lines ?? []" :columns="columns" :loading="pending">
         <template #empty-state>
           <EmptyState
@@ -89,10 +97,16 @@ const periodOptions = computed(() =>
   (periods.value ?? []).map((p) => ({ label: p.periodName, value: p.id }))
 )
 
-const glAccountId = ref<number | undefined>(undefined)
-const financialPeriodId = ref<number | undefined>(undefined)
+// Pre-filled when arriving from the General Ledger overview report's "View ledger" link.
+const route = useRoute()
+const glAccountId = ref<number | undefined>(
+  route.query.glAccountId ? Number(route.query.glAccountId) : undefined
+)
+const financialPeriodId = ref<number | undefined>(
+  route.query.financialPeriodId ? Number(route.query.financialPeriodId) : undefined
+)
 
-const { data: ledger, pending } = await useAsyncData(
+const { data: ledger, pending, error: fetchError } = await useAsyncData(
   'general-ledger-balance',
   () => {
     if (!glAccountId.value || !financialPeriodId.value) return Promise.resolve(null)

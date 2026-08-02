@@ -58,7 +58,7 @@
             >
               <span class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                 <span class="w-2.5 h-2.5 rounded-full shrink-0" :style="{ background: bucket.color }" />
-                {{ bucket.status }}
+                {{ bucket.label }}
               </span>
               <span class="font-medium text-gray-900 dark:text-white">{{ bucket.count }}</span>
             </li>
@@ -184,7 +184,7 @@ import type { ColumnDef, PageResponse } from '~/shared/types'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
-const { t } = useI18n()
+const { t, te, locale } = useI18n()
 const api = useApi()
 const router = useRouter()
 const { username } = storeToRefs(useAuth())
@@ -327,8 +327,10 @@ const statusBreakdown = computed(() => {
   const total = loans.value?.length ?? 0
   return STATUS_ORDER.map((status) => {
     const count = (loans.value ?? []).filter((l) => l.status === status).length
+    const labelKey = `common.status.${status}`
     return {
       status,
+      label: te(labelKey) ? t(labelKey) : status,
       count,
       pct: total > 0 ? (count / total) * 100 : 0,
       color: STATUS_CHART_COLOR[status]
@@ -337,7 +339,7 @@ const statusBreakdown = computed(() => {
 })
 
 const statusChartData = computed(() => ({
-  labels: statusBreakdown.value.map((b) => b.status),
+  labels: statusBreakdown.value.map((b) => b.label),
   datasets: [
     {
       data: statusBreakdown.value.map((b) => b.count),
@@ -367,7 +369,10 @@ const trendMonths = computed(() => {
   const now = new Date()
   return Array.from({ length: 6 }, (_, i) => {
     const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1)
-    return { key: `${d.getFullYear()}-${d.getMonth()}`, label: d.toLocaleDateString('en-US', { month: 'short' }) }
+    return {
+      key: `${d.getFullYear()}-${d.getMonth()}`,
+      label: d.toLocaleDateString(locale.value, { month: 'short' })
+    }
   })
 })
 
