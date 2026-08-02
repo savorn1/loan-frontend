@@ -205,6 +205,561 @@
         </template>
       </DataTable>
     </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.loanAccountingReportsHeader') }}</span>
+          <UInput
+            v-model="loanAccountingReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredLoanAccountingReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: loanAccountingReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.receivablesReportsHeader') }}</span>
+          <UInput
+            v-model="receivablesReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredReceivablesReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: receivablesReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.cashReportsHeader') }}</span>
+          <UInput
+            v-model="cashReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredCashReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: cashReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.branchAccountingReportsHeader') }}</span>
+          <UInput
+            v-model="branchAccountingReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredBranchAccountingReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: branchAccountingReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.expenseReportsHeader') }}</span>
+          <UInput
+            v-model="expenseReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredExpenseReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: expenseReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.revenueReportsHeader') }}</span>
+          <UInput
+            v-model="revenueReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredRevenueReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: revenueReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.loanPortfolioReportsHeader') }}</span>
+          <UInput
+            v-model="loanPortfolioReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredLoanPortfolioReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: loanPortfolioReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.repaymentReportsHeader') }}</span>
+          <UInput
+            v-model="repaymentReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredRepaymentReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: repaymentReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.outstandingReportsHeader') }}</span>
+          <UInput
+            v-model="outstandingReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredOutstandingReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: outstandingReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.overdueReportsHeader') }}</span>
+          <UInput
+            v-model="overdueReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredOverdueReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: overdueReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.penaltyReportsHeader') }}</span>
+          <UInput
+            v-model="penaltyReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredPenaltyReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: penaltyReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.interestReportsHeader') }}</span>
+          <UInput
+            v-model="interestReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredInterestReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: interestReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.customerReportsHeader') }}</span>
+          <UInput
+            v-model="customerReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredCustomerReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: customerReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.scheduleReportsHeader') }}</span>
+          <UInput
+            v-model="scheduleReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredScheduleReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: scheduleReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.writeoffRestructureReportsHeader') }}</span>
+          <UInput
+            v-model="writeoffRestructureReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredWriteoffRestructureReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: writeoffRestructureReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
   </div>
 </template>
 
@@ -480,6 +1035,582 @@ const financialStatementTiles = computed<GeneralLedgerReportTile[]>(() => [
 const financialStatementsSearch = ref('')
 const filteredFinancialStatementTiles = computed(() =>
   filterReportTiles(financialStatementTiles.value, financialStatementsSearch.value)
+)
+
+const loanAccountingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/loan-accounting/portfolio-summary',
+    icon: 'i-heroicons-briefcase',
+    label: t('admin.reports.loanAccountingReportsTiles.portfolioSummary.label'),
+    description: t('admin.reports.loanAccountingReportsTiles.portfolioSummary.description')
+  },
+  {
+    to: '/reports/loan-accounting/outstanding-balance',
+    icon: 'i-heroicons-banknotes',
+    label: t('admin.reports.loanAccountingReportsTiles.outstandingBalance.label'),
+    description: t('admin.reports.loanAccountingReportsTiles.outstandingBalance.description')
+  },
+  {
+    to: '/reports/loan-accounting/loans-receivable',
+    icon: 'i-heroicons-banknotes',
+    label: t('admin.reports.loanAccountingReportsTiles.loansReceivable.label'),
+    description: t('admin.reports.loanAccountingReportsTiles.loansReceivable.description')
+  },
+  {
+    to: '/reports/loan-accounting/interest-receivable',
+    icon: 'i-heroicons-inbox-arrow-down',
+    label: t('admin.reports.loanAccountingReportsTiles.interestReceivable.label'),
+    description: t('admin.reports.loanAccountingReportsTiles.interestReceivable.description')
+  },
+  {
+    to: '/reports/loan-accounting/interest-income',
+    icon: 'i-heroicons-chart-bar',
+    label: t('admin.reports.loanAccountingReportsTiles.interestIncome.label'),
+    description: t('admin.reports.loanAccountingReportsTiles.interestIncome.description')
+  },
+  {
+    to: '/reports/loan-accounting/penalty-income',
+    icon: 'i-heroicons-exclamation-triangle',
+    label: t('admin.reports.loanAccountingReportsTiles.penaltyIncome.label'),
+    description: t('admin.reports.loanAccountingReportsTiles.penaltyIncome.description')
+  },
+  {
+    to: '/reports/loan-accounting/fee-income',
+    icon: 'i-heroicons-receipt-percent',
+    label: t('admin.reports.loanAccountingReportsTiles.feeIncome.label'),
+    description: t('admin.reports.loanAccountingReportsTiles.feeIncome.description')
+  }
+])
+
+const loanAccountingReportSearch = ref('')
+const filteredLoanAccountingReportTiles = computed(() =>
+  filterReportTiles(loanAccountingReportTiles.value, loanAccountingReportSearch.value)
+)
+
+const receivablesReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/receivables/aging',
+    icon: 'i-heroicons-clock',
+    label: t('admin.reports.receivablesReportsTiles.aging.label'),
+    description: t('admin.reports.receivablesReportsTiles.aging.description')
+  },
+  {
+    to: '/reports/receivables/outstanding',
+    icon: 'i-heroicons-banknotes',
+    label: t('admin.reports.receivablesReportsTiles.outstanding.label'),
+    description: t('admin.reports.receivablesReportsTiles.outstanding.description')
+  }
+])
+
+const receivablesReportSearch = ref('')
+const filteredReceivablesReportTiles = computed(() =>
+  filterReportTiles(receivablesReportTiles.value, receivablesReportSearch.value)
+)
+
+const cashReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/cash/cash-book',
+    icon: 'i-heroicons-book-open',
+    label: t('admin.reports.cashReportsTiles.cashBook.label'),
+    description: t('admin.reports.cashReportsTiles.cashBook.description')
+  },
+  {
+    to: '/reports/cash/receipts',
+    icon: 'i-heroicons-arrow-down-circle',
+    label: t('admin.reports.cashReportsTiles.receipts.label'),
+    description: t('admin.reports.cashReportsTiles.receipts.description')
+  },
+  {
+    to: '/reports/cash/payments',
+    icon: 'i-heroicons-arrow-up-circle',
+    label: t('admin.reports.cashReportsTiles.payments.label'),
+    description: t('admin.reports.cashReportsTiles.payments.description')
+  },
+  {
+    to: '/reports/cash/daily-summary',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.cashReportsTiles.dailySummary.label'),
+    description: t('admin.reports.cashReportsTiles.dailySummary.description')
+  },
+  {
+    to: '/reports/cash/position',
+    icon: 'i-heroicons-banknotes',
+    label: t('admin.reports.cashReportsTiles.position.label'),
+    description: t('admin.reports.cashReportsTiles.position.description')
+  }
+])
+
+const cashReportSearch = ref('')
+const filteredCashReportTiles = computed(() => filterReportTiles(cashReportTiles.value, cashReportSearch.value))
+
+const branchAccountingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/branch-accounting/profit-and-loss',
+    icon: 'i-heroicons-chart-bar',
+    label: t('admin.reports.branchAccountingReportsTiles.profitAndLoss.label'),
+    description: t('admin.reports.branchAccountingReportsTiles.profitAndLoss.description')
+  },
+  {
+    to: '/reports/branch-accounting/balance-sheet',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.branchAccountingReportsTiles.balanceSheet.label'),
+    description: t('admin.reports.branchAccountingReportsTiles.balanceSheet.description')
+  },
+  {
+    to: '/reports/branch-accounting/trial-balance',
+    icon: 'i-heroicons-calculator',
+    label: t('admin.reports.branchAccountingReportsTiles.trialBalance.label'),
+    description: t('admin.reports.branchAccountingReportsTiles.trialBalance.description')
+  },
+  {
+    to: '/reports/branch-accounting/cash-position',
+    icon: 'i-heroicons-banknotes',
+    label: t('admin.reports.branchAccountingReportsTiles.cashPosition.label'),
+    description: t('admin.reports.branchAccountingReportsTiles.cashPosition.description')
+  },
+  {
+    to: '/reports/branch-accounting/transaction-summary',
+    icon: 'i-heroicons-document-chart-bar',
+    label: t('admin.reports.branchAccountingReportsTiles.transactionSummary.label'),
+    description: t('admin.reports.branchAccountingReportsTiles.transactionSummary.description')
+  }
+])
+
+const branchAccountingReportSearch = ref('')
+const filteredBranchAccountingReportTiles = computed(() =>
+  filterReportTiles(branchAccountingReportTiles.value, branchAccountingReportSearch.value)
+)
+
+const expenseReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/expenses/operating-expenses',
+    icon: 'i-heroicons-receipt-percent',
+    label: t('admin.reports.expenseReportsTiles.operatingExpenses.label'),
+    description: t('admin.reports.expenseReportsTiles.operatingExpenses.description')
+  },
+  {
+    to: '/reports/expenses/by-branch',
+    icon: 'i-heroicons-building-office-2',
+    label: t('admin.reports.expenseReportsTiles.byBranch.label'),
+    description: t('admin.reports.expenseReportsTiles.byBranch.description')
+  },
+  {
+    to: '/reports/expenses/by-category',
+    icon: 'i-heroicons-tag',
+    label: t('admin.reports.expenseReportsTiles.byCategory.label'),
+    description: t('admin.reports.expenseReportsTiles.byCategory.description')
+  }
+])
+
+const expenseReportSearch = ref('')
+const filteredExpenseReportTiles = computed(() => filterReportTiles(expenseReportTiles.value, expenseReportSearch.value))
+
+// Interest/Fee/Penalty Income Report point at the same pages already built under
+// "Loan Accounting Reports" — surfaced again here for discoverability under "Revenue Reports"
+// rather than duplicating the ledger logic.
+const revenueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/loan-accounting/interest-income',
+    icon: 'i-heroicons-chart-bar',
+    label: t('admin.reports.revenueReportsTiles.interestIncome.label'),
+    description: t('admin.reports.revenueReportsTiles.interestIncome.description')
+  },
+  {
+    to: '/reports/loan-accounting/fee-income',
+    icon: 'i-heroicons-receipt-percent',
+    label: t('admin.reports.revenueReportsTiles.feeIncome.label'),
+    description: t('admin.reports.revenueReportsTiles.feeIncome.description')
+  },
+  {
+    to: '/reports/loan-accounting/penalty-income',
+    icon: 'i-heroicons-exclamation-triangle',
+    label: t('admin.reports.revenueReportsTiles.penaltyIncome.label'),
+    description: t('admin.reports.revenueReportsTiles.penaltyIncome.description')
+  },
+  {
+    to: '/reports/revenue/other-income',
+    icon: 'i-heroicons-sparkles',
+    label: t('admin.reports.revenueReportsTiles.otherIncome.label'),
+    description: t('admin.reports.revenueReportsTiles.otherIncome.description')
+  },
+  {
+    to: '/reports/revenue/by-branch',
+    icon: 'i-heroicons-building-office-2',
+    label: t('admin.reports.revenueReportsTiles.byBranch.label'),
+    description: t('admin.reports.revenueReportsTiles.byBranch.description')
+  }
+])
+
+const revenueReportSearch = ref('')
+const filteredRevenueReportTiles = computed(() => filterReportTiles(revenueReportTiles.value, revenueReportSearch.value))
+
+// Portfolio Summary and Pending Applications point at pages already built elsewhere
+// (Loan Accounting Reports, and the existing /applications page) rather than duplicating them.
+const loanPortfolioReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/loan-accounting/portfolio-summary',
+    icon: 'i-heroicons-briefcase',
+    label: t('admin.reports.loanPortfolioReportsTiles.portfolioSummary.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.portfolioSummary.description')
+  },
+  {
+    to: '/reports/loan-portfolio/loans-by-status?status=ACTIVE',
+    icon: 'i-heroicons-bolt',
+    label: t('admin.reports.loanPortfolioReportsTiles.activeLoans.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.activeLoans.description')
+  },
+  {
+    to: '/reports/loan-portfolio/loans-by-status?status=CLOSED',
+    icon: 'i-heroicons-lock-closed',
+    label: t('admin.reports.loanPortfolioReportsTiles.closedLoans.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.closedLoans.description')
+  },
+  {
+    to: '/applications',
+    icon: 'i-heroicons-document-text',
+    label: t('admin.reports.loanPortfolioReportsTiles.pendingApplications.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.pendingApplications.description')
+  },
+  {
+    to: '/reports/loan-portfolio/loans-by-status?status=APPROVED',
+    icon: 'i-heroicons-check-circle',
+    label: t('admin.reports.loanPortfolioReportsTiles.approvedLoans.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.approvedLoans.description')
+  },
+  {
+    to: '/reports/loan-portfolio/loans-by-status?status=REJECTED',
+    icon: 'i-heroicons-x-circle',
+    label: t('admin.reports.loanPortfolioReportsTiles.rejectedLoans.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.rejectedLoans.description')
+  },
+  {
+    to: '/reports/loan-portfolio/loans-by-status',
+    icon: 'i-heroicons-list-bullet',
+    label: t('admin.reports.loanPortfolioReportsTiles.byStatus.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.byStatus.description')
+  },
+  {
+    to: '/reports/loan-portfolio/by-branch',
+    icon: 'i-heroicons-building-office-2',
+    label: t('admin.reports.loanPortfolioReportsTiles.byBranch.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.byBranch.description')
+  },
+  {
+    to: '/reports/loan-portfolio/by-customer',
+    icon: 'i-heroicons-user-group',
+    label: t('admin.reports.loanPortfolioReportsTiles.byCustomer.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.byCustomer.description')
+  }
+])
+
+const loanPortfolioReportSearch = ref('')
+const filteredLoanPortfolioReportTiles = computed(() =>
+  filterReportTiles(loanPortfolioReportTiles.value, loanPortfolioReportSearch.value)
+)
+
+const repaymentReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/repayments/daily',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.repaymentReportsTiles.daily.label'),
+    description: t('admin.reports.repaymentReportsTiles.daily.description')
+  },
+  {
+    to: '/reports/repayments/monthly',
+    icon: 'i-heroicons-calendar',
+    label: t('admin.reports.repaymentReportsTiles.monthly.label'),
+    description: t('admin.reports.repaymentReportsTiles.monthly.description')
+  },
+  {
+    to: '/reports/repayments/collection',
+    icon: 'i-heroicons-inbox-arrow-down',
+    label: t('admin.reports.repaymentReportsTiles.collection.label'),
+    description: t('admin.reports.repaymentReportsTiles.collection.description')
+  },
+  {
+    to: '/reports/repayments/early',
+    icon: 'i-heroicons-forward',
+    label: t('admin.reports.repaymentReportsTiles.early.label'),
+    description: t('admin.reports.repaymentReportsTiles.early.description')
+  },
+  {
+    to: '/reports/repayments/missed',
+    icon: 'i-heroicons-exclamation-triangle',
+    label: t('admin.reports.repaymentReportsTiles.missed.label'),
+    description: t('admin.reports.repaymentReportsTiles.missed.description')
+  }
+])
+
+const repaymentReportSearch = ref('')
+const filteredRepaymentReportTiles = computed(() => filterReportTiles(repaymentReportTiles.value, repaymentReportSearch.value))
+
+// Outstanding Balance / by Customer / by Branch point at pages already built under
+// Loan Accounting Reports / Loan Portfolio Reports — surfaced again here for
+// discoverability under "Outstanding" rather than duplicating the logic.
+const outstandingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/loan-accounting/loans-receivable',
+    icon: 'i-heroicons-banknotes',
+    label: t('admin.reports.outstandingReportsTiles.outstandingPrincipal.label'),
+    description: t('admin.reports.outstandingReportsTiles.outstandingPrincipal.description')
+  },
+  {
+    to: '/reports/loan-accounting/interest-receivable',
+    icon: 'i-heroicons-inbox-arrow-down',
+    label: t('admin.reports.outstandingReportsTiles.outstandingInterest.label'),
+    description: t('admin.reports.outstandingReportsTiles.outstandingInterest.description')
+  },
+  {
+    to: '/reports/loan-accounting/outstanding-balance',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.outstandingReportsTiles.outstandingBalance.label'),
+    description: t('admin.reports.outstandingReportsTiles.outstandingBalance.description')
+  },
+  {
+    to: '/reports/loan-portfolio/by-customer',
+    icon: 'i-heroicons-user-group',
+    label: t('admin.reports.outstandingReportsTiles.byCustomer.label'),
+    description: t('admin.reports.outstandingReportsTiles.byCustomer.description')
+  },
+  {
+    to: '/reports/loan-portfolio/by-branch',
+    icon: 'i-heroicons-building-office-2',
+    label: t('admin.reports.outstandingReportsTiles.byBranch.label'),
+    description: t('admin.reports.outstandingReportsTiles.byBranch.description')
+  }
+])
+
+const outstandingReportSearch = ref('')
+const filteredOutstandingReportTiles = computed(() =>
+  filterReportTiles(outstandingReportTiles.value, outstandingReportSearch.value)
+)
+
+// Overdue Loans / DPD point at the Aging report (its bucket summary already covers "days
+// past due"); Overdue Installments points at the Missed Repayment Report — surfaced again
+// here under "Overdue & Delinquency" for discoverability rather than duplicating the logic.
+const overdueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/receivables/aging',
+    icon: 'i-heroicons-clock',
+    label: t('admin.reports.overdueReportsTiles.overdueLoans.label'),
+    description: t('admin.reports.overdueReportsTiles.overdueLoans.description')
+  },
+  {
+    to: '/reports/repayments/missed',
+    icon: 'i-heroicons-exclamation-triangle',
+    label: t('admin.reports.overdueReportsTiles.overdueInstallments.label'),
+    description: t('admin.reports.overdueReportsTiles.overdueInstallments.description')
+  },
+  {
+    to: '/reports/receivables/aging',
+    icon: 'i-heroicons-chart-bar',
+    label: t('admin.reports.overdueReportsTiles.dpd.label'),
+    description: t('admin.reports.overdueReportsTiles.dpd.description')
+  },
+  {
+    to: '/reports/receivables/aging?bucket=DPD_90_PLUS',
+    icon: 'i-heroicons-fire',
+    label: t('admin.reports.overdueReportsTiles.delinquentLoans.label'),
+    description: t('admin.reports.overdueReportsTiles.delinquentLoans.description')
+  },
+  {
+    to: '/reports/overdue/collection-due?range=today',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.overdueReportsTiles.dueToday.label'),
+    description: t('admin.reports.overdueReportsTiles.dueToday.description')
+  },
+  {
+    to: '/reports/overdue/collection-due?range=week',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.overdueReportsTiles.dueWeek.label'),
+    description: t('admin.reports.overdueReportsTiles.dueWeek.description')
+  },
+  {
+    to: '/reports/overdue/collection-due?range=month',
+    icon: 'i-heroicons-calendar',
+    label: t('admin.reports.overdueReportsTiles.dueMonth.label'),
+    description: t('admin.reports.overdueReportsTiles.dueMonth.description')
+  }
+])
+
+const overdueReportSearch = ref('')
+const filteredOverdueReportTiles = computed(() => filterReportTiles(overdueReportTiles.value, overdueReportSearch.value))
+
+const penaltyReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/penalties/charges',
+    icon: 'i-heroicons-exclamation-triangle',
+    label: t('admin.reports.penaltyReportsTiles.charges.label'),
+    description: t('admin.reports.penaltyReportsTiles.charges.description')
+  },
+  {
+    to: '/reports/penalties/waivers',
+    icon: 'i-heroicons-hand-raised',
+    label: t('admin.reports.penaltyReportsTiles.waivers.label'),
+    description: t('admin.reports.penaltyReportsTiles.waivers.description')
+  },
+  {
+    to: '/reports/penalties/outstanding',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.penaltyReportsTiles.outstanding.label'),
+    description: t('admin.reports.penaltyReportsTiles.outstanding.description')
+  },
+  {
+    to: '/reports/penalties/collection',
+    icon: 'i-heroicons-inbox-arrow-down',
+    label: t('admin.reports.penaltyReportsTiles.collection.label'),
+    description: t('admin.reports.penaltyReportsTiles.collection.description')
+  }
+])
+
+const penaltyReportSearch = ref('')
+const filteredPenaltyReportTiles = computed(() => filterReportTiles(penaltyReportTiles.value, penaltyReportSearch.value))
+
+const interestReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/interest/accrued',
+    icon: 'i-heroicons-chart-bar',
+    label: t('admin.reports.interestReportsTiles.accrued.label'),
+    description: t('admin.reports.interestReportsTiles.accrued.description')
+  },
+  {
+    to: '/reports/interest/collected',
+    icon: 'i-heroicons-inbox-arrow-down',
+    label: t('admin.reports.interestReportsTiles.collected.label'),
+    description: t('admin.reports.interestReportsTiles.collected.description')
+  },
+  {
+    to: '/reports/interest/outstanding',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.interestReportsTiles.outstanding.label'),
+    description: t('admin.reports.interestReportsTiles.outstanding.description')
+  }
+])
+
+const interestReportSearch = ref('')
+const filteredInterestReportTiles = computed(() =>
+  filterReportTiles(interestReportTiles.value, interestReportSearch.value)
+)
+
+// Top Borrowers points at the existing Loans by Customer report (already sortable by
+// principal/outstanding) rather than duplicating the aggregation logic.
+const customerReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/customers/loan-history',
+    icon: 'i-heroicons-clock',
+    label: t('admin.reports.customerReportsTiles.loanHistory.label'),
+    description: t('admin.reports.customerReportsTiles.loanHistory.description')
+  },
+  {
+    to: '/reports/customers/loan-history?status=ACTIVE',
+    icon: 'i-heroicons-bolt',
+    label: t('admin.reports.customerReportsTiles.activeLoans.label'),
+    description: t('admin.reports.customerReportsTiles.activeLoans.description')
+  },
+  {
+    to: '/reports/customers/loan-summary',
+    icon: 'i-heroicons-briefcase',
+    label: t('admin.reports.customerReportsTiles.loanSummary.label'),
+    description: t('admin.reports.customerReportsTiles.loanSummary.description')
+  },
+  {
+    to: '/reports/customers/payment-history',
+    icon: 'i-heroicons-inbox-arrow-down',
+    label: t('admin.reports.customerReportsTiles.paymentHistory.label'),
+    description: t('admin.reports.customerReportsTiles.paymentHistory.description')
+  },
+  {
+    to: '/reports/loan-portfolio/by-customer',
+    icon: 'i-heroicons-trophy',
+    label: t('admin.reports.customerReportsTiles.topBorrowers.label'),
+    description: t('admin.reports.customerReportsTiles.topBorrowers.description')
+  }
+])
+
+const customerReportSearch = ref('')
+const filteredCustomerReportTiles = computed(() =>
+  filterReportTiles(customerReportTiles.value, customerReportSearch.value)
+)
+
+// Due Today/Week/Month reuse the same Collection Due page already built under Overdue
+// Reports (now extended with tomorrow/upcoming presets); Completed Schedules points at
+// Closed Loans, since reaching CLOSED status is this system's actual "schedule done" signal.
+const scheduleReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/overdue/collection-due?range=upcoming',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.scheduleReportsTiles.upcoming.label'),
+    description: t('admin.reports.scheduleReportsTiles.upcoming.description')
+  },
+  {
+    to: '/reports/overdue/collection-due?range=today',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.scheduleReportsTiles.dueToday.label'),
+    description: t('admin.reports.scheduleReportsTiles.dueToday.description')
+  },
+  {
+    to: '/reports/overdue/collection-due?range=tomorrow',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.scheduleReportsTiles.dueTomorrow.label'),
+    description: t('admin.reports.scheduleReportsTiles.dueTomorrow.description')
+  },
+  {
+    to: '/reports/overdue/collection-due?range=week',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.scheduleReportsTiles.dueWeek.label'),
+    description: t('admin.reports.scheduleReportsTiles.dueWeek.description')
+  },
+  {
+    to: '/reports/overdue/collection-due?range=month',
+    icon: 'i-heroicons-calendar',
+    label: t('admin.reports.scheduleReportsTiles.dueMonth.label'),
+    description: t('admin.reports.scheduleReportsTiles.dueMonth.description')
+  },
+  {
+    to: '/reports/loan-portfolio/loans-by-status?status=CLOSED',
+    icon: 'i-heroicons-check-circle',
+    label: t('admin.reports.scheduleReportsTiles.completedSchedules.label'),
+    description: t('admin.reports.scheduleReportsTiles.completedSchedules.description')
+  }
+])
+
+const scheduleReportSearch = ref('')
+const filteredScheduleReportTiles = computed(() =>
+  filterReportTiles(scheduleReportTiles.value, scheduleReportSearch.value)
+)
+
+// Loan Rescheduling points at the same Loan Restructuring report — LoanRestructure
+// (term/rate changes) is this system's only concept matching "rescheduling".
+const writeoffRestructureReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/writeoffs-restructures/writeoffs',
+    icon: 'i-heroicons-trash',
+    label: t('admin.reports.writeoffRestructureReportsTiles.writeoffs.label'),
+    description: t('admin.reports.writeoffRestructureReportsTiles.writeoffs.description')
+  },
+  {
+    to: '/reports/writeoffs-restructures/restructuring',
+    icon: 'i-heroicons-arrow-path',
+    label: t('admin.reports.writeoffRestructureReportsTiles.restructuring.label'),
+    description: t('admin.reports.writeoffRestructureReportsTiles.restructuring.description')
+  },
+  {
+    to: '/reports/writeoffs-restructures/refinancing',
+    icon: 'i-heroicons-arrows-right-left',
+    label: t('admin.reports.writeoffRestructureReportsTiles.refinancing.label'),
+    description: t('admin.reports.writeoffRestructureReportsTiles.refinancing.description')
+  },
+  {
+    to: '/reports/writeoffs-restructures/restructuring',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.writeoffRestructureReportsTiles.rescheduling.label'),
+    description: t('admin.reports.writeoffRestructureReportsTiles.rescheduling.description')
+  }
+])
+
+const writeoffRestructureReportSearch = ref('')
+const filteredWriteoffRestructureReportTiles = computed(() =>
+  filterReportTiles(writeoffRestructureReportTiles.value, writeoffRestructureReportSearch.value)
 )
 
 const reportColumns = computed<ColumnDef<GeneralLedgerReportTile>[]>(() => [

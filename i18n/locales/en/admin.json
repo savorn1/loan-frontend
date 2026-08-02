@@ -311,6 +311,126 @@
         "changesInEquity": { "label": "Statement of Changes in Equity", "description": "Opening and closing balances per equity account" },
         "financialPositionReport": { "label": "Financial Position Report", "description": "Same report as Balance Sheet" }
       },
+      "loanAccountingReportsHeader": "Loan Accounting Reports",
+      "loanAccountingReportsTiles": {
+        "portfolioSummary": { "label": "Loan Portfolio Summary", "description": "Active loan count, principal and outstanding balance by status" },
+        "outstandingBalance": { "label": "Outstanding Loan Balance", "description": "Every loan's principal and outstanding balance" },
+        "loansReceivable": { "label": "Loans Receivable", "description": "Loans Receivable account balance and activity" },
+        "interestReceivable": { "label": "Interest Receivable", "description": "Interest Receivable account balance and activity" },
+        "interestIncome": { "label": "Interest Income", "description": "Interest Income account balance and activity" },
+        "penaltyIncome": { "label": "Penalty Income", "description": "Penalty Income account balance and activity" },
+        "feeIncome": { "label": "Fee Income", "description": "Fee Income account balance and activity" }
+      },
+      "receivablesReportsHeader": "Accounts Receivable Reports",
+      "receivablesReportsTiles": {
+        "aging": { "label": "Accounts Receivable Aging", "description": "Loan receivables grouped by days past due" },
+        "outstanding": { "label": "Outstanding Receivables", "description": "Total owed by customers, current vs. overdue" }
+      },
+      "cashReportsHeader": "Cash Reports",
+      "cashReportsTiles": {
+        "cashBook": { "label": "Cash Book", "description": "Chronological record of Cash account postings" },
+        "receipts": { "label": "Cash Receipt Report", "description": "Cash received for a date range" },
+        "payments": { "label": "Cash Payment Report", "description": "Cash paid out for a date range" },
+        "dailySummary": { "label": "Daily Cash Summary", "description": "Receipts, payments and balance per day" },
+        "position": { "label": "Cash Position", "description": "Cash balance as of a chosen date" }
+      },
+      "branchAccountingReportsHeader": "Branch Accounting Reports",
+      "branchAccountingReportsTiles": {
+        "profitAndLoss": { "label": "Branch Profit & Loss", "description": "Income and expenses for a branch and date range" },
+        "balanceSheet": { "label": "Branch Balance Sheet", "description": "Assets, liabilities and equity for a branch as of a date" },
+        "trialBalance": { "label": "Branch Trial Balance", "description": "Debit/credit totals per account for a branch as of a date" },
+        "cashPosition": { "label": "Branch Cash Position", "description": "A branch's cash balance as of a chosen date" },
+        "transactionSummary": { "label": "Branch Transaction Summary", "description": "Debit/credit totals per account for a branch and date range" }
+      },
+      "expenseReportsHeader": "Expense Reports",
+      "expenseReportsTiles": {
+        "operatingExpenses": { "label": "Operating Expenses", "description": "Operating Expenses account balance and activity" },
+        "byBranch": { "label": "Expense by Branch", "description": "Total expenses posted to each branch" },
+        "byCategory": { "label": "Expense by Category", "description": "Total expenses posted to each expense account" }
+      },
+      "revenueReportsHeader": "Revenue Reports",
+      "revenueReportsTiles": {
+        "interestIncome": { "label": "Interest Income Report", "description": "Interest Income account balance and activity" },
+        "feeIncome": { "label": "Fee Income Report", "description": "Fee Income account balance and activity" },
+        "penaltyIncome": { "label": "Penalty Income Report", "description": "Penalty Income account balance and activity" },
+        "otherIncome": { "label": "Other Income Report", "description": "Income accounts other than Interest, Fee or Penalty Income" },
+        "byBranch": { "label": "Revenue by Branch", "description": "Total income posted to each branch" }
+      },
+      "loanPortfolioReportsHeader": "Loan Portfolio Reports",
+      "loanPortfolioReportsTiles": {
+        "portfolioSummary": { "label": "Loan Portfolio Summary", "description": "Active loan count, principal and outstanding balance by status" },
+        "activeLoans": { "label": "Active Loans", "description": "Loans currently in ACTIVE status" },
+        "closedLoans": { "label": "Closed Loans", "description": "Loans currently in CLOSED status" },
+        "pendingApplications": { "label": "Pending Loan Applications", "description": "Applications not yet decided" },
+        "approvedLoans": { "label": "Approved Loans", "description": "Loans currently in APPROVED status" },
+        "rejectedLoans": { "label": "Rejected Loans", "description": "Loans currently in REJECTED status" },
+        "byStatus": { "label": "Loans by Status", "description": "Every loan, filterable by status" },
+        "byBranch": { "label": "Loans by Branch", "description": "Loan count and balances per branch" },
+        "byCustomer": { "label": "Loans by Customer", "description": "Loan count and balances per customer" }
+      },
+      "repaymentReportsHeader": "Repayment Reports",
+      "repaymentReportsTiles": {
+        "daily": { "label": "Daily Repayment Report", "description": "Repayments collected, grouped by day" },
+        "monthly": { "label": "Monthly Repayment Report", "description": "Repayments collected, grouped by month" },
+        "collection": { "label": "Repayment Collection Report", "description": "Every repayment collected for a date range" },
+        "early": { "label": "Early Repayment Report", "description": "Repayments made before their due date" },
+        "missed": { "label": "Missed Repayment Report", "description": "Installments currently overdue and unpaid" }
+      },
+      "outstandingReportsHeader": "Outstanding Reports",
+      "outstandingReportsTiles": {
+        "outstandingPrincipal": { "label": "Outstanding Principal", "description": "Loans Receivable account balance and activity" },
+        "outstandingInterest": { "label": "Outstanding Interest", "description": "Interest Receivable account balance and activity" },
+        "outstandingBalance": { "label": "Outstanding Balance", "description": "Every loan's principal and outstanding balance" },
+        "byCustomer": { "label": "Outstanding by Customer", "description": "Loan count and balances per customer" },
+        "byBranch": { "label": "Outstanding by Branch", "description": "Loan count and balances per branch" }
+      },
+      "overdueReportsHeader": "Overdue & Delinquency Reports",
+      "overdueReportsTiles": {
+        "overdueLoans": { "label": "Overdue Loans", "description": "Loans with an overdue balance, by aging bucket" },
+        "overdueInstallments": { "label": "Overdue Installments", "description": "Individual installments currently overdue" },
+        "dpd": { "label": "Days Past Due (DPD)", "description": "Overdue loans grouped by aging bucket" },
+        "delinquentLoans": { "label": "Delinquent Loans", "description": "Loans 90+ days past due" },
+        "dueToday": { "label": "Collection Due Today", "description": "Installments due today" },
+        "dueWeek": { "label": "Collection Due This Week", "description": "Installments due in the next 7 days" },
+        "dueMonth": { "label": "Collection Due This Month", "description": "Installments due through the end of this month" }
+      },
+      "penaltyReportsHeader": "Penalty Reports",
+      "penaltyReportsTiles": {
+        "charges": { "label": "Penalty Charges", "description": "Penalties charged to loans for a date range" },
+        "waivers": { "label": "Penalty Waivers", "description": "Penalties waived for a date range" },
+        "outstanding": { "label": "Penalty Outstanding", "description": "Penalties not yet paid or waived" },
+        "collection": { "label": "Penalty Collection", "description": "Penalties paid for a date range" }
+      },
+      "interestReportsHeader": "Interest Reports",
+      "interestReportsTiles": {
+        "accrued": { "label": "Interest Accrued", "description": "Interest accrual entries recorded on loans" },
+        "collected": { "label": "Interest Collected", "description": "Interest portion of repayments collected" },
+        "outstanding": { "label": "Interest Outstanding", "description": "Interest accrued but not yet collected" }
+      },
+      "customerReportsHeader": "Customer Reports",
+      "customerReportsTiles": {
+        "loanHistory": { "label": "Customer Loan History", "description": "Every loan for a selected customer" },
+        "activeLoans": { "label": "Customer Active Loans", "description": "A selected customer's currently active loans" },
+        "loanSummary": { "label": "Customer Loan Summary", "description": "Loan totals and status breakdown for a customer" },
+        "paymentHistory": { "label": "Customer Payment History", "description": "Every payment across a customer's loans" },
+        "topBorrowers": { "label": "Top Borrowers", "description": "Customers ranked by loan count and balances" }
+      },
+      "scheduleReportsHeader": "Schedule Reports",
+      "scheduleReportsTiles": {
+        "upcoming": { "label": "Upcoming Installments", "description": "All not-yet-due installments" },
+        "dueToday": { "label": "Installments Due Today", "description": "Installments due today" },
+        "dueTomorrow": { "label": "Installments Due Tomorrow", "description": "Installments due tomorrow" },
+        "dueWeek": { "label": "Installments Due This Week", "description": "Installments due in the next 7 days" },
+        "dueMonth": { "label": "Installments Due This Month", "description": "Installments due through the end of this month" },
+        "completedSchedules": { "label": "Completed Schedules", "description": "Loans that have reached CLOSED status" }
+      },
+      "writeoffRestructureReportsHeader": "Write-off & Restructure Reports",
+      "writeoffRestructureReportsTiles": {
+        "writeoffs": { "label": "Loan Write-offs", "description": "Write-offs recorded on loans for a date range" },
+        "restructuring": { "label": "Loan Restructuring", "description": "Loans restructured for a date range" },
+        "refinancing": { "label": "Loan Refinancing", "description": "Loans refinanced into a new loan for a date range" },
+        "rescheduling": { "label": "Loan Rescheduling", "description": "Same as Loan Restructuring — term/rate changes" }
+      },
       "reportsTable": {
         "columns": { "name": "Report", "description": "Description" },
         "open": "Open"
