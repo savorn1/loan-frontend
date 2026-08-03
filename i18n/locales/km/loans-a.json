@@ -296,11 +296,16 @@
       "totalPaidLabel": "សរុបបានទូទាត់",
       "modalTitle": "កត់ត្រាការទូទាត់",
       "allocationModalTitle": "ការបំបែកការបែងចែក",
+      "reverseButton": "បញ្ច្រាស",
+      "reverseModalTitle": "បញ្ច្រាសការទូទាត់",
+      "reasonFieldLabel": "ហេតុផល",
+      "toastReversed": "ការទូទាត់ត្រូវបានបញ្ច្រាស",
       "columns": {
         "date": "កាលបរិច្ឆេទ",
         "amount": "ចំនួនទឹកប្រាក់",
         "method": "វិធីសាស្ត្រ",
         "reference": "លេខយោង",
+        "status": "ស្ថានភាព",
         "created": "បានបង្កើត"
       },
       "allocationColumns": {

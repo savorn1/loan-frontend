@@ -29,7 +29,12 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="rows ?? []" :columns="columns" :loading="pending">
+      <DataTable
+        :rows="rows ?? []"
+        :columns="columns"
+        :loading="pending"
+        export-filename="trial-balance.csv"
+      >
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-scale"
@@ -52,9 +57,15 @@
         class="flex justify-end gap-6 pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
       >
         <span>{{ t('accounting.trialBalance.totalDebit') }}: {{ formatCurrency(totalDebit) }}</span>
-        <span>{{ t('accounting.trialBalance.totalCredit') }}: {{ formatCurrency(totalCredit) }}</span>
+        <span
+          >{{ t('accounting.trialBalance.totalCredit') }}: {{ formatCurrency(totalCredit) }}</span
+        >
         <span :class="isBalanced ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'">
-          {{ isBalanced ? t('accounting.trialBalance.balanced') : t('accounting.trialBalance.outOfBalance') }}
+          {{
+            isBalanced
+              ? t('accounting.trialBalance.balanced')
+              : t('accounting.trialBalance.outOfBalance')
+          }}
         </span>
       </div>
       <p class="text-xs text-gray-500 mt-3">
@@ -81,6 +92,7 @@
         :rows="snapshots ?? []"
         :columns="snapshotColumns"
         :loading="snapshotsPending"
+        export-filename="trial-balance-snapshots.csv"
         @select="(row: TrialBalanceResponse) => router.push(`/trial-balance/snapshots/${row.id}`)"
       >
         <template #empty-state>
@@ -125,7 +137,11 @@ const periodOptions = computed(() =>
 
 const financialPeriodId = ref<number | undefined>(undefined)
 
-const { data: rows, pending, error: fetchError } = await useAsyncData(
+const {
+  data: rows,
+  pending,
+  error: fetchError
+} = await useAsyncData(
   'trial-balance-rows',
   () => {
     if (!financialPeriodId.value) return Promise.resolve([])
@@ -139,9 +155,24 @@ const { data: rows, pending, error: fetchError } = await useAsyncData(
 const columns = computed<ColumnDef<TrialBalanceRowResponse>[]>(() => [
   { key: 'accountNo', label: t('accounting.trialBalance.columns.accountNo'), sortable: true },
   { key: 'accountName', label: t('accounting.trialBalance.columns.accountName'), sortable: true },
-  { key: 'totalDebit', label: t('accounting.trialBalance.columns.debit'), type: 'currency', sortable: true },
-  { key: 'totalCredit', label: t('accounting.trialBalance.columns.credit'), type: 'currency', sortable: true },
-  { key: 'balance', label: t('accounting.trialBalance.columns.balance'), type: 'currency', sortable: true }
+  {
+    key: 'totalDebit',
+    label: t('accounting.trialBalance.columns.debit'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'totalCredit',
+    label: t('accounting.trialBalance.columns.credit'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'balance',
+    label: t('accounting.trialBalance.columns.balance'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 
 const totalDebit = computed(() => (rows.value ?? []).reduce((sum, r) => sum + r.totalDebit, 0))
@@ -164,7 +195,12 @@ const {
 )
 
 const snapshotColumns = computed<ColumnDef<TrialBalanceResponse>[]>(() => [
-  { key: 'generatedAt', label: t('accounting.trialBalance.columns.generated'), type: 'datetime', sortable: true },
+  {
+    key: 'generatedAt',
+    label: t('accounting.trialBalance.columns.generated'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'generatedBy', label: t('accounting.trialBalance.columns.by') },
   { key: 'totalDebit', label: t('accounting.trialBalance.columns.totalDebit'), type: 'currency' },
   { key: 'totalCredit', label: t('accounting.trialBalance.columns.totalCredit'), type: 'currency' }

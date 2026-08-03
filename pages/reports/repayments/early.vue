@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
@@ -87,7 +84,9 @@ const {
   data: paymentsRaw,
   pending,
   error: fetchError
-} = await useAsyncData('repayments-early', () => api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } }))
+} = await useAsyncData('repayments-early', () =>
+  api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } })
+)
 const payments = computed(() => paymentsRaw.value?.content ?? [])
 
 const dateFrom = ref('')
@@ -103,7 +102,11 @@ const earlyRows = computed<EarlyRow[]>(() => {
   return payments.value
     .filter(
       (p): p is PaymentResponse & { paidAt: string } =>
-        p.status === 'PAID' && !!p.paidAt && p.paidAt >= dateFrom.value && p.paidAt <= dateTo.value && p.paidAt < p.dueDate
+        p.status === 'PAID' &&
+        !!p.paidAt &&
+        p.paidAt >= dateFrom.value &&
+        p.paidAt <= dateTo.value &&
+        p.paidAt < p.dueDate
     )
     .map((p) => ({
       loanId: p.loanId,
@@ -122,10 +125,33 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(earlyRows, 
 
 const columns = computed<ColumnDef<EarlyRow>[]>(() => [
   { key: 'loanId', label: t('accounting.repaymentReports.early.columns.loanId'), sortable: true },
-  { key: 'installmentNumber', label: t('accounting.repaymentReports.early.columns.installmentNumber'), sortable: true },
-  { key: 'dueDate', label: t('accounting.repaymentReports.early.columns.dueDate'), type: 'date', sortable: true },
-  { key: 'paidAt', label: t('accounting.repaymentReports.early.columns.paidAt'), type: 'date', sortable: true },
-  { key: 'daysEarly', label: t('accounting.repaymentReports.early.columns.daysEarly'), sortable: true },
-  { key: 'amount', label: t('accounting.repaymentReports.early.columns.amount'), type: 'currency', sortable: true }
+  {
+    key: 'installmentNumber',
+    label: t('accounting.repaymentReports.early.columns.installmentNumber'),
+    sortable: true
+  },
+  {
+    key: 'dueDate',
+    label: t('accounting.repaymentReports.early.columns.dueDate'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'paidAt',
+    label: t('accounting.repaymentReports.early.columns.paidAt'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'daysEarly',
+    label: t('accounting.repaymentReports.early.columns.daysEarly'),
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.repaymentReports.early.columns.amount'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 </script>

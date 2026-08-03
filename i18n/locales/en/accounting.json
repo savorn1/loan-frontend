@@ -445,7 +445,11 @@
         "emptyDescriptionPick": "Select a financial period above to view its balance sheet.",
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "No accounts have posted journal entries as of the selected period.",
-        "columns": { "accountNo": "Account no.", "accountName": "Account name", "balance": "Balance" }
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "balance": "Balance"
+        }
       },
       "incomeStatement": {
         "title": "Income Statement",
@@ -506,7 +510,11 @@
         "totalPrincipal": "Total principal",
         "totalOutstanding": "Total outstanding",
         "statusBreakdownHeader": "By status",
-        "columns": { "status": "Status", "loanCount": "Loan count", "totalPrincipal": "Total principal" }
+        "columns": {
+          "status": "Status",
+          "loanCount": "Loan count",
+          "totalPrincipal": "Total principal"
+        }
       },
       "outstandingBalance": {
         "title": "Outstanding Loan Balance",
@@ -537,7 +545,14 @@
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected period.",
         "accountNotFound": "No \"Loans Receivable\" account was found in the chart of accounts.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "side": "Side", "amount": "Amount", "balance": "Balance" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
       },
       "interestReceivable": {
         "title": "Interest Receivable",
@@ -553,7 +568,14 @@
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected period.",
         "accountNotFound": "No \"Interest Receivable\" account was found in the chart of accounts.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "side": "Side", "amount": "Amount", "balance": "Balance" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
       },
       "interestIncome": {
         "title": "Interest Income",
@@ -569,7 +591,14 @@
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected period.",
         "accountNotFound": "No \"Interest Income\" account was found in the chart of accounts.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "side": "Side", "amount": "Amount", "balance": "Balance" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
       },
       "penaltyIncome": {
         "title": "Penalty Income",
@@ -585,7 +614,14 @@
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected period.",
         "accountNotFound": "No \"Penalty Income\" account was found in the chart of accounts.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "side": "Side", "amount": "Amount", "balance": "Balance" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
       },
       "feeIncome": {
         "title": "Fee Income",
@@ -601,7 +637,14 @@
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected period.",
         "accountNotFound": "No \"Fee Income\" account was found in the chart of accounts.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "side": "Side", "amount": "Amount", "balance": "Balance" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
       }
     },
     "receivablesReports": {
@@ -609,7 +652,11 @@
         "title": "Accounts Receivable Aging",
         "description": "Loan receivables grouped by days past due (DPD).",
         "bucketsHeader": "By aging bucket",
-        "bucketColumns": { "bucket": "Bucket", "loanCount": "Loan count", "overdueAmount": "Overdue amount" },
+        "bucketColumns": {
+          "bucket": "Bucket",
+          "loanCount": "Loan count",
+          "overdueAmount": "Overdue amount"
+        },
         "detailHeader": "Loan detail",
         "bucketFilterAll": "All buckets",
         "searchPlaceholder": "Search by customer…",
@@ -650,7 +697,14 @@
         "emptyDescriptionPick": "Select a from and to date above to view the cash book.",
         "emptyTitleNoActivity": "No cash activity",
         "emptyDescriptionNoActivity": "No postings to the Cash account in the selected range.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "side": "Side", "amount": "Amount", "balance": "Balance" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
       },
       "receipts": {
         "title": "Cash Receipt Report",
@@ -661,7 +715,12 @@
         "emptyDescriptionPick": "Select a from and to date above to view cash receipts.",
         "emptyTitleNoActivity": "No cash receipts",
         "emptyDescriptionNoActivity": "No cash was received in the selected range.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "amount": "Amount" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "amount": "Amount"
+        }
       },
       "payments": {
         "title": "Cash Payment Report",
@@ -672,7 +731,12 @@
         "emptyDescriptionPick": "Select a from and to date above to view cash payments.",
         "emptyTitleNoActivity": "No cash payments",
         "emptyDescriptionNoActivity": "No cash was paid out in the selected range.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "amount": "Amount" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "amount": "Amount"
+        }
       },
       "dailySummary": {
         "title": "Daily Cash Summary",
@@ -682,7 +746,13 @@
         "emptyDescriptionPick": "Select a from and to date above to view the daily summary.",
         "emptyTitleNoActivity": "No cash activity",
         "emptyDescriptionNoActivity": "No postings to the Cash account in the selected range.",
-        "columns": { "date": "Date", "receipts": "Receipts", "payments": "Payments", "netChange": "Net change", "closingBalance": "Closing balance" }
+        "columns": {
+          "date": "Date",
+          "receipts": "Receipts",
+          "payments": "Payments",
+          "netChange": "Net change",
+          "closingBalance": "Closing balance"
+        }
       },
       "position": {
         "title": "Cash Position",
@@ -734,7 +804,11 @@
         "emptyDescriptionPick": "Select a branch and an as-of date above to view its balance sheet.",
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This branch has no posted journal entries as of the selected date.",
-        "columns": { "accountNo": "Account no.", "accountName": "Account name", "balance": "Balance" }
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "balance": "Balance"
+        }
       },
       "trialBalance": {
         "title": "Branch Trial Balance",
@@ -751,7 +825,13 @@
         "emptyDescriptionPick": "Select a branch and an as-of date above to view its trial balance.",
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This branch has no posted journal entries as of the selected date.",
-        "columns": { "accountNo": "Account no.", "accountName": "Account name", "debit": "Debit", "credit": "Credit", "balance": "Balance" }
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "debit": "Debit",
+          "credit": "Credit",
+          "balance": "Balance"
+        }
       },
       "cashPosition": {
         "title": "Branch Cash Position",
@@ -776,7 +856,13 @@
         "emptyDescriptionPick": "Select a branch and a date range above to view its transaction summary.",
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This branch has no posted journal entries in the selected range.",
-        "columns": { "accountNo": "Account no.", "accountName": "Account name", "debit": "Debit", "credit": "Credit", "net": "Net" }
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "debit": "Debit",
+          "credit": "Credit",
+          "net": "Net"
+        }
       }
     },
     "expenseReports": {
@@ -794,7 +880,14 @@
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected period.",
         "accountNotFound": "No \"Operating Expenses\" account was found in the chart of accounts.",
-        "columns": { "date": "Date", "entryNo": "Entry no.", "description": "Description", "side": "Side", "amount": "Amount", "balance": "Balance" }
+        "columns": {
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "description": "Description",
+          "side": "Side",
+          "amount": "Amount",
+          "balance": "Balance"
+        }
       },
       "byBranch": {
         "title": "Expense by Branch",
@@ -868,7 +961,12 @@
         "description": "Loan count, principal and outstanding balance per branch.",
         "emptyTitle": "No loans",
         "emptyDescription": "No branch has any loans yet.",
-        "columns": { "branch": "Branch", "loanCount": "Loan count", "totalPrincipal": "Total principal", "totalOutstanding": "Total outstanding" }
+        "columns": {
+          "branch": "Branch",
+          "loanCount": "Loan count",
+          "totalPrincipal": "Total principal",
+          "totalOutstanding": "Total outstanding"
+        }
       },
       "byCustomer": {
         "title": "Loans by Customer",
@@ -876,7 +974,12 @@
         "searchPlaceholder": "Search by customer…",
         "emptyTitle": "No loans",
         "emptyDescription": "No customer has any loans yet.",
-        "columns": { "customer": "Customer", "loanCount": "Loan count", "totalPrincipal": "Total principal", "totalOutstanding": "Total outstanding" }
+        "columns": {
+          "customer": "Customer",
+          "loanCount": "Loan count",
+          "totalPrincipal": "Total principal",
+          "totalOutstanding": "Total outstanding"
+        }
       }
     },
     "repaymentReports": {
@@ -887,7 +990,13 @@
         "emptyDescriptionPick": "Select a from and to date above to view daily repayments.",
         "emptyTitleNoActivity": "No repayments collected",
         "emptyDescriptionNoActivity": "No payments were collected in the selected range.",
-        "columns": { "date": "Date", "count": "Count", "totalAmount": "Total amount", "totalPrincipal": "Principal", "totalInterest": "Interest" }
+        "columns": {
+          "date": "Date",
+          "count": "Count",
+          "totalAmount": "Total amount",
+          "totalPrincipal": "Principal",
+          "totalInterest": "Interest"
+        }
       },
       "monthly": {
         "title": "Monthly Repayment Report",
@@ -896,7 +1005,13 @@
         "emptyDescriptionPick": "Select a from and to date above to view monthly repayments.",
         "emptyTitleNoActivity": "No repayments collected",
         "emptyDescriptionNoActivity": "No payments were collected in the selected range.",
-        "columns": { "month": "Month", "count": "Count", "totalAmount": "Total amount", "totalPrincipal": "Principal", "totalInterest": "Interest" }
+        "columns": {
+          "month": "Month",
+          "count": "Count",
+          "totalAmount": "Total amount",
+          "totalPrincipal": "Principal",
+          "totalInterest": "Interest"
+        }
       },
       "collection": {
         "title": "Repayment Collection Report",
@@ -942,7 +1057,13 @@
         "searchPlaceholder": "Search by loan…",
         "emptyTitle": "No missed repayments",
         "emptyDescription": "No installments are currently overdue.",
-        "columns": { "loanId": "Loan", "installmentNumber": "Installment", "dueDate": "Due date", "daysOverdue": "Days overdue", "amount": "Amount" }
+        "columns": {
+          "loanId": "Loan",
+          "installmentNumber": "Installment",
+          "dueDate": "Due date",
+          "daysOverdue": "Days overdue",
+          "amount": "Amount"
+        }
       }
     },
     "overdueReports": {
@@ -958,7 +1079,12 @@
         "searchPlaceholder": "Search by loan…",
         "emptyTitle": "Nothing due",
         "emptyDescription": "No installments are due in the selected window.",
-        "columns": { "loanId": "Loan", "installmentNumber": "Installment", "dueDate": "Due date", "amount": "Amount" }
+        "columns": {
+          "loanId": "Loan",
+          "installmentNumber": "Installment",
+          "dueDate": "Due date",
+          "amount": "Amount"
+        }
       }
     },
     "penaltyReports": {
@@ -971,7 +1097,13 @@
         "emptyDescriptionPick": "Select a from and to date above to view penalty charges.",
         "emptyTitleNoActivity": "No penalties charged",
         "emptyDescriptionNoActivity": "No penalties were charged in the selected range.",
-        "columns": { "loanId": "Loan", "amount": "Amount", "reason": "Reason", "appliedDate": "Applied date", "status": "Status" }
+        "columns": {
+          "loanId": "Loan",
+          "amount": "Amount",
+          "reason": "Reason",
+          "appliedDate": "Applied date",
+          "status": "Status"
+        }
       },
       "waivers": {
         "title": "Penalty Waivers",
@@ -982,7 +1114,12 @@
         "emptyDescriptionPick": "Select a from and to date above to view penalty waivers.",
         "emptyTitleNoActivity": "No penalties waived",
         "emptyDescriptionNoActivity": "No penalties were waived in the selected range.",
-        "columns": { "loanId": "Loan", "amount": "Amount", "reason": "Reason", "waivedAt": "Waived at" }
+        "columns": {
+          "loanId": "Loan",
+          "amount": "Amount",
+          "reason": "Reason",
+          "waivedAt": "Waived at"
+        }
       },
       "outstanding": {
         "title": "Penalty Outstanding",
@@ -991,7 +1128,12 @@
         "searchPlaceholder": "Search by loan…",
         "emptyTitle": "No outstanding penalties",
         "emptyDescription": "No penalties are currently pending.",
-        "columns": { "loanId": "Loan", "amount": "Amount", "reason": "Reason", "appliedDate": "Applied date" }
+        "columns": {
+          "loanId": "Loan",
+          "amount": "Amount",
+          "reason": "Reason",
+          "appliedDate": "Applied date"
+        }
       },
       "collection": {
         "title": "Penalty Collection",
@@ -1015,7 +1157,14 @@
         "emptyDescriptionPick": "Select a from and to date above to view accrued interest.",
         "emptyTitleNoActivity": "No interest accrued",
         "emptyDescriptionNoActivity": "No interest accruals were recorded in the selected range.",
-        "columns": { "loanId": "Loan", "periodStart": "Period start", "periodEnd": "Period end", "rate": "Rate", "amount": "Amount", "accruedAt": "Accrued at" }
+        "columns": {
+          "loanId": "Loan",
+          "periodStart": "Period start",
+          "periodEnd": "Period end",
+          "rate": "Rate",
+          "amount": "Amount",
+          "accruedAt": "Accrued at"
+        }
       },
       "collected": {
         "title": "Interest Collected",
@@ -1026,7 +1175,12 @@
         "emptyDescriptionPick": "Select a from and to date above to view collected interest.",
         "emptyTitleNoActivity": "No interest collected",
         "emptyDescriptionNoActivity": "No repayments were collected in the selected range.",
-        "columns": { "loanId": "Loan", "installmentNumber": "Installment", "paidAt": "Paid at", "interestComponent": "Interest collected" }
+        "columns": {
+          "loanId": "Loan",
+          "installmentNumber": "Installment",
+          "paidAt": "Paid at",
+          "interestComponent": "Interest collected"
+        }
       },
       "outstanding": {
         "title": "Interest Outstanding",
@@ -1035,7 +1189,12 @@
         "searchPlaceholder": "Search by loan…",
         "emptyTitle": "No outstanding interest",
         "emptyDescription": "No loan currently has uncollected accrued interest.",
-        "columns": { "loanId": "Loan", "totalAccrued": "Total accrued", "totalCollected": "Total collected", "outstanding": "Outstanding" }
+        "columns": {
+          "loanId": "Loan",
+          "totalAccrued": "Total accrued",
+          "totalCollected": "Total collected",
+          "outstanding": "Outstanding"
+        }
       }
     },
     "customerReports": {
@@ -1068,7 +1227,11 @@
         "statusBreakdownHeader": "By status",
         "emptyTitlePick": "Pick a customer",
         "emptyDescriptionPick": "Select a customer above to view their loan summary.",
-        "columns": { "status": "Status", "loanCount": "Loan count", "totalPrincipal": "Total principal" }
+        "columns": {
+          "status": "Status",
+          "loanCount": "Loan count",
+          "totalPrincipal": "Total principal"
+        }
       },
       "paymentHistory": {
         "title": "Customer Payment History",
@@ -1102,7 +1265,13 @@
         "emptyDescriptionPick": "Select a from and to date above to view loan write-offs.",
         "emptyTitleNoActivity": "No write-offs",
         "emptyDescriptionNoActivity": "No write-offs were recorded in the selected range.",
-        "columns": { "loanId": "Loan", "amount": "Amount", "reason": "Reason", "writeoffDate": "Write-off date", "status": "Status" }
+        "columns": {
+          "loanId": "Loan",
+          "amount": "Amount",
+          "reason": "Reason",
+          "writeoffDate": "Write-off date",
+          "status": "Status"
+        }
       },
       "restructuring": {
         "title": "Loan Restructuring",
@@ -1128,7 +1297,28 @@
         "emptyDescriptionPick": "Select a from and to date above to view loan refinancing.",
         "emptyTitleNoActivity": "No refinancing",
         "emptyDescriptionNoActivity": "No loans were refinanced in the selected range.",
-        "columns": { "loanId": "Original loan", "newLoanId": "New loan", "reason": "Reason", "effectiveDate": "Effective date" }
+        "columns": {
+          "loanId": "Original loan",
+          "newLoanId": "New loan",
+          "reason": "Reason",
+          "effectiveDate": "Effective date"
+        }
+      }
+    },
+    "dashboardReports": {
+      "summary": {
+        "title": "Dashboard Summary",
+        "description": "Key portfolio metrics at a glance, as of now.",
+        "totalActiveLoans": "Total active loans",
+        "totalOutstandingBalance": "Total outstanding balance",
+        "totalDisbursedToday": "Total disbursed today",
+        "totalCollectedToday": "Total collected today",
+        "totalOverdueAmount": "Total overdue amount",
+        "loansDueToday": "Loans due today",
+        "newLoanApplications": "New loan applications today",
+        "portfolioAtRisk": "Portfolio at risk",
+        "nonPerformingLoans": "Non-performing loans (90+ DPD)",
+        "averageLoanAmount": "Average loan amount"
       }
     }
   }

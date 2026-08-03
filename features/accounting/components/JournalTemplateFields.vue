@@ -36,9 +36,9 @@
     <div>
       <div class="flex items-center justify-between mb-2">
         <span class="text-sm font-medium">{{ t('accounting.journalTemplates.fields.lines') }}</span>
-        <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine"
-          >{{ t('accounting.journalTemplates.fields.addLine') }}</UButton
-        >
+        <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine">{{
+          t('accounting.journalTemplates.fields.addLine')
+        }}</UButton>
       </div>
       <div class="space-y-2">
         <div v-for="(line, i) in model.lines" :key="i" class="flex items-center gap-2">

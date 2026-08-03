@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -72,10 +66,14 @@ const {
   data: loansRaw,
   pending,
   error: fetchError
-} = await useAsyncData('loan-portfolio-by-status', () => api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } }))
+} = await useAsyncData('loan-portfolio-by-status', () =>
+  api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
+)
 const loans = computed(() => loansRaw.value?.content ?? [])
 
-const { data: branches } = await useAsyncData('loan-portfolio-by-status-branches', () => api<BranchResponse[]>('/branches'))
+const { data: branches } = await useAsyncData('loan-portfolio-by-status-branches', () =>
+  api<BranchResponse[]>('/branches')
+)
 const branchNameById = computed(() => new Map((branches.value ?? []).map((b) => [b.id, b.name])))
 
 // Pre-filled when arriving from a status-specific tile (e.g. "Active Loans" on /reports).
@@ -90,7 +88,9 @@ const statusFilterOptions = computed(() => [
   { label: formatEnum('CLOSED'), value: 'CLOSED' }
 ])
 
-const filtered = computed(() => loans.value.filter((l) => !statusFilter.value || l.status === statusFilter.value))
+const filtered = computed(() =>
+  loans.value.filter((l) => !statusFilter.value || l.status === statusFilter.value)
+)
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(filtered, {
   searchFields: ['id', 'customerName'],
@@ -99,20 +99,40 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filtered, {
 
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   { key: 'id', label: t('accounting.loanPortfolioReports.byStatus.columns.id'), sortable: true },
-  { key: 'customerName', label: t('accounting.loanPortfolioReports.byStatus.columns.customer'), sortable: true },
+  {
+    key: 'customerName',
+    label: t('accounting.loanPortfolioReports.byStatus.columns.customer'),
+    sortable: true
+  },
   {
     key: 'branchId',
     label: t('accounting.loanPortfolioReports.byStatus.columns.branch'),
-    value: (row) => (row.branchId != null ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—')
+    value: (row) =>
+      row.branchId != null ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—'
   },
-  { key: 'principal', label: t('accounting.loanPortfolioReports.byStatus.columns.principal'), type: 'currency', sortable: true },
+  {
+    key: 'principal',
+    label: t('accounting.loanPortfolioReports.byStatus.columns.principal'),
+    type: 'currency',
+    sortable: true
+  },
   {
     key: 'outstandingBalance',
     label: t('accounting.loanPortfolioReports.byStatus.columns.outstandingBalance'),
     type: 'currency',
     sortable: true
   },
-  { key: 'status', label: t('accounting.loanPortfolioReports.byStatus.columns.status'), type: 'status', sortable: true },
-  { key: 'createdAt', label: t('accounting.loanPortfolioReports.byStatus.columns.created'), type: 'datetime', sortable: true }
+  {
+    key: 'status',
+    label: t('accounting.loanPortfolioReports.byStatus.columns.status'),
+    type: 'status',
+    sortable: true
+  },
+  {
+    key: 'createdAt',
+    label: t('accounting.loanPortfolioReports.byStatus.columns.created'),
+    type: 'datetime',
+    sortable: true
+  }
 ])
 </script>

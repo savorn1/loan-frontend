@@ -49,7 +49,11 @@
             {{ formatCurrency(s.totalPrincipal) }}
           </div>
           <div class="text-xs text-gray-500 dark:text-gray-400">
-            {{ s.loanCount === 1 ? t('admin.reports.loanCount.one') : t('admin.reports.loanCount.other', { count: s.loanCount }) }}
+            {{
+              s.loanCount === 1
+                ? t('admin.reports.loanCount.one')
+                : t('admin.reports.loanCount.other', { count: s.loanCount })
+            }}
           </div>
         </div>
       </div>
@@ -75,7 +79,11 @@
             {{ formatCurrency(b.overdueAmount) }}
           </div>
           <div class="text-xs text-gray-500 dark:text-gray-400">
-            {{ b.loanCount === 1 ? t('admin.reports.loanCount.one') : t('admin.reports.loanCount.other', { count: b.loanCount }) }}
+            {{
+              b.loanCount === 1
+                ? t('admin.reports.loanCount.one')
+                : t('admin.reports.loanCount.other', { count: b.loanCount })
+            }}
           </div>
         </div>
       </div>
@@ -116,7 +124,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -153,7 +163,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -190,7 +202,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -227,7 +241,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -264,7 +280,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -301,7 +319,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -338,7 +358,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -375,7 +397,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -412,7 +436,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -449,7 +475,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -486,7 +514,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -523,7 +553,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -560,7 +592,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -597,7 +631,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -634,7 +670,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -671,7 +709,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -708,7 +748,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -727,7 +769,9 @@
     <UCard class="mt-6">
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.writeoffRestructureReportsHeader') }}</span>
+          <span class="font-semibold">{{
+            t('admin.reports.writeoffRestructureReportsHeader')
+          }}</span>
           <UInput
             v-model="writeoffRestructureReportSearch"
             icon="i-heroicons-magnifying-glass"
@@ -745,7 +789,9 @@
       >
         <template #label-data="{ row }">
           <div class="flex items-center gap-3">
-            <div class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
               <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
             <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
@@ -756,6 +802,45 @@
             icon="i-heroicons-magnifying-glass"
             :title="t('common.noMatches')"
             :description="t('common.nothingMatches', { query: writeoffRestructureReportSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <UCard class="mt-6">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-semibold">{{ t('admin.reports.dashboardReportsHeader') }}</span>
+          <UInput
+            v-model="dashboardReportSearch"
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="w-56"
+            :placeholder="t('common.searchEllipsis')"
+          />
+        </div>
+      </template>
+      <DataTable
+        :rows="filteredDashboardReportTiles"
+        :columns="reportColumns"
+        :exportable="false"
+        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
+              <UIcon :name="row.icon" class="w-5 h-5" />
+            </div>
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: dashboardReportSearch })"
           />
         </template>
       </DataTable>
@@ -801,11 +886,15 @@ const [
   { data: collectionTrend, pending: p4 },
   { data: statusBreakdownRaw, pending: p5 }
 ] = await Promise.all([
-  useAsyncData('reports-portfolio', () => api<PortfolioSummaryResponse>('/loans/reports/portfolio-summary')),
+  useAsyncData('reports-portfolio', () =>
+    api<PortfolioSummaryResponse>('/loans/reports/portfolio-summary')
+  ),
   useAsyncData('reports-disbursement-trend', () =>
     api<DisbursementTrendPoint[]>('/loans/reports/disbursement-trend')
   ),
-  useAsyncData('reports-par-summary', () => api<ParSummaryResponse>('/payments/reports/par-summary')),
+  useAsyncData('reports-par-summary', () =>
+    api<ParSummaryResponse>('/payments/reports/par-summary')
+  ),
   useAsyncData('reports-collection-trend', () =>
     api<CollectionTrendPoint[]>('/payments/reports/collection-trend')
   ),
@@ -984,7 +1073,9 @@ const trialBalanceReportTiles = computed<GeneralLedgerReportTile[]>(() => [
 function filterReportTiles(tiles: GeneralLedgerReportTile[], query: string) {
   const q = query.trim().toLowerCase()
   if (!q) return tiles
-  return tiles.filter((t) => t.label.toLowerCase().includes(q) || t.description.toLowerCase().includes(q))
+  return tiles.filter(
+    (t) => t.label.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
+  )
 }
 
 const generalLedgerReportSearch = ref('')
@@ -1141,7 +1232,9 @@ const cashReportTiles = computed<GeneralLedgerReportTile[]>(() => [
 ])
 
 const cashReportSearch = ref('')
-const filteredCashReportTiles = computed(() => filterReportTiles(cashReportTiles.value, cashReportSearch.value))
+const filteredCashReportTiles = computed(() =>
+  filterReportTiles(cashReportTiles.value, cashReportSearch.value)
+)
 
 const branchAccountingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
@@ -1203,11 +1296,10 @@ const expenseReportTiles = computed<GeneralLedgerReportTile[]>(() => [
 ])
 
 const expenseReportSearch = ref('')
-const filteredExpenseReportTiles = computed(() => filterReportTiles(expenseReportTiles.value, expenseReportSearch.value))
+const filteredExpenseReportTiles = computed(() =>
+  filterReportTiles(expenseReportTiles.value, expenseReportSearch.value)
+)
 
-// Interest/Fee/Penalty Income Report point at the same pages already built under
-// "Loan Accounting Reports" — surfaced again here for discoverability under "Revenue Reports"
-// rather than duplicating the ledger logic.
 const revenueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
     to: '/reports/loan-accounting/interest-income',
@@ -1242,10 +1334,10 @@ const revenueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
 ])
 
 const revenueReportSearch = ref('')
-const filteredRevenueReportTiles = computed(() => filterReportTiles(revenueReportTiles.value, revenueReportSearch.value))
+const filteredRevenueReportTiles = computed(() =>
+  filterReportTiles(revenueReportTiles.value, revenueReportSearch.value)
+)
 
-// Portfolio Summary and Pending Applications point at pages already built elsewhere
-// (Loan Accounting Reports, and the existing /applications page) rather than duplicating them.
 const loanPortfolioReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
     to: '/reports/loan-accounting/portfolio-summary',
@@ -1342,11 +1434,10 @@ const repaymentReportTiles = computed<GeneralLedgerReportTile[]>(() => [
 ])
 
 const repaymentReportSearch = ref('')
-const filteredRepaymentReportTiles = computed(() => filterReportTiles(repaymentReportTiles.value, repaymentReportSearch.value))
+const filteredRepaymentReportTiles = computed(() =>
+  filterReportTiles(repaymentReportTiles.value, repaymentReportSearch.value)
+)
 
-// Outstanding Balance / by Customer / by Branch point at pages already built under
-// Loan Accounting Reports / Loan Portfolio Reports — surfaced again here for
-// discoverability under "Outstanding" rather than duplicating the logic.
 const outstandingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
     to: '/reports/loan-accounting/loans-receivable',
@@ -1385,9 +1476,6 @@ const filteredOutstandingReportTiles = computed(() =>
   filterReportTiles(outstandingReportTiles.value, outstandingReportSearch.value)
 )
 
-// Overdue Loans / DPD point at the Aging report (its bucket summary already covers "days
-// past due"); Overdue Installments points at the Missed Repayment Report — surfaced again
-// here under "Overdue & Delinquency" for discoverability rather than duplicating the logic.
 const overdueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
     to: '/reports/receivables/aging',
@@ -1434,7 +1522,9 @@ const overdueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
 ])
 
 const overdueReportSearch = ref('')
-const filteredOverdueReportTiles = computed(() => filterReportTiles(overdueReportTiles.value, overdueReportSearch.value))
+const filteredOverdueReportTiles = computed(() =>
+  filterReportTiles(overdueReportTiles.value, overdueReportSearch.value)
+)
 
 const penaltyReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
@@ -1464,7 +1554,9 @@ const penaltyReportTiles = computed<GeneralLedgerReportTile[]>(() => [
 ])
 
 const penaltyReportSearch = ref('')
-const filteredPenaltyReportTiles = computed(() => filterReportTiles(penaltyReportTiles.value, penaltyReportSearch.value))
+const filteredPenaltyReportTiles = computed(() =>
+  filterReportTiles(penaltyReportTiles.value, penaltyReportSearch.value)
+)
 
 const interestReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
@@ -1492,8 +1584,6 @@ const filteredInterestReportTiles = computed(() =>
   filterReportTiles(interestReportTiles.value, interestReportSearch.value)
 )
 
-// Top Borrowers points at the existing Loans by Customer report (already sortable by
-// principal/outstanding) rather than duplicating the aggregation logic.
 const customerReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
     to: '/reports/customers/loan-history',
@@ -1532,9 +1622,6 @@ const filteredCustomerReportTiles = computed(() =>
   filterReportTiles(customerReportTiles.value, customerReportSearch.value)
 )
 
-// Due Today/Week/Month reuse the same Collection Due page already built under Overdue
-// Reports (now extended with tomorrow/upcoming presets); Completed Schedules points at
-// Closed Loans, since reaching CLOSED status is this system's actual "schedule done" signal.
 const scheduleReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
     to: '/reports/overdue/collection-due?range=upcoming',
@@ -1579,8 +1666,6 @@ const filteredScheduleReportTiles = computed(() =>
   filterReportTiles(scheduleReportTiles.value, scheduleReportSearch.value)
 )
 
-// Loan Rescheduling points at the same Loan Restructuring report — LoanRestructure
-// (term/rate changes) is this system's only concept matching "rescheduling".
 const writeoffRestructureReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   {
     to: '/reports/writeoffs-restructures/writeoffs',
@@ -1613,6 +1698,74 @@ const filteredWriteoffRestructureReportTiles = computed(() =>
   filterReportTiles(writeoffRestructureReportTiles.value, writeoffRestructureReportSearch.value)
 )
 
+const dashboardReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+  {
+    to: '/reports/dashboard/summary',
+    icon: 'i-heroicons-briefcase',
+    label: t('admin.reports.dashboardReportsTiles.totalActiveLoans.label'),
+    description: t('admin.reports.dashboardReportsTiles.totalActiveLoans.description')
+  },
+  {
+    to: '/reports/dashboard/summary',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.dashboardReportsTiles.totalOutstandingBalance.label'),
+    description: t('admin.reports.dashboardReportsTiles.totalOutstandingBalance.description')
+  },
+  {
+    to: '/reports/dashboard/summary',
+    icon: 'i-heroicons-banknotes',
+    label: t('admin.reports.dashboardReportsTiles.totalDisbursedToday.label'),
+    description: t('admin.reports.dashboardReportsTiles.totalDisbursedToday.description')
+  },
+  {
+    to: '/reports/dashboard/summary',
+    icon: 'i-heroicons-inbox-arrow-down',
+    label: t('admin.reports.dashboardReportsTiles.totalCollectedToday.label'),
+    description: t('admin.reports.dashboardReportsTiles.totalCollectedToday.description')
+  },
+  {
+    to: '/reports/dashboard/summary',
+    icon: 'i-heroicons-exclamation-triangle',
+    label: t('admin.reports.dashboardReportsTiles.totalOverdueAmount.label'),
+    description: t('admin.reports.dashboardReportsTiles.totalOverdueAmount.description')
+  },
+  {
+    to: '/reports/overdue/collection-due?range=today',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.dashboardReportsTiles.loansDueToday.label'),
+    description: t('admin.reports.dashboardReportsTiles.loansDueToday.description')
+  },
+  {
+    to: '/applications',
+    icon: 'i-heroicons-document-text',
+    label: t('admin.reports.dashboardReportsTiles.newLoanApplications.label'),
+    description: t('admin.reports.dashboardReportsTiles.newLoanApplications.description')
+  },
+  {
+    to: '/reports/receivables/outstanding',
+    icon: 'i-heroicons-shield-exclamation',
+    label: t('admin.reports.dashboardReportsTiles.portfolioAtRisk.label'),
+    description: t('admin.reports.dashboardReportsTiles.portfolioAtRisk.description')
+  },
+  {
+    to: '/reports/receivables/aging?bucket=DPD_90_PLUS',
+    icon: 'i-heroicons-fire',
+    label: t('admin.reports.dashboardReportsTiles.nonPerformingLoans.label'),
+    description: t('admin.reports.dashboardReportsTiles.nonPerformingLoans.description')
+  },
+  {
+    to: '/reports/dashboard/summary',
+    icon: 'i-heroicons-calculator',
+    label: t('admin.reports.dashboardReportsTiles.averageLoanAmount.label'),
+    description: t('admin.reports.dashboardReportsTiles.averageLoanAmount.description')
+  }
+])
+
+const dashboardReportSearch = ref('')
+const filteredDashboardReportTiles = computed(() =>
+  filterReportTiles(dashboardReportTiles.value, dashboardReportSearch.value)
+)
+
 const reportColumns = computed<ColumnDef<GeneralLedgerReportTile>[]>(() => [
   { key: 'label', label: t('admin.reports.reportsTable.columns.name') },
   { key: 'description', label: t('admin.reports.reportsTable.columns.description') },
@@ -1636,7 +1789,8 @@ const trendChartOptions = computed(() => {
       legend: { position: 'top' as const, labels: { color: textColor, usePointStyle: true } },
       tooltip: {
         callbacks: {
-          label: (ctx: TooltipItem<'line'>) => ` ${ctx.dataset.label}: ${formatCurrency(ctx.parsed.y)}`
+          label: (ctx: TooltipItem<'line'>) =>
+            ` ${ctx.dataset.label}: ${formatCurrency(ctx.parsed.y)}`
         }
       }
     },

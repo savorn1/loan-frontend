@@ -2,7 +2,9 @@
   <div>
     <PageHeader :title="t('admin.roles.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('admin.roles.newRole') }}</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('admin.roles.newRole')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -64,7 +66,9 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-shield-check'"
-            :title="search ? t('admin.roles.empty.matchesTitle') : t('admin.roles.empty.emptyTitle')"
+            :title="
+              search ? t('admin.roles.empty.matchesTitle') : t('admin.roles.empty.emptyTitle')
+            "
             :description="
               search
                 ? t('admin.roles.empty.matchesDescription', { query: search })
@@ -72,7 +76,9 @@
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('admin.roles.newRole') }}</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('admin.roles.newRole')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -124,7 +130,10 @@
       :title="t('admin.roles.deleteConfirmTitle')"
       :description="
         confirmDelete
-          ? t('admin.roles.deleteConfirmDescription', { userCount: confirmDelete.userCount, permissionCount: confirmDelete.permissionCount })
+          ? t('admin.roles.deleteConfirmDescription', {
+              userCount: confirmDelete.userCount,
+              permissionCount: confirmDelete.permissionCount
+            })
           : ''
       "
       :confirm-label="t('common.delete')"
@@ -176,6 +185,7 @@ const totalLabel = computed(() => {
 
 const columns = computed<ColumnDef<RoleResponse>[]>(() => [
   { key: 'name', label: t('admin.roles.columns.name'), sortable: true },
+  { key: 'code', label: t('admin.roles.columns.code'), sortable: true },
   { key: 'description', label: t('admin.roles.columns.description') },
   { key: 'permissionCount', label: t('admin.roles.columns.permissions') },
   { key: 'userCount', label: t('admin.roles.columns.users') },
@@ -188,7 +198,18 @@ function onSelect(row: RoleResponse) {
 }
 
 const fields = computed<FieldDef[]>(() => [
-  { name: 'name', label: t('admin.roles.fields.name'), hint: t('admin.roles.fields.nameHint'), required: true },
+  {
+    name: 'name',
+    label: t('admin.roles.fields.name'),
+    hint: t('admin.roles.fields.nameHint'),
+    required: true
+  },
+  {
+    name: 'code',
+    label: t('admin.roles.fields.code'),
+    hint: t('admin.roles.fields.codeHint'),
+    required: true
+  },
   { name: 'description', label: t('admin.roles.fields.description'), type: 'textarea', rows: 2 }
 ])
 
@@ -210,8 +231,12 @@ const {
   onDelete
 } = useCrudModals<RoleResponse, RoleRequest>('/auth/roles', refresh, {
   entityName: t('admin.entities.role'),
-  createDefaults: () => ({ name: '', description: '' }),
-  toForm: (row) => ({ name: row.name, description: row.description ?? '' }),
-  toPayload: (values) => ({ name: values.name, description: values.description || undefined })
+  createDefaults: () => ({ name: '', code: '', description: '' }),
+  toForm: (row) => ({ name: row.name, code: row.code, description: row.description ?? '' }),
+  toPayload: (values) => ({
+    name: values.name,
+    code: values.code,
+    description: values.description || undefined
+  })
 })
 </script>

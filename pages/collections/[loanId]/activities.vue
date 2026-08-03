@@ -35,9 +35,12 @@
             formatDateTime(a.createdAt)
           }}</span>
         </div>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 whitespace-pre-wrap">{{ a.note }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 whitespace-pre-wrap">
+          {{ a.note }}
+        </p>
         <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-          {{ a.authorName }}<template v-if="a.followUpDate"> · Follow up {{ formatDate(a.followUpDate) }}</template>
+          {{ a.authorName
+          }}<template v-if="a.followUpDate"> · Follow up {{ formatDate(a.followUpDate) }}</template>
         </p>
       </li>
     </ol>
@@ -51,7 +54,10 @@
 </template>
 
 <script setup lang="ts">
-import type { CollectionActivityRequest, CollectionActivityResponse } from '~/features/collections/types'
+import type {
+  CollectionActivityRequest,
+  CollectionActivityResponse
+} from '~/features/collections/types'
 import type { FieldDef } from '~/shared/types'
 
 const route = useRoute()

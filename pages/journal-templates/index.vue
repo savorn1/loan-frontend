@@ -20,7 +20,13 @@
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
             <UButton
               size="2xs"
               color="red"
@@ -54,13 +60,17 @@
     <UModal v-model="showCreate" :ui="{ width: 'sm:max-w-2xl' }">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('accounting.journalTemplates.newJournalTemplate') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.journalTemplates.newJournalTemplate')
+          }}</span>
         </template>
         <UForm :state="createForm" class="space-y-4" @submit="onCreate">
           <JournalTemplateFields v-model="createForm" />
           <UAlert v-if="error" color="red" variant="subtle" :title="error" />
           <div class="flex justify-end gap-2 pt-2">
-            <UButton color="gray" variant="ghost" @click="showCreate = false">{{ t('common.cancel') }}</UButton>
+            <UButton color="gray" variant="ghost" @click="showCreate = false">{{
+              t('common.cancel')
+            }}</UButton>
             <UButton type="submit" :loading="creating">{{ t('common.create') }}</UButton>
           </div>
         </UForm>
@@ -70,13 +80,17 @@
     <UModal v-model="showEdit" :ui="{ width: 'sm:max-w-2xl' }">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('accounting.journalTemplates.editJournalTemplate') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.journalTemplates.editJournalTemplate')
+          }}</span>
         </template>
         <UForm :state="editForm" class="space-y-4" @submit="onEdit">
           <JournalTemplateFields v-model="editForm" />
           <UAlert v-if="editError" color="red" variant="subtle" :title="editError" />
           <div class="flex justify-end gap-2 pt-2">
-            <UButton color="gray" variant="ghost" @click="showEdit = false">{{ t('common.cancel') }}</UButton>
+            <UButton color="gray" variant="ghost" @click="showEdit = false">{{
+              t('common.cancel')
+            }}</UButton>
             <UButton type="submit" :loading="editing">{{ t('common.saveChanges') }}</UButton>
           </div>
         </UForm>
@@ -148,7 +162,12 @@ const columns = computed<ColumnDef<JournalTemplateResponse>[]>(() => [
     label: t('accounting.journalTemplates.columns.lines'),
     value: (row) => row.lines.length
   },
-  { key: 'status', label: t('accounting.journalTemplates.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'status',
+    label: t('accounting.journalTemplates.columns.status'),
+    type: 'status',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
 ])
 

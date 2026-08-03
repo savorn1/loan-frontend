@@ -40,7 +40,13 @@
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
             <UButton
               size="2xs"
               color="red"
@@ -54,7 +60,9 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-document-check'"
-            :title="search ? t('common.noMatches') : t('loanConfig.loanProductDocuments.emptyTitle')"
+            :title="
+              search ? t('common.noMatches') : t('loanConfig.loanProductDocuments.emptyTitle')
+            "
             :description="
               search
                 ? t('common.nothingMatches', { query: search })
@@ -78,7 +86,9 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loanConfig.loanProductDocuments.assignDocument') }}</span>
+          <span class="font-semibold">{{
+            t('loanConfig.loanProductDocuments.assignDocument')
+          }}</span>
         </template>
         <DynamicForm
           v-model="createForm"

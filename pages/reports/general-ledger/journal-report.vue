@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -88,7 +82,9 @@ const {
   data: entries,
   pending,
   error: fetchError
-} = await useAsyncData('journal-report-entries', () => api<JournalEntryResponse[]>('/journal-entries'))
+} = await useAsyncData('journal-report-entries', () =>
+  api<JournalEntryResponse[]>('/journal-entries')
+)
 const { data: branches } = await useAsyncData('journal-report-branches', () =>
   api<BranchResponse[]>('/branches')
 )
@@ -117,7 +113,9 @@ const filtered = computed(() =>
       (!statusFilter.value || e.status === statusFilter.value)
   )
 )
-const hasFilters = computed(() => !!dateFrom.value || !!dateTo.value || !!branchFilter.value || !!statusFilter.value)
+const hasFilters = computed(
+  () => !!dateFrom.value || !!dateTo.value || !!branchFilter.value || !!statusFilter.value
+)
 
 function clearFilters() {
   dateFrom.value = ''
@@ -130,14 +128,29 @@ const { page, pageSize, sort, total, rows } = useClientTable(filtered, { pageSiz
 
 const columns = computed<ColumnDef<JournalEntryResponse>[]>(() => [
   { key: 'entryNo', label: t('accounting.journalEntries.columns.entryNo'), sortable: true },
-  { key: 'transactionType', label: t('accounting.journalEntries.columns.type'), type: 'enum', sortable: true },
-  { key: 'transactionDate', label: t('accounting.journalEntries.columns.date'), type: 'date', sortable: true },
+  {
+    key: 'transactionType',
+    label: t('accounting.journalEntries.columns.type'),
+    type: 'enum',
+    sortable: true
+  },
+  {
+    key: 'transactionDate',
+    label: t('accounting.journalEntries.columns.date'),
+    type: 'date',
+    sortable: true
+  },
   {
     key: 'branchId',
     label: t('accounting.journalEntries.columns.branch'),
     value: (row) => (row.branchId ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—')
   },
   { key: 'financialPeriodName', label: t('accounting.journalEntries.columns.period') },
-  { key: 'status', label: t('accounting.journalEntries.columns.status'), type: 'status', sortable: true }
+  {
+    key: 'status',
+    label: t('accounting.journalEntries.columns.status'),
+    type: 'status',
+    sortable: true
+  }
 ])
 </script>

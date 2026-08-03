@@ -6,12 +6,7 @@ export type CollectionCaseStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED'
 export type ContactMethod = 'PHONE' | 'EMAIL' | 'SMS' | 'VISIT' | 'OTHER'
 
 export type ContactOutcome =
-  | 'NO_ANSWER'
-  | 'PROMISE_TO_PAY'
-  | 'DISPUTED'
-  | 'PAID'
-  | 'LEFT_MESSAGE'
-  | 'OTHER'
+  'NO_ANSWER' | 'PROMISE_TO_PAY' | 'DISPUTED' | 'PAID' | 'LEFT_MESSAGE' | 'OTHER'
 
 export type PromiseStatus = 'PENDING' | 'KEPT' | 'BROKEN' | 'PARTIAL'
 

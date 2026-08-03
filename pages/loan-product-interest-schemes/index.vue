@@ -49,7 +49,13 @@
               :aria-label="t('loanConfig.shared.setAsDefault')"
               @click="onSetDefault(row)"
             />
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
             <UButton
               size="2xs"
               color="red"
@@ -63,7 +69,9 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-chart-bar-square'"
-            :title="search ? t('common.noMatches') : t('loanConfig.loanProductInterestSchemes.emptyTitle')"
+            :title="
+              search ? t('common.noMatches') : t('loanConfig.loanProductInterestSchemes.emptyTitle')
+            "
             :description="
               search
                 ? t('common.nothingMatches', { query: search })
@@ -107,7 +115,9 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loanConfig.loanProductInterestSchemes.editHeader') }}</span>
+          <span class="font-semibold">{{
+            t('loanConfig.loanProductInterestSchemes.editHeader')
+          }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
@@ -232,7 +242,14 @@ const totalLabel = computed(() => {
 // (fixed for the lifetime of the assignment — it's the path param, not part
 // of the request body, so it isn't editable afterwards).
 const commonFields = computed<FieldDef[]>(() => [
-  { name: 'priority', label: t('loanConfig.shared.priorityColumn'), type: 'number', required: true, min: 0, wrapper: 'half' },
+  {
+    name: 'priority',
+    label: t('loanConfig.shared.priorityColumn'),
+    type: 'number',
+    required: true,
+    min: 0,
+    wrapper: 'half'
+  },
   {
     name: 'isDefault',
     label: t('loanConfig.loanProductInterestSchemes.defaultSchemeFieldLabel'),
@@ -337,7 +354,10 @@ async function onCreate(values: Record<string, any>) {
       method: 'POST',
       body: toPayload(values)
     })
-    toast.add({ title: t('loanConfig.loanProductInterestSchemes.interestSchemeAssignedToast'), color: 'green' })
+    toast.add({
+      title: t('loanConfig.loanProductInterestSchemes.interestSchemeAssignedToast'),
+      color: 'green'
+    })
     showCreate.value = false
     await refresh()
   } catch (err) {

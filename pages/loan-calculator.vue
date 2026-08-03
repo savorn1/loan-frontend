@@ -1,9 +1,6 @@
 <template>
   <div>
-    <PageHeader
-      :title="t('loanCalculator.title')"
-      :description="t('loanCalculator.description')"
-    />
+    <PageHeader :title="t('loanCalculator.title')" :description="t('loanCalculator.description')" />
 
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
       <UCard class="lg:col-span-2">
@@ -58,12 +55,7 @@
 
       <div class="lg:col-span-3 space-y-6">
         <template v-if="result">
-          <UAlert
-            v-if="rangeWarning"
-            color="orange"
-            variant="subtle"
-            :title="rangeWarning"
-          />
+          <UAlert v-if="rangeWarning" color="orange" variant="subtle" :title="rangeWarning" />
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <UCard>
@@ -121,10 +113,7 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 const { t } = useI18n()
 const api = useApi()
 
-const {
-  data: products,
-  error: fetchError
-} = await useAsyncData('loan-calculator-products', () =>
+const { data: products, error: fetchError } = await useAsyncData('loan-calculator-products', () =>
   api<LoanProductResponse[]>('/loan-products')
 )
 const { data: productSchemes } = await useAsyncData('loan-calculator-product-schemes', () =>
@@ -134,8 +123,8 @@ const { data: schemes } = await useAsyncData('loan-calculator-schemes', () =>
   api<InterestSchemeResponse[]>('/interest-schemes')
 )
 
-const publishedProducts = computed(
-  () => (products.value ?? []).filter((p) => p.status === 'PUBLISHED')
+const publishedProducts = computed(() =>
+  (products.value ?? []).filter((p) => p.status === 'PUBLISHED')
 )
 
 const productOptions = computed(() =>
@@ -241,8 +230,16 @@ const fields = computed<FieldDef[]>(() => [
 const scheduleColumns = computed<ColumnDef<AmortizationResult['schedule'][number]>[]>(() => [
   { key: 'installmentNumber', label: t('loanCalculator.scheduleColumns.number') },
   { key: 'dueDate', label: t('loanCalculator.scheduleColumns.dueDate'), type: 'date' },
-  { key: 'principalComponent', label: t('loanCalculator.scheduleColumns.principal'), type: 'currency' },
-  { key: 'interestComponent', label: t('loanCalculator.scheduleColumns.interest'), type: 'currency' },
+  {
+    key: 'principalComponent',
+    label: t('loanCalculator.scheduleColumns.principal'),
+    type: 'currency'
+  },
+  {
+    key: 'interestComponent',
+    label: t('loanCalculator.scheduleColumns.interest'),
+    type: 'currency'
+  },
   { key: 'amount', label: t('loanCalculator.scheduleColumns.amount'), type: 'currency' }
 ])
 
@@ -254,7 +251,12 @@ const rangeWarning = computed(() => {
   if (!product || !result.value) return ''
   const amount = calcForm.value.amount
   const term = calcForm.value.termMonths
-  if (amount < product.minAmount || amount > product.maxAmount || term < product.minTerm || term > product.maxTerm) {
+  if (
+    amount < product.minAmount ||
+    amount > product.maxAmount ||
+    term < product.minTerm ||
+    term > product.maxTerm
+  ) {
     return t('loanCalculator.rangeWarning', {
       minAmount: formatCurrency(product.minAmount),
       maxAmount: formatCurrency(product.maxAmount),

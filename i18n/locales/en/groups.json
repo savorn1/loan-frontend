@@ -1,0 +1,76 @@
+{
+  "groups": {
+    "list": {
+      "title": "Groups",
+      "newGroup": "New Group",
+      "searchPlaceholder": "Search by name or code...",
+      "branchLabel": "Branch",
+      "statusLabel": "Status",
+      "branchFilterAll": "All branches",
+      "statusOptions": {
+        "all": "All statuses"
+      },
+      "columns": {
+        "name": "Name",
+        "code": "Code",
+        "branch": "Branch",
+        "leader": "Leader",
+        "members": "Members",
+        "status": "Status",
+        "created": "Created"
+      },
+      "actions": {
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "close": "Close group"
+      },
+      "emptyTitle": "No groups yet",
+      "emptyDescription": "Create a group to start organizing customers for group lending.",
+      "toastCreated": "Group created",
+      "toast": {
+        "activated": "{name} activated",
+        "deactivated": "{name} deactivated",
+        "closed": "{name} closed"
+      },
+      "closeConfirmTitle": "Close this group?",
+      "closeConfirmDescription": "This is permanent — the group can no longer be edited, activated, or have members added or removed."
+    },
+    "form": {
+      "name": "Name",
+      "code": "Code",
+      "loanProduct": "Loan product",
+      "loanProductNone": "No loan product",
+      "branch": "Branch",
+      "branchNone": "No branch",
+      "leader": "Leader",
+      "leaderPlaceholder": "Search customers…",
+      "formationDate": "Formation date"
+    },
+    "detail": {
+      "backToGroups": "Back to groups",
+      "detailsHeader": "Details",
+      "membersHeader": "Members",
+      "addMember": "Add member",
+      "removeMember": "Remove",
+      "emptyMembersTitle": "No members yet",
+      "emptyMembersDescription": "Add customers to this group so they can co-guarantee each other's loans.",
+      "addMemberModalTitle": "Add member — {groupName}",
+      "memberColumn": "Customer",
+      "roleColumn": "Role",
+      "membershipStatusColumn": "Status",
+      "kycColumn": "KYC",
+      "joinedColumn": "Joined",
+      "memberFieldLabel": "Customer",
+      "memberFieldPlaceholder": "Search customers…",
+      "leaderBadge": "Leader",
+      "makeLeader": "Make leader",
+      "viewKyc": "View KYC",
+      "toast": {
+        "updated": "Group updated",
+        "memberAdded": "Member added",
+        "memberRemoved": "{name} removed",
+        "leaderChanged": "{name} is now the leader"
+      }
+    }
+  }
+}

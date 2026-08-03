@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ t('auth.createAccount') }}</h2>
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+      {{ t('auth.createAccount') }}
+    </h2>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">
       {{ t('auth.registerSubtitle') }}
     </p>

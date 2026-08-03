@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -83,13 +77,17 @@ const route = useRoute()
 const { data: customersRaw } = await useAsyncData('customer-loan-history-customers', () =>
   api<PageResponse<CustomerResponse>>('/customers', { query: { size: 1000 } })
 )
-const customerOptions = computed(() => (customersRaw.value?.content ?? []).map((c) => ({ label: c.fullName, value: c.id })))
+const customerOptions = computed(() =>
+  (customersRaw.value?.content ?? []).map((c) => ({ label: c.fullName, value: c.id }))
+)
 
 const {
   data: loansRaw,
   pending,
   error: fetchError
-} = await useAsyncData('customer-loan-history-loans', () => api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } }))
+} = await useAsyncData('customer-loan-history-loans', () =>
+  api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
+)
 const loans = computed(() => loansRaw.value?.content ?? [])
 
 const customerId = ref<number | undefined>(undefined)
@@ -107,21 +105,39 @@ const statusFilterOptions = computed(() => [
 
 const filtered = computed(() => {
   if (!customerId.value) return []
-  return loans.value.filter((l) => l.customerId === customerId.value && (!statusFilter.value || l.status === statusFilter.value))
+  return loans.value.filter(
+    (l) =>
+      l.customerId === customerId.value && (!statusFilter.value || l.status === statusFilter.value)
+  )
 })
 
 const { page, pageSize, sort, total, rows } = useClientTable(filtered, { pageSize: 15 })
 
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   { key: 'id', label: t('accounting.customerReports.loanHistory.columns.id'), sortable: true },
-  { key: 'principal', label: t('accounting.customerReports.loanHistory.columns.principal'), type: 'currency', sortable: true },
+  {
+    key: 'principal',
+    label: t('accounting.customerReports.loanHistory.columns.principal'),
+    type: 'currency',
+    sortable: true
+  },
   {
     key: 'outstandingBalance',
     label: t('accounting.customerReports.loanHistory.columns.outstandingBalance'),
     type: 'currency',
     sortable: true
   },
-  { key: 'status', label: t('accounting.customerReports.loanHistory.columns.status'), type: 'status', sortable: true },
-  { key: 'createdAt', label: t('accounting.customerReports.loanHistory.columns.created'), type: 'datetime', sortable: true }
+  {
+    key: 'status',
+    label: t('accounting.customerReports.loanHistory.columns.status'),
+    type: 'status',
+    sortable: true
+  },
+  {
+    key: 'createdAt',
+    label: t('accounting.customerReports.loanHistory.columns.created'),
+    type: 'datetime',
+    sortable: true
+  }
 ])
 </script>

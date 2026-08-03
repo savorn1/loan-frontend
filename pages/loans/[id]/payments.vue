@@ -4,9 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">{{ t('loans.payments.title') }}</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >{{ t('loans.payments.recordButton') }}</UButton
-          >
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+            t('loans.payments.recordButton')
+          }}</UButton>
         </div>
       </template>
 
@@ -19,15 +19,31 @@
       />
 
       <DataTable :rows="payments ?? []" :columns="columns" :loading="pending">
+        <template #reversed-data="{ row }">
+          <StatusBadge v-if="row.reversed" status="REVERSED" />
+          <span v-else>—</span>
+        </template>
         <template #actions-data="{ row }">
-          <UButton
-            v-if="row.allocations.length"
-            size="2xs"
-            variant="soft"
-            @click="viewingAllocations = row"
-          >
-            {{ t('loans.payments.viewAllocationsButton') }}
-          </UButton>
+          <div class="flex items-center justify-end gap-1">
+            <UButton
+              v-if="row.allocations.length"
+              size="2xs"
+              variant="soft"
+              @click="viewingAllocations = row"
+            >
+              {{ t('loans.payments.viewAllocationsButton') }}
+            </UButton>
+            <UButton
+              v-if="isAdmin && !row.reversed"
+              size="2xs"
+              color="orange"
+              variant="soft"
+              icon="i-heroicons-arrow-uturn-left"
+              @click="openReverse(row)"
+            >
+              {{ t('loans.payments.reverseButton') }}
+            </UButton>
+          </div>
         </template>
         <template #empty-state>
           <EmptyState
@@ -83,7 +99,29 @@
         <template #header>
           <span class="font-semibold">{{ t('loans.payments.allocationModalTitle') }}</span>
         </template>
-        <DataTable :rows="viewingAllocations.allocations" :columns="allocationColumns" />
+        <DataTable
+          :rows="viewingAllocations.allocations"
+          :columns="allocationColumns"
+          export-filename="payment-allocations.csv"
+        />
+      </UCard>
+    </UModal>
+
+    <UModal v-model="showReverse">
+      <UCard>
+        <template #header>
+          <span class="font-semibold">{{ t('loans.payments.reverseModalTitle') }}</span>
+        </template>
+        <DynamicForm
+          v-model="reverseForm"
+          :fields="reverseFields"
+          :loading="reversing"
+          :error="reverseError"
+          :submit-label="t('loans.payments.reverseButton')"
+          cancelable
+          @submit="onSubmitReverse"
+          @cancel="showReverse = false"
+        />
       </UCard>
     </UModal>
   </div>
@@ -121,6 +159,7 @@ const columns = computed<ColumnDef<LoanPaymentResponse>[]>(() => [
   { key: 'amount', label: t('loans.payments.columns.amount'), type: 'currency' },
   { key: 'method', label: t('loans.payments.columns.method'), type: 'enum' },
   { key: 'reference', label: t('loans.payments.columns.reference') },
+  { key: 'reversed', label: t('loans.payments.columns.status') },
   { key: 'createdAt', label: t('loans.payments.columns.created'), type: 'datetime' },
   { key: 'actions', label: '' }
 ])
@@ -130,9 +169,21 @@ const allocationColumns = computed<ColumnDef<LoanPaymentAllocationResponse>[]>((
     key: 'installmentNumber',
     label: t('loans.payments.allocationColumns.installmentNumber')
   },
-  { key: 'principalAllocated', label: t('loans.payments.allocationColumns.principal'), type: 'currency' },
-  { key: 'interestAllocated', label: t('loans.payments.allocationColumns.interest'), type: 'currency' },
-  { key: 'penaltyAllocated', label: t('loans.payments.allocationColumns.penalty'), type: 'currency' }
+  {
+    key: 'principalAllocated',
+    label: t('loans.payments.allocationColumns.principal'),
+    type: 'currency'
+  },
+  {
+    key: 'interestAllocated',
+    label: t('loans.payments.allocationColumns.interest'),
+    type: 'currency'
+  },
+  {
+    key: 'penaltyAllocated',
+    label: t('loans.payments.allocationColumns.penalty'),
+    type: 'currency'
+  }
 ])
 
 const fields = computed<FieldDef[]>(() => [
@@ -196,6 +247,42 @@ async function onCreate(values: Record<string, any>) {
     error.value = apiErrorMessage(err)
   } finally {
     creating.value = false
+  }
+}
+
+const showReverse = ref(false)
+const reversing = ref(false)
+const reverseError = ref('')
+const reverseForm = ref<Record<string, any>>({ reason: '' })
+const reverseTarget = ref<LoanPaymentResponse | null>(null)
+
+const reverseFields = computed<FieldDef[]>(() => [
+  { name: 'reason', label: t('loans.payments.reasonFieldLabel'), type: 'textarea', required: true }
+])
+
+function openReverse(row: LoanPaymentResponse) {
+  reverseTarget.value = row
+  reverseForm.value = { reason: '' }
+  reverseError.value = ''
+  showReverse.value = true
+}
+
+async function onSubmitReverse(values: Record<string, any>) {
+  if (!reverseTarget.value) return
+  reversing.value = true
+  reverseError.value = ''
+  try {
+    await api(`/loans/${loanId}/payments/${reverseTarget.value.id}/reverse`, {
+      method: 'POST',
+      body: { reason: values.reason }
+    })
+    toast.add({ title: t('loans.payments.toastReversed'), color: 'green' })
+    showReverse.value = false
+    await refresh()
+  } catch (err) {
+    reverseError.value = apiErrorMessage(err)
+  } finally {
+    reversing.value = false
   }
 }
 </script>

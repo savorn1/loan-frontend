@@ -40,7 +40,13 @@
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
             <UButton
               size="2xs"
               color="red"
@@ -54,7 +60,9 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-currency-dollar'"
-            :title="search ? t('common.noMatches') : t('loanConfig.loanProductFeeSchemes.emptyTitle')"
+            :title="
+              search ? t('common.noMatches') : t('loanConfig.loanProductFeeSchemes.emptyTitle')
+            "
             :description="
               search
                 ? t('common.nothingMatches', { query: search })
@@ -78,7 +86,9 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loanConfig.loanProductFeeSchemes.assignFeeScheme') }}</span>
+          <span class="font-semibold">{{
+            t('loanConfig.loanProductFeeSchemes.assignFeeScheme')
+          }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
@@ -222,8 +232,20 @@ const totalLabel = computed(() => {
 // (fixed for the lifetime of the assignment — it's the path param, not part
 // of the request body, so it isn't editable afterwards).
 const commonFields = computed<FieldDef[]>(() => [
-  { name: 'isMandatory', label: t('loanConfig.shared.mandatoryLabel'), type: 'switch', wrapper: 'half' },
-  { name: 'priority', label: t('loanConfig.shared.priorityColumn'), type: 'number', required: true, min: 0, wrapper: 'half' },
+  {
+    name: 'isMandatory',
+    label: t('loanConfig.shared.mandatoryLabel'),
+    type: 'switch',
+    wrapper: 'half'
+  },
+  {
+    name: 'priority',
+    label: t('loanConfig.shared.priorityColumn'),
+    type: 'number',
+    required: true,
+    min: 0,
+    wrapper: 'half'
+  },
   {
     name: 'effectiveFrom',
     label: t('loanConfig.shared.effectiveFromLabel'),
@@ -322,7 +344,10 @@ async function onCreate(values: Record<string, any>) {
       method: 'POST',
       body: toPayload(values)
     })
-    toast.add({ title: t('loanConfig.loanProductFeeSchemes.feeSchemeAssignedToast'), color: 'green' })
+    toast.add({
+      title: t('loanConfig.loanProductFeeSchemes.feeSchemeAssignedToast'),
+      color: 'green'
+    })
     showCreate.value = false
     await refresh()
   } catch (err) {

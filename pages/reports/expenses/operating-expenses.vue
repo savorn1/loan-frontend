@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('accounting.expenseReports.operatingExpenses.financialPeriod')" class="max-w-xs">
+      <UFormGroup
+        :label="t('accounting.expenseReports.operatingExpenses.financialPeriod')"
+        class="max-w-xs"
+      >
         <USelectMenu
           v-model="financialPeriodId"
           :options="periodOptions"
@@ -36,13 +33,21 @@
 
     <UCard v-if="ledger" class="mb-6">
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 text-sm">
-        <dt class="text-gray-500">{{ t('accounting.expenseReports.operatingExpenses.openingBalance') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.expenseReports.operatingExpenses.openingBalance') }}
+        </dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.openingBalance) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.expenseReports.operatingExpenses.periodDebit') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.expenseReports.operatingExpenses.periodDebit') }}
+        </dt>
         <dd>{{ formatCurrency(ledger.periodDebitTotal) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.expenseReports.operatingExpenses.periodCredit') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.expenseReports.operatingExpenses.periodCredit') }}
+        </dt>
         <dd>{{ formatCurrency(ledger.periodCreditTotal) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.expenseReports.operatingExpenses.closingBalance') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.expenseReports.operatingExpenses.closingBalance') }}
+        </dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.closingBalance) }}</dd>
       </dl>
     </UCard>
@@ -78,7 +83,12 @@
 </template>
 
 <script setup lang="ts">
-import type { FinancialPeriodResponse, GeneralLedgerResponse, GlAccountResponse, LedgerLineResponse } from '~/features/accounting/types'
+import type {
+  FinancialPeriodResponse,
+  GeneralLedgerResponse,
+  GlAccountResponse,
+  LedgerLineResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 const { t } = useI18n()
@@ -114,16 +124,31 @@ const {
 )
 
 const columns = computed<ColumnDef<LedgerLineResponse>[]>(() => [
-  { key: 'transactionDate', label: t('accounting.expenseReports.operatingExpenses.columns.date'), type: 'date' },
+  {
+    key: 'transactionDate',
+    label: t('accounting.expenseReports.operatingExpenses.columns.date'),
+    type: 'date'
+  },
   { key: 'entryNo', label: t('accounting.expenseReports.operatingExpenses.columns.entryNo') },
-  { key: 'description', label: t('accounting.expenseReports.operatingExpenses.columns.description') },
+  {
+    key: 'description',
+    label: t('accounting.expenseReports.operatingExpenses.columns.description')
+  },
   {
     key: 'entrySide',
     label: t('accounting.expenseReports.operatingExpenses.columns.side'),
     type: 'badge',
     color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
   },
-  { key: 'amount', label: t('accounting.expenseReports.operatingExpenses.columns.amount'), type: 'currency' },
-  { key: 'runningBalance', label: t('accounting.expenseReports.operatingExpenses.columns.balance'), type: 'currency' }
+  {
+    key: 'amount',
+    label: t('accounting.expenseReports.operatingExpenses.columns.amount'),
+    type: 'currency'
+  },
+  {
+    key: 'runningBalance',
+    label: t('accounting.expenseReports.operatingExpenses.columns.balance'),
+    type: 'currency'
+  }
 ])
 </script>

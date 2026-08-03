@@ -57,7 +57,10 @@
               class="flex items-center justify-between text-sm"
             >
               <span class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                <span class="w-2.5 h-2.5 rounded-full shrink-0" :style="{ background: bucket.color }" />
+                <span
+                  class="w-2.5 h-2.5 rounded-full shrink-0"
+                  :style="{ background: bucket.color }"
+                />
                 {{ bucket.label }}
               </span>
               <span class="font-medium text-gray-900 dark:text-white">{{ bucket.count }}</span>
@@ -75,7 +78,12 @@
             }}</UBadge>
           </div>
         </template>
-        <DataTable :rows="upcomingPayments" :columns="upcomingColumns" :loading="pending">
+        <DataTable
+          :rows="upcomingPayments"
+          :columns="upcomingColumns"
+          :loading="pending"
+          export-filename="upcoming-payments.csv"
+        >
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-calendar-days"
@@ -115,6 +123,7 @@
           :rows="pendingLoans"
           :columns="columns"
           :loading="pending"
+          export-filename="loans-awaiting-review.csv"
           @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
         >
           <template #empty-state>
@@ -203,7 +212,9 @@ const [
   useAsyncData('dash-customers', () =>
     api<PageResponse<CustomerResponse>>('/customers', { query: { size: 1000 } })
   ),
-  useAsyncData('dash-loans', () => api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })),
+  useAsyncData('dash-loans', () =>
+    api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
+  ),
   useAsyncData('dash-payments', () =>
     api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } })
   ),
@@ -431,7 +442,8 @@ const trendChartOptions = computed(() => {
       legend: { position: 'top' as const, labels: { color: textColor, usePointStyle: true } },
       tooltip: {
         callbacks: {
-          label: (ctx: TooltipItem<'line'>) => ` ${ctx.dataset.label}: ${formatCurrency(ctx.parsed.y)}`
+          label: (ctx: TooltipItem<'line'>) =>
+            ` ${ctx.dataset.label}: ${formatCurrency(ctx.parsed.y)}`
         }
       }
     },

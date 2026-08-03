@@ -20,7 +20,13 @@
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
             <UButton
               size="2xs"
               color="red"
@@ -54,7 +60,9 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('accounting.accountingSchemes.newAccountingScheme') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.accountingSchemes.newAccountingScheme')
+          }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
@@ -72,7 +80,9 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('accounting.accountingSchemes.editAccountingScheme') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.accountingSchemes.editAccountingScheme')
+          }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
@@ -158,7 +168,12 @@ const columns = computed<ColumnDef<AccountingSchemeResponse>[]>(() => [
   { key: 'accountRole', label: t('accounting.accountingSchemes.columns.role') },
   { key: 'glAccountNo', label: t('accounting.accountingSchemes.columns.glAccount') },
   { key: 'currency', label: t('accounting.accountingSchemes.columns.currency'), sortable: true },
-  { key: 'status', label: t('accounting.accountingSchemes.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'status',
+    label: t('accounting.accountingSchemes.columns.status'),
+    type: 'status',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
 ])
 
@@ -202,7 +217,12 @@ const createFields = computed<FieldDef[]>(() => [
     wrapper: 'half',
     options: glAccountOptions.value
   },
-  { name: 'currency', label: t('accounting.accountingSchemes.fields.currency'), required: true, wrapper: 'half' },
+  {
+    name: 'currency',
+    label: t('accounting.accountingSchemes.fields.currency'),
+    required: true,
+    wrapper: 'half'
+  },
   {
     name: 'status',
     label: t('accounting.accountingSchemes.fields.status'),
@@ -239,7 +259,12 @@ const editFields = computed<FieldDef[]>(() => [
     wrapper: 'half',
     options: glAccountOptions.value
   },
-  { name: 'currency', label: t('accounting.accountingSchemes.fields.currency'), required: true, wrapper: 'half' },
+  {
+    name: 'currency',
+    label: t('accounting.accountingSchemes.fields.currency'),
+    required: true,
+    wrapper: 'half'
+  },
   {
     name: 'status',
     label: t('accounting.accountingSchemes.fields.status'),

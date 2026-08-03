@@ -3,7 +3,9 @@
     <template #header>
       <div class="flex items-center justify-between">
         <span class="font-semibold">{{ t('collections.promises.title') }}</span>
-        <UButton size="xs" icon="i-heroicons-plus" @click="openCreate">{{ t('collections.promises.addPromise') }}</UButton>
+        <UButton size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+          t('collections.promises.addPromise')
+        }}</UButton>
       </div>
     </template>
 
@@ -37,7 +39,9 @@
           :description="t('collections.promises.empty.description')"
         >
           <template #action>
-            <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('collections.promises.addPromise') }}</UButton>
+            <UButton icon="i-heroicons-plus" @click="openCreate">{{
+              t('collections.promises.addPromise')
+            }}</UButton>
           </template>
         </EmptyState>
       </template>
@@ -64,7 +68,9 @@
     <UModal v-model="showResolve">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('collections.promises.resolveModal.title', { id: resolvingRow?.id }) }}</span>
+          <span class="font-semibold">{{
+            t('collections.promises.resolveModal.title', { id: resolvingRow?.id })
+          }}</span>
         </template>
         <DynamicForm
           v-model="resolveForm"
@@ -106,7 +112,11 @@ const {
 )
 
 const columns = computed<ColumnDef<CollectionPromiseResponse>[]>(() => [
-  { key: 'promisedAmount', label: t('collections.promises.columns.promisedAmount'), type: 'currency' },
+  {
+    key: 'promisedAmount',
+    label: t('collections.promises.columns.promisedAmount'),
+    type: 'currency'
+  },
   { key: 'promisedDate', label: t('collections.promises.columns.promisedDate'), type: 'date' },
   { key: 'status', label: t('collections.promises.columns.status') },
   { key: 'amountPaid', label: t('collections.promises.columns.amountPaid'), type: 'currency' },

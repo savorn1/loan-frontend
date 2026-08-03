@@ -19,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-
 import type { ChangePasswordRequest } from '~/features/auth/types'
 import type { FieldDef } from '~/shared/types'
 

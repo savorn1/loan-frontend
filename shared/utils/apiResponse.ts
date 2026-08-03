@@ -1,4 +1,3 @@
-
 export function unwrapApiResponse({ response }: { response: { _data?: unknown } }) {
   const body = response._data
   if (!body || typeof body !== 'object' || !('traceId' in body) || !('data' in body)) return

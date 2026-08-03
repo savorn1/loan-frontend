@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('accounting.expenseReports.byCategory.financialPeriod')" class="max-w-xs">
+      <UFormGroup
+        :label="t('accounting.expenseReports.byCategory.financialPeriod')"
+        class="max-w-xs"
+      >
         <USelectMenu
           v-model="financialPeriodId"
           :options="periodOptions"
@@ -57,7 +54,10 @@
         v-if="rows.length"
         class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
       >
-        <span>{{ t('accounting.expenseReports.byCategory.totalExpenses') }}: {{ formatCurrency(totalExpenses) }}</span>
+        <span
+          >{{ t('accounting.expenseReports.byCategory.totalExpenses') }}:
+          {{ formatCurrency(totalExpenses) }}</span
+        >
       </div>
       <p class="text-xs text-gray-500 mt-3">
         {{ t('accounting.expenseReports.byCategory.note') }}
@@ -67,7 +67,11 @@
 </template>
 
 <script setup lang="ts">
-import type { FinancialPeriodResponse, GeneralLedgerSummaryRow, GlAccountResponse } from '~/features/accounting/types'
+import type {
+  FinancialPeriodResponse,
+  GeneralLedgerSummaryRow,
+  GlAccountResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 interface CategoryRow {
@@ -81,7 +85,9 @@ const api = useApi()
 const { data: periods } = await useAsyncData('expense-by-category-periods', () =>
   api<FinancialPeriodResponse[]>('/financial-periods')
 )
-const periodOptions = computed(() => (periods.value ?? []).map((p) => ({ label: p.periodName, value: p.id })))
+const periodOptions = computed(() =>
+  (periods.value ?? []).map((p) => ({ label: p.periodName, value: p.id }))
+)
 
 const { data: glAccounts } = await useAsyncData('expense-by-category-gl-accounts', () =>
   api<GlAccountResponse[]>('/gl-accounts')
@@ -118,7 +124,16 @@ const rows = computed<CategoryRow[]>(() =>
 const totalExpenses = computed(() => rows.value.reduce((sum, r) => sum + r.amount, 0))
 
 const columns = computed<ColumnDef<CategoryRow>[]>(() => [
-  { key: 'category', label: t('accounting.expenseReports.byCategory.columns.category'), sortable: true },
-  { key: 'amount', label: t('accounting.expenseReports.byCategory.columns.amount'), type: 'currency', sortable: true }
+  {
+    key: 'category',
+    label: t('accounting.expenseReports.byCategory.columns.category'),
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.expenseReports.byCategory.columns.amount'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 </script>

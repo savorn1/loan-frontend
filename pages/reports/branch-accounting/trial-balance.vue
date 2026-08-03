@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -62,8 +56,14 @@
         v-if="rows.length"
         class="flex justify-end gap-6 pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
       >
-        <span>{{ t('accounting.branchAccountingReports.trialBalance.totalDebit') }}: {{ formatCurrency(totalDebit) }}</span>
-        <span>{{ t('accounting.branchAccountingReports.trialBalance.totalCredit') }}: {{ formatCurrency(totalCredit) }}</span>
+        <span
+          >{{ t('accounting.branchAccountingReports.trialBalance.totalDebit') }}:
+          {{ formatCurrency(totalDebit) }}</span
+        >
+        <span
+          >{{ t('accounting.branchAccountingReports.trialBalance.totalCredit') }}:
+          {{ formatCurrency(totalCredit) }}</span
+        >
         <span :class="isBalanced ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'">
           {{
             isBalanced
@@ -101,10 +101,16 @@ function todayIsoDate() {
 }
 const todayIso = todayIsoDate()
 
-const { data: branches } = await useAsyncData('branch-tb-branches', () => api<BranchResponse[]>('/branches'))
-const branchOptions = computed(() => (branches.value ?? []).map((b) => ({ label: b.name, value: b.id })))
+const { data: branches } = await useAsyncData('branch-tb-branches', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branchOptions = computed(() =>
+  (branches.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+)
 
-const { data: glAccounts } = await useAsyncData('branch-tb-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
+const { data: glAccounts } = await useAsyncData('branch-tb-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
 const accountByNo = computed(() => new Map((glAccounts.value ?? []).map((a) => [a.accountNo, a])))
 
 const branchId = ref<number | undefined>(undefined)
@@ -150,10 +156,33 @@ const totalCredit = computed(() => rows.value.reduce((sum, r) => sum + r.totalCr
 const isBalanced = computed(() => Math.abs(totalDebit.value - totalCredit.value) < 0.005)
 
 const columns = computed<ColumnDef<TrialBalanceRow>[]>(() => [
-  { key: 'accountNo', label: t('accounting.branchAccountingReports.trialBalance.columns.accountNo'), sortable: true },
-  { key: 'accountName', label: t('accounting.branchAccountingReports.trialBalance.columns.accountName'), sortable: true },
-  { key: 'totalDebit', label: t('accounting.branchAccountingReports.trialBalance.columns.debit'), type: 'currency', sortable: true },
-  { key: 'totalCredit', label: t('accounting.branchAccountingReports.trialBalance.columns.credit'), type: 'currency', sortable: true },
-  { key: 'balance', label: t('accounting.branchAccountingReports.trialBalance.columns.balance'), type: 'currency', sortable: true }
+  {
+    key: 'accountNo',
+    label: t('accounting.branchAccountingReports.trialBalance.columns.accountNo'),
+    sortable: true
+  },
+  {
+    key: 'accountName',
+    label: t('accounting.branchAccountingReports.trialBalance.columns.accountName'),
+    sortable: true
+  },
+  {
+    key: 'totalDebit',
+    label: t('accounting.branchAccountingReports.trialBalance.columns.debit'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'totalCredit',
+    label: t('accounting.branchAccountingReports.trialBalance.columns.credit'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'balance',
+    label: t('accounting.branchAccountingReports.trialBalance.columns.balance'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 </script>

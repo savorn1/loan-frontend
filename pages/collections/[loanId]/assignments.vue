@@ -24,7 +24,8 @@
             <span class="font-medium">{{ assigneeName(entry.assignedToUserId) }}</span>
           </p>
           <p class="text-xs text-gray-500 mt-1">
-            {{ formatDateTime(entry.assignedAt) }} · {{ t('collections.assignments.by') }} {{ entry.assignedBy }}
+            {{ formatDateTime(entry.assignedAt) }} · {{ t('collections.assignments.by') }}
+            {{ entry.assignedBy }}
           </p>
           <p v-if="entry.note" class="text-sm mt-1">{{ entry.note }}</p>
         </div>
@@ -60,7 +61,9 @@ const { data: usersPage } = await useAsyncData(`collection-case-${loanId}-users`
   isAdmin.value ? api<PageResponse<UserResponse>>('/auth/users?size=200') : Promise.resolve(null)
 )
 
-const userMap = computed(() => new Map((usersPage.value?.content ?? []).map((u) => [u.id, u.username])))
+const userMap = computed(
+  () => new Map((usersPage.value?.content ?? []).map((u) => [u.id, u.username]))
+)
 
 function assigneeName(userId: number | null) {
   if (!userId) return t('collections.assignments.unassigned')

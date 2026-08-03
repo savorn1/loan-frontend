@@ -40,7 +40,13 @@
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
             <UButton
               size="2xs"
               color="red"
@@ -191,7 +197,12 @@ const columns = computed<ColumnDef<PaymentMethodResponse>[]>(() => [
   { key: 'name', label: t('payments.methods.columns.name'), sortable: true },
   { key: 'type', label: t('payments.methods.columns.type'), type: 'enum', sortable: true },
   { key: 'status', label: t('payments.methods.columns.status'), type: 'status', sortable: true },
-  { key: 'createdAt', label: t('payments.methods.columns.created'), type: 'datetime', sortable: true },
+  {
+    key: 'createdAt',
+    label: t('payments.methods.columns.created'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
 ])
 

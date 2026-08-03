@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
@@ -119,9 +116,25 @@ const dailyRows = computed<DailySummaryRow[]>(() => {
 
 const columns = computed<ColumnDef<DailySummaryRow>[]>(() => [
   { key: 'date', label: t('accounting.cashReports.dailySummary.columns.date'), type: 'date' },
-  { key: 'receipts', label: t('accounting.cashReports.dailySummary.columns.receipts'), type: 'currency' },
-  { key: 'payments', label: t('accounting.cashReports.dailySummary.columns.payments'), type: 'currency' },
-  { key: 'netChange', label: t('accounting.cashReports.dailySummary.columns.netChange'), type: 'currency' },
-  { key: 'closingBalance', label: t('accounting.cashReports.dailySummary.columns.closingBalance'), type: 'currency' }
+  {
+    key: 'receipts',
+    label: t('accounting.cashReports.dailySummary.columns.receipts'),
+    type: 'currency'
+  },
+  {
+    key: 'payments',
+    label: t('accounting.cashReports.dailySummary.columns.payments'),
+    type: 'currency'
+  },
+  {
+    key: 'netChange',
+    label: t('accounting.cashReports.dailySummary.columns.netChange'),
+    type: 'currency'
+  },
+  {
+    key: 'closingBalance',
+    label: t('accounting.cashReports.dailySummary.columns.closingBalance'),
+    type: 'currency'
+  }
 ])
 </script>

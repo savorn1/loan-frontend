@@ -51,6 +51,12 @@ const groups = computed(() => [
   {
     links: [
       { label: t('nav.customers'), to: '/customers', icon: 'i-heroicons-users' },
+      { label: t('nav.groups'), to: '/groups', icon: 'i-heroicons-rectangle-group' },
+      {
+        label: t('nav.groupLoanApplications'),
+        to: '/group-loan-applications',
+        icon: 'i-heroicons-clipboard-document-check'
+      },
       { label: t('nav.applications'), to: '/applications', icon: 'i-heroicons-document-text' },
       {
         label: t('nav.loanCalculator'),

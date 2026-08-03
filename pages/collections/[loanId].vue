@@ -1,12 +1,20 @@
 <template>
   <div v-if="loan">
-    <UButton to="/collections" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
+    <UButton
+      to="/collections"
+      variant="link"
+      icon="i-heroicons-arrow-left"
+      size="xs"
+      class="mb-1 px-0"
+    >
       {{ t('collections.shell.backToCollections') }}
     </UButton>
 
     <div class="flex items-center justify-between mb-6 gap-4">
       <div class="flex items-center gap-3 min-w-0">
-        <h1 class="text-xl font-bold truncate">{{ t('collections.shell.caseTitle', { id: loan.id }) }}</h1>
+        <h1 class="text-xl font-bold truncate">
+          {{ t('collections.shell.caseTitle', { id: loan.id }) }}
+        </h1>
         <StatusBadge v-if="collectionCase" :status="collectionCase.status" />
       </div>
       <div v-if="isAdmin" class="flex gap-2 shrink-0">
@@ -50,7 +58,9 @@
     <UModal v-model="showAssign">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('collections.shell.reassignModal.title', { id: loan.id }) }}</span>
+          <span class="font-semibold">{{
+            t('collections.shell.reassignModal.title', { id: loan.id })
+          }}</span>
         </template>
         <DynamicForm
           v-model="assignForm"
@@ -130,7 +140,9 @@ const {
   error: loanError,
   pending: loanPending,
   refresh: refreshLoan
-} = await useAsyncData(`collection-case-${loanId}-loan`, () => api<LoanResponse>(`/loans/${loanId}`))
+} = await useAsyncData(`collection-case-${loanId}-loan`, () =>
+  api<LoanResponse>(`/loans/${loanId}`)
+)
 const { data: collectionCase, refresh: refreshCase } = await useAsyncData(
   `collection-case-${loanId}-case`,
   () => api<CollectionCaseResponse>(`/payments/collections/${loanId}/case`)
@@ -211,7 +223,10 @@ async function onAssign(values: Record<string, any>) {
   assigning.value = true
   assignError.value = ''
   try {
-    const payload: AssignCollectionCaseRequest = { userId: values.userId, note: values.note || undefined }
+    const payload: AssignCollectionCaseRequest = {
+      userId: values.userId,
+      note: values.note || undefined
+    }
     await api(`/payments/collections/${loanId}/assign`, { method: 'PUT', body: payload })
     toast.add({ title: t('collections.shared.loanAssigned'), color: 'green' })
     showAssign.value = false
@@ -260,7 +275,10 @@ async function onUpdateStatus(values: Record<string, any>) {
   updatingStatus.value = true
   statusError.value = ''
   try {
-    const payload: UpdateCollectionCaseStatusRequest = { status: values.status, note: values.note || undefined }
+    const payload: UpdateCollectionCaseStatusRequest = {
+      status: values.status,
+      note: values.note || undefined
+    }
     await api(`/payments/collections/${loanId}/status`, { method: 'PUT', body: payload })
     toast.add({ title: t('collections.shell.statusModal.success'), color: 'green' })
     showStatus.value = false

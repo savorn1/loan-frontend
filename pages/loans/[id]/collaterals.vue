@@ -4,9 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">{{ t('loans.collaterals.title') }}</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >{{ t('loans.collaterals.add') }}</UButton
-          >
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+            t('loans.collaterals.add')
+          }}</UButton>
         </div>
       </template>
 
@@ -37,7 +37,9 @@
             :description="t('loans.collaterals.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.collaterals.add') }}</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loans.collaterals.add')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -131,7 +133,12 @@ const fields = computed<FieldDef[]>(() => [
     required: true,
     wrapper: 'half'
   },
-  { name: 'description', label: t('loans.collaterals.fields.description'), type: 'textarea', required: true },
+  {
+    name: 'description',
+    label: t('loans.collaterals.fields.description'),
+    type: 'textarea',
+    required: true
+  },
   { name: 'reference', label: t('loans.collaterals.fields.reference') }
 ])
 

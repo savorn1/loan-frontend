@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -69,7 +63,9 @@ const {
   data: paymentsRaw,
   pending,
   error: fetchError
-} = await useAsyncData('repayments-missed', () => api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } }))
+} = await useAsyncData('repayments-missed', () =>
+  api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } })
+)
 const payments = computed(() => paymentsRaw.value?.content ?? [])
 
 function todayIsoDate() {
@@ -85,7 +81,9 @@ const missedRows = computed<MissedRow[]>(() =>
       loanId: p.loanId,
       installmentNumber: p.installmentNumber,
       dueDate: p.dueDate,
-      daysOverdue: Math.round((new Date(todayIso).getTime() - new Date(p.dueDate).getTime()) / 86400000),
+      daysOverdue: Math.round(
+        (new Date(todayIso).getTime() - new Date(p.dueDate).getTime()) / 86400000
+      ),
       amount: p.amount
     }))
 )
@@ -97,9 +95,27 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(missedRows,
 
 const columns = computed<ColumnDef<MissedRow>[]>(() => [
   { key: 'loanId', label: t('accounting.repaymentReports.missed.columns.loanId'), sortable: true },
-  { key: 'installmentNumber', label: t('accounting.repaymentReports.missed.columns.installmentNumber'), sortable: true },
-  { key: 'dueDate', label: t('accounting.repaymentReports.missed.columns.dueDate'), type: 'date', sortable: true },
-  { key: 'daysOverdue', label: t('accounting.repaymentReports.missed.columns.daysOverdue'), sortable: true },
-  { key: 'amount', label: t('accounting.repaymentReports.missed.columns.amount'), type: 'currency', sortable: true }
+  {
+    key: 'installmentNumber',
+    label: t('accounting.repaymentReports.missed.columns.installmentNumber'),
+    sortable: true
+  },
+  {
+    key: 'dueDate',
+    label: t('accounting.repaymentReports.missed.columns.dueDate'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'daysOverdue',
+    label: t('accounting.repaymentReports.missed.columns.daysOverdue'),
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.repaymentReports.missed.columns.amount'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 </script>

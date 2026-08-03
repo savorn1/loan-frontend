@@ -2,12 +2,23 @@
   <div v-if="role">
     <div class="flex items-center justify-between mb-6 gap-4">
       <div class="min-w-0">
-        <UButton to="/roles" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-0.5 px-0">
+        <UButton
+          to="/roles"
+          variant="link"
+          icon="i-heroicons-arrow-left"
+          size="xs"
+          class="mb-0.5 px-0"
+        >
           {{ t('admin.roles.detail.backToRoles') }}
         </UButton>
         <h1 class="text-xl font-bold truncate">{{ role.name }}</h1>
       </div>
-      <UButton color="red" variant="soft" icon="i-heroicons-trash" @click="confirmDeleteRole = true">
+      <UButton
+        color="red"
+        variant="soft"
+        icon="i-heroicons-trash"
+        @click="confirmDeleteRole = true"
+      >
         {{ t('admin.roles.detail.deleteRole') }}
       </UButton>
     </div>
@@ -34,7 +45,10 @@
             <UBadge color="gray" variant="subtle">{{ assignedPermissionIds.size }}</UBadge>
           </div>
         </template>
-        <div v-if="permissionsPending" class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div
+          v-if="permissionsPending"
+          class="py-6 text-center text-sm text-gray-500 dark:text-gray-400"
+        >
           {{ t('admin.shared.loading') }}
         </div>
         <div v-else-if="allPermissions.length" class="space-y-2.5 max-h-96 overflow-y-auto pr-1">
@@ -44,7 +58,9 @@
             class="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
           >
             <div class="flex items-center justify-between mb-2.5">
-              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+              <p
+                class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500"
+              >
                 {{ group.module }}
               </p>
               <UCheckbox
@@ -80,7 +96,9 @@
           :description="t('admin.roles.detail.emptyPermissionsDescription')"
         >
           <template #action>
-            <UButton to="/permissions" variant="soft">{{ t('admin.roles.detail.goToPermissions') }}</UButton>
+            <UButton to="/permissions" variant="soft">{{
+              t('admin.roles.detail.goToPermissions')
+            }}</UButton>
           </template>
         </EmptyState>
       </UCard>
@@ -89,7 +107,9 @@
         <template #header>
           <div class="flex items-center justify-between">
             <span class="font-semibold">{{ t('admin.roles.detail.assignedUsersHeader') }}</span>
-            <UButton size="xs" icon="i-heroicons-plus" @click="openAssignUser">{{ t('admin.roles.detail.assignUser') }}</UButton>
+            <UButton size="xs" icon="i-heroicons-plus" @click="openAssignUser">{{
+              t('admin.roles.detail.assignUser')
+            }}</UButton>
           </div>
         </template>
         <DataTable :rows="roleUsers ?? []" :columns="userColumns" :loading="usersPending">
@@ -112,7 +132,9 @@
               :description="t('admin.roles.detail.emptyUsersDescription')"
             >
               <template #action>
-                <UButton icon="i-heroicons-plus" @click="openAssignUser">{{ t('admin.roles.detail.assignUser') }}</UButton>
+                <UButton icon="i-heroicons-plus" @click="openAssignUser">{{
+                  t('admin.roles.detail.assignUser')
+                }}</UButton>
               </template>
             </EmptyState>
           </template>
@@ -123,7 +145,9 @@
     <UModal v-model="showAssignUser">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('admin.roles.detail.assignUserModalTitle', { roleName: role.name }) }}</span>
+          <span class="font-semibold">{{
+            t('admin.roles.detail.assignUserModalTitle', { roleName: role.name })
+          }}</span>
         </template>
         <DynamicForm
           v-model="assignUserForm"
@@ -141,7 +165,12 @@
     <ConfirmModal
       v-model="confirmDeleteRole"
       :title="t('admin.roles.deleteConfirmTitle')"
-      :description="t('admin.roles.deleteConfirmDescription', { userCount: role.userCount, permissionCount: role.permissionCount })"
+      :description="
+        t('admin.roles.deleteConfirmDescription', {
+          userCount: role.userCount,
+          permissionCount: role.permissionCount
+        })
+      "
       :confirm-label="t('common.delete')"
       color="red"
       :loading="deletingRole"
@@ -200,10 +229,17 @@ const {
 // ── Details ─────────────────────────────────────────────────────────────
 const detailsFields = computed<FieldDef[]>(() => [
   { name: 'name', label: t('admin.roles.fields.name'), required: true },
+  {
+    name: 'code',
+    label: t('admin.roles.fields.code'),
+    hint: t('admin.roles.fields.codeHint'),
+    required: true
+  },
   { name: 'description', label: t('admin.roles.fields.description'), type: 'textarea', rows: 2 }
 ])
 const detailsForm = ref<Record<string, any>>({
   name: role.value?.name ?? '',
+  code: role.value?.code ?? '',
   description: role.value?.description ?? ''
 })
 const savingDetails = ref(false)
@@ -213,7 +249,11 @@ async function onSaveDetails(values: Record<string, any>) {
   savingDetails.value = true
   detailsError.value = ''
   try {
-    const payload: RoleRequest = { name: values.name, description: values.description || undefined }
+    const payload: RoleRequest = {
+      name: values.name,
+      code: values.code,
+      description: values.description || undefined
+    }
     await api(`/auth/roles/${roleId}`, { method: 'PUT', body: payload })
     toast.add({ title: t('admin.roles.detail.toast.updated'), color: 'green' })
     await refreshRole()
@@ -277,7 +317,9 @@ async function onTogglePermission(permission: PermissionResponse, assign: boolea
 }
 
 function moduleState(group: { module: string; permissions: PermissionResponse[] }) {
-  const assignedCount = group.permissions.filter((p) => assignedPermissionIds.value.has(p.id)).length
+  const assignedCount = group.permissions.filter((p) =>
+    assignedPermissionIds.value.has(p.id)
+  ).length
   return {
     checked: assignedCount === group.permissions.length,
     indeterminate: assignedCount > 0 && assignedCount < group.permissions.length
@@ -286,10 +328,15 @@ function moduleState(group: { module: string; permissions: PermissionResponse[] 
 
 const togglingModule = ref<string | null>(null)
 
-async function onToggleModule(group: { module: string; permissions: PermissionResponse[] }, assign: boolean) {
+async function onToggleModule(
+  group: { module: string; permissions: PermissionResponse[] },
+  assign: boolean
+) {
   togglingModule.value = group.module
   try {
-    const targets = group.permissions.filter((p) => assignedPermissionIds.value.has(p.id) !== assign)
+    const targets = group.permissions.filter(
+      (p) => assignedPermissionIds.value.has(p.id) !== assign
+    )
     await Promise.all(
       targets.map((p) =>
         assign
@@ -378,7 +425,10 @@ async function onRemoveUser(row: UserRoleResponse) {
   removingUserId.value = row.id
   try {
     await api(`/auth/roles/${roleId}/users/${row.userId}`, { method: 'DELETE' })
-    toast.add({ title: t('admin.roles.detail.toast.removed', { username: row.username }), color: 'green' })
+    toast.add({
+      title: t('admin.roles.detail.toast.removed', { username: row.username }),
+      color: 'green'
+    })
     await Promise.all([refreshRoleUsers(), refreshRole()])
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })

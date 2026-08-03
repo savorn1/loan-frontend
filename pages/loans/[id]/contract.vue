@@ -9,236 +9,253 @@
     />
 
     <div v-if="loan" class="space-y-6">
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <span class="font-semibold">{{ t('loans.contract.contractTermsTitle') }}</span>
-          <StatusBadge :status="loan.status" />
-        </div>
-      </template>
-      <dl class="grid grid-cols-2 sm:grid-cols-3 gap-y-3 text-sm">
-        <dt class="text-gray-500">{{ t('loans.contract.fields.customer') }}</dt>
-        <dd class="sm:col-span-2">
-          <NuxtLink :to="`/customers/${loan.customerId}`" class="text-primary-500">{{
-            loan.customerName
-          }}</NuxtLink>
-        </dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.principal') }}</dt>
-        <dd class="sm:col-span-2">{{ formatCurrency(loan.principal) }}</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.interestRate') }}</dt>
-        <dd class="sm:col-span-2">{{ loan.interestRate }}%</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.term') }}</dt>
-        <dd class="sm:col-span-2">{{ t('loans.contract.months', { count: loan.termMonths }) }}</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.monthlyInstallment') }}</dt>
-        <dd class="sm:col-span-2">{{ formatCurrency(loan.monthlyInstallment) }}</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.outstandingBalance') }}</dt>
-        <dd class="sm:col-span-2 font-semibold">{{ formatCurrency(loan.outstandingBalance) }}</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.maturityDate') }}</dt>
-        <dd class="sm:col-span-2">{{ formatDate(loan.maturityDate) }}</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.approved') }}</dt>
-        <dd class="sm:col-span-2">{{ formatDateTime(loan.approvedAt) }}</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.disbursed') }}</dt>
-        <dd class="sm:col-span-2">{{ formatDateTime(loan.disbursedAt) }}</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.closed') }}</dt>
-        <dd class="sm:col-span-2">{{ formatDateTime(loan.closedAt) }}</dd>
-        <dt class="text-gray-500">{{ t('loans.contract.fields.purpose') }}</dt>
-        <dd class="sm:col-span-2">{{ loan.purpose || '—' }}</dd>
-      </dl>
-    </UCard>
-
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <span class="font-semibold">{{ t('loans.contract.repaymentScheduleTitle') }}</span>
-          <StatusBadge v-if="activeSchedule" :status="activeSchedule.status" />
-        </div>
-      </template>
-      <DataTable
-        :rows="scheduleDetails ?? []"
-        :columns="scheduleColumns"
-        :loading="scheduleDetailsPending"
-      >
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-calendar-days"
-            :title="t('loans.contract.scheduleEmpty.title')"
-            :description="t('loans.contract.scheduleEmpty.description')"
-          />
-        </template>
-      </DataTable>
-    </UCard>
-
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <span class="font-semibold">{{ t('loans.contract.paymentsTitle') }}</span>
-          <span v-if="totalPaid" class="text-sm text-gray-500">{{
-            t('loans.contract.totalLabel', { amount: formatCurrency(totalPaid) })
-          }}</span>
-        </div>
-      </template>
-      <DataTable :rows="payments ?? []" :columns="paymentColumns" :loading="paymentsPending">
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-banknotes"
-            :title="t('loans.contract.paymentsEmpty.title')"
-            :description="t('loans.contract.paymentsEmpty.description')"
-          />
-        </template>
-      </DataTable>
-    </UCard>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <UCard>
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">{{ t('loans.contract.collateralTitle') }}</span>
-            <span v-if="totalPledged" class="text-sm text-gray-500">{{
-              t('loans.contract.pledgedLabel', { amount: formatCurrency(totalPledged) })
+            <span class="font-semibold">{{ t('loans.contract.contractTermsTitle') }}</span>
+            <StatusBadge :status="loan.status" />
+          </div>
+        </template>
+        <dl class="grid grid-cols-2 sm:grid-cols-3 gap-y-3 text-sm">
+          <dt class="text-gray-500">{{ t('loans.contract.fields.customer') }}</dt>
+          <dd class="sm:col-span-2">
+            <NuxtLink :to="`/customers/${loan.customerId}`" class="text-primary-500">{{
+              loan.customerName
+            }}</NuxtLink>
+          </dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.principal') }}</dt>
+          <dd class="sm:col-span-2">{{ formatCurrency(loan.principal) }}</dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.interestRate') }}</dt>
+          <dd class="sm:col-span-2">{{ loan.interestRate }}%</dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.term') }}</dt>
+          <dd class="sm:col-span-2">
+            {{ t('loans.contract.months', { count: loan.termMonths }) }}
+          </dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.monthlyInstallment') }}</dt>
+          <dd class="sm:col-span-2">{{ formatCurrency(loan.monthlyInstallment) }}</dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.outstandingBalance') }}</dt>
+          <dd class="sm:col-span-2 font-semibold">{{ formatCurrency(loan.outstandingBalance) }}</dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.maturityDate') }}</dt>
+          <dd class="sm:col-span-2">{{ formatDate(loan.maturityDate) }}</dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.approved') }}</dt>
+          <dd class="sm:col-span-2">{{ formatDateTime(loan.approvedAt) }}</dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.disbursed') }}</dt>
+          <dd class="sm:col-span-2">{{ formatDateTime(loan.disbursedAt) }}</dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.closed') }}</dt>
+          <dd class="sm:col-span-2">{{ formatDateTime(loan.closedAt) }}</dd>
+          <dt class="text-gray-500">{{ t('loans.contract.fields.purpose') }}</dt>
+          <dd class="sm:col-span-2">{{ loan.purpose || '—' }}</dd>
+        </dl>
+      </UCard>
+
+      <UCard>
+        <template #header>
+          <div class="flex items-center justify-between">
+            <span class="font-semibold">{{ t('loans.contract.repaymentScheduleTitle') }}</span>
+            <StatusBadge v-if="activeSchedule" :status="activeSchedule.status" />
+          </div>
+        </template>
+        <DataTable
+          :rows="scheduleDetails ?? []"
+          :columns="scheduleColumns"
+          :loading="scheduleDetailsPending"
+          export-filename="loan-contract-schedule.csv"
+        >
+          <template #empty-state>
+            <EmptyState
+              icon="i-heroicons-calendar-days"
+              :title="t('loans.contract.scheduleEmpty.title')"
+              :description="t('loans.contract.scheduleEmpty.description')"
+            />
+          </template>
+        </DataTable>
+      </UCard>
+
+      <UCard>
+        <template #header>
+          <div class="flex items-center justify-between">
+            <span class="font-semibold">{{ t('loans.contract.paymentsTitle') }}</span>
+            <span v-if="totalPaid" class="text-sm text-gray-500">{{
+              t('loans.contract.totalLabel', { amount: formatCurrency(totalPaid) })
             }}</span>
           </div>
         </template>
         <DataTable
-          :rows="collaterals ?? []"
-          :columns="collateralColumns"
-          :loading="collateralsPending"
+          :rows="payments ?? []"
+          :columns="paymentColumns"
+          :loading="paymentsPending"
+          export-filename="loan-contract-payments.csv"
         >
           <template #empty-state>
             <EmptyState
-              icon="i-heroicons-shield-check"
-              :title="t('loans.contract.collateralEmpty.title')"
-              :description="t('loans.contract.collateralEmpty.description')"
+              icon="i-heroicons-banknotes"
+              :title="t('loans.contract.paymentsEmpty.title')"
+              :description="t('loans.contract.paymentsEmpty.description')"
             />
           </template>
         </DataTable>
       </UCard>
 
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <UCard>
+          <template #header>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold">{{ t('loans.contract.collateralTitle') }}</span>
+              <span v-if="totalPledged" class="text-sm text-gray-500">{{
+                t('loans.contract.pledgedLabel', { amount: formatCurrency(totalPledged) })
+              }}</span>
+            </div>
+          </template>
+          <DataTable
+            :rows="collaterals ?? []"
+            :columns="collateralColumns"
+            :loading="collateralsPending"
+            export-filename="loan-contract-collaterals.csv"
+          >
+            <template #empty-state>
+              <EmptyState
+                icon="i-heroicons-shield-check"
+                :title="t('loans.contract.collateralEmpty.title')"
+                :description="t('loans.contract.collateralEmpty.description')"
+              />
+            </template>
+          </DataTable>
+        </UCard>
+
+        <UCard>
+          <template #header>
+            <span class="font-semibold">{{ t('loans.contract.guarantorsTitle') }}</span>
+          </template>
+          <DataTable
+            :rows="guarantors ?? []"
+            :columns="guarantorColumns"
+            :loading="guarantorsPending"
+            export-filename="loan-contract-guarantors.csv"
+          >
+            <template #empty-state>
+              <EmptyState
+                icon="i-heroicons-user-group"
+                :title="t('loans.contract.guarantorsEmpty.title')"
+                :description="t('loans.contract.guarantorsEmpty.description')"
+              />
+            </template>
+          </DataTable>
+        </UCard>
+      </div>
+
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loans.contract.guarantorsTitle') }}</span>
+          <span class="font-semibold">{{ t('loans.contract.statusHistoryTitle') }}</span>
         </template>
         <DataTable
-          :rows="guarantors ?? []"
-          :columns="guarantorColumns"
-          :loading="guarantorsPending"
+          :rows="statusHistory ?? []"
+          :columns="statusColumns"
+          :loading="statusPending"
+          export-filename="loan-contract-status-history.csv"
         >
           <template #empty-state>
             <EmptyState
-              icon="i-heroicons-user-group"
-              :title="t('loans.contract.guarantorsEmpty.title')"
-              :description="t('loans.contract.guarantorsEmpty.description')"
+              icon="i-heroicons-clock"
+              :title="t('loans.contract.statusHistoryEmpty.title')"
+              :description="t('loans.contract.statusHistoryEmpty.description')"
             />
           </template>
         </DataTable>
       </UCard>
-    </div>
-
-    <UCard>
-      <template #header>
-        <span class="font-semibold">{{ t('loans.contract.statusHistoryTitle') }}</span>
-      </template>
-      <DataTable :rows="statusHistory ?? []" :columns="statusColumns" :loading="statusPending">
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-clock"
-            :title="t('loans.contract.statusHistoryEmpty.title')"
-            :description="t('loans.contract.statusHistoryEmpty.description')"
-          />
-        </template>
-      </DataTable>
-    </UCard>
-
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <span class="font-semibold">{{ t('loans.contract.disbursementsTitle') }}</span>
-          <span v-if="totalDisbursed" class="text-sm text-gray-500">{{
-            t('loans.contract.totalLabel', { amount: formatCurrency(totalDisbursed) })
-          }}</span>
-        </div>
-      </template>
-      <DataTable
-        :rows="disbursements ?? []"
-        :columns="disbursementColumns"
-        :loading="disbursementsPending"
-      >
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-arrow-down-tray"
-            :title="t('loans.contract.disbursementsEmpty.title')"
-            :description="t('loans.contract.disbursementsEmpty.description')"
-          />
-        </template>
-      </DataTable>
-    </UCard>
-
-    <UCard>
-      <template #header>
-        <span class="font-semibold">{{ t('loans.contract.restructuresTitle') }}</span>
-      </template>
-      <DataTable
-        :rows="restructures ?? []"
-        :columns="restructureColumns"
-        :loading="restructuresPending"
-      >
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-arrow-path-rounded-square"
-            :title="t('loans.contract.restructuresEmpty.title')"
-            :description="t('loans.contract.restructuresEmpty.description')"
-          />
-        </template>
-      </DataTable>
-    </UCard>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <UCard>
-        <template #header>
-          <div class="flex items-center justify-between">
-            <span class="font-semibold">{{ t('loans.contract.settlementTitle') }}</span>
-            <StatusBadge v-if="settlement" :status="settlement.status" />
-          </div>
-        </template>
-        <dl v-if="settlement" class="grid grid-cols-2 gap-y-3 text-sm">
-          <dt class="text-gray-500">{{ t('loans.contract.settlementFields.amount') }}</dt>
-          <dd class="font-semibold">{{ formatCurrency(settlement.settlementAmount) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.contract.settlementFields.date') }}</dt>
-          <dd>{{ formatDate(settlement.settlementDate) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.contract.settlementFields.note') }}</dt>
-          <dd>{{ settlement.note || '—' }}</dd>
-        </dl>
-        <EmptyState
-          v-else
-          icon="i-heroicons-flag"
-          :title="t('loans.contract.settlementEmpty.title')"
-          :description="t('loans.contract.settlementEmpty.description')"
-        />
-      </UCard>
 
       <UCard>
         <template #header>
           <div class="flex items-center justify-between">
-            <span class="font-semibold">{{ t('loans.contract.writeoffTitle') }}</span>
-            <StatusBadge v-if="writeoff" :status="writeoff.status" />
+            <span class="font-semibold">{{ t('loans.contract.disbursementsTitle') }}</span>
+            <span v-if="totalDisbursed" class="text-sm text-gray-500">{{
+              t('loans.contract.totalLabel', { amount: formatCurrency(totalDisbursed) })
+            }}</span>
           </div>
         </template>
-        <dl v-if="writeoff" class="grid grid-cols-2 gap-y-3 text-sm">
-          <dt class="text-gray-500">{{ t('loans.contract.writeoffFields.amount') }}</dt>
-          <dd class="font-semibold">{{ formatCurrency(writeoff.amount) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.contract.writeoffFields.date') }}</dt>
-          <dd>{{ formatDate(writeoff.writeoffDate) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.contract.writeoffFields.reason') }}</dt>
-          <dd>{{ writeoff.reason }}</dd>
-        </dl>
-        <EmptyState
-          v-else
-          icon="i-heroicons-no-symbol"
-          :title="t('loans.contract.writeoffEmpty.title')"
-          :description="t('loans.contract.writeoffEmpty.description')"
-        />
+        <DataTable
+          :rows="disbursements ?? []"
+          :columns="disbursementColumns"
+          :loading="disbursementsPending"
+          export-filename="loan-contract-disbursements.csv"
+        >
+          <template #empty-state>
+            <EmptyState
+              icon="i-heroicons-arrow-down-tray"
+              :title="t('loans.contract.disbursementsEmpty.title')"
+              :description="t('loans.contract.disbursementsEmpty.description')"
+            />
+          </template>
+        </DataTable>
       </UCard>
+
+      <UCard>
+        <template #header>
+          <span class="font-semibold">{{ t('loans.contract.restructuresTitle') }}</span>
+        </template>
+        <DataTable
+          :rows="restructures ?? []"
+          :columns="restructureColumns"
+          :loading="restructuresPending"
+          export-filename="loan-contract-restructures.csv"
+        >
+          <template #empty-state>
+            <EmptyState
+              icon="i-heroicons-arrow-path-rounded-square"
+              :title="t('loans.contract.restructuresEmpty.title')"
+              :description="t('loans.contract.restructuresEmpty.description')"
+            />
+          </template>
+        </DataTable>
+      </UCard>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <UCard>
+          <template #header>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold">{{ t('loans.contract.settlementTitle') }}</span>
+              <StatusBadge v-if="settlement" :status="settlement.status" />
+            </div>
+          </template>
+          <dl v-if="settlement" class="grid grid-cols-2 gap-y-3 text-sm">
+            <dt class="text-gray-500">{{ t('loans.contract.settlementFields.amount') }}</dt>
+            <dd class="font-semibold">{{ formatCurrency(settlement.settlementAmount) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.contract.settlementFields.date') }}</dt>
+            <dd>{{ formatDate(settlement.settlementDate) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.contract.settlementFields.note') }}</dt>
+            <dd>{{ settlement.note || '—' }}</dd>
+          </dl>
+          <EmptyState
+            v-else
+            icon="i-heroicons-flag"
+            :title="t('loans.contract.settlementEmpty.title')"
+            :description="t('loans.contract.settlementEmpty.description')"
+          />
+        </UCard>
+
+        <UCard>
+          <template #header>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold">{{ t('loans.contract.writeoffTitle') }}</span>
+              <StatusBadge v-if="writeoff" :status="writeoff.status" />
+            </div>
+          </template>
+          <dl v-if="writeoff" class="grid grid-cols-2 gap-y-3 text-sm">
+            <dt class="text-gray-500">{{ t('loans.contract.writeoffFields.amount') }}</dt>
+            <dd class="font-semibold">{{ formatCurrency(writeoff.amount) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.contract.writeoffFields.date') }}</dt>
+            <dd>{{ formatDate(writeoff.writeoffDate) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.contract.writeoffFields.reason') }}</dt>
+            <dd>{{ writeoff.reason }}</dd>
+          </dl>
+          <EmptyState
+            v-else
+            icon="i-heroicons-no-symbol"
+            :title="t('loans.contract.writeoffEmpty.title')"
+            :description="t('loans.contract.writeoffEmpty.description')"
+          />
+        </UCard>
+      </div>
     </div>
-  </div>
     <div v-else class="flex justify-center py-16">
       <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
     </div>

@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,13 +9,18 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('accounting.loanAccountingReports.interestReceivable.financialPeriod')" class="max-w-xs">
+      <UFormGroup
+        :label="t('accounting.loanAccountingReports.interestReceivable.financialPeriod')"
+        class="max-w-xs"
+      >
         <USelectMenu
           v-model="financialPeriodId"
           :options="periodOptions"
           option-attribute="label"
           value-attribute="value"
-          :placeholder="t('accounting.loanAccountingReports.interestReceivable.financialPeriodPlaceholder')"
+          :placeholder="
+            t('accounting.loanAccountingReports.interestReceivable.financialPeriodPlaceholder')
+          "
         />
       </UFormGroup>
     </UCard>
@@ -36,13 +35,21 @@
 
     <UCard v-if="ledger" class="mb-6">
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 text-sm">
-        <dt class="text-gray-500">{{ t('accounting.loanAccountingReports.interestReceivable.openingBalance') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.loanAccountingReports.interestReceivable.openingBalance') }}
+        </dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.openingBalance) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.loanAccountingReports.interestReceivable.periodDebit') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.loanAccountingReports.interestReceivable.periodDebit') }}
+        </dt>
         <dd>{{ formatCurrency(ledger.periodDebitTotal) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.loanAccountingReports.interestReceivable.periodCredit') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.loanAccountingReports.interestReceivable.periodCredit') }}
+        </dt>
         <dd>{{ formatCurrency(ledger.periodCreditTotal) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.loanAccountingReports.interestReceivable.closingBalance') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.loanAccountingReports.interestReceivable.closingBalance') }}
+        </dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.closingBalance) }}</dd>
       </dl>
     </UCard>
@@ -67,7 +74,9 @@
             "
             :description="
               financialPeriodId
-                ? t('accounting.loanAccountingReports.interestReceivable.emptyDescriptionNoActivity')
+                ? t(
+                    'accounting.loanAccountingReports.interestReceivable.emptyDescriptionNoActivity'
+                  )
                 : t('accounting.loanAccountingReports.interestReceivable.emptyDescriptionPick')
             "
           />
@@ -78,7 +87,12 @@
 </template>
 
 <script setup lang="ts">
-import type { FinancialPeriodResponse, GeneralLedgerResponse, GlAccountResponse, LedgerLineResponse } from '~/features/accounting/types'
+import type {
+  FinancialPeriodResponse,
+  GeneralLedgerResponse,
+  GlAccountResponse,
+  LedgerLineResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 const { t } = useI18n()
@@ -114,16 +128,34 @@ const {
 )
 
 const columns = computed<ColumnDef<LedgerLineResponse>[]>(() => [
-  { key: 'transactionDate', label: t('accounting.loanAccountingReports.interestReceivable.columns.date'), type: 'date' },
-  { key: 'entryNo', label: t('accounting.loanAccountingReports.interestReceivable.columns.entryNo') },
-  { key: 'description', label: t('accounting.loanAccountingReports.interestReceivable.columns.description') },
+  {
+    key: 'transactionDate',
+    label: t('accounting.loanAccountingReports.interestReceivable.columns.date'),
+    type: 'date'
+  },
+  {
+    key: 'entryNo',
+    label: t('accounting.loanAccountingReports.interestReceivable.columns.entryNo')
+  },
+  {
+    key: 'description',
+    label: t('accounting.loanAccountingReports.interestReceivable.columns.description')
+  },
   {
     key: 'entrySide',
     label: t('accounting.loanAccountingReports.interestReceivable.columns.side'),
     type: 'badge',
     color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
   },
-  { key: 'amount', label: t('accounting.loanAccountingReports.interestReceivable.columns.amount'), type: 'currency' },
-  { key: 'runningBalance', label: t('accounting.loanAccountingReports.interestReceivable.columns.balance'), type: 'currency' }
+  {
+    key: 'amount',
+    label: t('accounting.loanAccountingReports.interestReceivable.columns.amount'),
+    type: 'currency'
+  },
+  {
+    key: 'runningBalance',
+    label: t('accounting.loanAccountingReports.interestReceivable.columns.balance'),
+    type: 'currency'
+  }
 ])
 </script>

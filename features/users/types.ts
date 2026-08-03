@@ -1,11 +1,13 @@
 // Mirrors auth-service's admin-only user-management endpoints (/api/auth/users/**).
 import type { Role } from '~/shared/types'
 
+export type UserStatus = 'ACTIVE' | 'INACTIVE'
+
 export interface UserResponse {
   id: number
   username: string
   role: Role
-  active: boolean
+  status: UserStatus
   branchId: number | null
   branchName: string | null
   createdAt: string
@@ -16,7 +18,7 @@ export interface CreateUserRequest {
   username: string
   password: string
   role: Role
-  active: boolean
+  status: UserStatus
   branchId?: number
 }
 
@@ -29,14 +31,14 @@ export interface UpdateRoleRequest {
 }
 
 export interface UpdateStatusRequest {
-  active: boolean
+  status: UserStatus
 }
 
 // Query params for GET /auth/users — all optional, mirrors UserFilterRequest.
 export interface UserFilter {
   username?: string
   role?: Role
-  active?: boolean
+  status?: UserStatus
   page?: number
   size?: number
 }

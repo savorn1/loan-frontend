@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -25,7 +19,9 @@
             :placeholder="t('accounting.branchAccountingReports.profitAndLoss.branchPlaceholder')"
           />
         </UFormGroup>
-        <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')">
+        <UFormGroup
+          :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        >
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
         </UFormGroup>
       </div>
@@ -53,28 +49,44 @@
         <EmptyState
           icon="i-heroicons-chart-bar"
           :title="t('accounting.branchAccountingReports.profitAndLoss.emptyTitleNoActivity')"
-          :description="t('accounting.branchAccountingReports.profitAndLoss.emptyDescriptionNoActivity')"
+          :description="
+            t('accounting.branchAccountingReports.profitAndLoss.emptyDescriptionNoActivity')
+          "
         />
       </UCard>
     </template>
     <template v-else>
       <UCard class="mb-6">
         <template #header>
-          <span class="font-semibold">{{ t('accounting.branchAccountingReports.profitAndLoss.income') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.branchAccountingReports.profitAndLoss.income')
+          }}</span>
         </template>
         <DataTable :rows="incomeLines" :columns="columns" :loading="pending" :exportable="false" />
-        <div class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2">
-          <span>{{ t('accounting.branchAccountingReports.profitAndLoss.totalIncome') }}: {{ formatCurrency(totalIncome) }}</span>
+        <div
+          class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
+        >
+          <span
+            >{{ t('accounting.branchAccountingReports.profitAndLoss.totalIncome') }}:
+            {{ formatCurrency(totalIncome) }}</span
+          >
         </div>
       </UCard>
 
       <UCard class="mb-6">
         <template #header>
-          <span class="font-semibold">{{ t('accounting.branchAccountingReports.profitAndLoss.expenses') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.branchAccountingReports.profitAndLoss.expenses')
+          }}</span>
         </template>
         <DataTable :rows="expenseLines" :columns="columns" :loading="pending" :exportable="false" />
-        <div class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2">
-          <span>{{ t('accounting.branchAccountingReports.profitAndLoss.totalExpenses') }}: {{ formatCurrency(totalExpenses) }}</span>
+        <div
+          class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
+        >
+          <span
+            >{{ t('accounting.branchAccountingReports.profitAndLoss.totalExpenses') }}:
+            {{ formatCurrency(totalExpenses) }}</span
+          >
         </div>
       </UCard>
 
@@ -111,11 +123,19 @@ interface StatementLine {
 const { t } = useI18n()
 const api = useApi()
 
-const { data: branches } = await useAsyncData('branch-pl-branches', () => api<BranchResponse[]>('/branches'))
-const branchOptions = computed(() => (branches.value ?? []).map((b) => ({ label: b.name, value: b.id })))
+const { data: branches } = await useAsyncData('branch-pl-branches', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branchOptions = computed(() =>
+  (branches.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+)
 
-const { data: glAccounts } = await useAsyncData('branch-pl-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
-const accountTypeByNo = computed(() => new Map((glAccounts.value ?? []).map((a) => [a.accountNo, a.accountType])))
+const { data: glAccounts } = await useAsyncData('branch-pl-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
+const accountTypeByNo = computed(
+  () => new Map((glAccounts.value ?? []).map((a) => [a.accountNo, a.accountType]))
+)
 
 const branchId = ref<number | undefined>(undefined)
 const dateFrom = ref('')
@@ -147,7 +167,9 @@ function linesForType(type: 'INCOME' | 'EXPENSE'): StatementLine[] {
       amount: 0
     }
     // INCOME is normal-credit, EXPENSE is normal-debit — sum in each account's own direction.
-    const matchesNormalSide = (type === 'INCOME' && line.entrySide === 'CREDIT') || (type === 'EXPENSE' && line.entrySide === 'DEBIT')
+    const matchesNormalSide =
+      (type === 'INCOME' && line.entrySide === 'CREDIT') ||
+      (type === 'EXPENSE' && line.entrySide === 'DEBIT')
     existing.amount += matchesNormalSide ? line.amount : -line.amount
     byAccount.set(line.glAccountNo, existing)
   }
@@ -162,8 +184,18 @@ const netIncome = computed(() => totalIncome.value - totalExpenses.value)
 const hasAnyActivity = computed(() => incomeLines.value.length > 0 || expenseLines.value.length > 0)
 
 const columns = computed<ColumnDef<StatementLine>[]>(() => [
-  { key: 'accountNo', label: t('accounting.branchAccountingReports.profitAndLoss.columns.accountNo') },
-  { key: 'accountName', label: t('accounting.branchAccountingReports.profitAndLoss.columns.accountName') },
-  { key: 'amount', label: t('accounting.branchAccountingReports.profitAndLoss.columns.amount'), type: 'currency' }
+  {
+    key: 'accountNo',
+    label: t('accounting.branchAccountingReports.profitAndLoss.columns.accountNo')
+  },
+  {
+    key: 'accountName',
+    label: t('accounting.branchAccountingReports.profitAndLoss.columns.accountName')
+  },
+  {
+    key: 'amount',
+    label: t('accounting.branchAccountingReports.profitAndLoss.columns.amount'),
+    type: 'currency'
+  }
 ])
 </script>

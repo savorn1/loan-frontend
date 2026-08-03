@@ -31,7 +31,9 @@
           t('loans.schedule.generatedLabel', { date: formatDateTime(selectedSchedule.generatedAt) })
         }}</span>
         <StatusBadge :status="selectedSchedule.status" />
-        <span>{{ t('loans.schedule.installments', { count: selectedSchedule.totalInstallments }) }}</span>
+        <span>{{
+          t('loans.schedule.installments', { count: selectedSchedule.totalInstallments })
+        }}</span>
       </div>
 
       <DataTable :rows="details ?? []" :columns="columns" :loading="detailsPending">

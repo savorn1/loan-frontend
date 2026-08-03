@@ -78,6 +78,8 @@ export interface LoanDisbursementResponse {
 // ── Loan payments (money received against a loan, tracked directly in
 // loan-service — distinct from payment-service's installment ledger used on
 // the Overview tab) ─────────────────────────────────────────────────────────
+//
+//   POST /loans/{id}/payments/{paymentId}/reverse <- { reason: string } -> LoanPaymentResponse (ADMIN, only when !reversed)
 export interface LoanPaymentRequest {
   amount: number
   paymentDate: string // ISO date
@@ -107,6 +109,9 @@ export interface LoanPaymentResponse {
   method: DisbursementMethod
   reference: string | null
   allocations: LoanPaymentAllocationResponse[]
+  reversed: boolean
+  reversedAt: string | null
+  reversalReason: string | null
   createdAt: string
   updatedAt: string
 }

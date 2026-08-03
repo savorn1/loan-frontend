@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
@@ -67,8 +64,12 @@ interface BranchRevenueRow {
 const { t } = useI18n()
 const api = useApi()
 
-const { data: branches } = await useAsyncData('revenue-by-branch-branches', () => api<BranchResponse[]>('/branches'))
-const { data: glAccounts } = await useAsyncData('revenue-by-branch-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
+const { data: branches } = await useAsyncData('revenue-by-branch-branches', () =>
+  api<BranchResponse[]>('/branches')
+)
+const { data: glAccounts } = await useAsyncData('revenue-by-branch-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
 const accountByNo = computed(() => new Map((glAccounts.value ?? []).map((a) => [a.accountNo, a])))
 
 const dateFrom = ref('')
@@ -105,13 +106,21 @@ const rows = computed<BranchRevenueRow[]>(() => {
         // INCOME is normal-credit — a credit increases revenue, a debit (e.g. a reversal) decreases it.
         totalRevenue += line.entrySide === account.normalBalance ? line.amount : -line.amount
       }
-      return { branch: branchNameById.get(ledger.branchId) ?? String(ledger.branchId), totalRevenue }
+      return {
+        branch: branchNameById.get(ledger.branchId) ?? String(ledger.branchId),
+        totalRevenue
+      }
     })
     .filter((row) => row.totalRevenue !== 0)
 })
 
 const columns = computed<ColumnDef<BranchRevenueRow>[]>(() => [
   { key: 'branch', label: t('accounting.revenueReports.byBranch.columns.branch'), sortable: true },
-  { key: 'totalRevenue', label: t('accounting.revenueReports.byBranch.columns.totalRevenue'), type: 'currency', sortable: true }
+  {
+    key: 'totalRevenue',
+    label: t('accounting.revenueReports.byBranch.columns.totalRevenue'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 </script>

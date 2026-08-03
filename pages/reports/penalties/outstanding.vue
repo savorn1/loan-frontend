@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -16,7 +10,10 @@
 
     <UCard v-if="total > 0" class="mb-6">
       <div class="flex justify-end text-sm font-semibold">
-        <span>{{ t('accounting.penaltyReports.outstanding.totalOutstanding') }}: {{ formatCurrency(totalOutstanding) }}</span>
+        <span
+          >{{ t('accounting.penaltyReports.outstanding.totalOutstanding') }}:
+          {{ formatCurrency(totalOutstanding) }}</span
+        >
       </div>
     </UCard>
 
@@ -67,7 +64,9 @@ const {
   data: penaltiesRaw,
   pending,
   error: fetchError
-} = await useAsyncData('penalty-outstanding', () => api<PageResponse<LoanPenaltyResponse>>('/loans/penalties', { query: { size: 1000 } }))
+} = await useAsyncData('penalty-outstanding', () =>
+  api<PageResponse<LoanPenaltyResponse>>('/loans/penalties', { query: { size: 1000 } })
+)
 const penalties = computed(() => penaltiesRaw.value?.content ?? [])
 
 const outstanding = computed(() => penalties.value.filter((p) => p.status === 'PENDING'))
@@ -79,9 +78,23 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(outstanding
 })
 
 const columns = computed<ColumnDef<LoanPenaltyResponse>[]>(() => [
-  { key: 'loanId', label: t('accounting.penaltyReports.outstanding.columns.loanId'), sortable: true },
-  { key: 'amount', label: t('accounting.penaltyReports.outstanding.columns.amount'), type: 'currency', sortable: true },
+  {
+    key: 'loanId',
+    label: t('accounting.penaltyReports.outstanding.columns.loanId'),
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.penaltyReports.outstanding.columns.amount'),
+    type: 'currency',
+    sortable: true
+  },
   { key: 'reason', label: t('accounting.penaltyReports.outstanding.columns.reason') },
-  { key: 'appliedDate', label: t('accounting.penaltyReports.outstanding.columns.appliedDate'), type: 'date', sortable: true }
+  {
+    key: 'appliedDate',
+    label: t('accounting.penaltyReports.outstanding.columns.appliedDate'),
+    type: 'date',
+    sortable: true
+  }
 ])
 </script>

@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('accounting.revenueReports.otherIncome.financialPeriod')" class="max-w-xs">
+      <UFormGroup
+        :label="t('accounting.revenueReports.otherIncome.financialPeriod')"
+        class="max-w-xs"
+      >
         <USelectMenu
           v-model="financialPeriodId"
           :options="periodOptions"
@@ -49,14 +46,21 @@
         v-if="rows.length"
         class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
       >
-        <span>{{ t('accounting.revenueReports.otherIncome.totalOtherIncome') }}: {{ formatCurrency(totalOtherIncome) }}</span>
+        <span
+          >{{ t('accounting.revenueReports.otherIncome.totalOtherIncome') }}:
+          {{ formatCurrency(totalOtherIncome) }}</span
+        >
       </div>
     </UCard>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { FinancialPeriodResponse, GeneralLedgerSummaryRow, GlAccountResponse } from '~/features/accounting/types'
+import type {
+  FinancialPeriodResponse,
+  GeneralLedgerSummaryRow,
+  GlAccountResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 interface CategoryRow {
@@ -73,9 +77,13 @@ const api = useApi()
 const { data: periods } = await useAsyncData('other-income-periods', () =>
   api<FinancialPeriodResponse[]>('/financial-periods')
 )
-const periodOptions = computed(() => (periods.value ?? []).map((p) => ({ label: p.periodName, value: p.id })))
+const periodOptions = computed(() =>
+  (periods.value ?? []).map((p) => ({ label: p.periodName, value: p.id }))
+)
 
-const { data: glAccounts } = await useAsyncData('other-income-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
+const { data: glAccounts } = await useAsyncData('other-income-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
 const otherIncomeAccountIds = computed(
   () =>
     new Set(
@@ -118,18 +126,25 @@ const totalOtherIncome = computed(() => rows.value.reduce((sum, r) => sum + r.am
 
 const emptyTitle = computed(() => {
   if (!financialPeriodId.value) return t('accounting.revenueReports.otherIncome.emptyTitlePick')
-  if (!hasOtherIncomeAccounts.value) return t('accounting.revenueReports.otherIncome.emptyTitleNoAccounts')
+  if (!hasOtherIncomeAccounts.value)
+    return t('accounting.revenueReports.otherIncome.emptyTitleNoAccounts')
   return t('accounting.revenueReports.otherIncome.emptyTitleNoActivity')
 })
 const emptyDescription = computed(() => {
-  if (!financialPeriodId.value) return t('accounting.revenueReports.otherIncome.emptyDescriptionPick')
-  if (!hasOtherIncomeAccounts.value) return t('accounting.revenueReports.otherIncome.emptyDescriptionNoAccounts')
+  if (!financialPeriodId.value)
+    return t('accounting.revenueReports.otherIncome.emptyDescriptionPick')
+  if (!hasOtherIncomeAccounts.value)
+    return t('accounting.revenueReports.otherIncome.emptyDescriptionNoAccounts')
   return t('accounting.revenueReports.otherIncome.emptyDescriptionNoActivity')
 })
 
 const columns = computed<ColumnDef<CategoryRow>[]>(() => [
   { key: 'accountNo', label: t('accounting.revenueReports.otherIncome.columns.accountNo') },
   { key: 'accountName', label: t('accounting.revenueReports.otherIncome.columns.accountName') },
-  { key: 'amount', label: t('accounting.revenueReports.otherIncome.columns.amount'), type: 'currency' }
+  {
+    key: 'amount',
+    label: t('accounting.revenueReports.otherIncome.columns.amount'),
+    type: 'currency'
+  }
 ])
 </script>

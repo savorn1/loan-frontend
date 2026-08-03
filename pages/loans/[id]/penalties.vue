@@ -4,9 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">{{ t('loans.penalties.title') }}</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >{{ t('loans.penalties.add') }}</UButton
-          >
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+            t('loans.penalties.add')
+          }}</UButton>
         </div>
       </template>
 
@@ -49,7 +49,9 @@
             :description="t('loans.penalties.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.penalties.add') }}</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loans.penalties.add')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>

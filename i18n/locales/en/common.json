@@ -4,6 +4,8 @@
   },
   "nav": {
     "customers": "Customers",
+    "groups": "Groups",
+    "groupLoanApplications": "Group Loan Applications",
     "applications": "Applications",
     "loanCalculator": "Loan Calculator",
     "loans": "Loans",
@@ -119,6 +121,7 @@
       "WAIVED": "Waived",
       "REFUNDED": "Refunded",
       "INACTIVE": "Inactive",
+      "LEFT": "Left",
       "SUBMITTED": "Submitted",
       "UNDER_REVIEW": "Under Review",
       "WITHDRAWN": "Withdrawn",

@@ -2,7 +2,9 @@
   <div>
     <PageHeader :title="t('admin.users.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('admin.users.newUser') }}</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('admin.users.newUser')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -36,7 +38,7 @@
         </UFormGroup>
         <UFormGroup :label="t('admin.users.statusLabel')" class="w-40">
           <USelectMenu
-            v-model="filters.active"
+            v-model="filters.status"
             :options="statusFilterOptions"
             option-attribute="label"
             value-attribute="value"
@@ -65,7 +67,11 @@
               :loading="actingId === row.id && action === 'role'"
               @click="onToggleRole(row)"
             >
-              {{ row.role === 'ADMIN' ? t('admin.users.actions.makeUser') : t('admin.users.actions.makeAdmin') }}
+              {{
+                row.role === 'ADMIN'
+                  ? t('admin.users.actions.makeUser')
+                  : t('admin.users.actions.makeAdmin')
+              }}
             </UButton>
             <UButton
               size="xs"
@@ -75,10 +81,18 @@
               :loading="actingId === row.id && action === 'status'"
               @click="onToggleStatus(row)"
             >
-              {{ row.active ? t('admin.users.actions.disable') : t('admin.users.actions.enable') }}
+              {{
+                row.status === 'ACTIVE'
+                  ? t('admin.users.actions.disable')
+                  : t('admin.users.actions.enable')
+              }}
             </UButton>
-            <UButton size="xs" color="gray" variant="ghost" @click="openRoles(row)">{{ t('admin.users.actions.roles') }}</UButton>
-            <UButton size="xs" color="gray" variant="ghost" @click="openBranch(row)">{{ t('admin.users.actions.branch') }}</UButton>
+            <UButton size="xs" color="gray" variant="ghost" @click="openRoles(row)">{{
+              t('admin.users.actions.roles')
+            }}</UButton>
+            <UButton size="xs" color="gray" variant="ghost" @click="openBranch(row)">{{
+              t('admin.users.actions.branch')
+            }}</UButton>
             <UButton
               size="xs"
               color="red"
@@ -135,12 +149,18 @@
     >
       <UCard v-if="confirmDeleteUser">
         <template #header>
-          <span class="font-semibold">{{ t('admin.users.deleteConfirmTitle', { username: confirmDeleteUser.username }) }}</span>
+          <span class="font-semibold">{{
+            t('admin.users.deleteConfirmTitle', { username: confirmDeleteUser.username })
+          }}</span>
         </template>
         <p class="text-sm text-gray-500 mb-4">{{ t('admin.users.deleteConfirmDescription') }}</p>
         <div class="flex justify-end gap-2">
-          <UButton color="gray" variant="ghost" @click="confirmDeleteUser = null">{{ t('common.cancel') }}</UButton>
-          <UButton color="red" :loading="deleting" @click="onDelete">{{ t('common.delete') }}</UButton>
+          <UButton color="gray" variant="ghost" @click="confirmDeleteUser = null">{{
+            t('common.cancel')
+          }}</UButton>
+          <UButton color="red" :loading="deleting" @click="onDelete">{{
+            t('common.delete')
+          }}</UButton>
         </div>
       </UCard>
     </UModal>
@@ -148,9 +168,14 @@
     <UModal v-model="showRoles">
       <UCard v-if="rolesTargetUser">
         <template #header>
-          <span class="font-semibold">{{ t('admin.users.rolesModal.title', { username: rolesTargetUser.username }) }}</span>
+          <span class="font-semibold">{{
+            t('admin.users.rolesModal.title', { username: rolesTargetUser.username })
+          }}</span>
         </template>
-        <div v-if="allRolesPending || userRolesPending" class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div
+          v-if="allRolesPending || userRolesPending"
+          class="py-6 text-center text-sm text-gray-500 dark:text-gray-400"
+        >
           {{ t('admin.shared.loading') }}
         </div>
         <ul v-else-if="allRoles.length" class="space-y-2 max-h-80 overflow-y-auto pr-1">
@@ -179,7 +204,9 @@
           :description="t('admin.users.rolesModal.emptyDescription')"
         >
           <template #action>
-            <UButton to="/roles" variant="soft">{{ t('admin.users.rolesModal.goToRoles') }}</UButton>
+            <UButton to="/roles" variant="soft">{{
+              t('admin.users.rolesModal.goToRoles')
+            }}</UButton>
           </template>
         </EmptyState>
       </UCard>
@@ -188,7 +215,9 @@
     <UModal v-model="showBranch">
       <UCard v-if="branchTargetUser">
         <template #header>
-          <span class="font-semibold">{{ t('admin.users.branchModal.title', { username: branchTargetUser.username }) }}</span>
+          <span class="font-semibold">{{
+            t('admin.users.branchModal.title', { username: branchTargetUser.username })
+          }}</span>
         </template>
         <UFormGroup :label="t('admin.users.fields.branch')">
           <USelectMenu
@@ -199,8 +228,12 @@
           />
         </UFormGroup>
         <div class="flex justify-end gap-2 mt-4">
-          <UButton color="gray" variant="ghost" @click="showBranch = false">{{ t('common.cancel') }}</UButton>
-          <UButton :loading="savingBranch" @click="onSaveBranch">{{ t('common.saveChanges') }}</UButton>
+          <UButton color="gray" variant="ghost" @click="showBranch = false">{{
+            t('common.cancel')
+          }}</UButton>
+          <UButton :loading="savingBranch" @click="onSaveBranch">{{
+            t('common.saveChanges')
+          }}</UButton>
         </div>
       </UCard>
     </UModal>
@@ -232,7 +265,7 @@ const pageSize = ref(10)
 const filters = reactive({
   username: '',
   role: '' as '' | 'USER' | 'ADMIN',
-  active: '' as '' | 'true' | 'false'
+  status: '' as '' | 'ACTIVE' | 'INACTIVE'
 })
 
 const roleFilterOptions = computed(() => [
@@ -242,8 +275,8 @@ const roleFilterOptions = computed(() => [
 ])
 const statusFilterOptions = computed(() => [
   { label: t('admin.users.statusOptions.all'), value: '' },
-  { label: t('admin.users.statusOptions.active'), value: 'true' },
-  { label: t('admin.users.statusOptions.disabled'), value: 'false' }
+  { label: t('admin.users.statusOptions.active'), value: 'ACTIVE' },
+  { label: t('admin.users.statusOptions.disabled'), value: 'INACTIVE' }
 ])
 
 function buildQuery(): UserFilter {
@@ -252,7 +285,7 @@ function buildQuery(): UserFilter {
     size: pageSize.value,
     username: filters.username || undefined,
     role: filters.role || undefined,
-    active: filters.active === '' ? undefined : filters.active === 'true'
+    status: filters.status || undefined
   }
 }
 
@@ -283,7 +316,7 @@ watch(
   }
 )
 watch(
-  () => filters.active,
+  () => filters.status,
   () => {
     page.value = 1
     refresh()
@@ -323,9 +356,10 @@ const columns = computed<ColumnDef<UserResponse>[]>(() => [
     color: (row) => (row.role === 'ADMIN' ? 'primary' : 'gray')
   },
   {
-    key: 'active',
+    key: 'status',
     label: t('admin.users.columns.status'),
     type: 'boolean',
+    value: (row) => row.status === 'ACTIVE',
     trueLabel: t('admin.users.statusOptions.active'),
     falseLabel: t('admin.users.statusOptions.disabled'),
     trueColor: 'teal',
@@ -385,9 +419,17 @@ async function onCreate(values: Record<string, any>) {
   creating.value = true
   createError.value = ''
   try {
-    const payload = { ...values, branchId: values.branchId || undefined } as CreateUserRequest
+    const { active, ...rest } = values
+    const payload = {
+      ...rest,
+      status: active ? 'ACTIVE' : 'INACTIVE',
+      branchId: values.branchId || undefined
+    } as CreateUserRequest
     await api('/auth/users', { method: 'POST', body: payload })
-    toast.add({ title: t('admin.users.toast.created', { username: values.username }), color: 'green' })
+    toast.add({
+      title: t('admin.users.toast.created', { username: values.username }),
+      color: 'green'
+    })
     showCreate.value = false
     page.value = 1
     await refresh()
@@ -406,7 +448,10 @@ async function onToggleRole(row: UserResponse) {
     await api(`/auth/users/${row.id}/role`, { method: 'PUT', body: { role: nextRole } })
     const roleLabel =
       nextRole === 'ADMIN' ? t('admin.users.roleOptions.admin') : t('admin.users.roleOptions.user')
-    toast.add({ title: t('admin.users.toast.roleChanged', { username: row.username, role: roleLabel }), color: 'green' })
+    toast.add({
+      title: t('admin.users.toast.roleChanged', { username: row.username, role: roleLabel }),
+      color: 'green'
+    })
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
@@ -419,12 +464,14 @@ async function onToggleRole(row: UserResponse) {
 async function onToggleStatus(row: UserResponse) {
   actingId.value = row.id
   action.value = 'status'
+  const nextStatus = row.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'
   try {
-    await api(`/auth/users/${row.id}/status`, { method: 'PUT', body: { active: !row.active } })
+    await api(`/auth/users/${row.id}/status`, { method: 'PUT', body: { status: nextStatus } })
     toast.add({
-      title: row.active
-        ? t('admin.users.toast.disabled', { username: row.username })
-        : t('admin.users.toast.enabled', { username: row.username }),
+      title:
+        nextStatus === 'INACTIVE'
+          ? t('admin.users.toast.disabled', { username: row.username })
+          : t('admin.users.toast.enabled', { username: row.username }),
       color: 'green'
     })
     await refresh()
@@ -513,7 +560,10 @@ async function onSaveBranch() {
   try {
     const payload: UpdateBranchRequest = { branchId: branchForm.branchId || null }
     await api(`/auth/users/${branchTargetUser.value.id}/branch`, { method: 'PUT', body: payload })
-    toast.add({ title: t('admin.users.toast.branchChanged', { username: branchTargetUser.value.username }), color: 'green' })
+    toast.add({
+      title: t('admin.users.toast.branchChanged', { username: branchTargetUser.value.username }),
+      color: 'green'
+    })
     showBranch.value = false
     await refresh()
   } catch (err) {

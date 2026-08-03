@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,14 +9,20 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
 
     <UCard v-if="total > 0" class="mb-6">
       <div class="flex justify-end text-sm font-semibold">
-        <span>{{ t('accounting.penaltyReports.collection.totalCollected') }}: {{ formatCurrency(totalCollected) }}</span>
+        <span
+          >{{ t('accounting.penaltyReports.collection.totalCollected') }}:
+          {{ formatCurrency(totalCollected) }}</span
+        >
       </div>
     </UCard>
 
@@ -81,7 +81,9 @@ const {
   data: penaltiesRaw,
   pending,
   error: fetchError
-} = await useAsyncData('penalty-collection', () => api<PageResponse<LoanPenaltyResponse>>('/loans/penalties', { query: { size: 1000 } }))
+} = await useAsyncData('penalty-collection', () =>
+  api<PageResponse<LoanPenaltyResponse>>('/loans/penalties', { query: { size: 1000 } })
+)
 const penalties = computed(() => penaltiesRaw.value?.content ?? [])
 
 const dateFrom = ref('')
@@ -92,7 +94,10 @@ const collectedInRange = computed(() => {
   if (!hasFullRange.value) return []
   return penalties.value.filter(
     (p): p is LoanPenaltyResponse & { paidAt: string } =>
-      p.status === 'PAID' && !!p.paidAt && p.paidAt.slice(0, 10) >= dateFrom.value && p.paidAt.slice(0, 10) <= dateTo.value
+      p.status === 'PAID' &&
+      !!p.paidAt &&
+      p.paidAt.slice(0, 10) >= dateFrom.value &&
+      p.paidAt.slice(0, 10) <= dateTo.value
   )
 })
 
@@ -104,9 +109,23 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(collectedIn
 })
 
 const columns = computed<ColumnDef<LoanPenaltyResponse>[]>(() => [
-  { key: 'loanId', label: t('accounting.penaltyReports.collection.columns.loanId'), sortable: true },
-  { key: 'amount', label: t('accounting.penaltyReports.collection.columns.amount'), type: 'currency', sortable: true },
+  {
+    key: 'loanId',
+    label: t('accounting.penaltyReports.collection.columns.loanId'),
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.penaltyReports.collection.columns.amount'),
+    type: 'currency',
+    sortable: true
+  },
   { key: 'reason', label: t('accounting.penaltyReports.collection.columns.reason') },
-  { key: 'paidAt', label: t('accounting.penaltyReports.collection.columns.paidAt'), type: 'datetime', sortable: true }
+  {
+    key: 'paidAt',
+    label: t('accounting.penaltyReports.collection.columns.paidAt'),
+    type: 'datetime',
+    sortable: true
+  }
 ])
 </script>

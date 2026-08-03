@@ -1,0 +1,76 @@
+{
+  "groups": {
+    "list": {
+      "title": "ក្រុម",
+      "newGroup": "ក្រុមថ្មី",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ ឬលេខកូដ...",
+      "branchLabel": "សាខា",
+      "statusLabel": "ស្ថានភាព",
+      "branchFilterAll": "គ្រប់សាខា",
+      "statusOptions": {
+        "all": "គ្រប់ស្ថានភាព"
+      },
+      "columns": {
+        "name": "ឈ្មោះ",
+        "code": "លេខកូដ",
+        "branch": "សាខា",
+        "leader": "ប្រធានក្រុម",
+        "members": "សមាជិក",
+        "status": "ស្ថានភាព",
+        "created": "កាលបង្កើត"
+      },
+      "actions": {
+        "activate": "ធ្វើឲ្យសកម្ម",
+        "deactivate": "ធ្វើឲ្យអសកម្ម",
+        "close": "បិទក្រុម"
+      },
+      "emptyTitle": "មិនទាន់មានក្រុមទេ",
+      "emptyDescription": "បង្កើតក្រុមមួយ ដើម្បីចាប់ផ្តើមរៀបចំអតិថិជនសម្រាប់កម្ចីជាក្រុម។",
+      "toastCreated": "ក្រុមត្រូវបានបង្កើត",
+      "toast": {
+        "activated": "{name} ត្រូវបានធ្វើឲ្យសកម្ម",
+        "deactivated": "{name} ត្រូវបានធ្វើឲ្យអសកម្ម",
+        "closed": "{name} ត្រូវបានបិទ"
+      },
+      "closeConfirmTitle": "បិទក្រុមនេះ?",
+      "closeConfirmDescription": "សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ — ក្រុមនេះនឹងលែងអាចកែប្រែ ធ្វើឲ្យសកម្ម ឬបន្ថែម/លុបសមាជិកបានទៀត។"
+    },
+    "form": {
+      "name": "ឈ្មោះ",
+      "code": "លេខកូដ",
+      "loanProduct": "ផលិតផលកម្ចី",
+      "loanProductNone": "គ្មានផលិតផលកម្ចី",
+      "branch": "សាខា",
+      "branchNone": "គ្មានសាខា",
+      "leader": "ប្រធានក្រុម",
+      "leaderPlaceholder": "ស្វែងរកអតិថិជន…",
+      "formationDate": "កាលបរិច្ឆេទបង្កើតក្រុម"
+    },
+    "detail": {
+      "backToGroups": "ត្រឡប់ទៅក្រុមវិញ",
+      "detailsHeader": "ព័ត៌មានលម្អិត",
+      "membersHeader": "សមាជិក",
+      "addMember": "បន្ថែមសមាជិក",
+      "removeMember": "លុប",
+      "emptyMembersTitle": "មិនទាន់មានសមាជិកទេ",
+      "emptyMembersDescription": "បន្ថែមអតិថិជនទៅក្រុមនេះ ដើម្បីឲ្យពួកគេធានាកម្ចីគ្នាទៅវិញទៅមក។",
+      "addMemberModalTitle": "បន្ថែមសមាជិក — {groupName}",
+      "memberColumn": "អតិថិជន",
+      "roleColumn": "តួនាទី",
+      "membershipStatusColumn": "ស្ថានភាព",
+      "kycColumn": "KYC",
+      "joinedColumn": "ចូលរួម",
+      "memberFieldLabel": "អតិថិជន",
+      "memberFieldPlaceholder": "ស្វែងរកអតិថិជន…",
+      "leaderBadge": "ប្រធានក្រុម",
+      "makeLeader": "តែងតាំងជាប្រធានក្រុម",
+      "viewKyc": "មើល KYC",
+      "toast": {
+        "updated": "ក្រុមត្រូវបានកែប្រែ",
+        "memberAdded": "សមាជិកត្រូវបានបន្ថែម",
+        "memberRemoved": "{name} ត្រូវបានលុប",
+        "leaderChanged": "{name} ឥឡូវនេះជាប្រធានក្រុម"
+      }
+    }
+  }
+}

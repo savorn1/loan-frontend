@@ -143,7 +143,9 @@ const applications = computed(() => applicationsRaw.value?.content ?? [])
 const { data: branchesData } = await useAsyncData('branches-all', () =>
   api<BranchResponse[]>('/branches')
 )
-const branchNameById = computed(() => new Map((branchesData.value ?? []).map((b) => [b.id, b.name])))
+const branchNameById = computed(
+  () => new Map((branchesData.value ?? []).map((b) => [b.id, b.name]))
+)
 const branchFilterOptions = computed(() => [
   { label: t('applications.list.branchFilter.all'), value: '' },
   ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
@@ -156,7 +158,10 @@ async function searchCustomers(query: string) {
   const result = await api<PageResponse<CustomerResponse>>('/customers', {
     query: { search: query, size: 20 }
   })
-  return result.content.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
+  return result.content.map((c) => ({
+    label: `${c.firstName} ${c.lastName} (#${c.id})`,
+    value: c.id
+  }))
 }
 
 const columns = computed<ColumnDef<ApplicationResponse>[]>(() => [
@@ -165,7 +170,8 @@ const columns = computed<ColumnDef<ApplicationResponse>[]>(() => [
   {
     key: 'branchId',
     label: t('applications.list.columns.branch'),
-    value: (row) => (row.branchId != null ? branchNameById.value.get(row.branchId) ?? row.branchId : '—')
+    value: (row) =>
+      row.branchId != null ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—'
   },
   {
     key: 'requestedAmount',
@@ -207,7 +213,12 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByS
 })
 
 const hasFilters = computed(
-  () => !!search.value || !!statusFilter.value || branchFilter.value !== '' || !!dateFrom.value || !!dateTo.value
+  () =>
+    !!search.value ||
+    !!statusFilter.value ||
+    branchFilter.value !== '' ||
+    !!dateFrom.value ||
+    !!dateTo.value
 )
 
 function clearFilters() {

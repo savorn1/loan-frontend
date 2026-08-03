@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -16,13 +10,21 @@
 
     <UCard class="mb-6">
       <UFormGroup class="max-w-xs">
-        <USelectMenu v-model="range" :options="rangeOptions" option-attribute="label" value-attribute="value" />
+        <USelectMenu
+          v-model="range"
+          :options="rangeOptions"
+          option-attribute="label"
+          value-attribute="value"
+        />
       </UFormGroup>
     </UCard>
 
     <UCard v-if="total > 0" class="mb-6">
       <div class="flex justify-end text-sm font-semibold">
-        <span>{{ t('accounting.overdueReports.collectionDue.totalDue') }}: {{ formatCurrency(totalDue) }}</span>
+        <span
+          >{{ t('accounting.overdueReports.collectionDue.totalDue') }}:
+          {{ formatCurrency(totalDue) }}</span
+        >
       </div>
     </UCard>
 
@@ -76,7 +78,9 @@ const {
   data: paymentsRaw,
   pending,
   error: fetchError
-} = await useAsyncData('collection-due', () => api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } }))
+} = await useAsyncData('collection-due', () =>
+  api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } })
+)
 const payments = computed(() => paymentsRaw.value?.content ?? [])
 
 function toIsoDate(d: Date) {
@@ -104,7 +108,10 @@ const rangeWindow = computed<{ start: string; end: string | null }>(() => {
     return { start: d, end: d }
   }
   if (range.value === 'week') {
-    return { start: todayIso, end: toIsoDate(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 6)) }
+    return {
+      start: todayIso,
+      end: toIsoDate(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 6))
+    }
   }
   if (range.value === 'month') {
     return { start: todayIso, end: toIsoDate(new Date(now.getFullYear(), now.getMonth() + 1, 0)) }
@@ -129,9 +136,27 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(dueInRange,
 })
 
 const columns = computed<ColumnDef<PaymentResponse>[]>(() => [
-  { key: 'loanId', label: t('accounting.overdueReports.collectionDue.columns.loanId'), sortable: true },
-  { key: 'installmentNumber', label: t('accounting.overdueReports.collectionDue.columns.installmentNumber'), sortable: true },
-  { key: 'dueDate', label: t('accounting.overdueReports.collectionDue.columns.dueDate'), type: 'date', sortable: true },
-  { key: 'amount', label: t('accounting.overdueReports.collectionDue.columns.amount'), type: 'currency', sortable: true }
+  {
+    key: 'loanId',
+    label: t('accounting.overdueReports.collectionDue.columns.loanId'),
+    sortable: true
+  },
+  {
+    key: 'installmentNumber',
+    label: t('accounting.overdueReports.collectionDue.columns.installmentNumber'),
+    sortable: true
+  },
+  {
+    key: 'dueDate',
+    label: t('accounting.overdueReports.collectionDue.columns.dueDate'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.overdueReports.collectionDue.columns.amount'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 </script>

@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -14,7 +8,11 @@
       :description="t('accounting.receivablesReports.outstanding.description')"
     >
       <template #actions>
-        <UButton to="/reports/loan-accounting/outstanding-balance" variant="soft" icon="i-heroicons-table-cells">
+        <UButton
+          to="/reports/loan-accounting/outstanding-balance"
+          variant="soft"
+          icon="i-heroicons-table-cells"
+        >
           {{ t('accounting.receivablesReports.outstanding.viewDetail') }}
         </UButton>
       </template>
@@ -65,7 +63,9 @@
 
     <UCard class="mt-6">
       <dl class="grid grid-cols-2 gap-y-3 text-sm">
-        <dt class="text-gray-500">{{ t('accounting.receivablesReports.outstanding.activeLoans') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.receivablesReports.outstanding.activeLoans') }}
+        </dt>
         <dd class="font-semibold text-right">{{ parSummary?.activeLoanCount ?? 0 }}</dd>
       </dl>
     </UCard>
@@ -78,8 +78,9 @@ import type { ParSummaryResponse } from '~/features/reports/types'
 const { t } = useI18n()
 const api = useApi()
 
-const { data: parSummary, error: fetchError } = await useAsyncData('outstanding-receivables-par-summary', () =>
-  api<ParSummaryResponse>('/payments/reports/par-summary')
+const { data: parSummary, error: fetchError } = await useAsyncData(
+  'outstanding-receivables-par-summary',
+  () => api<ParSummaryResponse>('/payments/reports/par-summary')
 )
 
 const currentBalance = computed(() => {

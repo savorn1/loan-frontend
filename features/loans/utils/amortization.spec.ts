@@ -52,7 +52,11 @@ describe('calculateSchedule', () => {
       startDate: new Date('2026-01-15')
     })
 
-    expect(result.schedule.map((p) => p.dueDate)).toEqual(['2026-02-15', '2026-03-15', '2026-04-15'])
+    expect(result.schedule.map((p) => p.dueDate)).toEqual([
+      '2026-02-15',
+      '2026-03-15',
+      '2026-04-15'
+    ])
   })
 })
 

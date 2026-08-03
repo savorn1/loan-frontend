@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
@@ -30,7 +27,10 @@
 
     <UCard v-if="ledger" class="mb-6">
       <div class="flex justify-end text-sm font-semibold">
-        <span>{{ t('accounting.cashReports.receipts.totalReceipts') }}: {{ formatCurrency(ledger.periodDebitTotal) }}</span>
+        <span
+          >{{ t('accounting.cashReports.receipts.totalReceipts') }}:
+          {{ formatCurrency(ledger.periodDebitTotal) }}</span
+        >
       </div>
     </UCard>
 
@@ -65,13 +65,19 @@
 </template>
 
 <script setup lang="ts">
-import type { DateRangeLedgerResponse, GlAccountResponse, LedgerLineResponse } from '~/features/accounting/types'
+import type {
+  DateRangeLedgerResponse,
+  GlAccountResponse,
+  LedgerLineResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 const { t } = useI18n()
 const api = useApi()
 
-const { data: glAccounts } = await useAsyncData('cash-receipts-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
+const { data: glAccounts } = await useAsyncData('cash-receipts-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
 const account = computed(() => (glAccounts.value ?? []).find((a) => a.accountNo === '1010'))
 
 const dateFrom = ref('')
@@ -94,10 +100,16 @@ const {
 )
 
 // Cash is a normal-debit account — a debit posting is a receipt (cash coming in).
-const receiptLines = computed(() => (ledger.value?.lines ?? []).filter((line) => line.entrySide === 'DEBIT'))
+const receiptLines = computed(() =>
+  (ledger.value?.lines ?? []).filter((line) => line.entrySide === 'DEBIT')
+)
 
 const columns = computed<ColumnDef<LedgerLineResponse>[]>(() => [
-  { key: 'transactionDate', label: t('accounting.cashReports.receipts.columns.date'), type: 'date' },
+  {
+    key: 'transactionDate',
+    label: t('accounting.cashReports.receipts.columns.date'),
+    type: 'date'
+  },
   { key: 'entryNo', label: t('accounting.cashReports.receipts.columns.entryNo') },
   { key: 'description', label: t('accounting.cashReports.receipts.columns.description') },
   { key: 'amount', label: t('accounting.cashReports.receipts.columns.amount'), type: 'currency' }

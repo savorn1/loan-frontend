@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -51,9 +45,16 @@
 
     <UCard>
       <template #header>
-        <span class="font-semibold">{{ t('accounting.loanAccountingReports.portfolioSummary.statusBreakdownHeader') }}</span>
+        <span class="font-semibold">{{
+          t('accounting.loanAccountingReports.portfolioSummary.statusBreakdownHeader')
+        }}</span>
       </template>
-      <DataTable :rows="statusBreakdown ?? []" :columns="columns" :loading="pending" :exportable="false" />
+      <DataTable
+        :rows="statusBreakdown ?? []"
+        :columns="columns"
+        :loading="pending"
+        :exportable="false"
+      />
     </UCard>
   </div>
 </template>
@@ -69,16 +70,31 @@ const [
   { data: portfolio, pending: p1, error: e1 },
   { data: statusBreakdown, pending: p2, error: e2 }
 ] = await Promise.all([
-  useAsyncData('loan-accounting-portfolio-summary', () => api<PortfolioSummaryResponse>('/loans/reports/portfolio-summary')),
-  useAsyncData('loan-accounting-status-breakdown', () => api<LoanStatusBreakdown[]>('/loans/reports/status-breakdown'))
+  useAsyncData('loan-accounting-portfolio-summary', () =>
+    api<PortfolioSummaryResponse>('/loans/reports/portfolio-summary')
+  ),
+  useAsyncData('loan-accounting-status-breakdown', () =>
+    api<LoanStatusBreakdown[]>('/loans/reports/status-breakdown')
+  )
 ])
 
 const pending = computed(() => p1.value || p2.value)
 const fetchError = computed(() => e1.value || e2.value)
 
 const columns = computed<ColumnDef<LoanStatusBreakdown>[]>(() => [
-  { key: 'status', label: t('accounting.loanAccountingReports.portfolioSummary.columns.status'), type: 'status' },
-  { key: 'loanCount', label: t('accounting.loanAccountingReports.portfolioSummary.columns.loanCount') },
-  { key: 'totalPrincipal', label: t('accounting.loanAccountingReports.portfolioSummary.columns.totalPrincipal'), type: 'currency' }
+  {
+    key: 'status',
+    label: t('accounting.loanAccountingReports.portfolioSummary.columns.status'),
+    type: 'status'
+  },
+  {
+    key: 'loanCount',
+    label: t('accounting.loanAccountingReports.portfolioSummary.columns.loanCount')
+  },
+  {
+    key: 'totalPrincipal',
+    label: t('accounting.loanAccountingReports.portfolioSummary.columns.totalPrincipal'),
+    type: 'currency'
+  }
 ])
 </script>

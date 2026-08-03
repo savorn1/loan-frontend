@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -22,10 +16,14 @@
             :options="glAccountOptions"
             option-attribute="label"
             value-attribute="value"
-            :placeholder="t('accounting.generalLedgerReports.ledgerByDateRange.glAccountPlaceholder')"
+            :placeholder="
+              t('accounting.generalLedgerReports.ledgerByDateRange.glAccountPlaceholder')
+            "
           />
         </UFormGroup>
-        <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')">
+        <UFormGroup
+          :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        >
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
         </UFormGroup>
       </div>
@@ -36,13 +34,21 @@
 
     <UCard v-if="ledger" class="mb-6">
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 text-sm">
-        <dt class="text-gray-500">{{ t('accounting.generalLedgerReports.ledgerByDateRange.openingBalance') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.generalLedgerReports.ledgerByDateRange.openingBalance') }}
+        </dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.openingBalance) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.generalLedgerReports.ledgerByDateRange.periodDebit') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.generalLedgerReports.ledgerByDateRange.periodDebit') }}
+        </dt>
         <dd>{{ formatCurrency(ledger.periodDebitTotal) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.generalLedgerReports.ledgerByDateRange.periodCredit') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.generalLedgerReports.ledgerByDateRange.periodCredit') }}
+        </dt>
         <dd>{{ formatCurrency(ledger.periodCreditTotal) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.generalLedgerReports.ledgerByDateRange.closingBalance') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.generalLedgerReports.ledgerByDateRange.closingBalance') }}
+        </dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.closingBalance) }}</dd>
       </dl>
     </UCard>
@@ -78,7 +84,11 @@
 </template>
 
 <script setup lang="ts">
-import type { DateRangeLedgerResponse, GlAccountResponse, LedgerLineResponse } from '~/features/accounting/types'
+import type {
+  DateRangeLedgerResponse,
+  GlAccountResponse,
+  LedgerLineResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 const { t } = useI18n()
@@ -112,16 +122,31 @@ const {
 )
 
 const columns = computed<ColumnDef<LedgerLineResponse>[]>(() => [
-  { key: 'transactionDate', label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.date'), type: 'date' },
+  {
+    key: 'transactionDate',
+    label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.date'),
+    type: 'date'
+  },
   { key: 'entryNo', label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.entryNo') },
-  { key: 'description', label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.description') },
+  {
+    key: 'description',
+    label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.description')
+  },
   {
     key: 'entrySide',
     label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.side'),
     type: 'badge',
     color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
   },
-  { key: 'amount', label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.amount'), type: 'currency' },
-  { key: 'runningBalance', label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.balance'), type: 'currency' }
+  {
+    key: 'amount',
+    label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.amount'),
+    type: 'currency'
+  },
+  {
+    key: 'runningBalance',
+    label: t('accounting.generalLedgerReports.ledgerByDateRange.columns.balance'),
+    type: 'currency'
+  }
 ])
 </script>

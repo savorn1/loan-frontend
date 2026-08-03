@@ -296,11 +296,16 @@
       "totalPaidLabel": "Total paid",
       "modalTitle": "Record payment",
       "allocationModalTitle": "Allocation breakdown",
+      "reverseButton": "Reverse",
+      "reverseModalTitle": "Reverse payment",
+      "reasonFieldLabel": "Reason",
+      "toastReversed": "Payment reversed",
       "columns": {
         "date": "Date",
         "amount": "Amount",
         "method": "Method",
         "reference": "Reference",
+        "status": "Status",
         "created": "Created"
       },
       "allocationColumns": {

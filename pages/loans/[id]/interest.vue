@@ -4,9 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">{{ t('loans.interest.title') }}</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >{{ t('loans.interest.addButton') }}</UButton
-          >
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+            t('loans.interest.addButton')
+          }}</UButton>
         </div>
       </template>
 

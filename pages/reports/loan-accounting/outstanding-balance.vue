@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -78,20 +72,39 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(loans, {
 })
 
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
-  { key: 'id', label: t('accounting.loanAccountingReports.outstandingBalance.columns.id'), sortable: true },
-  { key: 'customerName', label: t('accounting.loanAccountingReports.outstandingBalance.columns.customer'), sortable: true },
+  {
+    key: 'id',
+    label: t('accounting.loanAccountingReports.outstandingBalance.columns.id'),
+    sortable: true
+  },
+  {
+    key: 'customerName',
+    label: t('accounting.loanAccountingReports.outstandingBalance.columns.customer'),
+    sortable: true
+  },
   {
     key: 'branchId',
     label: t('accounting.loanAccountingReports.outstandingBalance.columns.branch'),
-    value: (row) => (row.branchId != null ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—')
+    value: (row) =>
+      row.branchId != null ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—'
   },
-  { key: 'principal', label: t('accounting.loanAccountingReports.outstandingBalance.columns.principal'), type: 'currency', sortable: true },
+  {
+    key: 'principal',
+    label: t('accounting.loanAccountingReports.outstandingBalance.columns.principal'),
+    type: 'currency',
+    sortable: true
+  },
   {
     key: 'outstandingBalance',
     label: t('accounting.loanAccountingReports.outstandingBalance.columns.outstandingBalance'),
     type: 'currency',
     sortable: true
   },
-  { key: 'status', label: t('accounting.loanAccountingReports.outstandingBalance.columns.status'), type: 'status', sortable: true }
+  {
+    key: 'status',
+    label: t('accounting.loanAccountingReports.outstandingBalance.columns.status'),
+    type: 'status',
+    sortable: true
+  }
 ])
 </script>

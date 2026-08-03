@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -24,15 +18,24 @@
 
     <UCard class="mb-6">
       <template #header>
-        <span class="font-semibold">{{ t('accounting.receivablesReports.aging.bucketsHeader') }}</span>
+        <span class="font-semibold">{{
+          t('accounting.receivablesReports.aging.bucketsHeader')
+        }}</span>
       </template>
-      <DataTable :rows="bucketRows" :columns="bucketColumns" :loading="pending" :exportable="false" />
+      <DataTable
+        :rows="bucketRows"
+        :columns="bucketColumns"
+        :loading="pending"
+        :exportable="false"
+      />
     </UCard>
 
     <UCard>
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('accounting.receivablesReports.aging.detailHeader') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.receivablesReports.aging.detailHeader')
+          }}</span>
           <div class="flex flex-wrap items-center gap-3">
             <UInput
               v-model="search"
@@ -58,7 +61,9 @@
         :rows="rows"
         :columns="detailColumns"
         :loading="pending"
-        @select="(row: CollectionWorkqueueItemResponse) => router.push(`/collections/${row.loanId}`)"
+        @select="
+          (row: CollectionWorkqueueItemResponse) => router.push(`/collections/${row.loanId}`)
+        "
       >
         <template #empty-state>
           <EmptyState
@@ -77,7 +82,10 @@
 </template>
 
 <script setup lang="ts">
-import type { CollectionBucket, CollectionWorkqueueItemResponse } from '~/features/collections/types'
+import type {
+  CollectionBucket,
+  CollectionWorkqueueItemResponse
+} from '~/features/collections/types'
 import type { ParBucketSummary, ParSummaryResponse } from '~/features/reports/types'
 import type { ColumnDef } from '~/shared/types'
 
@@ -86,13 +94,15 @@ const api = useApi()
 const router = useRouter()
 const route = useRoute()
 
-const [
-  { data: parSummary, pending: p1, error: e1 },
-  { data: workqueue, pending: p2, error: e2 }
-] = await Promise.all([
-  useAsyncData('receivables-aging-par-summary', () => api<ParSummaryResponse>('/payments/reports/par-summary')),
-  useAsyncData('receivables-aging-workqueue', () => api<CollectionWorkqueueItemResponse[]>('/payments/collections'))
-])
+const [{ data: parSummary, pending: p1, error: e1 }, { data: workqueue, pending: p2, error: e2 }] =
+  await Promise.all([
+    useAsyncData('receivables-aging-par-summary', () =>
+      api<ParSummaryResponse>('/payments/reports/par-summary')
+    ),
+    useAsyncData('receivables-aging-workqueue', () =>
+      api<CollectionWorkqueueItemResponse[]>('/payments/collections')
+    )
+  ])
 
 const pending = computed(() => p1.value || p2.value)
 const fetchError = computed(() => e1.value || e2.value)
@@ -122,7 +132,11 @@ const bucketColumns = computed<ColumnDef<ParBucketSummary>[]>(() => [
     color: (row) => bucketColor(row.bucket)
   },
   { key: 'loanCount', label: t('accounting.receivablesReports.aging.bucketColumns.loanCount') },
-  { key: 'overdueAmount', label: t('accounting.receivablesReports.aging.bucketColumns.overdueAmount'), type: 'currency' }
+  {
+    key: 'overdueAmount',
+    label: t('accounting.receivablesReports.aging.bucketColumns.overdueAmount'),
+    type: 'currency'
+  }
 ])
 
 const bucketFilterOptions = computed(() => [
@@ -136,7 +150,9 @@ const bucketFilterOptions = computed(() => [
 const bucketFilter = ref<CollectionBucket | ''>((route.query.bucket as CollectionBucket) || '')
 
 const filtered = computed(() =>
-  (workqueue.value ?? []).filter((item) => !bucketFilter.value || item.bucket === bucketFilter.value)
+  (workqueue.value ?? []).filter(
+    (item) => !bucketFilter.value || item.bucket === bucketFilter.value
+  )
 )
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(filtered, {
@@ -146,8 +162,17 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filtered, {
 
 const detailColumns = computed<ColumnDef<CollectionWorkqueueItemResponse>[]>(() => [
   { key: 'loanId', label: t('accounting.receivablesReports.aging.columns.loanId'), sortable: true },
-  { key: 'customerName', label: t('accounting.receivablesReports.aging.columns.customer'), sortable: true },
-  { key: 'principal', label: t('accounting.receivablesReports.aging.columns.principal'), type: 'currency', sortable: true },
+  {
+    key: 'customerName',
+    label: t('accounting.receivablesReports.aging.columns.customer'),
+    sortable: true
+  },
+  {
+    key: 'principal',
+    label: t('accounting.receivablesReports.aging.columns.principal'),
+    type: 'currency',
+    sortable: true
+  },
   {
     key: 'outstandingBalance',
     label: t('accounting.receivablesReports.aging.columns.outstandingBalance'),
@@ -160,8 +185,17 @@ const detailColumns = computed<ColumnDef<CollectionWorkqueueItemResponse>[]>(() 
     type: 'currency',
     sortable: true
   },
-  { key: 'oldestDueDate', label: t('accounting.receivablesReports.aging.columns.oldestDueDate'), type: 'date', sortable: true },
-  { key: 'maxDpd', label: t('accounting.receivablesReports.aging.columns.daysPastDue'), sortable: true },
+  {
+    key: 'oldestDueDate',
+    label: t('accounting.receivablesReports.aging.columns.oldestDueDate'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'maxDpd',
+    label: t('accounting.receivablesReports.aging.columns.daysPastDue'),
+    sortable: true
+  },
   {
     key: 'bucket',
     label: t('accounting.receivablesReports.aging.columns.bucket'),

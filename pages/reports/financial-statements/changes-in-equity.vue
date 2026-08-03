@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,13 +9,18 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('accounting.financialStatements.changesInEquity.financialPeriod')" class="max-w-xs">
+      <UFormGroup
+        :label="t('accounting.financialStatements.changesInEquity.financialPeriod')"
+        class="max-w-xs"
+      >
         <USelectMenu
           v-model="financialPeriodId"
           :options="periodOptions"
           option-attribute="label"
           value-attribute="value"
-          :placeholder="t('accounting.financialStatements.changesInEquity.financialPeriodPlaceholder')"
+          :placeholder="
+            t('accounting.financialStatements.changesInEquity.financialPeriodPlaceholder')
+          "
         />
       </UFormGroup>
     </UCard>
@@ -53,16 +52,25 @@
         </template>
       </DataTable>
 
-      <p v-if="financialPeriodId && equityRows.length" class="text-sm text-gray-500 pt-4 px-2 border-t border-gray-200 dark:border-gray-800 mt-2">
+      <p
+        v-if="financialPeriodId && equityRows.length"
+        class="text-sm text-gray-500 pt-4 px-2 border-t border-gray-200 dark:border-gray-800 mt-2"
+      >
         {{ t('accounting.financialStatements.changesInEquity.netIncomeReference') }}:
-        <span class="font-semibold text-gray-900 dark:text-white">{{ formatCurrency(netIncome) }}</span>
+        <span class="font-semibold text-gray-900 dark:text-white">{{
+          formatCurrency(netIncome)
+        }}</span>
       </p>
     </UCard>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { FinancialPeriodResponse, GeneralLedgerSummaryRow, GlAccountResponse } from '~/features/accounting/types'
+import type {
+  FinancialPeriodResponse,
+  GeneralLedgerSummaryRow,
+  GlAccountResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 interface EquityChangeRow {
@@ -130,10 +138,28 @@ const netIncome = computed(() => {
 })
 
 const columns = computed<ColumnDef<EquityChangeRow>[]>(() => [
-  { key: 'accountNo', label: t('accounting.financialStatements.changesInEquity.columns.accountNo') },
-  { key: 'accountName', label: t('accounting.financialStatements.changesInEquity.columns.accountName') },
-  { key: 'openingBalance', label: t('accounting.financialStatements.changesInEquity.columns.opening'), type: 'currency' },
-  { key: 'movement', label: t('accounting.financialStatements.changesInEquity.columns.movement'), type: 'currency' },
-  { key: 'closingBalance', label: t('accounting.financialStatements.changesInEquity.columns.closing'), type: 'currency' }
+  {
+    key: 'accountNo',
+    label: t('accounting.financialStatements.changesInEquity.columns.accountNo')
+  },
+  {
+    key: 'accountName',
+    label: t('accounting.financialStatements.changesInEquity.columns.accountName')
+  },
+  {
+    key: 'openingBalance',
+    label: t('accounting.financialStatements.changesInEquity.columns.opening'),
+    type: 'currency'
+  },
+  {
+    key: 'movement',
+    label: t('accounting.financialStatements.changesInEquity.columns.movement'),
+    type: 'currency'
+  },
+  {
+    key: 'closingBalance',
+    label: t('accounting.financialStatements.changesInEquity.columns.closing'),
+    type: 'currency'
+  }
 ])
 </script>

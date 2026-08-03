@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -16,16 +10,22 @@
 
     <UCard class="mb-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <UFormGroup :label="t('accounting.generalLedgerReports.accountTransactionHistory.glAccount')">
+        <UFormGroup
+          :label="t('accounting.generalLedgerReports.accountTransactionHistory.glAccount')"
+        >
           <USelectMenu
             v-model="glAccountId"
             :options="glAccountOptions"
             option-attribute="label"
             value-attribute="value"
-            :placeholder="t('accounting.generalLedgerReports.accountTransactionHistory.glAccountPlaceholder')"
+            :placeholder="
+              t('accounting.generalLedgerReports.accountTransactionHistory.glAccountPlaceholder')
+            "
           />
         </UFormGroup>
-        <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')">
+        <UFormGroup
+          :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        >
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
         </UFormGroup>
       </div>
@@ -46,13 +46,19 @@
             icon="i-heroicons-clock"
             :title="
               glAccountId
-                ? t('accounting.generalLedgerReports.accountTransactionHistory.emptyTitleNoActivity')
+                ? t(
+                    'accounting.generalLedgerReports.accountTransactionHistory.emptyTitleNoActivity'
+                  )
                 : t('accounting.generalLedgerReports.accountTransactionHistory.emptyTitlePick')
             "
             :description="
               glAccountId
-                ? t('accounting.generalLedgerReports.accountTransactionHistory.emptyDescriptionNoActivity')
-                : t('accounting.generalLedgerReports.accountTransactionHistory.emptyDescriptionPick')
+                ? t(
+                    'accounting.generalLedgerReports.accountTransactionHistory.emptyDescriptionNoActivity'
+                  )
+                : t(
+                    'accounting.generalLedgerReports.accountTransactionHistory.emptyDescriptionPick'
+                  )
             "
           />
         </template>
@@ -62,7 +68,11 @@
 </template>
 
 <script setup lang="ts">
-import type { DateRangeLedgerResponse, GlAccountResponse, LedgerLineResponse } from '~/features/accounting/types'
+import type {
+  DateRangeLedgerResponse,
+  GlAccountResponse,
+  LedgerLineResponse
+} from '~/features/accounting/types'
 import type { ColumnDef } from '~/shared/types'
 
 const { t } = useI18n()
@@ -95,16 +105,34 @@ const {
 )
 
 const columns = computed<ColumnDef<LedgerLineResponse>[]>(() => [
-  { key: 'transactionDate', label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.date'), type: 'date' },
-  { key: 'entryNo', label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.entryNo') },
-  { key: 'description', label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.description') },
+  {
+    key: 'transactionDate',
+    label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.date'),
+    type: 'date'
+  },
+  {
+    key: 'entryNo',
+    label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.entryNo')
+  },
+  {
+    key: 'description',
+    label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.description')
+  },
   {
     key: 'entrySide',
     label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.side'),
     type: 'badge',
     color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
   },
-  { key: 'amount', label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.amount'), type: 'currency' },
-  { key: 'runningBalance', label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.balance'), type: 'currency' }
+  {
+    key: 'amount',
+    label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.amount'),
+    type: 'currency'
+  },
+  {
+    key: 'runningBalance',
+    label: t('accounting.generalLedgerReports.accountTransactionHistory.columns.balance'),
+    type: 'currency'
+  }
 ])
 </script>

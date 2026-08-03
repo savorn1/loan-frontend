@@ -38,6 +38,7 @@ const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   WAIVED: { color: 'gray', icon: 'i-heroicons-hand-raised' },
   REFUNDED: { color: 'gray', icon: 'i-heroicons-arrow-uturn-left' },
   INACTIVE: { color: 'gray', icon: 'i-heroicons-pause-circle' },
+  LEFT: { color: 'gray', icon: 'i-heroicons-arrow-right-on-rectangle' },
   SUBMITTED: { color: 'gray', icon: 'i-heroicons-paper-airplane' },
   UNDER_REVIEW: { color: 'orange', icon: 'i-heroicons-magnifying-glass' },
   WITHDRAWN: { color: 'gray', icon: 'i-heroicons-arrow-uturn-left' },

@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -111,9 +105,28 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(outstanding
 })
 
 const columns = computed<ColumnDef<OutstandingRow>[]>(() => [
-  { key: 'loanId', label: t('accounting.interestReports.outstanding.columns.loanId'), sortable: true },
-  { key: 'totalAccrued', label: t('accounting.interestReports.outstanding.columns.totalAccrued'), type: 'currency', sortable: true },
-  { key: 'totalCollected', label: t('accounting.interestReports.outstanding.columns.totalCollected'), type: 'currency', sortable: true },
-  { key: 'outstanding', label: t('accounting.interestReports.outstanding.columns.outstanding'), type: 'currency', sortable: true }
+  {
+    key: 'loanId',
+    label: t('accounting.interestReports.outstanding.columns.loanId'),
+    sortable: true
+  },
+  {
+    key: 'totalAccrued',
+    label: t('accounting.interestReports.outstanding.columns.totalAccrued'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'totalCollected',
+    label: t('accounting.interestReports.outstanding.columns.totalCollected'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'outstanding',
+    label: t('accounting.interestReports.outstanding.columns.outstanding'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 </script>

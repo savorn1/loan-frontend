@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -33,7 +27,9 @@
             :placeholder="t('accounting.financialStatements.cashFlow.cashAccountPlaceholder')"
           />
         </UFormGroup>
-        <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')">
+        <UFormGroup
+          :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        >
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
         </UFormGroup>
       </div>
@@ -49,11 +45,17 @@
 
     <UCard v-if="ledger" class="mb-6">
       <dl class="grid grid-cols-3 gap-y-3 text-sm">
-        <dt class="text-gray-500">{{ t('accounting.financialStatements.cashFlow.openingBalance') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.financialStatements.cashFlow.openingBalance') }}
+        </dt>
         <dd class="font-semibold col-span-2">{{ formatCurrency(ledger.openingBalance) }}</dd>
         <dt class="text-gray-500">{{ t('accounting.financialStatements.cashFlow.netChange') }}</dt>
-        <dd class="font-semibold col-span-2">{{ formatCurrency(ledger.closingBalance - ledger.openingBalance) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.financialStatements.cashFlow.closingBalance') }}</dt>
+        <dd class="font-semibold col-span-2">
+          {{ formatCurrency(ledger.closingBalance - ledger.openingBalance) }}
+        </dd>
+        <dt class="text-gray-500">
+          {{ t('accounting.financialStatements.cashFlow.closingBalance') }}
+        </dt>
         <dd class="font-semibold col-span-2">{{ formatCurrency(ledger.closingBalance) }}</dd>
       </dl>
     </UCard>
@@ -109,7 +111,12 @@ const { data: entries } = await useAsyncData('cash-flow-journal-entries', () =>
   api<JournalEntryResponse[]>('/journal-entries')
 )
 const transactionTypeByEntryNo = computed(
-  () => new Map((entries.value ?? []).filter((e) => e.entryNo).map((e) => [e.entryNo as string, e.transactionType]))
+  () =>
+    new Map(
+      (entries.value ?? [])
+        .filter((e) => e.entryNo)
+        .map((e) => [e.entryNo as string, e.transactionType])
+    )
 )
 
 const cashAccountId = ref<number | undefined>(undefined)
@@ -124,9 +131,12 @@ const {
   'cash-flow-ledger',
   () => {
     if (!cashAccountId.value) return Promise.resolve(null)
-    return api<DateRangeLedgerResponse>(`/gl-accounts/${cashAccountId.value}/ledger-by-date-range`, {
-      query: { dateFrom: dateFrom.value || undefined, dateTo: dateTo.value || undefined }
-    })
+    return api<DateRangeLedgerResponse>(
+      `/gl-accounts/${cashAccountId.value}/ledger-by-date-range`,
+      {
+        query: { dateFrom: dateFrom.value || undefined, dateTo: dateTo.value || undefined }
+      }
+    )
   },
   { watch: [cashAccountId, dateFrom, dateTo] }
 )
@@ -145,7 +155,15 @@ const movementsByType = computed<CashMovementRow[]>(() => {
 })
 
 const columns = computed<ColumnDef<CashMovementRow>[]>(() => [
-  { key: 'transactionType', label: t('accounting.financialStatements.cashFlow.columns.transactionType'), type: 'enum' },
-  { key: 'amount', label: t('accounting.financialStatements.cashFlow.columns.amount'), type: 'currency' }
+  {
+    key: 'transactionType',
+    label: t('accounting.financialStatements.cashFlow.columns.transactionType'),
+    type: 'enum'
+  },
+  {
+    key: 'amount',
+    label: t('accounting.financialStatements.cashFlow.columns.amount'),
+    type: 'currency'
+  }
 ])
 </script>

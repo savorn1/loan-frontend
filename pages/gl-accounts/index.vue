@@ -40,7 +40,13 @@
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
             <UButton
               size="2xs"
               color="red"
@@ -152,8 +158,17 @@ function accountLabel(id: number | null) {
 const columns = computed<ColumnDef<GlAccountResponse>[]>(() => [
   { key: 'accountNo', label: t('accounting.glAccounts.columns.accountNo'), sortable: true },
   { key: 'accountName', label: t('accounting.glAccounts.columns.name'), sortable: true },
-  { key: 'parentId', label: t('accounting.glAccounts.columns.parent'), value: (row) => accountLabel(row.parentId) },
-  { key: 'accountType', label: t('accounting.glAccounts.columns.type'), type: 'enum', sortable: true },
+  {
+    key: 'parentId',
+    label: t('accounting.glAccounts.columns.parent'),
+    value: (row) => accountLabel(row.parentId)
+  },
+  {
+    key: 'accountType',
+    label: t('accounting.glAccounts.columns.type'),
+    type: 'enum',
+    sortable: true
+  },
   {
     key: 'normalBalance',
     label: t('accounting.glAccounts.columns.normalBalance'),
@@ -167,7 +182,12 @@ const columns = computed<ColumnDef<GlAccountResponse>[]>(() => [
     type: 'boolean',
     trueColor: 'teal'
   },
-  { key: 'status', label: t('accounting.glAccounts.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'status',
+    label: t('accounting.glAccounts.columns.status'),
+    type: 'status',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
 ])
 
@@ -244,7 +264,12 @@ const createFields = computed<FieldDef[]>(() => [
     wrapper: 'half',
     options: entrySideOptions.value
   },
-  { name: 'currency', label: t('accounting.glAccounts.fields.currency'), required: true, wrapper: 'half' },
+  {
+    name: 'currency',
+    label: t('accounting.glAccounts.fields.currency'),
+    required: true,
+    wrapper: 'half'
+  },
   {
     name: 'allowPosting',
     label: t('accounting.glAccounts.fields.allowPosting'),
@@ -300,7 +325,12 @@ const editFields = computed<FieldDef[]>(() => [
     wrapper: 'half',
     options: entrySideOptions.value
   },
-  { name: 'currency', label: t('accounting.glAccounts.fields.currency'), required: true, wrapper: 'half' },
+  {
+    name: 'currency',
+    label: t('accounting.glAccounts.fields.currency'),
+    required: true,
+    wrapper: 'half'
+  },
   {
     name: 'allowPosting',
     label: t('accounting.glAccounts.fields.allowPosting'),

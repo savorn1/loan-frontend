@@ -48,18 +48,29 @@
 
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #bucket-data="{ row }">
-          <UBadge :color="bucketColor(row.bucket)" variant="subtle">{{ bucketLabel(row.bucket) }}</UBadge>
+          <UBadge :color="bucketColor(row.bucket)" variant="subtle">{{
+            bucketLabel(row.bucket)
+          }}</UBadge>
         </template>
         <template #caseStatus-data="{ row }">
           <StatusBadge v-if="row.caseStatus" :status="row.caseStatus" />
-          <UBadge v-else color="gray" variant="subtle">{{ t('collections.list.unassigned') }}</UBadge>
+          <UBadge v-else color="gray" variant="subtle">{{
+            t('collections.list.unassigned')
+          }}</UBadge>
         </template>
         <template #assignedToUserId-data="{ row }">
-          <span class="text-sm text-gray-700 dark:text-gray-300">{{ assigneeName(row.assignedToUserId) }}</span>
+          <span class="text-sm text-gray-700 dark:text-gray-300">{{
+            assigneeName(row.assignedToUserId)
+          }}</span>
         </template>
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton size="2xs" variant="soft" icon="i-heroicons-chat-bubble-left-ellipsis" @click="openNote(row)">
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-chat-bubble-left-ellipsis"
+              @click="openNote(row)"
+            >
               {{ t('collections.list.actions.note') }}
             </UButton>
             <UButton
@@ -111,7 +122,9 @@
     <UModal v-model="showAssign">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('collections.list.assignModal.title', { id: assigningRow?.loanId }) }}</span>
+          <span class="font-semibold">{{
+            t('collections.list.assignModal.title', { id: assigningRow?.loanId })
+          }}</span>
         </template>
         <DynamicForm
           v-model="assignForm"
@@ -129,7 +142,9 @@
     <UModal v-model="showNote">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('collections.list.noteModal.title', { id: noteRow?.loanId }) }}</span>
+          <span class="font-semibold">{{
+            t('collections.list.noteModal.title', { id: noteRow?.loanId })
+          }}</span>
         </template>
 
         <div v-if="notesLoading" class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
@@ -153,7 +168,9 @@
             <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ n.authorName }}</p>
           </li>
         </ol>
-        <p v-else class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ t('collections.list.noteModal.empty') }}</p>
+        <p v-else class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          {{ t('collections.list.noteModal.empty') }}
+        </p>
 
         <DynamicForm
           v-model="noteForm"
@@ -193,12 +210,13 @@ const {
   api<CollectionWorkqueueItemResponse[]>('/payments/collections')
 )
 
-
 const { data: usersPage } = await useAsyncData('collections-users', () =>
   isAdmin.value ? api<PageResponse<UserResponse>>('/auth/users?size=200') : Promise.resolve(null)
 )
 
-const userMap = computed(() => new Map((usersPage.value?.content ?? []).map((u) => [u.id, u.username])))
+const userMap = computed(
+  () => new Map((usersPage.value?.content ?? []).map((u) => [u.id, u.username]))
+)
 
 function assigneeName(userId: number | null) {
   if (!userId) return '—'
@@ -242,7 +260,8 @@ const filteredItems = computed(() =>
   (items.value ?? []).filter((item) => {
     if (bucketFilter.value !== 'ALL' && item.bucket !== bucketFilter.value) return false
     if (assignedFilter.value === 'UNASSIGNED' && item.assignedToUserId) return false
-    if (typeof assignedFilter.value === 'number' && item.assignedToUserId !== assignedFilter.value) return false
+    if (typeof assignedFilter.value === 'number' && item.assignedToUserId !== assignedFilter.value)
+      return false
     return true
   })
 )
@@ -257,9 +276,7 @@ function clearFilters() {
 
 const totalLabel = computed(() => {
   const count = items.value?.length ?? 0
-  return count === 1
-    ? t('collections.list.totalOne')
-    : t('collections.list.totalMany', { count })
+  return count === 1 ? t('collections.list.totalOne') : t('collections.list.totalMany', { count })
 })
 
 const columns = computed<ColumnDef<CollectionWorkqueueItemResponse>[]>(() => [
@@ -273,8 +290,18 @@ const columns = computed<ColumnDef<CollectionWorkqueueItemResponse>[]>(() => [
   },
   { key: 'customerName', label: t('collections.list.columns.customer'), sortable: true },
   { key: 'customerPhone', label: t('collections.list.columns.phone') },
-  { key: 'totalOverdueAmount', label: t('collections.list.columns.overdue'), type: 'currency', sortable: true },
-  { key: 'oldestDueDate', label: t('collections.list.columns.oldestDue'), type: 'date', sortable: true },
+  {
+    key: 'totalOverdueAmount',
+    label: t('collections.list.columns.overdue'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'oldestDueDate',
+    label: t('collections.list.columns.oldestDue'),
+    type: 'date',
+    sortable: true
+  },
   { key: 'maxDpd', label: t('collections.list.columns.dpd'), sortable: true },
   { key: 'bucket', label: t('collections.list.columns.bucket') },
   { key: 'caseStatus', label: t('collections.list.columns.case') },
@@ -367,7 +394,13 @@ const noteFields = computed<FieldDef[]>(() => [
       { label: t('collections.shared.outcomes.other'), value: 'OTHER' }
     ]
   },
-  { name: 'note', label: t('collections.list.noteModal.note'), type: 'textarea', required: true, rows: 3 },
+  {
+    name: 'note',
+    label: t('collections.list.noteModal.note'),
+    type: 'textarea',
+    required: true,
+    rows: 3
+  },
   { name: 'followUpDate', label: t('collections.list.noteModal.nextFollowUp'), type: 'date' }
 ])
 
@@ -382,7 +415,9 @@ async function openNote(row: CollectionWorkqueueItemResponse) {
   showNote.value = true
   notesLoading.value = true
   try {
-    notes.value = await api<CollectionActivityResponse[]>(`/payments/collections/${row.loanId}/activities`)
+    notes.value = await api<CollectionActivityResponse[]>(
+      `/payments/collections/${row.loanId}/activities`
+    )
   } finally {
     notesLoading.value = false
   }
@@ -393,15 +428,18 @@ async function onAddNote(values: Record<string, any>) {
   addingNote.value = true
   noteError.value = ''
   try {
-    const created = await api<CollectionActivityResponse>(`/payments/collections/${noteRow.value.loanId}/activities`, {
-      method: 'POST',
-      body: {
-        contactMethod: values.contactMethod,
-        outcome: values.outcome,
-        note: values.note,
-        followUpDate: values.followUpDate || undefined
+    const created = await api<CollectionActivityResponse>(
+      `/payments/collections/${noteRow.value.loanId}/activities`,
+      {
+        method: 'POST',
+        body: {
+          contactMethod: values.contactMethod,
+          outcome: values.outcome,
+          note: values.note,
+          followUpDate: values.followUpDate || undefined
+        }
       }
-    })
+    )
     notes.value = [created, ...notes.value]
     resetNoteForm()
     toast.add({ title: t('collections.list.noteModal.success'), color: 'green' })

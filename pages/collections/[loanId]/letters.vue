@@ -3,7 +3,9 @@
     <template #header>
       <div class="flex items-center justify-between">
         <span class="font-semibold">{{ t('collections.letters.title') }}</span>
-        <UButton size="xs" icon="i-heroicons-plus" @click="openCreate">{{ t('collections.letters.addLetter') }}</UButton>
+        <UButton size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+          t('collections.letters.addLetter')
+        }}</UButton>
       </div>
     </template>
 
@@ -62,7 +64,9 @@
           :description="t('collections.letters.empty.description')"
         >
           <template #action>
-            <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('collections.letters.addLetter') }}</UButton>
+            <UButton icon="i-heroicons-plus" @click="openCreate">{{
+              t('collections.letters.addLetter')
+            }}</UButton>
           </template>
         </EmptyState>
       </template>
@@ -166,7 +170,12 @@ const createFields = computed<FieldDef[]>(() => [
 ])
 
 function openCreate() {
-  createForm.value = { letterType: undefined, deliveryMethod: undefined, recipientAddress: '', content: '' }
+  createForm.value = {
+    letterType: undefined,
+    deliveryMethod: undefined,
+    recipientAddress: '',
+    content: ''
+  }
   createError.value = ''
   showCreate.value = true
 }
@@ -194,11 +203,17 @@ async function onCreate(values: Record<string, any>) {
 
 const updatingId = ref<number | null>(null)
 
-async function onUpdateStatus(row: CollectionLetterResponse, status: Exclude<LetterStatus, 'DRAFT'>) {
+async function onUpdateStatus(
+  row: CollectionLetterResponse,
+  status: Exclude<LetterStatus, 'DRAFT'>
+) {
   updatingId.value = row.id
   try {
     const payload: UpdateCollectionLetterStatusRequest = { status }
-    await api(`/payments/collections/${loanId}/letters/${row.id}/status`, { method: 'PUT', body: payload })
+    await api(`/payments/collections/${loanId}/letters/${row.id}/status`, {
+      method: 'PUT',
+      body: payload
+    })
     toast.add({ title: t('collections.letters.statusUpdated'), color: 'green' })
     await refresh()
   } catch (err) {

@@ -4,9 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">{{ t('loans.refinances.title') }}</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >{{ t('loans.refinances.add') }}</UButton
-          >
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+            t('loans.refinances.add')
+          }}</UButton>
         </div>
       </template>
 
@@ -26,7 +26,9 @@
             :description="t('loans.refinances.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.refinances.add') }}</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loans.refinances.add')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -109,7 +111,12 @@ const fields = computed<FieldDef[]>(() => [
     options: loanOptions.value,
     placeholder: t('loans.refinances.fields.newLoanIdPlaceholder')
   },
-  { name: 'effectiveDate', label: t('loans.refinances.fields.effectiveDate'), type: 'date', required: true },
+  {
+    name: 'effectiveDate',
+    label: t('loans.refinances.fields.effectiveDate'),
+    type: 'date',
+    required: true
+  },
   { name: 'reason', label: t('loans.refinances.fields.reason'), type: 'textarea', required: true }
 ])
 

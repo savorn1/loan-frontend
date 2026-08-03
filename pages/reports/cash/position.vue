@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -44,10 +38,16 @@
         {{ formatCurrency(ledger.closingBalance) }}
       </div>
 
-      <dl class="grid grid-cols-2 gap-y-3 text-sm mt-6 pt-4 border-t border-gray-200 dark:border-gray-800">
-        <dt class="text-gray-500">{{ t('accounting.cashReports.position.totalReceiptsToDate') }}</dt>
+      <dl
+        class="grid grid-cols-2 gap-y-3 text-sm mt-6 pt-4 border-t border-gray-200 dark:border-gray-800"
+      >
+        <dt class="text-gray-500">
+          {{ t('accounting.cashReports.position.totalReceiptsToDate') }}
+        </dt>
         <dd class="font-semibold text-right">{{ formatCurrency(ledger.periodDebitTotal) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.cashReports.position.totalPaymentsToDate') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.cashReports.position.totalPaymentsToDate') }}
+        </dt>
         <dd class="font-semibold text-right">{{ formatCurrency(ledger.periodCreditTotal) }}</dd>
       </dl>
     </UCard>
@@ -66,15 +66,14 @@ function todayIsoDate() {
 }
 const todayIso = todayIsoDate()
 
-const { data: glAccounts } = await useAsyncData('cash-position-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
+const { data: glAccounts } = await useAsyncData('cash-position-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
 const account = computed(() => (glAccounts.value ?? []).find((a) => a.accountNo === '1010'))
 
 const asOfDate = ref(todayIso)
 
-const {
-  data: ledger,
-  error: fetchError
-} = await useAsyncData(
+const { data: ledger, error: fetchError } = await useAsyncData(
   'cash-position-ledger',
   () => {
     if (!account.value || !asOfDate.value) return Promise.resolve(null)

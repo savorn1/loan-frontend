@@ -6,7 +6,7 @@
         variant="soft"
         color="gray"
         icon="i-heroicons-arrow-down-tray"
-        @click="downloadCsv(exportFilename, columns, rows)"
+        @click="downloadCsv(resolvedExportFilename, columns, rows)"
       >
         {{ t('common.exportCsv') }}
       </UButton>
@@ -33,6 +33,7 @@
 
 <script setup lang="ts" generic="T extends Record<string, any>">
 import type { ColumnDef } from '~/shared/types'
+import { deriveExportBaseName } from '~/shared/utils/csv'
 
 const props = withDefaults(
   defineProps<{
@@ -43,14 +44,20 @@ const props = withDefaults(
     exportFilename?: string
   }>(),
   {
-    exportable: true,
-    exportFilename: 'export.csv'
+    exportable: true
   }
 )
 
 const emit = defineEmits<{ select: [row: T] }>()
 
 const { t } = useI18n()
+const route = useRoute()
+
+const resolvedExportFilename = computed(
+  () =>
+    props.exportFilename ??
+    `${deriveExportBaseName(route.path, route.params as Record<string, string | string[]>)}.csv`
+)
 
 const sort = defineModel<{ column: string; direction: 'asc' | 'desc' } | undefined>('sort')
 

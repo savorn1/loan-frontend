@@ -2,7 +2,9 @@
   <div>
     <PageHeader :title="t('admin.branches.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('admin.branches.newBranch') }}</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('admin.branches.newBranch')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -82,7 +84,9 @@
         <template #empty-state>
           <EmptyState
             :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-building-office-2'"
-            :title="search ? t('admin.branches.empty.matchesTitle') : t('admin.branches.empty.emptyTitle')"
+            :title="
+              search ? t('admin.branches.empty.matchesTitle') : t('admin.branches.empty.emptyTitle')
+            "
             :description="
               search
                 ? t('admin.branches.empty.matchesDescription', { query: search })
@@ -90,7 +94,9 @@
             "
           >
             <template v-if="!search" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('admin.branches.newBranch') }}</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('admin.branches.newBranch')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -140,7 +146,9 @@
     <UModal v-model="showHours" :ui="{ width: 'sm:max-w-2xl' }">
       <UCard v-if="hoursTargetBranch">
         <template #header>
-          <span class="font-semibold">{{ t('admin.branches.hoursModal.title', { name: hoursTargetBranch.name }) }}</span>
+          <span class="font-semibold">{{
+            t('admin.branches.hoursModal.title', { name: hoursTargetBranch.name })
+          }}</span>
         </template>
         <div v-if="hoursPending" class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
           {{ t('admin.shared.loading') }}
@@ -167,8 +175,12 @@
         </div>
         <template #footer>
           <div class="flex justify-end gap-2">
-            <UButton color="gray" variant="ghost" @click="showHours = false">{{ t('common.cancel') }}</UButton>
-            <UButton :loading="savingHours" @click="onSaveHours">{{ t('common.saveChanges') }}</UButton>
+            <UButton color="gray" variant="ghost" @click="showHours = false">{{
+              t('common.cancel')
+            }}</UButton>
+            <UButton :loading="savingHours" @click="onSaveHours">{{
+              t('common.saveChanges')
+            }}</UButton>
           </div>
         </template>
       </UCard>
@@ -176,7 +188,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      :title="confirmDelete ? t('admin.branches.deleteConfirmTitle', { name: confirmDelete.name }) : ''"
+      :title="
+        confirmDelete ? t('admin.branches.deleteConfirmTitle', { name: confirmDelete.name }) : ''
+      "
       :description="confirmDelete ? t('admin.branches.deleteConfirmDescription') : ''"
       :confirm-label="t('common.delete')"
       color="red"
@@ -221,9 +235,7 @@ const filtered = computed(() => {
   const q = search.value.trim().toLowerCase()
   const list = (branches.value ?? []).filter((b) => inRange(b.createdAt))
   if (!q) return list
-  return list.filter(
-    (b) => b.name.toLowerCase().includes(q) || b.code.toLowerCase().includes(q)
-  )
+  return list.filter((b) => b.name.toLowerCase().includes(q) || b.code.toLowerCase().includes(q))
 })
 
 const { page, pageSize, total, rows } = useClientTable(filtered, { pageSize: 10 })
@@ -252,7 +264,13 @@ const columns = computed<ColumnDef<BranchResponse>[]>(() => [
 ])
 
 const fields = computed<FieldDef[]>(() => [
-  { name: 'code', label: t('admin.branches.fields.code'), hint: t('admin.branches.fields.codeHint'), required: true, wrapper: 'half' },
+  {
+    name: 'code',
+    label: t('admin.branches.fields.code'),
+    hint: t('admin.branches.fields.codeHint'),
+    required: true,
+    wrapper: 'half'
+  },
   { name: 'name', label: t('admin.branches.fields.name'), required: true, wrapper: 'half' },
   { name: 'address', label: t('admin.branches.fields.address') },
   { name: 'phone', label: t('admin.branches.fields.phone'), type: 'phone', wrapper: 'half' },
@@ -316,10 +334,9 @@ const hoursPending = ref(false)
 const savingHours = ref(false)
 const hoursTargetBranch = ref<BranchResponse | null>(null)
 const hoursForm = reactive<Record<DayOfWeek, HoursFormRow>>(
-  Object.fromEntries(daysOfWeek.map((day) => [day, { isClosed: true, openingTime: '', closingTime: '' }])) as Record<
-    DayOfWeek,
-    HoursFormRow
-  >
+  Object.fromEntries(
+    daysOfWeek.map((day) => [day, { isClosed: true, openingTime: '', closingTime: '' }])
+  ) as Record<DayOfWeek, HoursFormRow>
 )
 
 async function openHours(row: BranchResponse) {

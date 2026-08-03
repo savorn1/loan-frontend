@@ -58,6 +58,7 @@
           :rows="loans ?? []"
           :columns="loanColumns"
           :loading="loansPending"
+          export-filename="customer-loans.csv"
           @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
         >
           <template #empty-state>
@@ -79,7 +80,12 @@
             }}</UButton>
           </div>
         </template>
-        <DataTable :rows="identities ?? []" :columns="identityColumns" :loading="identitiesPending">
+        <DataTable
+          :rows="identities ?? []"
+          :columns="identityColumns"
+          :loading="identitiesPending"
+          export-filename="customer-identities.csv"
+        >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
               <UButton
@@ -124,7 +130,12 @@
             }}</UButton>
           </div>
         </template>
-        <DataTable :rows="addresses ?? []" :columns="addressColumns" :loading="addressesPending">
+        <DataTable
+          :rows="addresses ?? []"
+          :columns="addressColumns"
+          :loading="addressesPending"
+          export-filename="customer-addresses.csv"
+        >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
               <UButton
@@ -169,7 +180,12 @@
             }}</UButton>
           </div>
         </template>
-        <DataTable :rows="contacts ?? []" :columns="contactColumns" :loading="contactsPending">
+        <DataTable
+          :rows="contacts ?? []"
+          :columns="contactColumns"
+          :loading="contactsPending"
+          export-filename="customer-contacts.csv"
+        >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
               <UButton
@@ -218,6 +234,7 @@
           :rows="employments ?? []"
           :columns="employmentColumns"
           :loading="employmentsPending"
+          export-filename="customer-employments.csv"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
@@ -263,7 +280,12 @@
             }}</UButton>
           </div>
         </template>
-        <DataTable :rows="incomes ?? []" :columns="incomeColumns" :loading="incomesPending">
+        <DataTable
+          :rows="incomes ?? []"
+          :columns="incomeColumns"
+          :loading="incomesPending"
+          export-filename="customer-incomes.csv"
+        >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
               <UButton
@@ -312,6 +334,7 @@
           :rows="relationships ?? []"
           :columns="relationshipColumns"
           :loading="relationshipsPending"
+          export-filename="customer-relationships.csv"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
@@ -378,7 +401,12 @@
         <template #header>
           <span class="font-semibold">{{ t('customers.detail.auditLog.cardTitle') }}</span>
         </template>
-        <DataTable :rows="auditLogs ?? []" :columns="auditLogColumns" :loading="auditLogsPending">
+        <DataTable
+          :rows="auditLogs ?? []"
+          :columns="auditLogColumns"
+          :loading="auditLogsPending"
+          export-filename="customer-audit-log.csv"
+        >
           <template #empty-state>
             <EmptyState
               icon="i-heroicons-clock"
@@ -666,9 +694,7 @@
     <UModal v-model="showEditRelationship">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{
-            t('customers.detail.relationship.editModalTitle')
-          }}</span>
+          <span class="font-semibold">{{ t('customers.detail.relationship.editModalTitle') }}</span>
         </template>
         <DynamicForm
           v-model="editRelationshipForm"
@@ -771,7 +797,9 @@ const {
   error: customerError,
   pending: customerPending,
   refresh
-} = await useAsyncData(`customer-${customerId}`, () => api<CustomerResponse>(`/customers/${customerId}`))
+} = await useAsyncData(`customer-${customerId}`, () =>
+  api<CustomerResponse>(`/customers/${customerId}`)
+)
 const { data: loans, pending: loansPending } = await useAsyncData(
   `customer-${customerId}-loans`,
   () => api<LoanResponse[]>(`/loans/customer/${customerId}`)

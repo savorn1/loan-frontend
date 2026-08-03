@@ -129,7 +129,9 @@ const customers = computed(() => customersRaw.value?.content ?? [])
 const { data: branchesData } = await useAsyncData('branches-all', () =>
   api<BranchResponse[]>('/branches')
 )
-const branchNameById = computed(() => new Map((branchesData.value ?? []).map((b) => [b.id, b.name])))
+const branchNameById = computed(
+  () => new Map((branchesData.value ?? []).map((b) => [b.id, b.name]))
+)
 
 const branchFilter = ref<number | ''>('')
 const branchFilterOptions = computed(() => [
@@ -156,7 +158,8 @@ const columns = computed<ColumnDef<CustomerResponse>[]>(() => [
   {
     key: 'branchId',
     label: t('customers.list.columns.branch'),
-    value: (row) => (row.branchId != null ? branchNameById.value.get(row.branchId) ?? row.branchId : '—')
+    value: (row) =>
+      row.branchId != null ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—'
   },
   {
     key: 'createdAt',

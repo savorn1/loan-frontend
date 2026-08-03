@@ -73,6 +73,7 @@ const fields = computed<FieldDef[]>(() => [
 ])
 
 const form = ref<Record<string, any>>({
+  customerType: props.initial?.customerType ?? 'INDIVIDUAL',
   firstName: props.initial?.firstName ?? '',
   lastName: props.initial?.lastName ?? '',
   email: props.initial?.email ?? '',

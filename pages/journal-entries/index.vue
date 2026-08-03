@@ -67,7 +67,11 @@
 
         <UForm :state="createForm" class="space-y-4" @submit="onCreate">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <UFormGroup :label="t('accounting.journalEntries.fields.transactionType')" name="transactionType" required>
+            <UFormGroup
+              :label="t('accounting.journalEntries.fields.transactionType')"
+              name="transactionType"
+              required
+            >
               <USelectMenu
                 v-model="createForm.transactionType"
                 :options="transactionTypeOptions"
@@ -75,10 +79,18 @@
                 value-attribute="value"
               />
             </UFormGroup>
-            <UFormGroup :label="t('accounting.journalEntries.fields.transactionDate')" name="transactionDate" required>
+            <UFormGroup
+              :label="t('accounting.journalEntries.fields.transactionDate')"
+              name="transactionDate"
+              required
+            >
               <DatePicker v-model="createForm.transactionDate" />
             </UFormGroup>
-            <UFormGroup :label="t('accounting.journalEntries.fields.branch')" name="branchId" required>
+            <UFormGroup
+              :label="t('accounting.journalEntries.fields.branch')"
+              name="branchId"
+              required
+            >
               <USelectMenu
                 v-model="createForm.branchId"
                 :options="branchOptions"
@@ -87,7 +99,11 @@
                 :placeholder="t('accounting.journalEntries.fields.branchPlaceholder')"
               />
             </UFormGroup>
-            <UFormGroup :label="t('accounting.journalEntries.fields.currency')" name="currency" required>
+            <UFormGroup
+              :label="t('accounting.journalEntries.fields.currency')"
+              name="currency"
+              required
+            >
               <UInput
                 v-model="createForm.currency"
                 :placeholder="t('accounting.journalEntries.fields.currencyPlaceholder')"
@@ -110,10 +126,12 @@
 
           <div>
             <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium">{{ t('accounting.journalEntries.fields.lines') }}</span>
-              <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine"
-                >{{ t('accounting.journalEntries.fields.addLine') }}</UButton
-              >
+              <span class="text-sm font-medium">{{
+                t('accounting.journalEntries.fields.lines')
+              }}</span>
+              <UButton size="2xs" variant="soft" icon="i-heroicons-plus" @click="addLine">{{
+                t('accounting.journalEntries.fields.addLine')
+              }}</UButton>
             </div>
             <div class="space-y-2">
               <div v-for="(line, i) in createForm.lines" :key="i" class="flex items-center gap-2">
@@ -158,15 +176,21 @@
                   credit: formatCurrency(totalCredit)
                 })
               }}
-              <span v-if="!isBalanced">{{ t('accounting.journalEntries.fields.mustBalance') }}</span>
+              <span v-if="!isBalanced">{{
+                t('accounting.journalEntries.fields.mustBalance')
+              }}</span>
             </p>
           </div>
 
           <UAlert v-if="error" color="red" variant="subtle" :title="error" />
 
           <div class="flex justify-end gap-2 pt-2">
-            <UButton color="gray" variant="ghost" @click="showCreate = false">{{ t('common.cancel') }}</UButton>
-            <UButton type="submit" :loading="creating" :disabled="!isBalanced">{{ t('common.create') }}</UButton>
+            <UButton color="gray" variant="ghost" @click="showCreate = false">{{
+              t('common.cancel')
+            }}</UButton>
+            <UButton type="submit" :loading="creating" :disabled="!isBalanced">{{
+              t('common.create')
+            }}</UButton>
           </div>
         </UForm>
       </UCard>
@@ -206,22 +230,44 @@ const { data: branches } = await useAsyncData('journal-entries-branches', () =>
 const glAccountOptions = computed(() =>
   (glAccounts.value ?? []).map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
 )
-const branchOptions = computed(() => (branches.value ?? []).map((b) => ({ label: b.name, value: b.id })))
+const branchOptions = computed(() =>
+  (branches.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+)
 const branchNameById = computed(() => new Map((branches.value ?? []).map((b) => [b.id, b.name])))
 
 const columns = computed<ColumnDef<JournalEntryResponse>[]>(() => [
   { key: 'entryNo', label: t('accounting.journalEntries.columns.entryNo'), sortable: true },
-  { key: 'transactionType', label: t('accounting.journalEntries.columns.type'), type: 'enum', sortable: true },
-  { key: 'transactionDate', label: t('accounting.journalEntries.columns.date'), type: 'date', sortable: true },
+  {
+    key: 'transactionType',
+    label: t('accounting.journalEntries.columns.type'),
+    type: 'enum',
+    sortable: true
+  },
+  {
+    key: 'transactionDate',
+    label: t('accounting.journalEntries.columns.date'),
+    type: 'date',
+    sortable: true
+  },
   { key: 'financialPeriodName', label: t('accounting.journalEntries.columns.period') },
   {
     key: 'branchId',
     label: t('accounting.journalEntries.columns.branch'),
-    value: (row) => (row.branchId ? branchNameById.value.get(row.branchId) ?? row.branchId : '—')
+    value: (row) => (row.branchId ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—')
   },
   { key: 'referenceId', label: t('accounting.journalEntries.columns.reference') },
-  { key: 'status', label: t('accounting.journalEntries.columns.status'), type: 'status', sortable: true },
-  { key: 'createdAt', label: t('accounting.journalEntries.columns.created'), type: 'datetime', sortable: true }
+  {
+    key: 'status',
+    label: t('accounting.journalEntries.columns.status'),
+    type: 'status',
+    sortable: true
+  },
+  {
+    key: 'createdAt',
+    label: t('accounting.journalEntries.columns.created'),
+    type: 'datetime',
+    sortable: true
+  }
 ])
 
 const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
@@ -324,7 +370,12 @@ function openCreate() {
 }
 
 async function onCreate() {
-  if (!createForm.transactionType || !createForm.transactionDate || !createForm.branchId || !createForm.currency) {
+  if (
+    !createForm.transactionType ||
+    !createForm.transactionDate ||
+    !createForm.branchId ||
+    !createForm.currency
+  ) {
     error.value = t('accounting.journalEntries.validationMissingFields')
     return
   }

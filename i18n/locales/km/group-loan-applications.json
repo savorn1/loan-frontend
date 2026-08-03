@@ -1,0 +1,116 @@
+{
+  "groupLoanApplications": {
+    "list": {
+      "title": "ពាក្យស្នើសុំកម្ចីជាក្រុម",
+      "searchPlaceholder": "ស្វែងរកតាមក្រុម...",
+      "branchFilterAll": "គ្រប់សាខា",
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "group": "ក្រុម",
+        "branch": "សាខា",
+        "members": "សមាជិក",
+        "totalRequested": "ចំនួនស្នើសុំសរុប",
+        "status": "ស្ថានភាព",
+        "submitted": "កាលបានដាក់ស្នើ"
+      },
+      "statusOptions": {
+        "all": "គ្រប់ស្ថានភាព",
+        "submitted": "បានដាក់ស្នើ",
+        "underReview": "កំពុងពិនិត្យ",
+        "approved": "បានអនុម័ត",
+        "rejected": "បានច្រានចោល",
+        "withdrawn": "បានលុបចោល"
+      },
+      "emptyTitle": "មិនទាន់មានពាក្យស្នើសុំកម្ចីជាក្រុមទេ",
+      "emptyDescriptionFiltered": "សាកល្បងពាក្យស្វែងរក ឬតម្រងស្ថានភាពផ្សេង។",
+      "emptyDescription": "ពាក្យស្នើសុំត្រូវបានបង្កើតចេញពីទំព័ររបស់ក្រុមនីមួយៗ។",
+      "totalOne": "ពាក្យស្នើសុំ ១",
+      "totalOther": "ពាក្យស្នើសុំ {count}"
+    },
+    "detail": {
+      "backToList": "ត្រឡប់ទៅពាក្យស្នើសុំកម្ចីជាក្រុមវិញ",
+      "title": "ពាក្យស្នើសុំកម្ចីជាក្រុម #{id}",
+      "startReview": "ចាប់ផ្តើមពិនិត្យ",
+      "approve": "អនុម័ត",
+      "reject": "ច្រានចោល",
+      "cancel": "លុបចោលពាក្យស្នើសុំ",
+      "details": "ព័ត៌មានលម្អិត",
+      "group": "ក្រុម",
+      "purpose": "គោលបំណង",
+      "submitted": "កាលដាក់ស្នើ",
+      "decided": "កាលសម្រេច",
+      "membersHeader": "សមាជិក",
+      "memberColumn": "អតិថិជន",
+      "requestedColumn": "ស្នើសុំ",
+      "termColumn": "រយៈពេល (ខែ)",
+      "approvedColumn": "អនុម័ត",
+      "loanColumn": "កម្ចី",
+      "documents": "ឯកសារ",
+      "documentTypePlaceholder": "ប្រភេទ (ឧ. ID_PROOF)",
+      "fileNamePlaceholder": "ឈ្មោះឯកសារ",
+      "fileUrlPlaceholder": "តំណឯកសារ",
+      "addDocument": "បន្ថែមឯកសារ",
+      "verifyDocument": "ផ្ទៀងផ្ទាត់ឯកសារ",
+      "rejectDocument": "ច្រានចោលឯកសារ",
+      "deleteDocument": "លុបឯកសារ",
+      "noDocumentsTitle": "មិនទាន់មានឯកសារទេ",
+      "noDocumentsDescription": "ឯកសារភ្ជាប់ជាមួយពាក្យស្នើសុំនេះនឹងបង្ហាញនៅទីនេះ។",
+      "approveModalTitle": "អនុម័តពាក្យស្នើសុំកម្ចីជាក្រុម",
+      "rejectModalTitle": "ច្រានចោលពាក្យស្នើសុំកម្ចីជាក្រុម",
+      "approvedAmount": "ចំនួនទឹកប្រាក់អនុម័ត",
+      "interestRate": "អត្រាការប្រាក់",
+      "termMonths": "រយៈពេល (ខែ)",
+      "comments": "មតិយោបល់",
+      "decisionValidationError": "ចំនួនទឹកប្រាក់អនុម័ត អត្រាការប្រាក់ និងរយៈពេល សុទ្ធតែត្រូវការសម្រាប់សមាជិកគ្រប់រូប ដើម្បីអនុម័ត។",
+      "toastUnderReview": "ពាក្យស្នើសុំកំពុងពិនិត្យ",
+      "toastApproved": "ពាក្យស្នើសុំត្រូវបានអនុម័ត",
+      "toastRejected": "ពាក្យស្នើសុំត្រូវបានច្រានចោល",
+      "toastCancelled": "ពាក្យស្នើសុំត្រូវបានលុបចោល",
+      "toastDocumentDeleted": "ឯកសារត្រូវបានលុប",
+      "cancelTitle": "លុបចោលពាក្យស្នើសុំនេះ?",
+      "cancelDescription": "ពាក្យស្នើសុំរបស់ក្រុមនេះនឹងត្រូវបានលុបចោល ហើយមិនអាចត្រូវបានពិនិត្យ ឬអនុម័តទៀតទេ។"
+    },
+    "groupCard": {
+      "header": "ពាក្យស្នើសុំកម្ចី",
+      "newApplication": "ពាក្យស្នើសុំថ្មី",
+      "emptyTitle": "មិនទាន់មានពាក្យស្នើសុំកម្ចីទេ",
+      "emptyDescription": "ដាក់ពាក្យស្នើសុំកម្ចីជាក្រុម ដើម្បីស្នើសុំកម្ចីសម្រាប់សមាជិកក្រុមនេះ។",
+      "purpose": "គោលបំណង",
+      "membersLabel": "សមាជិកត្រូវរួមបញ្ចូល",
+      "requestedAmountPlaceholder": "ចំនួនទឹកប្រាក់ស្នើសុំ",
+      "requestedTermPlaceholder": "រយៈពេល (ខែ)",
+      "toastCreated": "ពាក្យស្នើសុំកម្ចីជាក្រុមត្រូវបានដាក់ស្នើ",
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "status": "ស្ថានភាព",
+        "submitted": "កាលបានដាក់ស្នើ"
+      }
+    },
+    "loanAccounts": {
+      "header": "គណនីកម្ចី",
+      "emptyTitle": "មិនទាន់មានគណនីកម្ចីទេ",
+      "emptyDescription": "គណនីកម្ចីត្រូវបានបង្កើតដោយស្វ័យប្រវត្តិ នៅពេលពាក្យស្នើសុំកម្ចីជាក្រុមត្រូវបានអនុម័ត។",
+      "columns": {
+        "id": "លេខសម្គាល់",
+        "customer": "អតិថិជន",
+        "principal": "ប្រាក់ដើម",
+        "status": "ស្ថានភាព",
+        "outstanding": "នៅសល់",
+        "disbursed": "បានផ្តល់ប្រាក់កម្ចី"
+      }
+    },
+    "repayments": {
+      "header": "ការទូទាត់សង",
+      "emptyTitle": "មិនទាន់មានការទូទាត់សងត្រូវបានកត់ត្រាទេ",
+      "emptyDescription": "ការទូទាត់សងត្រូវបានកត់ត្រាចេញពីទំព័រកម្ចីរបស់សមាជិកនីមួយៗ។",
+      "columns": {
+        "customer": "អតិថិជន",
+        "loan": "កម្ចី",
+        "amount": "ចំនួនទឹកប្រាក់",
+        "date": "កាលបរិច្ឆេទ",
+        "method": "វិធីសាស្ត្រ",
+        "status": "ស្ថានភាព"
+      }
+    }
+  }
+}

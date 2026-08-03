@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
@@ -50,7 +47,9 @@
             "
             :description="
               hasFullRange
-                ? t('accounting.writeoffRestructureReports.restructuring.emptyDescriptionNoActivity')
+                ? t(
+                    'accounting.writeoffRestructureReports.restructuring.emptyDescriptionNoActivity'
+                  )
                 : t('accounting.writeoffRestructureReports.restructuring.emptyDescriptionPick')
             "
           />
@@ -86,7 +85,9 @@ const hasFullRange = computed(() => !!dateFrom.value && !!dateTo.value)
 
 const restructuresInRange = computed(() => {
   if (!hasFullRange.value) return []
-  return restructures.value.filter((r) => r.effectiveDate >= dateFrom.value && r.effectiveDate <= dateTo.value)
+  return restructures.value.filter(
+    (r) => r.effectiveDate >= dateFrom.value && r.effectiveDate <= dateTo.value
+  )
 })
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(restructuresInRange, {
@@ -95,7 +96,11 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(restructure
 })
 
 const columns = computed<ColumnDef<LoanRestructureResponse>[]>(() => [
-  { key: 'loanId', label: t('accounting.writeoffRestructureReports.restructuring.columns.loanId'), sortable: true },
+  {
+    key: 'loanId',
+    label: t('accounting.writeoffRestructureReports.restructuring.columns.loanId'),
+    sortable: true
+  },
   {
     key: 'newTermMonths',
     label: t('accounting.writeoffRestructureReports.restructuring.columns.newTermMonths'),

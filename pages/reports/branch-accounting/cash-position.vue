@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -55,10 +49,16 @@
         {{ formatCurrency(cashPosition) }}
       </div>
 
-      <dl class="grid grid-cols-2 gap-y-3 text-sm mt-6 pt-4 border-t border-gray-200 dark:border-gray-800">
-        <dt class="text-gray-500">{{ t('accounting.branchAccountingReports.cashPosition.totalReceiptsToDate') }}</dt>
+      <dl
+        class="grid grid-cols-2 gap-y-3 text-sm mt-6 pt-4 border-t border-gray-200 dark:border-gray-800"
+      >
+        <dt class="text-gray-500">
+          {{ t('accounting.branchAccountingReports.cashPosition.totalReceiptsToDate') }}
+        </dt>
         <dd class="font-semibold text-right">{{ formatCurrency(totalReceipts) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.branchAccountingReports.cashPosition.totalPaymentsToDate') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.branchAccountingReports.cashPosition.totalPaymentsToDate') }}
+        </dt>
         <dd class="font-semibold text-right">{{ formatCurrency(totalPayments) }}</dd>
       </dl>
     </UCard>
@@ -84,21 +84,24 @@ function todayIsoDate() {
 }
 const todayIso = todayIsoDate()
 
-const { data: branches } = await useAsyncData('branch-cash-position-branches', () => api<BranchResponse[]>('/branches'))
-const branchOptions = computed(() => (branches.value ?? []).map((b) => ({ label: b.name, value: b.id })))
+const { data: branches } = await useAsyncData('branch-cash-position-branches', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branchOptions = computed(() =>
+  (branches.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+)
 
 const { data: glAccounts } = await useAsyncData('branch-cash-position-gl-accounts', () =>
   api<GlAccountResponse[]>('/gl-accounts')
 )
-const cashAccountExists = computed(() => (glAccounts.value ?? []).some((a) => a.accountNo === '1010'))
+const cashAccountExists = computed(() =>
+  (glAccounts.value ?? []).some((a) => a.accountNo === '1010')
+)
 
 const branchId = ref<number | undefined>(undefined)
 const asOfDate = ref(todayIso)
 
-const {
-  data: ledger,
-  error: fetchError
-} = await useAsyncData(
+const { data: ledger, error: fetchError } = await useAsyncData(
   'branch-cash-position-ledger',
   () => {
     if (!branchId.value || !asOfDate.value) return Promise.resolve(null)
@@ -109,8 +112,14 @@ const {
   { watch: [branchId, asOfDate] }
 )
 
-const cashLines = computed(() => (ledger.value?.lines ?? []).filter((line) => line.glAccountNo === '1010'))
-const totalReceipts = computed(() => cashLines.value.filter((l) => l.entrySide === 'DEBIT').reduce((sum, l) => sum + l.amount, 0))
-const totalPayments = computed(() => cashLines.value.filter((l) => l.entrySide === 'CREDIT').reduce((sum, l) => sum + l.amount, 0))
+const cashLines = computed(() =>
+  (ledger.value?.lines ?? []).filter((line) => line.glAccountNo === '1010')
+)
+const totalReceipts = computed(() =>
+  cashLines.value.filter((l) => l.entrySide === 'DEBIT').reduce((sum, l) => sum + l.amount, 0)
+)
+const totalPayments = computed(() =>
+  cashLines.value.filter((l) => l.entrySide === 'CREDIT').reduce((sum, l) => sum + l.amount, 0)
+)
 const cashPosition = computed(() => totalReceipts.value - totalPayments.value)
 </script>

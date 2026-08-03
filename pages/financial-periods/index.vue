@@ -71,7 +71,9 @@
     <UModal v-model="showCreate">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('accounting.financialPeriods.newFinancialPeriod') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.financialPeriods.newFinancialPeriod')
+          }}</span>
         </template>
         <DynamicForm
           v-model="createForm"
@@ -89,7 +91,9 @@
     <UModal v-model="showEdit">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('accounting.financialPeriods.editFinancialPeriod') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.financialPeriods.editFinancialPeriod')
+          }}</span>
         </template>
         <DynamicForm
           v-model="editForm"
@@ -156,7 +160,12 @@ const {
 const columns = computed<ColumnDef<FinancialPeriodResponse>[]>(() => [
   { key: 'periodName', label: t('accounting.financialPeriods.columns.period'), sortable: true },
   { key: 'startDate', type: 'date', to: 'endDate', sortable: true },
-  { key: 'status', label: t('accounting.financialPeriods.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'status',
+    label: t('accounting.financialPeriods.columns.status'),
+    type: 'status',
+    sortable: true
+  },
   { key: 'actions', label: '', class: 'text-right' }
 ])
 

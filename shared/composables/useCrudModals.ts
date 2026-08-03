@@ -1,4 +1,3 @@
-
 export function useCrudModals<
   TResponse extends { id: string | number },
   TRequest = Record<string, any>
@@ -37,8 +36,14 @@ export function useCrudModals<
     creating.value = true
     error.value = ''
     try {
-      const created = await api<TResponse>(basePath, { method: 'POST', body: options.toPayload(values) })
-      toast.add({ title: t('common.entityCreated', { entity: options.entityName }), color: 'green' })
+      const created = await api<TResponse>(basePath, {
+        method: 'POST',
+        body: options.toPayload(values)
+      })
+      toast.add({
+        title: t('common.entityCreated', { entity: options.entityName }),
+        color: 'green'
+      })
       showCreate.value = false
       await refresh()
       await options.onCreated?.(created)
@@ -71,7 +76,10 @@ export function useCrudModals<
         method: 'PUT',
         body: options.toPayload(values)
       })
-      toast.add({ title: t('common.entityUpdated', { entity: options.entityName }), color: 'green' })
+      toast.add({
+        title: t('common.entityUpdated', { entity: options.entityName }),
+        color: 'green'
+      })
       showEdit.value = false
       await refresh()
     } catch (err) {
@@ -89,7 +97,10 @@ export function useCrudModals<
     deleting.value = true
     try {
       await api(`${basePath}/${confirmDelete.value.id}`, { method: 'DELETE' })
-      toast.add({ title: t('common.entityDeleted', { entity: options.entityName }), color: 'green' })
+      toast.add({
+        title: t('common.entityDeleted', { entity: options.entityName }),
+        color: 'green'
+      })
       confirmDelete.value = null
       await refresh()
     } catch (err) {

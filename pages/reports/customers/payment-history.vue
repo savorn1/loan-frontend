@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -83,7 +77,9 @@ const api = useApi()
 const { data: customersRaw } = await useAsyncData('customer-payment-history-customers', () =>
   api<PageResponse<CustomerResponse>>('/customers', { query: { size: 1000 } })
 )
-const customerOptions = computed(() => (customersRaw.value?.content ?? []).map((c) => ({ label: c.fullName, value: c.id })))
+const customerOptions = computed(() =>
+  (customersRaw.value?.content ?? []).map((c) => ({ label: c.fullName, value: c.id }))
+)
 
 const { data: loansRaw } = await useAsyncData('customer-payment-history-loans', () =>
   api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
@@ -101,7 +97,9 @@ const payments = computed(() => paymentsRaw.value?.content ?? [])
 
 const customerId = ref<number | undefined>(undefined)
 
-const customerLoanIds = computed(() => new Set(loans.value.filter((l) => l.customerId === customerId.value).map((l) => l.id)))
+const customerLoanIds = computed(
+  () => new Set(loans.value.filter((l) => l.customerId === customerId.value).map((l) => l.id))
+)
 
 const filtered = computed(() => {
   if (!customerId.value) return []
@@ -114,12 +112,40 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filtered, {
 })
 
 const columns = computed<ColumnDef<PaymentResponse>[]>(() => [
-  { key: 'loanId', label: t('accounting.customerReports.paymentHistory.columns.loanId'), sortable: true },
-  { key: 'installmentNumber', label: t('accounting.customerReports.paymentHistory.columns.installmentNumber'), sortable: true },
-  { key: 'dueDate', label: t('accounting.customerReports.paymentHistory.columns.dueDate'), type: 'date', sortable: true },
-  { key: 'paidAt', label: t('accounting.customerReports.paymentHistory.columns.paidAt'), type: 'date', sortable: true },
-  { key: 'status', label: t('accounting.customerReports.paymentHistory.columns.status'), type: 'status', sortable: true },
-  { key: 'amount', label: t('accounting.customerReports.paymentHistory.columns.amount'), type: 'currency', sortable: true },
+  {
+    key: 'loanId',
+    label: t('accounting.customerReports.paymentHistory.columns.loanId'),
+    sortable: true
+  },
+  {
+    key: 'installmentNumber',
+    label: t('accounting.customerReports.paymentHistory.columns.installmentNumber'),
+    sortable: true
+  },
+  {
+    key: 'dueDate',
+    label: t('accounting.customerReports.paymentHistory.columns.dueDate'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'paidAt',
+    label: t('accounting.customerReports.paymentHistory.columns.paidAt'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'status',
+    label: t('accounting.customerReports.paymentHistory.columns.status'),
+    type: 'status',
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.customerReports.paymentHistory.columns.amount'),
+    type: 'currency',
+    sortable: true
+  },
   {
     key: 'principalComponent',
     label: t('accounting.customerReports.paymentHistory.columns.principalComponent'),

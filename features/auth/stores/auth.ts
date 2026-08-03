@@ -33,8 +33,14 @@ export const useAuth = defineStore('auth', () => {
     sameSite: 'lax'
   })
   const role = useCookie<Role | null>('auth_role', { default: () => null, sameSite: 'lax' })
-  const branchId = useCookie<number | null>('auth_branch_id', { default: () => null, sameSite: 'lax' })
-  const branchName = useCookie<string | null>('auth_branch_name', { default: () => null, sameSite: 'lax' })
+  const branchId = useCookie<number | null>('auth_branch_id', {
+    default: () => null,
+    sameSite: 'lax'
+  })
+  const branchName = useCookie<string | null>('auth_branch_name', {
+    default: () => null,
+    sameSite: 'lax'
+  })
 
   const isAuthenticated = computed(() => !!token.value)
   const isAdmin = computed(() => role.value === 'ADMIN')

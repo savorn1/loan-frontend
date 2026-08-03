@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,14 +9,20 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
 
     <UCard v-if="total > 0" class="mb-6">
       <div class="flex justify-end text-sm font-semibold">
-        <span>{{ t('accounting.interestReports.collected.totalCollected') }}: {{ formatCurrency(totalCollected) }}</span>
+        <span
+          >{{ t('accounting.interestReports.collected.totalCollected') }}:
+          {{ formatCurrency(totalCollected) }}</span
+        >
       </div>
     </UCard>
 
@@ -81,7 +81,9 @@ const {
   data: paymentsRaw,
   pending,
   error: fetchError
-} = await useAsyncData('interest-collected', () => api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } }))
+} = await useAsyncData('interest-collected', () =>
+  api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } })
+)
 const payments = computed(() => paymentsRaw.value?.content ?? [])
 
 const dateFrom = ref('')
@@ -101,7 +103,9 @@ const collectedInRange = computed(() => {
   )
 })
 
-const totalCollected = computed(() => collectedInRange.value.reduce((sum, p) => sum + (p.interestComponent ?? 0), 0))
+const totalCollected = computed(() =>
+  collectedInRange.value.reduce((sum, p) => sum + (p.interestComponent ?? 0), 0)
+)
 
 const { search, page, pageSize, sort, total, rows } = useClientTable(collectedInRange, {
   searchFields: ['loanId'],
@@ -109,9 +113,27 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(collectedIn
 })
 
 const columns = computed<ColumnDef<PaymentResponse>[]>(() => [
-  { key: 'loanId', label: t('accounting.interestReports.collected.columns.loanId'), sortable: true },
-  { key: 'installmentNumber', label: t('accounting.interestReports.collected.columns.installmentNumber'), sortable: true },
-  { key: 'paidAt', label: t('accounting.interestReports.collected.columns.paidAt'), type: 'date', sortable: true },
-  { key: 'interestComponent', label: t('accounting.interestReports.collected.columns.interestComponent'), type: 'currency', sortable: true }
+  {
+    key: 'loanId',
+    label: t('accounting.interestReports.collected.columns.loanId'),
+    sortable: true
+  },
+  {
+    key: 'installmentNumber',
+    label: t('accounting.interestReports.collected.columns.installmentNumber'),
+    sortable: true
+  },
+  {
+    key: 'paidAt',
+    label: t('accounting.interestReports.collected.columns.paidAt'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'interestComponent',
+    label: t('accounting.interestReports.collected.columns.interestComponent'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 </script>

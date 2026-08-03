@@ -4,6 +4,8 @@
   },
   "nav": {
     "customers": "អតិថិជន",
+    "groups": "ក្រុម",
+    "groupLoanApplications": "ពាក្យស្នើសុំកម្ចីជាក្រុម",
     "applications": "ពាក្យស្នើសុំ",
     "loanCalculator": "ម៉ាស៊ីនគណនាកម្ចី",
     "loans": "កម្ចី",
@@ -119,6 +121,7 @@
       "WAIVED": "បានលើកលែង",
       "REFUNDED": "បានសងប្រាក់ត្រឡប់",
       "INACTIVE": "អសកម្ម",
+      "LEFT": "បានចាកចេញ",
       "SUBMITTED": "បានដាក់ស្នើ",
       "UNDER_REVIEW": "កំពុងពិនិត្យ",
       "WITHDRAWN": "បានដកខ្លួន",

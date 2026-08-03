@@ -11,7 +11,9 @@
     </UButton>
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-xl font-bold">
-        {{ t('accounting.journalEntries.detailTitle', { entryNo: entry.entryNo ?? `#${entry.id}` }) }}
+        {{
+          t('accounting.journalEntries.detailTitle', { entryNo: entry.entryNo ?? `#${entry.id}` })
+        }}
       </h1>
       <div class="flex gap-2">
         <UButton
@@ -42,11 +44,15 @@
         <dl class="grid grid-cols-2 gap-y-3 text-sm">
           <dt class="text-gray-500">{{ t('accounting.journalEntries.details.status') }}</dt>
           <dd><StatusBadge :status="entry.status" /></dd>
-          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.transactionType') }}</dt>
+          <dt class="text-gray-500">
+            {{ t('accounting.journalEntries.details.transactionType') }}
+          </dt>
           <dd>{{ formatEnum(entry.transactionType) }}</dd>
           <dt class="text-gray-500">{{ t('accounting.journalEntries.details.date') }}</dt>
           <dd>{{ formatDate(entry.transactionDate) }}</dd>
-          <dt class="text-gray-500">{{ t('accounting.journalEntries.details.financialPeriod') }}</dt>
+          <dt class="text-gray-500">
+            {{ t('accounting.journalEntries.details.financialPeriod') }}
+          </dt>
           <dd>{{ entry.financialPeriodName }}</dd>
           <dt class="text-gray-500">{{ t('accounting.journalEntries.details.currency') }}</dt>
           <dd>{{ entry.currency }}</dd>
@@ -79,7 +85,11 @@
             }}</span>
           </div>
         </template>
-        <DataTable :rows="entry.lines" :columns="lineColumns" />
+        <DataTable
+          :rows="entry.lines"
+          :columns="lineColumns"
+          export-filename="journal-entry-lines.csv"
+        />
       </UCard>
     </div>
 
@@ -87,7 +97,11 @@
       <template #header>
         <span class="font-semibold">{{ t('accounting.journalEntries.auditLog.title') }}</span>
       </template>
-      <DataTable :rows="auditLogs ?? []" :columns="auditColumns" />
+      <DataTable
+        :rows="auditLogs ?? []"
+        :columns="auditColumns"
+        export-filename="journal-entry-audit-log.csv"
+      />
     </UCard>
   </div>
   <div v-else-if="error" class="py-8">
@@ -151,7 +165,12 @@ const lineColumns = computed<ColumnDef<JournalEntryLineResponse>[]>(() => [
 ])
 
 const auditColumns = computed<ColumnDef<JournalAuditLogResponse>[]>(() => [
-  { key: 'performedAt', label: t('accounting.journalEntries.auditLog.when'), type: 'datetime', sortable: true },
+  {
+    key: 'performedAt',
+    label: t('accounting.journalEntries.auditLog.when'),
+    type: 'datetime',
+    sortable: true
+  },
   { key: 'action', label: t('accounting.journalEntries.auditLog.action'), type: 'enum' },
   { key: 'performedBy', label: t('accounting.journalEntries.auditLog.by') },
   { key: 'details', label: t('accounting.journalEntries.auditLog.details') }

@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -69,7 +63,9 @@ const {
   data: loansRaw,
   pending,
   error: fetchError
-} = await useAsyncData('loan-portfolio-by-customer', () => api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } }))
+} = await useAsyncData('loan-portfolio-by-customer', () =>
+  api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
+)
 const loans = computed(() => loansRaw.value?.content ?? [])
 
 const aggregated = computed<CustomerLoanRow[]>(() => {
@@ -96,9 +92,22 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(aggregated,
 })
 
 const columns = computed<ColumnDef<CustomerLoanRow>[]>(() => [
-  { key: 'customer', label: t('accounting.loanPortfolioReports.byCustomer.columns.customer'), sortable: true },
-  { key: 'loanCount', label: t('accounting.loanPortfolioReports.byCustomer.columns.loanCount'), sortable: true },
-  { key: 'totalPrincipal', label: t('accounting.loanPortfolioReports.byCustomer.columns.totalPrincipal'), type: 'currency', sortable: true },
+  {
+    key: 'customer',
+    label: t('accounting.loanPortfolioReports.byCustomer.columns.customer'),
+    sortable: true
+  },
+  {
+    key: 'loanCount',
+    label: t('accounting.loanPortfolioReports.byCustomer.columns.loanCount'),
+    sortable: true
+  },
+  {
+    key: 'totalPrincipal',
+    label: t('accounting.loanPortfolioReports.byCustomer.columns.totalPrincipal'),
+    type: 'currency',
+    sortable: true
+  },
   {
     key: 'totalOutstanding',
     label: t('accounting.loanPortfolioReports.byCustomer.columns.totalOutstanding'),

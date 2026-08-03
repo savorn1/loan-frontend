@@ -26,13 +26,7 @@ export interface BranchRequest {
 // ── Weekly business hours (branch-service's BranchBusinessHours) — at most one
 // row per day of week, upserted by day rather than an open-ended add/remove list.
 export type DayOfWeek =
-  | 'MONDAY'
-  | 'TUESDAY'
-  | 'WEDNESDAY'
-  | 'THURSDAY'
-  | 'FRIDAY'
-  | 'SATURDAY'
-  | 'SUNDAY'
+  'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
 
 export const DAYS_OF_WEEK: DayOfWeek[] = [
   'MONDAY',

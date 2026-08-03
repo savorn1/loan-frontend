@@ -6,6 +6,8 @@
 export interface RoleResponse {
   id: number
   name: string
+  code: string
+  isDefault: boolean
   description: string | null
   permissionCount: number
   userCount: number
@@ -15,6 +17,8 @@ export interface RoleResponse {
 
 export interface RoleRequest {
   name: string
+  code: string
+  isDefault?: boolean
   description?: string
 }
 

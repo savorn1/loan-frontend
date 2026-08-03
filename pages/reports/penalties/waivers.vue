@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,14 +9,20 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
 
     <UCard v-if="total > 0" class="mb-6">
       <div class="flex justify-end text-sm font-semibold">
-        <span>{{ t('accounting.penaltyReports.waivers.totalWaived') }}: {{ formatCurrency(totalWaived) }}</span>
+        <span
+          >{{ t('accounting.penaltyReports.waivers.totalWaived') }}:
+          {{ formatCurrency(totalWaived) }}</span
+        >
       </div>
     </UCard>
 
@@ -81,7 +81,9 @@ const {
   data: penaltiesRaw,
   pending,
   error: fetchError
-} = await useAsyncData('penalty-waivers', () => api<PageResponse<LoanPenaltyResponse>>('/loans/penalties', { query: { size: 1000 } }))
+} = await useAsyncData('penalty-waivers', () =>
+  api<PageResponse<LoanPenaltyResponse>>('/loans/penalties', { query: { size: 1000 } })
+)
 const penalties = computed(() => penaltiesRaw.value?.content ?? [])
 
 const dateFrom = ref('')
@@ -92,7 +94,10 @@ const waivedInRange = computed(() => {
   if (!hasFullRange.value) return []
   return penalties.value.filter(
     (p): p is LoanPenaltyResponse & { waivedAt: string } =>
-      p.status === 'WAIVED' && !!p.waivedAt && p.waivedAt.slice(0, 10) >= dateFrom.value && p.waivedAt.slice(0, 10) <= dateTo.value
+      p.status === 'WAIVED' &&
+      !!p.waivedAt &&
+      p.waivedAt.slice(0, 10) >= dateFrom.value &&
+      p.waivedAt.slice(0, 10) <= dateTo.value
   )
 })
 
@@ -105,8 +110,18 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(waivedInRan
 
 const columns = computed<ColumnDef<LoanPenaltyResponse>[]>(() => [
   { key: 'loanId', label: t('accounting.penaltyReports.waivers.columns.loanId'), sortable: true },
-  { key: 'amount', label: t('accounting.penaltyReports.waivers.columns.amount'), type: 'currency', sortable: true },
+  {
+    key: 'amount',
+    label: t('accounting.penaltyReports.waivers.columns.amount'),
+    type: 'currency',
+    sortable: true
+  },
   { key: 'reason', label: t('accounting.penaltyReports.waivers.columns.reason') },
-  { key: 'waivedAt', label: t('accounting.penaltyReports.waivers.columns.waivedAt'), type: 'datetime', sortable: true }
+  {
+    key: 'waivedAt',
+    label: t('accounting.penaltyReports.waivers.columns.waivedAt'),
+    type: 'datetime',
+    sortable: true
+  }
 ])
 </script>

@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,14 +9,20 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
 
     <UCard v-if="total > 0" class="mb-6">
       <div class="flex justify-end text-sm font-semibold">
-        <span>{{ t('accounting.writeoffRestructureReports.writeoffs.totalWriteoffs') }}: {{ formatCurrency(totalWriteoffs) }}</span>
+        <span
+          >{{ t('accounting.writeoffRestructureReports.writeoffs.totalWriteoffs') }}:
+          {{ formatCurrency(totalWriteoffs) }}</span
+        >
       </div>
     </UCard>
 
@@ -81,7 +81,9 @@ const {
   data: writeoffsRaw,
   pending,
   error: fetchError
-} = await useAsyncData('loan-writeoffs', () => api<PageResponse<LoanWriteoffResponse>>('/loans/writeoffs', { query: { size: 1000 } }))
+} = await useAsyncData('loan-writeoffs', () =>
+  api<PageResponse<LoanWriteoffResponse>>('/loans/writeoffs', { query: { size: 1000 } })
+)
 const writeoffs = computed(() => writeoffsRaw.value?.content ?? [])
 
 const dateFrom = ref('')
@@ -90,7 +92,9 @@ const hasFullRange = computed(() => !!dateFrom.value && !!dateTo.value)
 
 const writeoffsInRange = computed(() => {
   if (!hasFullRange.value) return []
-  return writeoffs.value.filter((w) => w.writeoffDate >= dateFrom.value && w.writeoffDate <= dateTo.value)
+  return writeoffs.value.filter(
+    (w) => w.writeoffDate >= dateFrom.value && w.writeoffDate <= dateTo.value
+  )
 })
 
 const totalWriteoffs = computed(() => writeoffsInRange.value.reduce((sum, w) => sum + w.amount, 0))
@@ -101,10 +105,29 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(writeoffsIn
 })
 
 const columns = computed<ColumnDef<LoanWriteoffResponse>[]>(() => [
-  { key: 'loanId', label: t('accounting.writeoffRestructureReports.writeoffs.columns.loanId'), sortable: true },
-  { key: 'amount', label: t('accounting.writeoffRestructureReports.writeoffs.columns.amount'), type: 'currency', sortable: true },
+  {
+    key: 'loanId',
+    label: t('accounting.writeoffRestructureReports.writeoffs.columns.loanId'),
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.writeoffRestructureReports.writeoffs.columns.amount'),
+    type: 'currency',
+    sortable: true
+  },
   { key: 'reason', label: t('accounting.writeoffRestructureReports.writeoffs.columns.reason') },
-  { key: 'writeoffDate', label: t('accounting.writeoffRestructureReports.writeoffs.columns.writeoffDate'), type: 'date', sortable: true },
-  { key: 'status', label: t('accounting.writeoffRestructureReports.writeoffs.columns.status'), type: 'status', sortable: true }
+  {
+    key: 'writeoffDate',
+    label: t('accounting.writeoffRestructureReports.writeoffs.columns.writeoffDate'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'status',
+    label: t('accounting.writeoffRestructureReports.writeoffs.columns.status'),
+    type: 'status',
+    sortable: true
+  }
 ])
 </script>

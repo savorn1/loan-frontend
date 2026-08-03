@@ -4,9 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">{{ t('loans.restructures.title') }}</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >{{ t('loans.restructures.add') }}</UButton
-          >
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+            t('loans.restructures.add')
+          }}</UButton>
         </div>
       </template>
 
@@ -26,7 +26,9 @@
             :description="t('loans.restructures.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.restructures.add') }}</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loans.restructures.add')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -106,7 +108,12 @@ const fields = computed<FieldDef[]>(() => [
     hint: t('loans.restructures.fields.newInterestRateHint'),
     wrapper: 'half'
   },
-  { name: 'effectiveDate', label: t('loans.restructures.fields.effectiveDate'), type: 'date', required: true },
+  {
+    name: 'effectiveDate',
+    label: t('loans.restructures.fields.effectiveDate'),
+    type: 'date',
+    required: true
+  },
   { name: 'reason', label: t('loans.restructures.fields.reason'), type: 'textarea', required: true }
 ])
 

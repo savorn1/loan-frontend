@@ -79,7 +79,9 @@
             "
           >
             <template v-if="!hasFilters" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.list.newLoan') }}</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loans.list.newLoan')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -125,14 +127,18 @@ const {
   pending,
   error: fetchError,
   refresh
-} = await useAsyncData('loans', () => api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } }))
+} = await useAsyncData('loans', () =>
+  api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
+)
 
 const loans = computed(() => loansRaw.value?.content ?? [])
 
 const { data: branchesData } = await useAsyncData('branches-all', () =>
   api<BranchResponse[]>('/branches')
 )
-const branchNameById = computed(() => new Map((branchesData.value ?? []).map((b) => [b.id, b.name])))
+const branchNameById = computed(
+  () => new Map((branchesData.value ?? []).map((b) => [b.id, b.name]))
+)
 const branchFilterOptions = computed(() => [
   { label: t('loans.list.branchFilter.all'), value: '' },
   ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
@@ -145,7 +151,10 @@ async function searchCustomers(query: string) {
   const result = await api<PageResponse<CustomerResponse>>('/customers', {
     query: { search: query, size: 20 }
   })
-  return result.content.map((c) => ({ label: `${c.firstName} ${c.lastName} (#${c.id})`, value: c.id }))
+  return result.content.map((c) => ({
+    label: `${c.firstName} ${c.lastName} (#${c.id})`,
+    value: c.id
+  }))
 }
 
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
@@ -154,7 +163,8 @@ const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   {
     key: 'branchId',
     label: t('loans.list.columns.branch'),
-    value: (row) => (row.branchId != null ? branchNameById.value.get(row.branchId) ?? row.branchId : '—')
+    value: (row) =>
+      row.branchId != null ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—'
   },
   { key: 'principal', label: t('loans.list.columns.principal'), type: 'currency', sortable: true },
   { key: 'interestRate', label: t('loans.list.columns.rate'), type: 'percent', sortable: true },
@@ -187,7 +197,12 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByS
 })
 
 const hasFilters = computed(
-  () => !!search.value || !!statusFilter.value || branchFilter.value !== '' || !!dateFrom.value || !!dateTo.value
+  () =>
+    !!search.value ||
+    !!statusFilter.value ||
+    branchFilter.value !== '' ||
+    !!dateFrom.value ||
+    !!dateTo.value
 )
 
 function clearFilters() {

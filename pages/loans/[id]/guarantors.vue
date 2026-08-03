@@ -4,9 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">{{ t('loans.guarantors.title') }}</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >{{ t('loans.guarantors.add') }}</UButton
-          >
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+            t('loans.guarantors.add')
+          }}</UButton>
         </div>
       </template>
 
@@ -37,7 +37,9 @@
             :description="t('loans.guarantors.empty.description')"
           >
             <template v-if="isAdmin" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('loans.guarantors.add') }}</UButton>
+              <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                t('loans.guarantors.add')
+              }}</UButton>
             </template>
           </EmptyState>
         </template>
@@ -89,7 +91,11 @@ const columns = computed<ColumnDef<LoanGuarantorResponse>[]>(() => [
   { key: 'name', label: t('loans.guarantors.columns.name') },
   { key: 'phone', label: t('loans.guarantors.columns.phone') },
   { key: 'relationship', label: t('loans.guarantors.columns.relationship') },
-  { key: 'guaranteedAmount', label: t('loans.guarantors.columns.guaranteedAmount'), type: 'currency' },
+  {
+    key: 'guaranteedAmount',
+    label: t('loans.guarantors.columns.guaranteedAmount'),
+    type: 'currency'
+  },
   { key: 'status', label: t('loans.guarantors.columns.status'), type: 'status' },
   { key: 'createdAt', label: t('loans.guarantors.columns.created'), type: 'datetime' },
   { key: 'actions', label: t('loans.guarantors.columns.actions') }

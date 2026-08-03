@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ t('auth.welcomeBack') }}</h2>
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+      {{ t('auth.welcomeBack') }}
+    </h2>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">
       {{ t('auth.signInSubtitle') }}
     </p>
@@ -56,7 +58,9 @@
 
     <p class="text-sm text-center mt-6 text-gray-500">
       {{ t('auth.noAccount') }}
-      <NuxtLink to="/register" class="text-primary-500 font-medium">{{ t('auth.signUp') }}</NuxtLink>
+      <NuxtLink to="/register" class="text-primary-500 font-medium">{{
+        t('auth.signUp')
+      }}</NuxtLink>
     </p>
   </div>
 </template>

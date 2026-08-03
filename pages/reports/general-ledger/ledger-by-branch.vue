@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -25,7 +19,9 @@
             :placeholder="t('accounting.generalLedgerReports.ledgerByBranch.branchPlaceholder')"
           />
         </UFormGroup>
-        <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')">
+        <UFormGroup
+          :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        >
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
         </UFormGroup>
       </div>
@@ -33,9 +29,13 @@
 
     <UCard v-if="ledger" class="mb-6">
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 text-sm">
-        <dt class="text-gray-500">{{ t('accounting.generalLedgerReports.ledgerByBranch.totalDebit') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.generalLedgerReports.ledgerByBranch.totalDebit') }}
+        </dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.totalDebit) }}</dd>
-        <dt class="text-gray-500">{{ t('accounting.generalLedgerReports.ledgerByBranch.totalCredit') }}</dt>
+        <dt class="text-gray-500">
+          {{ t('accounting.generalLedgerReports.ledgerByBranch.totalCredit') }}
+        </dt>
         <dd class="font-semibold">{{ formatCurrency(ledger.totalCredit) }}</dd>
       </dl>
     </UCard>
@@ -81,7 +81,9 @@ const api = useApi()
 const { data: branches } = await useAsyncData('ledger-by-branch-branches', () =>
   api<BranchResponse[]>('/branches')
 )
-const branchOptions = computed(() => (branches.value ?? []).map((b) => ({ label: b.name, value: b.id })))
+const branchOptions = computed(() =>
+  (branches.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+)
 
 const branchId = ref<number | undefined>(undefined)
 const dateFrom = ref('')
@@ -107,20 +109,31 @@ const {
 )
 
 const columns = computed<ColumnDef<BranchLedgerLineResponse>[]>(() => [
-  { key: 'transactionDate', label: t('accounting.generalLedgerReports.ledgerByBranch.columns.date'), type: 'date' },
+  {
+    key: 'transactionDate',
+    label: t('accounting.generalLedgerReports.ledgerByBranch.columns.date'),
+    type: 'date'
+  },
   { key: 'entryNo', label: t('accounting.generalLedgerReports.ledgerByBranch.columns.entryNo') },
   {
     key: 'glAccountNo',
     label: t('accounting.generalLedgerReports.ledgerByBranch.columns.account'),
     value: (row) => `${row.glAccountNo} — ${row.glAccountName}`
   },
-  { key: 'description', label: t('accounting.generalLedgerReports.ledgerByBranch.columns.description') },
+  {
+    key: 'description',
+    label: t('accounting.generalLedgerReports.ledgerByBranch.columns.description')
+  },
   {
     key: 'entrySide',
     label: t('accounting.generalLedgerReports.ledgerByBranch.columns.side'),
     type: 'badge',
     color: (row) => (row.entrySide === 'DEBIT' ? 'orange' : 'teal')
   },
-  { key: 'amount', label: t('accounting.generalLedgerReports.ledgerByBranch.columns.amount'), type: 'currency' }
+  {
+    key: 'amount',
+    label: t('accounting.generalLedgerReports.ledgerByBranch.columns.amount'),
+    type: 'currency'
+  }
 ])
 </script>

@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,7 +9,10 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
@@ -69,7 +66,9 @@ const {
   data: paymentsRaw,
   pending,
   error: fetchError
-} = await useAsyncData('repayments-daily', () => api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } }))
+} = await useAsyncData('repayments-daily', () =>
+  api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } })
+)
 const payments = computed(() => paymentsRaw.value?.content ?? [])
 
 const dateFrom = ref('')
@@ -82,7 +81,13 @@ const rows = computed<DailyRow[]>(() => {
   for (const p of payments.value) {
     if (p.status !== 'PAID' || !p.paidAt) continue
     if (p.paidAt < dateFrom.value || p.paidAt > dateTo.value) continue
-    const existing = byDate.get(p.paidAt) ?? { date: p.paidAt, count: 0, totalAmount: 0, totalPrincipal: 0, totalInterest: 0 }
+    const existing = byDate.get(p.paidAt) ?? {
+      date: p.paidAt,
+      count: 0,
+      totalAmount: 0,
+      totalPrincipal: 0,
+      totalInterest: 0
+    }
     existing.count += 1
     existing.totalAmount += p.amount
     existing.totalPrincipal += p.principalComponent ?? 0
@@ -95,8 +100,20 @@ const rows = computed<DailyRow[]>(() => {
 const columns = computed<ColumnDef<DailyRow>[]>(() => [
   { key: 'date', label: t('accounting.repaymentReports.daily.columns.date'), type: 'date' },
   { key: 'count', label: t('accounting.repaymentReports.daily.columns.count') },
-  { key: 'totalAmount', label: t('accounting.repaymentReports.daily.columns.totalAmount'), type: 'currency' },
-  { key: 'totalPrincipal', label: t('accounting.repaymentReports.daily.columns.totalPrincipal'), type: 'currency' },
-  { key: 'totalInterest', label: t('accounting.repaymentReports.daily.columns.totalInterest'), type: 'currency' }
+  {
+    key: 'totalAmount',
+    label: t('accounting.repaymentReports.daily.columns.totalAmount'),
+    type: 'currency'
+  },
+  {
+    key: 'totalPrincipal',
+    label: t('accounting.repaymentReports.daily.columns.totalPrincipal'),
+    type: 'currency'
+  },
+  {
+    key: 'totalInterest',
+    label: t('accounting.repaymentReports.daily.columns.totalInterest'),
+    type: 'currency'
+  }
 ])
 </script>

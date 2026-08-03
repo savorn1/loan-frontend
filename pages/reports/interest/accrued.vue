@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,14 +9,20 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')" class="max-w-xs">
+      <UFormGroup
+        :label="t('common.dateRangeFilter.from') + ' – ' + t('common.dateRangeFilter.to')"
+        class="max-w-xs"
+      >
         <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
       </UFormGroup>
     </UCard>
 
     <UCard v-if="total > 0" class="mb-6">
       <div class="flex justify-end text-sm font-semibold">
-        <span>{{ t('accounting.interestReports.accrued.totalAccrued') }}: {{ formatCurrency(totalAccrued) }}</span>
+        <span
+          >{{ t('accounting.interestReports.accrued.totalAccrued') }}:
+          {{ formatCurrency(totalAccrued) }}</span
+        >
       </div>
     </UCard>
 
@@ -81,7 +81,9 @@ const {
   data: accrualsRaw,
   pending,
   error: fetchError
-} = await useAsyncData('interest-accrued', () => api<PageResponse<LoanInterestResponse>>('/loans/interest', { query: { size: 1000 } }))
+} = await useAsyncData('interest-accrued', () =>
+  api<PageResponse<LoanInterestResponse>>('/loans/interest', { query: { size: 1000 } })
+)
 const accruals = computed(() => accrualsRaw.value?.content ?? [])
 
 const dateFrom = ref('')
@@ -104,10 +106,35 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(accruedInRa
 
 const columns = computed<ColumnDef<LoanInterestResponse>[]>(() => [
   { key: 'loanId', label: t('accounting.interestReports.accrued.columns.loanId'), sortable: true },
-  { key: 'periodStart', label: t('accounting.interestReports.accrued.columns.periodStart'), type: 'date', sortable: true },
-  { key: 'periodEnd', label: t('accounting.interestReports.accrued.columns.periodEnd'), type: 'date', sortable: true },
-  { key: 'rate', label: t('accounting.interestReports.accrued.columns.rate'), type: 'percent', sortable: true },
-  { key: 'amount', label: t('accounting.interestReports.accrued.columns.amount'), type: 'currency', sortable: true },
-  { key: 'accruedAt', label: t('accounting.interestReports.accrued.columns.accruedAt'), type: 'datetime', sortable: true }
+  {
+    key: 'periodStart',
+    label: t('accounting.interestReports.accrued.columns.periodStart'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'periodEnd',
+    label: t('accounting.interestReports.accrued.columns.periodEnd'),
+    type: 'date',
+    sortable: true
+  },
+  {
+    key: 'rate',
+    label: t('accounting.interestReports.accrued.columns.rate'),
+    type: 'percent',
+    sortable: true
+  },
+  {
+    key: 'amount',
+    label: t('accounting.interestReports.accrued.columns.amount'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'accruedAt',
+    label: t('accounting.interestReports.accrued.columns.accruedAt'),
+    type: 'datetime',
+    sortable: true
+  }
 ])
 </script>

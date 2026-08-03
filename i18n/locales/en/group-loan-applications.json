@@ -1,0 +1,116 @@
+{
+  "groupLoanApplications": {
+    "list": {
+      "title": "Group Loan Applications",
+      "searchPlaceholder": "Search by group...",
+      "branchFilterAll": "All branches",
+      "columns": {
+        "id": "ID",
+        "group": "Group",
+        "branch": "Branch",
+        "members": "Members",
+        "totalRequested": "Total requested",
+        "status": "Status",
+        "submitted": "Submitted"
+      },
+      "statusOptions": {
+        "all": "All statuses",
+        "submitted": "Submitted",
+        "underReview": "Under review",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "withdrawn": "Cancelled"
+      },
+      "emptyTitle": "No group loan applications yet",
+      "emptyDescriptionFiltered": "Try a different search term or status filter.",
+      "emptyDescription": "Applications are created from a group's own page.",
+      "totalOne": "1 application",
+      "totalOther": "{count} applications"
+    },
+    "detail": {
+      "backToList": "Back to group loan applications",
+      "title": "Group Loan Application #{id}",
+      "startReview": "Start review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "cancel": "Cancel application",
+      "details": "Details",
+      "group": "Group",
+      "purpose": "Purpose",
+      "submitted": "Submitted",
+      "decided": "Decided",
+      "membersHeader": "Members",
+      "memberColumn": "Customer",
+      "requestedColumn": "Requested",
+      "termColumn": "Term (mo)",
+      "approvedColumn": "Approved",
+      "loanColumn": "Loan",
+      "documents": "Documents",
+      "documentTypePlaceholder": "Type (e.g. ID_PROOF)",
+      "fileNamePlaceholder": "File name",
+      "fileUrlPlaceholder": "File URL",
+      "addDocument": "Add document",
+      "verifyDocument": "Verify document",
+      "rejectDocument": "Reject document",
+      "deleteDocument": "Delete document",
+      "noDocumentsTitle": "No documents yet",
+      "noDocumentsDescription": "Supporting documents submitted with this application will appear here.",
+      "approveModalTitle": "Approve group loan application",
+      "rejectModalTitle": "Reject group loan application",
+      "approvedAmount": "Approved amount",
+      "interestRate": "Interest rate",
+      "termMonths": "Term (months)",
+      "comments": "Comments",
+      "decisionValidationError": "Approved amount, interest rate and term are required for every member to approve.",
+      "toastUnderReview": "Application under review",
+      "toastApproved": "Application approved",
+      "toastRejected": "Application rejected",
+      "toastCancelled": "Application cancelled",
+      "toastDocumentDeleted": "Document deleted",
+      "cancelTitle": "Cancel this application?",
+      "cancelDescription": "The group's application is cancelled and can no longer be reviewed or approved."
+    },
+    "groupCard": {
+      "header": "Loan Applications",
+      "newApplication": "New Application",
+      "emptyTitle": "No loan applications yet",
+      "emptyDescription": "Submit a group loan application to request loans for this group's members.",
+      "purpose": "Purpose",
+      "membersLabel": "Members to include",
+      "requestedAmountPlaceholder": "Requested amount",
+      "requestedTermPlaceholder": "Term (months)",
+      "toastCreated": "Group loan application submitted",
+      "columns": {
+        "id": "ID",
+        "status": "Status",
+        "submitted": "Submitted"
+      }
+    },
+    "loanAccounts": {
+      "header": "Loan Accounts",
+      "emptyTitle": "No loan accounts yet",
+      "emptyDescription": "Loan accounts are created automatically once a group loan application is approved.",
+      "columns": {
+        "id": "ID",
+        "customer": "Customer",
+        "principal": "Principal",
+        "status": "Status",
+        "outstanding": "Outstanding",
+        "disbursed": "Disbursed"
+      }
+    },
+    "repayments": {
+      "header": "Repayments",
+      "emptyTitle": "No repayments recorded yet",
+      "emptyDescription": "Repayments are recorded from each member's individual loan page.",
+      "columns": {
+        "customer": "Customer",
+        "loan": "Loan",
+        "amount": "Amount",
+        "date": "Date",
+        "method": "Method",
+        "status": "Status"
+      }
+    }
+  }
+}

@@ -23,7 +23,7 @@
           variant="ghost"
           color="gray"
           icon="i-heroicons-x-mark"
-          @click="statusFilter = ''; dateFrom = ''; dateTo = ''"
+          @click="((statusFilter = ''), (dateFrom = ''), (dateTo = ''))"
         >
           {{ t('common.clearFilters') }}
         </UButton>
@@ -170,7 +170,12 @@ const columns = computed<ColumnDef<PaymentTransactionResponse>[]>(() => [
     sortable: true,
     prefix: (row) => `${row.currency} `
   },
-  { key: 'status', label: t('payments.transactions.columns.status'), type: 'status', sortable: true },
+  {
+    key: 'status',
+    label: t('payments.transactions.columns.status'),
+    type: 'status',
+    sortable: true
+  },
   {
     key: 'requestedAt',
     label: t('payments.transactions.columns.requested'),

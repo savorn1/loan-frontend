@@ -9,125 +9,125 @@
     />
 
     <div v-if="loan">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-      <UCard class="lg:col-span-2">
-        <template #header>
-          <span class="font-semibold">{{ t('loans.overview.detailsTitle') }}</span>
-        </template>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <UCard class="lg:col-span-2">
+          <template #header>
+            <span class="font-semibold">{{ t('loans.overview.detailsTitle') }}</span>
+          </template>
 
-        <div v-if="loan.status === 'ACTIVE' || loan.status === 'CLOSED'" class="mb-5">
-          <div class="flex items-center justify-between text-sm mb-1.5">
-            <span class="text-gray-500">{{ t('loans.overview.paidOff') }}</span>
-            <span class="font-medium text-gray-900 dark:text-white">{{ payoffPercent }}%</span>
+          <div v-if="loan.status === 'ACTIVE' || loan.status === 'CLOSED'" class="mb-5">
+            <div class="flex items-center justify-between text-sm mb-1.5">
+              <span class="text-gray-500">{{ t('loans.overview.paidOff') }}</span>
+              <span class="font-medium text-gray-900 dark:text-white">{{ payoffPercent }}%</span>
+            </div>
+            <UProgress
+              :value="payoffPercent"
+              :color="loan.status === 'CLOSED' ? 'teal' : 'primary'"
+              size="sm"
+            />
           </div>
-          <UProgress
-            :value="payoffPercent"
-            :color="loan.status === 'CLOSED' ? 'teal' : 'primary'"
-            size="sm"
-          />
-        </div>
 
-        <dl class="grid grid-cols-2 gap-y-3 text-sm">
-          <dt class="text-gray-500">{{ t('loans.overview.fields.customer') }}</dt>
-          <dd>
-            <NuxtLink :to="`/customers/${loan.customerId}`" class="text-primary-500">{{
-              loan.customerName
-            }}</NuxtLink>
-          </dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.principal') }}</dt>
-          <dd>{{ formatCurrency(loan.principal) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.interestRate') }}</dt>
-          <dd>{{ loan.interestRate }}%</dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.term') }}</dt>
-          <dd>{{ t('loans.overview.months', { count: loan.termMonths }) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.monthlyInstallment') }}</dt>
-          <dd>{{ formatCurrency(loan.monthlyInstallment) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.outstandingBalance') }}</dt>
-          <dd class="font-semibold">{{ formatCurrency(loan.outstandingBalance) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.purpose') }}</dt>
-          <dd>{{ loan.purpose || '—' }}</dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.maturityDate') }}</dt>
-          <dd>{{ formatDate(loan.maturityDate) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.approved') }}</dt>
-          <dd>{{ formatDateTime(loan.approvedAt) }}</dd>
-          <dt class="text-gray-500">{{ t('loans.overview.fields.disbursed') }}</dt>
-          <dd>{{ formatDateTime(loan.disbursedAt) }}</dd>
-        </dl>
-      </UCard>
+          <dl class="grid grid-cols-2 gap-y-3 text-sm">
+            <dt class="text-gray-500">{{ t('loans.overview.fields.customer') }}</dt>
+            <dd>
+              <NuxtLink :to="`/customers/${loan.customerId}`" class="text-primary-500">{{
+                loan.customerName
+              }}</NuxtLink>
+            </dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.principal') }}</dt>
+            <dd>{{ formatCurrency(loan.principal) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.interestRate') }}</dt>
+            <dd>{{ loan.interestRate }}%</dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.term') }}</dt>
+            <dd>{{ t('loans.overview.months', { count: loan.termMonths }) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.monthlyInstallment') }}</dt>
+            <dd>{{ formatCurrency(loan.monthlyInstallment) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.outstandingBalance') }}</dt>
+            <dd class="font-semibold">{{ formatCurrency(loan.outstandingBalance) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.purpose') }}</dt>
+            <dd>{{ loan.purpose || '—' }}</dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.maturityDate') }}</dt>
+            <dd>{{ formatDate(loan.maturityDate) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.approved') }}</dt>
+            <dd>{{ formatDateTime(loan.approvedAt) }}</dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.disbursed') }}</dt>
+            <dd>{{ formatDateTime(loan.disbursedAt) }}</dd>
+          </dl>
+        </UCard>
+
+        <UCard>
+          <template #header>
+            <span class="font-semibold">{{ t('loans.overview.applyPaymentTitle') }}</span>
+          </template>
+          <!-- Directly reduces loan.outstandingBalance via loan-service. Distinct
+             from the installment ledger in the "Payments" tab below, which is
+             tracked separately in payment-service. -->
+          <UForm :state="paymentForm" class="space-y-3" @submit="onApplyPayment">
+            <UFormGroup :label="t('loans.overview.amount')" name="amount" required>
+              <UInput
+                v-model.number="paymentForm.amount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                required
+              />
+            </UFormGroup>
+            <UButton
+              type="submit"
+              block
+              :loading="applyingPayment"
+              :disabled="loan.status !== 'ACTIVE'"
+            >
+              {{ t('loans.overview.applyPaymentButton') }}
+            </UButton>
+            <p v-if="loan.status !== 'ACTIVE'" class="text-xs text-gray-500">
+              {{ t('loans.overview.applyPaymentHint') }}
+            </p>
+          </UForm>
+        </UCard>
+      </div>
 
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loans.overview.applyPaymentTitle') }}</span>
+          <div class="flex items-center justify-between">
+            <span class="font-semibold">{{ t('loans.overview.scheduleTitle') }}</span>
+            <UButton
+              v-if="isAdmin && loan.status === 'ACTIVE' && (payments ?? []).length === 0"
+              size="xs"
+              variant="soft"
+              :loading="generatingSchedule"
+              @click="onGenerateSchedule"
+            >
+              {{ t('loans.overview.generateScheduleButton') }}
+            </UButton>
+          </div>
         </template>
-        <!-- Directly reduces loan.outstandingBalance via loan-service. Distinct
-             from the installment ledger in the "Payments" tab below, which is
-             tracked separately in payment-service. -->
-        <UForm :state="paymentForm" class="space-y-3" @submit="onApplyPayment">
-          <UFormGroup :label="t('loans.overview.amount')" name="amount" required>
-            <UInput
-              v-model.number="paymentForm.amount"
-              type="number"
-              min="0.01"
-              step="0.01"
-              required
+        <DataTable :rows="payments ?? []" :columns="paymentColumns" :loading="paymentsPending">
+          <template #actions-data="{ row }">
+            <UButton
+              v-if="row.status !== 'PAID'"
+              size="2xs"
+              variant="soft"
+              :loading="markingPaid === row.id"
+              @click="onMarkPaid(row.id)"
+            >
+              {{ t('loans.overview.markPaidButton') }}
+            </UButton>
+          </template>
+          <template #empty-state>
+            <EmptyState
+              icon="i-heroicons-calendar-days"
+              :title="t('loans.overview.empty.title')"
+              :description="
+                loan.status === 'ACTIVE'
+                  ? t('loans.overview.empty.descriptionActive')
+                  : t('loans.overview.empty.descriptionOther')
+              "
             />
-          </UFormGroup>
-          <UButton
-            type="submit"
-            block
-            :loading="applyingPayment"
-            :disabled="loan.status !== 'ACTIVE'"
-          >
-            {{ t('loans.overview.applyPaymentButton') }}
-          </UButton>
-          <p v-if="loan.status !== 'ACTIVE'" class="text-xs text-gray-500">
-            {{ t('loans.overview.applyPaymentHint') }}
-          </p>
-        </UForm>
+          </template>
+        </DataTable>
       </UCard>
     </div>
-
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <span class="font-semibold">{{ t('loans.overview.scheduleTitle') }}</span>
-          <UButton
-            v-if="isAdmin && loan.status === 'ACTIVE' && (payments ?? []).length === 0"
-            size="xs"
-            variant="soft"
-            :loading="generatingSchedule"
-            @click="onGenerateSchedule"
-          >
-            {{ t('loans.overview.generateScheduleButton') }}
-          </UButton>
-        </div>
-      </template>
-      <DataTable :rows="payments ?? []" :columns="paymentColumns" :loading="paymentsPending">
-        <template #actions-data="{ row }">
-          <UButton
-            v-if="row.status !== 'PAID'"
-            size="2xs"
-            variant="soft"
-            :loading="markingPaid === row.id"
-            @click="onMarkPaid(row.id)"
-          >
-            {{ t('loans.overview.markPaidButton') }}
-          </UButton>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-calendar-days"
-            :title="t('loans.overview.empty.title')"
-            :description="
-              loan.status === 'ACTIVE'
-                ? t('loans.overview.empty.descriptionActive')
-                : t('loans.overview.empty.descriptionOther')
-            "
-          />
-        </template>
-      </DataTable>
-    </UCard>
-  </div>
     <div v-else class="flex justify-center py-16">
       <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 animate-spin text-gray-400" />
     </div>

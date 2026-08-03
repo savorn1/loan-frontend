@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,13 +9,18 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('accounting.generalLedgerReports.generalLedger.financialPeriod')" class="max-w-xs">
+      <UFormGroup
+        :label="t('accounting.generalLedgerReports.generalLedger.financialPeriod')"
+        class="max-w-xs"
+      >
         <USelectMenu
           v-model="financialPeriodId"
           :options="periodOptions"
           option-attribute="label"
           value-attribute="value"
-          :placeholder="t('accounting.generalLedgerReports.generalLedger.financialPeriodPlaceholder')"
+          :placeholder="
+            t('accounting.generalLedgerReports.generalLedger.financialPeriodPlaceholder')
+          "
         />
       </UFormGroup>
     </UCard>
@@ -81,17 +80,37 @@ const {
 
 const columns = computed<ColumnDef<GeneralLedgerSummaryRow>[]>(() => [
   { key: 'accountNo', label: t('accounting.generalLedgerReports.generalLedger.columns.accountNo') },
-  { key: 'accountName', label: t('accounting.generalLedgerReports.generalLedger.columns.accountName') },
-  { key: 'openingBalance', label: t('accounting.generalLedgerReports.generalLedger.columns.opening'), type: 'currency' },
-  { key: 'periodDebitTotal', label: t('accounting.generalLedgerReports.generalLedger.columns.debit'), type: 'currency' },
-  { key: 'periodCreditTotal', label: t('accounting.generalLedgerReports.generalLedger.columns.credit'), type: 'currency' },
-  { key: 'closingBalance', label: t('accounting.generalLedgerReports.generalLedger.columns.closing'), type: 'currency' },
+  {
+    key: 'accountName',
+    label: t('accounting.generalLedgerReports.generalLedger.columns.accountName')
+  },
+  {
+    key: 'openingBalance',
+    label: t('accounting.generalLedgerReports.generalLedger.columns.opening'),
+    type: 'currency'
+  },
+  {
+    key: 'periodDebitTotal',
+    label: t('accounting.generalLedgerReports.generalLedger.columns.debit'),
+    type: 'currency'
+  },
+  {
+    key: 'periodCreditTotal',
+    label: t('accounting.generalLedgerReports.generalLedger.columns.credit'),
+    type: 'currency'
+  },
+  {
+    key: 'closingBalance',
+    label: t('accounting.generalLedgerReports.generalLedger.columns.closing'),
+    type: 'currency'
+  },
   {
     key: 'actions',
     label: '',
     type: 'link',
     value: () => t('accounting.generalLedgerReports.generalLedger.viewLedger'),
-    href: (row) => `/general-ledger?glAccountId=${row.glAccountId}&financialPeriodId=${financialPeriodId.value}`
+    href: (row) =>
+      `/general-ledger?glAccountId=${row.glAccountId}&financialPeriodId=${financialPeriodId.value}`
   }
 ])
 </script>

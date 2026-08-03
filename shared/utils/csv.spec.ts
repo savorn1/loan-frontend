@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { downloadCsv } from './csv'
+import { deriveExportBaseName, downloadCsv } from './csv'
 import type { ColumnDef } from '~/shared/types'
 
 interface Row extends Record<string, unknown> {
@@ -13,6 +13,7 @@ const BOM = String.fromCharCode(0xfeff)
 
 function captureDownload() {
   let capturedBlob: Blob | undefined
+  let capturedAnchor: HTMLAnchorElement | undefined
   const createObjectURL = vi.fn((blob: Blob) => {
     capturedBlob = blob
     return 'blob:mock-url'
@@ -24,13 +25,17 @@ function captureDownload() {
   const originalCreateElement = document.createElement.bind(document)
   vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
     const el = originalCreateElement(tag)
-    if (tag === 'a') el.click = clickSpy
+    if (tag === 'a') {
+      el.click = clickSpy
+      capturedAnchor = el as HTMLAnchorElement
+    }
     return el
   })
 
   return {
     clickSpy,
-    getBlob: () => capturedBlob
+    getBlob: () => capturedBlob,
+    getFilename: () => capturedAnchor?.download
   }
 }
 
@@ -94,5 +99,34 @@ describe('downloadCsv', () => {
     // the raw bytes instead: EF BB BF is the UTF-8 BOM.
     const bytes = new Uint8Array(await getBlob()!.arrayBuffer())
     expect([bytes[0], bytes[1], bytes[2]]).toEqual([0xef, 0xbb, 0xbf])
+  })
+
+  it('stamps the downloaded filename with the current date and time', async () => {
+    const { getFilename } = captureDownload()
+    downloadCsv('export.csv', columns, [])
+
+    expect(getFilename()).toMatch(/^export-\d{8}-\d{6}\.csv$/)
+  })
+})
+
+describe('deriveExportBaseName', () => {
+  it('uses the last static path segment', () => {
+    expect(deriveExportBaseName('/customers')).toBe('customers')
+    expect(deriveExportBaseName('/loans')).toBe('loans')
+  })
+
+  it('drops dynamic route params so ids are never used as the name', () => {
+    expect(deriveExportBaseName('/loans/123/schedule', { id: '123' })).toBe('schedule')
+    expect(deriveExportBaseName('/groups/123', { id: '123' })).toBe('groups')
+    expect(deriveExportBaseName('/journal-entries/123', { id: '123' })).toBe('journal-entries')
+  })
+
+  it('handles array route params', () => {
+    expect(deriveExportBaseName('/reports/a/b/summary', { slug: ['a', 'b'] })).toBe('summary')
+  })
+
+  it('falls back to "export" when nothing static remains', () => {
+    expect(deriveExportBaseName('/123', { id: '123' })).toBe('export')
+    expect(deriveExportBaseName('/')).toBe('export')
   })
 })

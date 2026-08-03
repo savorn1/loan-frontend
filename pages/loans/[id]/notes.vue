@@ -12,7 +12,9 @@
         class="flex-1"
         required
       />
-      <UButton type="submit" :loading="creating" :disabled="!form.note.trim()">{{ t('loans.notes.add') }}</UButton>
+      <UButton type="submit" :loading="creating" :disabled="!form.note.trim()">{{
+        t('loans.notes.add')
+      }}</UButton>
     </UForm>
 
     <UAlert
@@ -58,7 +60,9 @@ const {
   data: notes,
   error: fetchError,
   refresh
-} = await useAsyncData(`loan-${loanId}-notes`, () => api<LoanNoteResponse[]>(`/loans/${loanId}/notes`))
+} = await useAsyncData(`loan-${loanId}-notes`, () =>
+  api<LoanNoteResponse[]>(`/loans/${loanId}/notes`)
+)
 
 const sortedNotes = computed(() =>
   [...(notes.value ?? [])].sort(

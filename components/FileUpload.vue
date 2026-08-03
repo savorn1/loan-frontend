@@ -103,7 +103,9 @@ const files = computed<File[]>(() => {
 })
 
 const hintText = computed(
-  () => props.hint ?? (props.maxSizeMb ? t('fileUpload.upToSize', { size: props.maxSizeMb }) : undefined)
+  () =>
+    props.hint ??
+    (props.maxSizeMb ? t('fileUpload.upToSize', { size: props.maxSizeMb }) : undefined)
 )
 
 // Thumbnails for image files only; revoked whenever the selection changes so

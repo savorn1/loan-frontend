@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -16,17 +10,28 @@
 
     <UCard>
       <form class="flex flex-wrap items-end gap-3" @submit.prevent="onSearch">
-        <UFormGroup :label="t('accounting.generalLedgerReports.journalEntryDetails.searchLabel')" class="w-64">
+        <UFormGroup
+          :label="t('accounting.generalLedgerReports.journalEntryDetails.searchLabel')"
+          class="w-64"
+        >
           <UInput
             v-model="entryNo"
-            :placeholder="t('accounting.generalLedgerReports.journalEntryDetails.searchPlaceholder')"
+            :placeholder="
+              t('accounting.generalLedgerReports.journalEntryDetails.searchPlaceholder')
+            "
           />
         </UFormGroup>
         <UButton type="submit" :loading="searching">
           {{ t('accounting.generalLedgerReports.journalEntryDetails.searchButton') }}
         </UButton>
       </form>
-      <UAlert v-if="notFound" color="red" variant="subtle" class="mt-4" :title="t('accounting.generalLedgerReports.journalEntryDetails.notFound')" />
+      <UAlert
+        v-if="notFound"
+        color="red"
+        variant="subtle"
+        class="mt-4"
+        :title="t('accounting.generalLedgerReports.journalEntryDetails.notFound')"
+      />
     </UCard>
   </div>
 </template>

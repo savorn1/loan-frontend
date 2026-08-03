@@ -34,7 +34,11 @@
             class="text-xs font-semibold"
             :class="isBalanced ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'"
           >
-            {{ isBalanced ? t('accounting.trialBalance.balanced') : t('accounting.trialBalance.outOfBalance') }}
+            {{
+              isBalanced
+                ? t('accounting.trialBalance.balanced')
+                : t('accounting.trialBalance.outOfBalance')
+            }}
           </span>
         </div>
       </template>
@@ -83,9 +87,24 @@ const {
 const columns = computed<ColumnDef<TrialBalanceRowResponse>[]>(() => [
   { key: 'accountNo', label: t('accounting.trialBalance.columns.accountNo'), sortable: true },
   { key: 'accountName', label: t('accounting.trialBalance.columns.accountName'), sortable: true },
-  { key: 'totalDebit', label: t('accounting.trialBalance.columns.debit'), type: 'currency', sortable: true },
-  { key: 'totalCredit', label: t('accounting.trialBalance.columns.credit'), type: 'currency', sortable: true },
-  { key: 'balance', label: t('accounting.trialBalance.columns.balance'), type: 'currency', sortable: true }
+  {
+    key: 'totalDebit',
+    label: t('accounting.trialBalance.columns.debit'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'totalCredit',
+    label: t('accounting.trialBalance.columns.credit'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'balance',
+    label: t('accounting.trialBalance.columns.balance'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 
 const isBalanced = computed(() => {

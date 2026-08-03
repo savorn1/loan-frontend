@@ -4,9 +4,9 @@
       <template #header>
         <div class="flex items-center justify-between">
           <span class="font-semibold">{{ t('loans.disbursements.title') }}</span>
-          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate"
-            >{{ t('loans.disbursements.addButton') }}</UButton
-          >
+          <UButton v-if="isAdmin" size="xs" icon="i-heroicons-plus" @click="openCreate">{{
+            t('loans.disbursements.addButton')
+          }}</UButton>
         </div>
       </template>
 
@@ -149,7 +149,11 @@
       :description="t('loans.disbursements.confirm.delete.description')"
       color="red"
       :loading="deleting"
-      @update:model-value="(v: boolean) => { if (!v) confirmDelete = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
       @confirm="onConfirmDelete"
     />
 
@@ -159,7 +163,11 @@
       :description="t('loans.disbursements.confirm.approve.description')"
       color="green"
       :loading="approving"
-      @update:model-value="(v: boolean) => { if (!v) confirmApprove = null }"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmApprove = null
+        }
+      "
       @confirm="onConfirmApprove"
     />
   </div>
@@ -245,7 +253,12 @@ const fields = computed<FieldDef[]>(() => [
 ])
 
 const reasonFields = computed<FieldDef[]>(() => [
-  { name: 'reason', label: t('loans.disbursements.fields.reason'), type: 'textarea', required: true }
+  {
+    name: 'reason',
+    label: t('loans.disbursements.fields.reason'),
+    type: 'textarea',
+    required: true
+  }
 ])
 
 const showForm = ref(false)
@@ -258,7 +271,12 @@ const disbursementForm = ref<Record<string, any>>({})
 function openCreate() {
   formMode.value = 'create'
   editingId.value = null
-  disbursementForm.value = { amount: undefined, disbursedDate: '', method: undefined, reference: '' }
+  disbursementForm.value = {
+    amount: undefined,
+    disbursedDate: '',
+    method: undefined,
+    reference: ''
+  }
   error.value = ''
   showForm.value = true
 }
@@ -290,7 +308,10 @@ async function onSubmitForm(values: Record<string, any>) {
       await api(`/loans/${loanId}/disbursements`, { method: 'POST', body: payload })
       toast.add({ title: t('loans.disbursements.toastRecorded'), color: 'green' })
     } else {
-      await api(`/loans/${loanId}/disbursements/${editingId.value}`, { method: 'PUT', body: payload })
+      await api(`/loans/${loanId}/disbursements/${editingId.value}`, {
+        method: 'PUT',
+        body: payload
+      })
       toast.add({ title: t('loans.disbursements.toastUpdated'), color: 'green' })
     }
     showForm.value = false
@@ -327,7 +348,9 @@ async function onConfirmApprove() {
   if (!confirmApprove.value) return
   approving.value = true
   try {
-    await api(`/loans/${loanId}/disbursements/${confirmApprove.value.id}/approve`, { method: 'PUT' })
+    await api(`/loans/${loanId}/disbursements/${confirmApprove.value.id}/approve`, {
+      method: 'PUT'
+    })
     toast.add({ title: t('loans.disbursements.toastApproved'), color: 'green' })
     confirmApprove.value = null
     await refresh()

@@ -477,7 +477,10 @@
         "emptyDescriptionPick": "ជ្រើសរើសគណនីបញ្ជីមេដែលតំណាងឲ្យសាច់ប្រាក់ និងដែនកាលបរិច្ឆេទខាងលើ។",
         "emptyTitleNoActivity": "គ្មានចលនាសាច់ប្រាក់",
         "emptyDescriptionNoActivity": "គណនីនេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "transactionType": "ប្រភេទប្រតិបត្តិការ", "amount": "ផលប៉ះពាល់សាច់ប្រាក់សុទ្ធ" }
+        "columns": {
+          "transactionType": "ប្រភេទប្រតិបត្តិការ",
+          "amount": "ផលប៉ះពាល់សាច់ប្រាក់សុទ្ធ"
+        }
       },
       "changesInEquity": {
         "title": "របាយការណ៍ការផ្លាស់ប្តូរមូលធន",
@@ -506,7 +509,11 @@
         "totalPrincipal": "ប្រាក់ដើមសរុប",
         "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប",
         "statusBreakdownHeader": "តាមស្ថានភាព",
-        "columns": { "status": "ស្ថានភាព", "loanCount": "ចំនួនកម្ចី", "totalPrincipal": "ប្រាក់ដើមសរុប" }
+        "columns": {
+          "status": "ស្ថានភាព",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប"
+        }
       },
       "outstandingBalance": {
         "title": "សមតុល្យកម្ចីនៅសល់",
@@ -537,7 +544,14 @@
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គណនីនេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
         "accountNotFound": "រកមិនឃើញគណនី \"កម្ចីត្រូវទទួល\" នៅក្នុងតារាងគណនីទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "side": "ចំហៀង", "amount": "ចំនួន", "balance": "សមតុល្យ" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "side": "ចំហៀង",
+          "amount": "ចំនួន",
+          "balance": "សមតុល្យ"
+        }
       },
       "interestReceivable": {
         "title": "ការប្រាក់ត្រូវទទួល",
@@ -553,7 +567,14 @@
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គណនីនេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
         "accountNotFound": "រកមិនឃើញគណនី \"ការប្រាក់ត្រូវទទួល\" នៅក្នុងតារាងគណនីទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "side": "ចំហៀង", "amount": "ចំនួន", "balance": "សមតុល្យ" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "side": "ចំហៀង",
+          "amount": "ចំនួន",
+          "balance": "សមតុល្យ"
+        }
       },
       "interestIncome": {
         "title": "ចំណូលការប្រាក់",
@@ -569,7 +590,14 @@
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គណនីនេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
         "accountNotFound": "រកមិនឃើញគណនី \"ចំណូលការប្រាក់\" នៅក្នុងតារាងគណនីទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "side": "ចំហៀង", "amount": "ចំនួន", "balance": "សមតុល្យ" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "side": "ចំហៀង",
+          "amount": "ចំនួន",
+          "balance": "សមតុល្យ"
+        }
       },
       "penaltyIncome": {
         "title": "ចំណូលពិន័យ",
@@ -585,7 +613,14 @@
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គណនីនេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
         "accountNotFound": "រកមិនឃើញគណនី \"ចំណូលពិន័យ\" នៅក្នុងតារាងគណនីទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "side": "ចំហៀង", "amount": "ចំនួន", "balance": "សមតុល្យ" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "side": "ចំហៀង",
+          "amount": "ចំនួន",
+          "balance": "សមតុល្យ"
+        }
       },
       "feeIncome": {
         "title": "ចំណូលកម្រៃ",
@@ -601,7 +636,14 @@
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គណនីនេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
         "accountNotFound": "រកមិនឃើញគណនី \"ចំណូលកម្រៃ\" នៅក្នុងតារាងគណនីទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "side": "ចំហៀង", "amount": "ចំនួន", "balance": "សមតុល្យ" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "side": "ចំហៀង",
+          "amount": "ចំនួន",
+          "balance": "សមតុល្យ"
+        }
       }
     },
     "receivablesReports": {
@@ -609,7 +651,11 @@
         "title": "ការវិភាគអាយុគណនីត្រូវទទួល",
         "description": "គណនីត្រូវទទួលពីកម្ចី ដាក់ជាក្រុមតាមចំនួនថ្ងៃហួសកំណត់ (DPD)។",
         "bucketsHeader": "តាមក្រុមអាយុ",
-        "bucketColumns": { "bucket": "ក្រុមអាយុ", "loanCount": "ចំនួនកម្ចី", "overdueAmount": "ចំនួនហួសកំណត់" },
+        "bucketColumns": {
+          "bucket": "ក្រុមអាយុ",
+          "loanCount": "ចំនួនកម្ចី",
+          "overdueAmount": "ចំនួនហួសកំណត់"
+        },
         "detailHeader": "ព័ត៌មានលម្អិតកម្ចី",
         "bucketFilterAll": "គ្រប់ក្រុមអាយុ",
         "searchPlaceholder": "ស្វែងរកតាមអតិថិជន…",
@@ -650,7 +696,14 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលសៀវភៅសាច់ប្រាក់។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពសាច់ប្រាក់",
         "emptyDescriptionNoActivity": "គ្មានការកត់ត្រាទៅគណនីសាច់ប្រាក់ក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "side": "ចំហៀង", "amount": "ចំនួន", "balance": "សមតុល្យ" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "side": "ចំហៀង",
+          "amount": "ចំនួន",
+          "balance": "សមតុល្យ"
+        }
       },
       "receipts": {
         "title": "របាយការណ៍ការទទួលសាច់ប្រាក់",
@@ -661,7 +714,12 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការទទួលសាច់ប្រាក់។",
         "emptyTitleNoActivity": "គ្មានការទទួលសាច់ប្រាក់",
         "emptyDescriptionNoActivity": "គ្មានសាច់ប្រាក់ត្រូវបានទទួលក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "amount": "ចំនួន" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "amount": "ចំនួន"
+        }
       },
       "payments": {
         "title": "របាយការណ៍ការទូទាត់សាច់ប្រាក់",
@@ -672,7 +730,12 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការទូទាត់សាច់ប្រាក់។",
         "emptyTitleNoActivity": "គ្មានការទូទាត់សាច់ប្រាក់",
         "emptyDescriptionNoActivity": "គ្មានសាច់ប្រាក់ត្រូវបានទូទាត់ចេញក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "amount": "ចំនួន" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "amount": "ចំនួន"
+        }
       },
       "dailySummary": {
         "title": "សេចក្តីសង្ខេបសាច់ប្រាក់ប្រចាំថ្ងៃ",
@@ -682,7 +745,13 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលសេចក្តីសង្ខេបប្រចាំថ្ងៃ។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពសាច់ប្រាក់",
         "emptyDescriptionNoActivity": "គ្មានការកត់ត្រាទៅគណនីសាច់ប្រាក់ក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "receipts": "ការទទួល", "payments": "ការទូទាត់", "netChange": "ការផ្លាស់ប្តូរសុទ្ធ", "closingBalance": "សមតុល្យចុងគ្រា" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "receipts": "ការទទួល",
+          "payments": "ការទូទាត់",
+          "netChange": "ការផ្លាស់ប្តូរសុទ្ធ",
+          "closingBalance": "សមតុល្យចុងគ្រា"
+        }
       },
       "position": {
         "title": "ស្ថានភាពសាច់ប្រាក់",
@@ -751,7 +820,13 @@
         "emptyDescriptionPick": "ជ្រើសរើសសាខា និងកាលបរិច្ឆេទគិតត្រឹមខាងលើ ដើម្បីមើលតារាងតុល្យការសាកល្បងរបស់វា។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "សាខានេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រាគិតត្រឹមកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "accountNo": "លេខគណនី", "accountName": "ឈ្មោះគណនី", "debit": "ឥណពន្ធ", "credit": "ឥណទាន", "balance": "សមតុល្យ" }
+        "columns": {
+          "accountNo": "លេខគណនី",
+          "accountName": "ឈ្មោះគណនី",
+          "debit": "ឥណពន្ធ",
+          "credit": "ឥណទាន",
+          "balance": "សមតុល្យ"
+        }
       },
       "cashPosition": {
         "title": "ស្ថានភាពសាច់ប្រាក់សាខា",
@@ -776,7 +851,13 @@
         "emptyDescriptionPick": "ជ្រើសរើសសាខា និងដែនកាលបរិច្ឆេទខាងលើ ដើម្បីមើលសេចក្តីសង្ខេបប្រតិបត្តិការរបស់វា។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "សាខានេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "accountNo": "លេខគណនី", "accountName": "ឈ្មោះគណនី", "debit": "ឥណពន្ធ", "credit": "ឥណទាន", "net": "សុទ្ធ" }
+        "columns": {
+          "accountNo": "លេខគណនី",
+          "accountName": "ឈ្មោះគណនី",
+          "debit": "ឥណពន្ធ",
+          "credit": "ឥណទាន",
+          "net": "សុទ្ធ"
+        }
       }
     },
     "expenseReports": {
@@ -794,7 +875,14 @@
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គណនីនេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
         "accountNotFound": "រកមិនឃើញគណនី \"ចំណាយប្រតិបត្តិការ\" នៅក្នុងតារាងគណនីទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "entryNo": "លេខធាតុ", "description": "ការពិពណ៌នា", "side": "ចំហៀង", "amount": "ចំនួន", "balance": "សមតុល្យ" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "entryNo": "លេខធាតុ",
+          "description": "ការពិពណ៌នា",
+          "side": "ចំហៀង",
+          "amount": "ចំនួន",
+          "balance": "សមតុល្យ"
+        }
       },
       "byBranch": {
         "title": "ចំណាយតាមសាខា",
@@ -868,7 +956,12 @@
         "description": "ចំនួនកម្ចី ប្រាក់ដើម និងសមតុល្យនៅសល់ តាមសាខានីមួយៗ។",
         "emptyTitle": "គ្មានកម្ចី",
         "emptyDescription": "គ្មានសាខាណាមួយមានកម្ចីនៅឡើយទេ។",
-        "columns": { "branch": "សាខា", "loanCount": "ចំនួនកម្ចី", "totalPrincipal": "ប្រាក់ដើមសរុប", "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប" }
+        "columns": {
+          "branch": "សាខា",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប",
+          "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប"
+        }
       },
       "byCustomer": {
         "title": "កម្ចីតាមអតិថិជន",
@@ -876,7 +969,12 @@
         "searchPlaceholder": "ស្វែងរកតាមអតិថិជន…",
         "emptyTitle": "គ្មានកម្ចី",
         "emptyDescription": "គ្មានអតិថិជនណាមួយមានកម្ចីនៅឡើយទេ។",
-        "columns": { "customer": "អតិថិជន", "loanCount": "ចំនួនកម្ចី", "totalPrincipal": "ប្រាក់ដើមសរុប", "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប" }
+        "columns": {
+          "customer": "អតិថិជន",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប",
+          "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប"
+        }
       }
     },
     "repaymentReports": {
@@ -887,7 +985,13 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការសងប្រាក់ប្រចាំថ្ងៃ។",
         "emptyTitleNoActivity": "គ្មានការសងប្រាក់ដែលបានប្រមូល",
         "emptyDescriptionNoActivity": "គ្មានការទូទាត់ត្រូវបានប្រមូលក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "date": "កាលបរិច្ឆេទ", "count": "ចំនួន", "totalAmount": "ចំនួនសរុប", "totalPrincipal": "ប្រាក់ដើម", "totalInterest": "ការប្រាក់" }
+        "columns": {
+          "date": "កាលបរិច្ឆេទ",
+          "count": "ចំនួន",
+          "totalAmount": "ចំនួនសរុប",
+          "totalPrincipal": "ប្រាក់ដើម",
+          "totalInterest": "ការប្រាក់"
+        }
       },
       "monthly": {
         "title": "របាយការណ៍ការសងប្រាក់ប្រចាំខែ",
@@ -896,7 +1000,13 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការសងប្រាក់ប្រចាំខែ។",
         "emptyTitleNoActivity": "គ្មានការសងប្រាក់ដែលបានប្រមូល",
         "emptyDescriptionNoActivity": "គ្មានការទូទាត់ត្រូវបានប្រមូលក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "month": "ខែ", "count": "ចំនួន", "totalAmount": "ចំនួនសរុប", "totalPrincipal": "ប្រាក់ដើម", "totalInterest": "ការប្រាក់" }
+        "columns": {
+          "month": "ខែ",
+          "count": "ចំនួន",
+          "totalAmount": "ចំនួនសរុប",
+          "totalPrincipal": "ប្រាក់ដើម",
+          "totalInterest": "ការប្រាក់"
+        }
       },
       "collection": {
         "title": "របាយការណ៍ការប្រមូលការសងប្រាក់",
@@ -942,7 +1052,13 @@
         "searchPlaceholder": "ស្វែងរកតាមកម្ចី…",
         "emptyTitle": "គ្មានការសងប្រាក់ខកខាន",
         "emptyDescription": "គ្មានដំណាក់កាលទូទាត់ណាមួយកំពុងហួសកំណត់ទេ។",
-        "columns": { "loanId": "កម្ចី", "installmentNumber": "ការទូទាត់ជុំទី", "dueDate": "កាលបរិច្ឆេទដល់កំណត់", "daysOverdue": "ចំនួនថ្ងៃហួសកំណត់", "amount": "ចំនួនទឹកប្រាក់" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "installmentNumber": "ការទូទាត់ជុំទី",
+          "dueDate": "កាលបរិច្ឆេទដល់កំណត់",
+          "daysOverdue": "ចំនួនថ្ងៃហួសកំណត់",
+          "amount": "ចំនួនទឹកប្រាក់"
+        }
       }
     },
     "overdueReports": {
@@ -958,7 +1074,12 @@
         "searchPlaceholder": "ស្វែងរកតាមកម្ចី…",
         "emptyTitle": "គ្មានអ្វីដល់កំណត់ទេ",
         "emptyDescription": "គ្មានដំណាក់កាលទូទាត់ណាមួយដល់កំណត់ក្នុងដែនកំណត់ដែលបានជ្រើសរើសទេ។",
-        "columns": { "loanId": "កម្ចី", "installmentNumber": "ការទូទាត់ជុំទី", "dueDate": "កាលបរិច្ឆេទដល់កំណត់", "amount": "ចំនួនទឹកប្រាក់" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "installmentNumber": "ការទូទាត់ជុំទី",
+          "dueDate": "កាលបរិច្ឆេទដល់កំណត់",
+          "amount": "ចំនួនទឹកប្រាក់"
+        }
       }
     },
     "penaltyReports": {
@@ -971,7 +1092,13 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការគិតកម្រៃពិន័យ។",
         "emptyTitleNoActivity": "គ្មានពិន័យត្រូវបានគិត",
         "emptyDescriptionNoActivity": "គ្មានពិន័យត្រូវបានគិតក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "loanId": "កម្ចី", "amount": "ចំនួនទឹកប្រាក់", "reason": "មូលហេតុ", "appliedDate": "កាលបរិច្ឆេទអនុវត្ត", "status": "ស្ថានភាព" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "reason": "មូលហេតុ",
+          "appliedDate": "កាលបរិច្ឆេទអនុវត្ត",
+          "status": "ស្ថានភាព"
+        }
       },
       "waivers": {
         "title": "ការលើកលែងពិន័យ",
@@ -982,7 +1109,12 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការលើកលែងពិន័យ។",
         "emptyTitleNoActivity": "គ្មានពិន័យត្រូវបានលើកលែង",
         "emptyDescriptionNoActivity": "គ្មានពិន័យត្រូវបានលើកលែងក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "loanId": "កម្ចី", "amount": "ចំនួនទឹកប្រាក់", "reason": "មូលហេតុ", "waivedAt": "បានលើកលែងនៅ" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "reason": "មូលហេតុ",
+          "waivedAt": "បានលើកលែងនៅ"
+        }
       },
       "outstanding": {
         "title": "ពិន័យនៅសល់",
@@ -991,7 +1123,12 @@
         "searchPlaceholder": "ស្វែងរកតាមកម្ចី…",
         "emptyTitle": "គ្មានពិន័យនៅសល់",
         "emptyDescription": "គ្មានពិន័យណាមួយកំពុងរង់ចាំទេ។",
-        "columns": { "loanId": "កម្ចី", "amount": "ចំនួនទឹកប្រាក់", "reason": "មូលហេតុ", "appliedDate": "កាលបរិច្ឆេទអនុវត្ត" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "reason": "មូលហេតុ",
+          "appliedDate": "កាលបរិច្ឆេទអនុវត្ត"
+        }
       },
       "collection": {
         "title": "ការប្រមូលពិន័យ",
@@ -1002,7 +1139,12 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលពិន័យដែលបានប្រមូល។",
         "emptyTitleNoActivity": "គ្មានពិន័យត្រូវបានប្រមូល",
         "emptyDescriptionNoActivity": "គ្មានពិន័យត្រូវបានសងក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "loanId": "កម្ចី", "amount": "ចំនួនទឹកប្រាក់", "reason": "មូលហេតុ", "paidAt": "បានទូទាត់នៅ" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "reason": "មូលហេតុ",
+          "paidAt": "បានទូទាត់នៅ"
+        }
       }
     },
     "interestReports": {
@@ -1015,7 +1157,14 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការប្រាក់ដែលបានបូក។",
         "emptyTitleNoActivity": "គ្មានការប្រាក់ត្រូវបានបូក",
         "emptyDescriptionNoActivity": "គ្មានធាតុបូកការប្រាក់ត្រូវបានកត់ត្រាក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "loanId": "កម្ចី", "periodStart": "ចាប់ផ្តើមរយៈពេល", "periodEnd": "បញ្ចប់រយៈពេល", "rate": "អត្រា", "amount": "ចំនួនទឹកប្រាក់", "accruedAt": "បានបូកនៅ" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "periodStart": "ចាប់ផ្តើមរយៈពេល",
+          "periodEnd": "បញ្ចប់រយៈពេល",
+          "rate": "អត្រា",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "accruedAt": "បានបូកនៅ"
+        }
       },
       "collected": {
         "title": "ការប្រាក់ដែលបានប្រមូល",
@@ -1026,7 +1175,12 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការប្រាក់ដែលបានប្រមូល។",
         "emptyTitleNoActivity": "គ្មានការប្រាក់ត្រូវបានប្រមូល",
         "emptyDescriptionNoActivity": "គ្មានការទូទាត់ត្រូវបានប្រមូលក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "loanId": "កម្ចី", "installmentNumber": "ការទូទាត់ជុំទី", "paidAt": "បានទូទាត់នៅ", "interestComponent": "ការប្រាក់ដែលបានប្រមូល" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "installmentNumber": "ការទូទាត់ជុំទី",
+          "paidAt": "បានទូទាត់នៅ",
+          "interestComponent": "ការប្រាក់ដែលបានប្រមូល"
+        }
       },
       "outstanding": {
         "title": "ការប្រាក់នៅសល់",
@@ -1035,7 +1189,12 @@
         "searchPlaceholder": "ស្វែងរកតាមកម្ចី…",
         "emptyTitle": "គ្មានការប្រាក់នៅសល់",
         "emptyDescription": "គ្មានកម្ចីណាមួយមានការប្រាក់ដែលបានបូកមិនទាន់ប្រមូលនាពេលនេះទេ។",
-        "columns": { "loanId": "កម្ចី", "totalAccrued": "ចំនួនបូកសរុប", "totalCollected": "ចំនួនប្រមូលសរុប", "outstanding": "នៅសល់" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "totalAccrued": "ចំនួនបូកសរុប",
+          "totalCollected": "ចំនួនប្រមូលសរុប",
+          "outstanding": "នៅសល់"
+        }
       }
     },
     "customerReports": {
@@ -1068,7 +1227,11 @@
         "statusBreakdownHeader": "តាមស្ថានភាព",
         "emptyTitlePick": "ជ្រើសរើសអតិថិជន",
         "emptyDescriptionPick": "ជ្រើសរើសអតិថិជនខាងលើ ដើម្បីមើលសេចក្តីសង្ខេបកម្ចីរបស់ពួកគេ។",
-        "columns": { "status": "ស្ថានភាព", "loanCount": "ចំនួនកម្ចី", "totalPrincipal": "ប្រាក់ដើមសរុប" }
+        "columns": {
+          "status": "ស្ថានភាព",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប"
+        }
       },
       "paymentHistory": {
         "title": "ប្រវត្តិការទូទាត់អតិថិជន",
@@ -1102,7 +1265,13 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការលុបចោលកម្ចី។",
         "emptyTitleNoActivity": "គ្មានការលុបចោល",
         "emptyDescriptionNoActivity": "គ្មានការលុបចោលត្រូវបានកត់ត្រាក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "loanId": "កម្ចី", "amount": "ចំនួនទឹកប្រាក់", "reason": "មូលហេតុ", "writeoffDate": "កាលបរិច្ឆេទលុបចោល", "status": "ស្ថានភាព" }
+        "columns": {
+          "loanId": "កម្ចី",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "reason": "មូលហេតុ",
+          "writeoffDate": "កាលបរិច្ឆេទលុបចោល",
+          "status": "ស្ថានភាព"
+        }
       },
       "restructuring": {
         "title": "ការរៀបចំកម្ចីឡើងវិញ",
@@ -1128,7 +1297,28 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការផ្តល់ហិរញ្ញប្បទានឡើងវិញ។",
         "emptyTitleNoActivity": "គ្មានការផ្តល់ហិរញ្ញប្បទានឡើងវិញ",
         "emptyDescriptionNoActivity": "គ្មានកម្ចីណាមួយត្រូវបានផ្តល់ហិរញ្ញប្បទានឡើងវិញក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "loanId": "កម្ចីដើម", "newLoanId": "កម្ចីថ្មី", "reason": "មូលហេតុ", "effectiveDate": "កាលបរិច្ឆេទចូលជាធរមាន" }
+        "columns": {
+          "loanId": "កម្ចីដើម",
+          "newLoanId": "កម្ចីថ្មី",
+          "reason": "មូលហេតុ",
+          "effectiveDate": "កាលបរិច្ឆេទចូលជាធរមាន"
+        }
+      }
+    },
+    "dashboardReports": {
+      "summary": {
+        "title": "សេចក្តីសង្ខេបផ្ទាំងគ្រប់គ្រង",
+        "description": "សូចនាករផលប័ត្រសំខាន់ៗ គិតត្រឹមពេលនេះ។",
+        "totalActiveLoans": "ចំនួនកម្ចីសកម្មសរុប",
+        "totalOutstandingBalance": "សមតុល្យនៅសល់សរុប",
+        "totalDisbursedToday": "ចំនួនបានផ្តល់ថ្ងៃនេះ",
+        "totalCollectedToday": "ចំនួនបានប្រមូលថ្ងៃនេះ",
+        "totalOverdueAmount": "ចំនួនហួសកំណត់សរុប",
+        "loansDueToday": "កម្ចីដល់កំណត់ថ្ងៃនេះ",
+        "newLoanApplications": "ពាក្យសុំកម្ចីថ្មីថ្ងៃនេះ",
+        "portfolioAtRisk": "ផលប័ត្រប្រថុយប្រថាន",
+        "nonPerformingLoans": "កម្ចីមិនដំណើរការ (ហួសកំណត់ ៩០+ ថ្ងៃ)",
+        "averageLoanAmount": "ចំនួនកម្ចីជាមធ្យម"
       }
     }
   }

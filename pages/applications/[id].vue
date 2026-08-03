@@ -17,9 +17,9 @@
         <StatusBadge :status="application.status" />
       </div>
       <div v-if="isAdmin" class="flex gap-2">
-        <UButton v-if="application.status === 'SUBMITTED'" variant="soft" @click="onStartReview"
-          >{{ t('applications.detail.startReview') }}</UButton
-        >
+        <UButton v-if="application.status === 'SUBMITTED'" variant="soft" @click="onStartReview">{{
+          t('applications.detail.startReview')
+        }}</UButton>
         <UButton
           v-if="application.status === 'SUBMITTED' || application.status === 'UNDER_REVIEW'"
           color="green"
@@ -136,7 +136,11 @@
             />
           </div>
           <div class="flex justify-end">
-            <UButton type="submit" size="xs" :loading="addingDocument" :disabled="!canAddDocument"
+            <UButton
+              type="submit"
+              size="xs"
+              :loading="addingDocument"
+              :disabled="!canAddDocument"
               >{{ t('applications.detail.addDocument') }}</UButton
             >
           </div>
@@ -207,9 +211,9 @@
             class="flex-1"
             required
           />
-          <UButton type="submit" :loading="addingNote" :disabled="!noteForm.note.trim()"
-            >{{ t('applications.detail.add') }}</UButton
-          >
+          <UButton type="submit" :loading="addingNote" :disabled="!noteForm.note.trim()">{{
+            t('applications.detail.add')
+          }}</UButton>
         </UForm>
 
         <ol v-if="application.notes.length" class="space-y-4">

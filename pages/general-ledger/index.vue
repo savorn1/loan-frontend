@@ -106,7 +106,11 @@ const financialPeriodId = ref<number | undefined>(
   route.query.financialPeriodId ? Number(route.query.financialPeriodId) : undefined
 )
 
-const { data: ledger, pending, error: fetchError } = await useAsyncData(
+const {
+  data: ledger,
+  pending,
+  error: fetchError
+} = await useAsyncData(
   'general-ledger-balance',
   () => {
     if (!glAccountId.value || !financialPeriodId.value) return Promise.resolve(null)

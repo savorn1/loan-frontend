@@ -2,7 +2,9 @@
   <div>
     <PageHeader :title="t('admin.permissions.title')" :description="totalLabel">
       <template #actions>
-        <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('admin.permissions.newPermission') }}</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('admin.permissions.newPermission')
+        }}</UButton>
       </template>
     </PageHeader>
 
@@ -37,7 +39,9 @@
     <EmptyState
       v-if="!pending && groups.length === 0"
       :icon="search ? 'i-heroicons-magnifying-glass' : 'i-heroicons-key'"
-      :title="search ? t('admin.permissions.empty.matchesTitle') : t('admin.permissions.empty.emptyTitle')"
+      :title="
+        search ? t('admin.permissions.empty.matchesTitle') : t('admin.permissions.empty.emptyTitle')
+      "
       :description="
         search
           ? t('admin.permissions.empty.matchesDescription', { query: search })
@@ -45,7 +49,9 @@
       "
     >
       <template v-if="!search" #action>
-        <UButton icon="i-heroicons-plus" @click="openCreate">{{ t('admin.permissions.newPermission') }}</UButton>
+        <UButton icon="i-heroicons-plus" @click="openCreate">{{
+          t('admin.permissions.newPermission')
+        }}</UButton>
       </template>
     </EmptyState>
 
@@ -60,7 +66,13 @@
       <DataTable :rows="group.permissions" :columns="columns">
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton size="2xs" variant="soft" icon="i-heroicons-pencil" :aria-label="t('common.edit')" @click="openEdit(row)" />
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
             <UButton
               size="2xs"
               color="red"
@@ -155,7 +167,9 @@ const filtered = computed(() => {
 
 const totalLabel = computed(() => {
   const count = permissions.value?.length ?? 0
-  return count === 1 ? t('admin.permissions.total.one') : t('admin.permissions.total.other', { count })
+  return count === 1
+    ? t('admin.permissions.total.one')
+    : t('admin.permissions.total.other', { count })
 })
 
 const groups = computed(() => {
@@ -193,7 +207,12 @@ const fields = computed<FieldDef[]>(() => [
     hint: t('admin.permissions.fields.nameHint'),
     required: true
   },
-  { name: 'description', label: t('admin.permissions.fields.description'), type: 'textarea', rows: 2 }
+  {
+    name: 'description',
+    label: t('admin.permissions.fields.description'),
+    type: 'textarea',
+    rows: 2
+  }
 ])
 
 const {

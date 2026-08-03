@@ -14,7 +14,9 @@
     >
       <template #label>
         <span class="truncate">{{
-          selectedCountry ? `${selectedCountry.flag} ${selectedCountry.dialCode}` : t('phoneInput.codeFallback')
+          selectedCountry
+            ? `${selectedCountry.flag} ${selectedCountry.dialCode}`
+            : t('phoneInput.codeFallback')
         }}</span>
       </template>
       <template #option="{ option }">

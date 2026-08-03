@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -53,49 +47,90 @@
         <EmptyState
           icon="i-heroicons-scale"
           :title="t('accounting.branchAccountingReports.balanceSheet.emptyTitleNoActivity')"
-          :description="t('accounting.branchAccountingReports.balanceSheet.emptyDescriptionNoActivity')"
+          :description="
+            t('accounting.branchAccountingReports.balanceSheet.emptyDescriptionNoActivity')
+          "
         />
       </UCard>
     </template>
     <template v-else>
       <UCard class="mb-6">
         <template #header>
-          <span class="font-semibold">{{ t('accounting.branchAccountingReports.balanceSheet.assets') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.branchAccountingReports.balanceSheet.assets')
+          }}</span>
         </template>
         <DataTable :rows="assetRows" :columns="columns" :loading="pending" :exportable="false" />
-        <div class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2">
-          <span>{{ t('accounting.branchAccountingReports.balanceSheet.totalAssets') }}: {{ formatCurrency(totalAssets) }}</span>
+        <div
+          class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
+        >
+          <span
+            >{{ t('accounting.branchAccountingReports.balanceSheet.totalAssets') }}:
+            {{ formatCurrency(totalAssets) }}</span
+          >
         </div>
       </UCard>
 
       <UCard class="mb-6">
         <template #header>
-          <span class="font-semibold">{{ t('accounting.branchAccountingReports.balanceSheet.liabilities') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.branchAccountingReports.balanceSheet.liabilities')
+          }}</span>
         </template>
-        <DataTable :rows="liabilityRows" :columns="columns" :loading="pending" :exportable="false" />
-        <div class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2">
-          <span>{{ t('accounting.branchAccountingReports.balanceSheet.totalLiabilities') }}: {{ formatCurrency(totalLiabilities) }}</span>
+        <DataTable
+          :rows="liabilityRows"
+          :columns="columns"
+          :loading="pending"
+          :exportable="false"
+        />
+        <div
+          class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
+        >
+          <span
+            >{{ t('accounting.branchAccountingReports.balanceSheet.totalLiabilities') }}:
+            {{ formatCurrency(totalLiabilities) }}</span
+          >
         </div>
       </UCard>
 
       <UCard class="mb-6">
         <template #header>
-          <span class="font-semibold">{{ t('accounting.branchAccountingReports.balanceSheet.equity') }}</span>
+          <span class="font-semibold">{{
+            t('accounting.branchAccountingReports.balanceSheet.equity')
+          }}</span>
         </template>
-        <DataTable :rows="equityRowsWithRetainedEarnings" :columns="columns" :loading="pending" :exportable="false" />
-        <div class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2">
-          <span>{{ t('accounting.branchAccountingReports.balanceSheet.totalEquity') }}: {{ formatCurrency(totalEquityWithRetainedEarnings) }}</span>
+        <DataTable
+          :rows="equityRowsWithRetainedEarnings"
+          :columns="columns"
+          :loading="pending"
+          :exportable="false"
+        />
+        <div
+          class="flex justify-end pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
+        >
+          <span
+            >{{ t('accounting.branchAccountingReports.balanceSheet.totalEquity') }}:
+            {{ formatCurrency(totalEquityWithRetainedEarnings) }}</span
+          >
         </div>
       </UCard>
 
       <UCard>
         <dl class="grid grid-cols-2 gap-y-3 text-sm">
-          <dt class="text-gray-500">{{ t('accounting.branchAccountingReports.balanceSheet.totalAssets') }}</dt>
+          <dt class="text-gray-500">
+            {{ t('accounting.branchAccountingReports.balanceSheet.totalAssets') }}
+          </dt>
           <dd class="font-semibold text-right">{{ formatCurrency(totalAssets) }}</dd>
-          <dt class="text-gray-500">{{ t('accounting.branchAccountingReports.balanceSheet.totalLiabilitiesAndEquity') }}</dt>
-          <dd class="font-semibold text-right">{{ formatCurrency(totalLiabilities + totalEquityWithRetainedEarnings) }}</dd>
+          <dt class="text-gray-500">
+            {{ t('accounting.branchAccountingReports.balanceSheet.totalLiabilitiesAndEquity') }}
+          </dt>
+          <dd class="font-semibold text-right">
+            {{ formatCurrency(totalLiabilities + totalEquityWithRetainedEarnings) }}
+          </dd>
         </dl>
-        <div class="pt-3 mt-3 border-t border-gray-200 dark:border-gray-800 text-right text-sm font-semibold">
+        <div
+          class="pt-3 mt-3 border-t border-gray-200 dark:border-gray-800 text-right text-sm font-semibold"
+        >
           <span :class="isBalanced ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'">
             {{
               isBalanced
@@ -132,10 +167,16 @@ function todayIsoDate() {
 }
 const todayIso = todayIsoDate()
 
-const { data: branches } = await useAsyncData('branch-bs-branches', () => api<BranchResponse[]>('/branches'))
-const branchOptions = computed(() => (branches.value ?? []).map((b) => ({ label: b.name, value: b.id })))
+const { data: branches } = await useAsyncData('branch-bs-branches', () =>
+  api<BranchResponse[]>('/branches')
+)
+const branchOptions = computed(() =>
+  (branches.value ?? []).map((b) => ({ label: b.name, value: b.id }))
+)
 
-const { data: glAccounts } = await useAsyncData('branch-bs-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts'))
+const { data: glAccounts } = await useAsyncData('branch-bs-gl-accounts', () =>
+  api<GlAccountResponse[]>('/gl-accounts')
+)
 const accountByNo = computed(() => new Map((glAccounts.value ?? []).map((a) => [a.accountNo, a])))
 
 const branchId = ref<number | undefined>(undefined)
@@ -202,12 +243,24 @@ const equityRowsWithRetainedEarnings = computed(() => [
 
 const hasAnyActivity = computed(() => (ledger.value?.lines.length ?? 0) > 0)
 const isBalanced = computed(
-  () => Math.abs(totalAssets.value - (totalLiabilities.value + totalEquityWithRetainedEarnings.value)) < 0.005
+  () =>
+    Math.abs(totalAssets.value - (totalLiabilities.value + totalEquityWithRetainedEarnings.value)) <
+    0.005
 )
 
 const columns = computed<ColumnDef<BalanceRow>[]>(() => [
-  { key: 'accountNo', label: t('accounting.branchAccountingReports.balanceSheet.columns.accountNo') },
-  { key: 'accountName', label: t('accounting.branchAccountingReports.balanceSheet.columns.accountName') },
-  { key: 'balance', label: t('accounting.branchAccountingReports.balanceSheet.columns.balance'), type: 'currency' }
+  {
+    key: 'accountNo',
+    label: t('accounting.branchAccountingReports.balanceSheet.columns.accountNo')
+  },
+  {
+    key: 'accountName',
+    label: t('accounting.branchAccountingReports.balanceSheet.columns.accountName')
+  },
+  {
+    key: 'balance',
+    label: t('accounting.branchAccountingReports.balanceSheet.columns.balance'),
+    type: 'currency'
+  }
 ])
 </script>

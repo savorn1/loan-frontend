@@ -1,12 +1,6 @@
 <template>
   <div>
-    <UButton
-      to="/reports"
-      variant="link"
-      icon="i-heroicons-arrow-left"
-      size="xs"
-      class="mb-1 px-0"
-    >
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('admin.reports.title') }}
     </UButton>
     <PageHeader
@@ -15,13 +9,18 @@
     />
 
     <UCard class="mb-6">
-      <UFormGroup :label="t('accounting.trialBalanceReports.adjustedTrialBalance.financialPeriod')" class="max-w-xs">
+      <UFormGroup
+        :label="t('accounting.trialBalanceReports.adjustedTrialBalance.financialPeriod')"
+        class="max-w-xs"
+      >
         <USelectMenu
           v-model="financialPeriodId"
           :options="periodOptions"
           option-attribute="label"
           value-attribute="value"
-          :placeholder="t('accounting.trialBalanceReports.adjustedTrialBalance.financialPeriodPlaceholder')"
+          :placeholder="
+            t('accounting.trialBalanceReports.adjustedTrialBalance.financialPeriodPlaceholder')
+          "
         />
       </UFormGroup>
     </UCard>
@@ -46,7 +45,9 @@
             "
             :description="
               financialPeriodId
-                ? t('accounting.trialBalanceReports.adjustedTrialBalance.emptyDescriptionNoActivity')
+                ? t(
+                    'accounting.trialBalanceReports.adjustedTrialBalance.emptyDescriptionNoActivity'
+                  )
                 : t('accounting.trialBalanceReports.adjustedTrialBalance.emptyDescriptionPick')
             "
           />
@@ -57,8 +58,14 @@
         v-if="rows?.length"
         class="flex justify-end gap-6 pt-4 px-2 text-sm font-semibold border-t border-gray-200 dark:border-gray-800 mt-2"
       >
-        <span>{{ t('accounting.trialBalanceReports.adjustedTrialBalance.totalDebit') }}: {{ formatCurrency(totalDebit) }}</span>
-        <span>{{ t('accounting.trialBalanceReports.adjustedTrialBalance.totalCredit') }}: {{ formatCurrency(totalCredit) }}</span>
+        <span
+          >{{ t('accounting.trialBalanceReports.adjustedTrialBalance.totalDebit') }}:
+          {{ formatCurrency(totalDebit) }}</span
+        >
+        <span
+          >{{ t('accounting.trialBalanceReports.adjustedTrialBalance.totalCredit') }}:
+          {{ formatCurrency(totalCredit) }}</span
+        >
         <span :class="isBalanced ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'">
           {{
             isBalanced
@@ -106,11 +113,34 @@ const {
 )
 
 const columns = computed<ColumnDef<TrialBalanceRowResponse>[]>(() => [
-  { key: 'accountNo', label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.accountNo'), sortable: true },
-  { key: 'accountName', label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.accountName'), sortable: true },
-  { key: 'totalDebit', label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.debit'), type: 'currency', sortable: true },
-  { key: 'totalCredit', label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.credit'), type: 'currency', sortable: true },
-  { key: 'balance', label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.balance'), type: 'currency', sortable: true }
+  {
+    key: 'accountNo',
+    label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.accountNo'),
+    sortable: true
+  },
+  {
+    key: 'accountName',
+    label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.accountName'),
+    sortable: true
+  },
+  {
+    key: 'totalDebit',
+    label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.debit'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'totalCredit',
+    label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.credit'),
+    type: 'currency',
+    sortable: true
+  },
+  {
+    key: 'balance',
+    label: t('accounting.trialBalanceReports.adjustedTrialBalance.columns.balance'),
+    type: 'currency',
+    sortable: true
+  }
 ])
 
 const totalDebit = computed(() => (rows.value ?? []).reduce((sum, r) => sum + r.totalDebit, 0))
