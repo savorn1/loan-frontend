@@ -21,6 +21,7 @@
           <h1 class="text-xl font-bold truncate">
             {{ customer.firstName }} {{ customer.lastName }}
           </h1>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ customer.customerNo }}</p>
         </div>
       </div>
       <UButton
@@ -456,7 +457,13 @@
 
     <ConfirmModal
       :model-value="confirmDeleteIdentity !== null"
-      :title="t('customers.detail.identity.deleteTitle')"
+      :title="
+        confirmDeleteIdentity
+          ? t('customers.detail.identity.deleteTitle', {
+              name: `${humanize(confirmDeleteIdentity.identityType)} — ${confirmDeleteIdentity.identityNumber}`
+            })
+          : ''
+      "
       :description="t('customers.detail.identity.deleteDescription')"
       :confirm-label="t('common.delete')"
       color="red"
@@ -507,7 +514,13 @@
 
     <ConfirmModal
       :model-value="confirmDeleteAddress !== null"
-      :title="t('customers.detail.address.deleteTitle')"
+      :title="
+        confirmDeleteAddress
+          ? t('customers.detail.address.deleteTitle', {
+              name: humanize(confirmDeleteAddress.addressType)
+            })
+          : ''
+      "
       :description="t('customers.detail.address.deleteDescription')"
       :confirm-label="t('common.delete')"
       color="red"
@@ -558,7 +571,11 @@
 
     <ConfirmModal
       :model-value="confirmDeleteContact !== null"
-      :title="t('customers.detail.contact.deleteTitle')"
+      :title="
+        confirmDeleteContact
+          ? t('customers.detail.contact.deleteTitle', { name: confirmDeleteContact.name })
+          : ''
+      "
       :description="t('customers.detail.contact.deleteDescription')"
       :confirm-label="t('common.delete')"
       color="red"
@@ -609,7 +626,13 @@
 
     <ConfirmModal
       :model-value="confirmDeleteEmployment !== null"
-      :title="t('customers.detail.employment.deleteTitle')"
+      :title="
+        confirmDeleteEmployment
+          ? t('customers.detail.employment.deleteTitle', {
+              name: confirmDeleteEmployment.companyName
+            })
+          : ''
+      "
       :description="t('customers.detail.employment.deleteDescription')"
       :confirm-label="t('common.delete')"
       color="red"
@@ -660,7 +683,13 @@
 
     <ConfirmModal
       :model-value="confirmDeleteIncome !== null"
-      :title="t('customers.detail.income.deleteTitle')"
+      :title="
+        confirmDeleteIncome
+          ? t('customers.detail.income.deleteTitle', {
+              name: humanize(confirmDeleteIncome.incomeType)
+            })
+          : ''
+      "
       :description="t('customers.detail.income.deleteDescription')"
       :confirm-label="t('common.delete')"
       color="red"
@@ -711,7 +740,13 @@
 
     <ConfirmModal
       :model-value="confirmDeleteRelationship !== null"
-      :title="t('customers.detail.relationship.deleteTitle')"
+      :title="
+        confirmDeleteRelationship
+          ? t('customers.detail.relationship.deleteTitle', {
+              name: confirmDeleteRelationship.relatedCustomerName
+            })
+          : ''
+      "
       :description="t('customers.detail.relationship.deleteDescription')"
       :confirm-label="t('common.delete')"
       color="red"

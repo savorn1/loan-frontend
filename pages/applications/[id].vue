@@ -11,9 +11,12 @@
     </UButton>
     <div class="flex items-center justify-between mb-6">
       <div class="flex items-center gap-3">
-        <h1 class="text-xl font-bold">
-          {{ t('applications.detail.title', { id: application.id }) }}
-        </h1>
+        <div>
+          <h1 class="text-xl font-bold">
+            {{ t('applications.detail.title', { id: application.id }) }}
+          </h1>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ application.applicationNo }}</p>
+        </div>
         <StatusBadge :status="application.status" />
       </div>
       <div v-if="isAdmin" class="flex gap-2">

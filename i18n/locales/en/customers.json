@@ -20,6 +20,7 @@
       "branchFilterAll": "All branches",
       "columns": {
         "id": "ID",
+        "reference": "Reference No.",
         "firstName": "First name",
         "lastName": "Last name",
         "email": "Email",
@@ -55,7 +56,7 @@
         "emptyDescription": "Add a National ID, Passport or Driver License for KYC.",
         "addModalTitle": "Add identity",
         "editModalTitle": "Edit identity",
-        "deleteTitle": "Delete this identity?",
+        "deleteTitle": "Delete identity \"{name}\"?",
         "deleteDescription": "This permanently removes the identity document and cannot be undone.",
         "columns": {
           "type": "Type",
@@ -88,7 +89,7 @@
         "emptyDescription": "Add a current, permanent or office address.",
         "addModalTitle": "Add address",
         "editModalTitle": "Edit address",
-        "deleteTitle": "Delete this address?",
+        "deleteTitle": "Delete \"{name}\" address?",
         "deleteDescription": "This permanently removes the address and cannot be undone.",
         "columns": {
           "type": "Type",
@@ -120,7 +121,7 @@
         "emptyDescription": "Add an emergency or reference contact for this customer.",
         "addModalTitle": "Add contact",
         "editModalTitle": "Edit contact",
-        "deleteTitle": "Delete this contact?",
+        "deleteTitle": "Delete contact \"{name}\"?",
         "deleteDescription": "This permanently removes the contact and cannot be undone.",
         "columns": {
           "name": "Name",
@@ -144,7 +145,7 @@
         "emptyDescription": "Add the customer's employer and income details.",
         "addModalTitle": "Add employment",
         "editModalTitle": "Edit employment",
-        "deleteTitle": "Delete this employment record?",
+        "deleteTitle": "Delete employment record \"{name}\"?",
         "deleteDescription": "This permanently removes the employment record and cannot be undone.",
         "columns": {
           "company": "Company",
@@ -179,7 +180,7 @@
         "emptyDescription": "Add a salary, business or other income source.",
         "addModalTitle": "Add income",
         "editModalTitle": "Edit income",
-        "deleteTitle": "Delete this income record?",
+        "deleteTitle": "Delete \"{name}\" income record?",
         "deleteDescription": "This permanently removes the income record and cannot be undone.",
         "columns": {
           "type": "Type",
@@ -214,7 +215,7 @@
         "emptyDescription": "Link this customer to another customer (e.g. spouse, guarantor).",
         "addModalTitle": "Add relationship",
         "editModalTitle": "Edit relationship",
-        "deleteTitle": "Delete this relationship?",
+        "deleteTitle": "Delete relationship with \"{name}\"?",
         "deleteDescription": "This permanently removes the relationship and cannot be undone.",
         "columns": {
           "relatedCustomer": "Related customer",
@@ -314,6 +315,7 @@
       },
       "columns": {
         "id": "ID",
+        "reference": "Reference No.",
         "customer": "Customer",
         "branch": "Branch",
         "requested": "Requested",

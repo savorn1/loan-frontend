@@ -7,7 +7,7 @@
       <p class="text-sm text-gray-500 dark:text-gray-400">{{ description }}</p>
       <template #footer>
         <div class="flex justify-end gap-2">
-          <UButton color="gray" variant="ghost" @click="open = false">{{
+          <UButton color="gray" variant="ghost" :disabled="loading" @click="open = false">{{
             t('common.cancel')
           }}</UButton>
           <UButton :color="color" :loading="loading" @click="emit('confirm')">{{

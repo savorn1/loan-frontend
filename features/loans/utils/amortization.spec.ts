@@ -63,6 +63,7 @@ describe('calculateSchedule', () => {
 describe('generateAmortizationSchedule', () => {
   const baseLoan: LoanResponse = {
     id: 1,
+    loanNo: 'LN-20260101-000001',
     customerId: 1,
     branchId: null,
     customerName: 'Jane Doe',

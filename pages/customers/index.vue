@@ -115,16 +115,61 @@ const api = useApi()
 const toast = useToast()
 const router = useRouter()
 
+const search = ref('')
+const page = ref(1)
+const pageSize = ref(10)
+const sort = ref<{ column: string; direction: 'asc' | 'desc' } | undefined>(undefined)
+const branchFilter = ref<number | ''>('')
+const { from: dateFrom, to: dateTo } = useDateRangeFilter()
+
+function buildQuery() {
+  return {
+    page: page.value,
+    size: pageSize.value,
+    search: search.value || undefined,
+    branchId: branchFilter.value || undefined,
+    dateFrom: dateFrom.value || undefined,
+    dateTo: dateTo.value || undefined,
+    sortBy: sort.value?.column ?? 'createdAt',
+    sortOrder: sort.value?.direction ?? 'desc'
+  }
+}
+
 const {
-  data: customersRaw,
+  data: customersPage,
   pending,
   error: fetchError,
   refresh
 } = await useAsyncData('customers', () =>
-  api<PageResponse<CustomerResponse>>('/customers', { query: { size: 1000 } })
+  api<PageResponse<CustomerResponse>>('/customers', { query: buildQuery() })
 )
 
-const customers = computed(() => customersRaw.value?.content ?? [])
+const rows = computed(() => customersPage.value?.content ?? [])
+const total = computed(() => customersPage.value?.totalElements ?? 0)
+
+watch(page, () => refresh())
+watch([pageSize, branchFilter, dateFrom, dateTo], () => {
+  page.value = 1
+  refresh()
+})
+watch(
+  sort,
+  () => {
+    page.value = 1
+    refresh()
+  },
+  { deep: true }
+)
+
+// Debounced so we don't fire a request on every keystroke.
+let searchTimer: ReturnType<typeof setTimeout>
+watch(search, () => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => {
+    page.value = 1
+    refresh()
+  }, 400)
+})
 
 const { data: branchesData } = await useAsyncData('branches-all', () =>
   api<BranchResponse[]>('/branches')
@@ -133,24 +178,17 @@ const branchNameById = computed(
   () => new Map((branchesData.value ?? []).map((b) => [b.id, b.name]))
 )
 
-const branchFilter = ref<number | ''>('')
 const branchFilterOptions = computed(() => [
   { label: t('customers.list.branchFilterAll'), value: '' },
   ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
 ])
-const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
-const customersByBranch = computed(() =>
-  (branchFilter.value === ''
-    ? customers.value
-    : customers.value.filter((c) => c.branchId === branchFilter.value)
-  ).filter((c) => inRange(c.createdAt))
-)
 
 const showCreate = ref(false)
 const creating = ref(false)
 
 const columns = computed<ColumnDef<CustomerResponse>[]>(() => [
   { key: 'id', label: t('customers.list.columns.id'), sortable: true },
+  { key: 'customerNo', label: t('customers.list.columns.reference') },
   { key: 'firstName', label: t('customers.list.columns.firstName'), sortable: true },
   { key: 'lastName', label: t('customers.list.columns.lastName'), sortable: true },
   { key: 'email', label: t('customers.list.columns.email'), sortable: true },
@@ -169,11 +207,6 @@ const columns = computed<ColumnDef<CustomerResponse>[]>(() => [
   }
 ])
 
-const { search, page, pageSize, sort, total, rows } = useClientTable(customersByBranch, {
-  searchFields: ['firstName', 'lastName', 'email'],
-  pageSize: 10
-})
-
 const hasFilters = computed(
   () => !!search.value || branchFilter.value !== '' || !!dateFrom.value || !!dateTo.value
 )
@@ -186,7 +219,7 @@ function clearFilters() {
 }
 
 const totalLabel = computed(() => {
-  const count = customers.value?.length ?? 0
+  const count = total.value
   return count === 1 ? t('customers.list.totalOne') : t('customers.list.totalOther', { count })
 })
 

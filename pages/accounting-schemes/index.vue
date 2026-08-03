@@ -99,7 +99,13 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      :title="t('accounting.accountingSchemes.deleteConfirmTitle')"
+      :title="
+        confirmDelete
+          ? t('accounting.accountingSchemes.deleteConfirmTitle', {
+              name: `${confirmDelete.accountRole} — ${confirmDelete.glAccountNo}`
+            })
+          : ''
+      "
       :description="t('accounting.accountingSchemes.deleteConfirmDescription')"
       :confirm-label="t('common.delete')"
       color="red"

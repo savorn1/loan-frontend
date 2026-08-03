@@ -207,6 +207,7 @@ const totalPending = computed(() =>
 )
 
 const columns = computed<ColumnDef<LoanDisbursementResponse>[]>(() => [
+  { key: 'disbursementNo', label: t('loans.disbursements.columns.disbursementNo') },
   { key: 'disbursedDate', label: t('loans.disbursements.columns.date'), type: 'date' },
   { key: 'amount', label: t('loans.disbursements.columns.amount'), type: 'currency' },
   { key: 'method', label: t('loans.disbursements.columns.method'), type: 'enum' },

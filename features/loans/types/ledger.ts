@@ -58,6 +58,7 @@ export type DisbursementStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 
 
 export interface LoanDisbursementResponse {
   id: number
+  disbursementNo: string
   loanId: number
   amount: number
   disbursedDate: string
@@ -103,6 +104,7 @@ export interface LoanPaymentAllocationResponse {
 
 export interface LoanPaymentResponse {
   id: number
+  paymentNo: string
   loanId: number
   amount: number
   paymentDate: string

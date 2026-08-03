@@ -20,8 +20,16 @@
       "branchFilter": {
         "all": "All branches"
       },
+      "customerFilter": {
+        "all": "All customers"
+      },
+      "principalFilter": {
+        "min": "Min principal",
+        "max": "Max principal"
+      },
       "columns": {
         "id": "ID",
+        "reference": "Reference No.",
         "customer": "Customer",
         "branch": "Branch",
         "principal": "Principal",
@@ -32,7 +40,7 @@
       },
       "empty": {
         "noLoansTitle": "No loans yet",
-        "noMatchesDescription": "Try a different search term or status filter.",
+        "noMatchesDescription": "Try different filters.",
         "noLoansDescription": "Create a loan for one of your customers to get started."
       },
       "modalTitle": "New Loan",
@@ -301,6 +309,7 @@
       "reasonFieldLabel": "Reason",
       "toastReversed": "Payment reversed",
       "columns": {
+        "paymentNo": "Receipt No.",
         "date": "Date",
         "amount": "Amount",
         "method": "Method",
@@ -353,6 +362,7 @@
       "totalLabel": "Total disbursed (approved)",
       "modalTitle": "Add disbursement",
       "columns": {
+        "disbursementNo": "Disbursement No.",
         "date": "Date",
         "amount": "Amount",
         "method": "Method",

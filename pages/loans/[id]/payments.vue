@@ -155,6 +155,7 @@ const {
 const totalPaid = computed(() => (payments.value ?? []).reduce((sum, p) => sum + p.amount, 0))
 
 const columns = computed<ColumnDef<LoanPaymentResponse>[]>(() => [
+  { key: 'paymentNo', label: t('loans.payments.columns.paymentNo') },
   { key: 'paymentDate', label: t('loans.payments.columns.date'), type: 'date' },
   { key: 'amount', label: t('loans.payments.columns.amount'), type: 'currency' },
   { key: 'method', label: t('loans.payments.columns.method'), type: 'enum' },

@@ -24,6 +24,7 @@ export interface ApplicationRequest {
 
 export interface ApplicationResponse {
   id: number
+  applicationNo: string
   customerId: number
   branchId: number | null
   customerName: string

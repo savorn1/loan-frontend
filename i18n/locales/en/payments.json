@@ -14,7 +14,7 @@
       "editPaymentMethod": "Edit Payment Method",
       "emptyTitle": "No payment methods yet",
       "emptyDescription": "Add a payment method to start recording transactions against it.",
-      "deleteConfirmTitle": "Delete this payment method?",
+      "deleteConfirmTitle": "Delete payment method \"{name}\"?",
       "deleteConfirmDescription": "This permanently removes the payment method and cannot be undone.",
       "columns": {
         "code": "Code",
@@ -46,7 +46,7 @@
       "editPaymentChannel": "Edit Payment Channel",
       "emptyTitle": "No payment channels yet",
       "emptyDescription": "Add a payment channel to record which route a payment came in through.",
-      "deleteConfirmTitle": "Delete this payment channel?",
+      "deleteConfirmTitle": "Delete payment channel \"{name}\"?",
       "deleteConfirmDescription": "This permanently removes the payment channel and cannot be undone.",
       "columns": {
         "code": "Code",
@@ -71,7 +71,7 @@
       "editPaymentGateway": "Edit Payment Gateway",
       "emptyTitle": "No payment gateways yet",
       "emptyDescription": "Add a payment gateway (external provider) that a payment channel can connect through.",
-      "deleteConfirmTitle": "Delete this payment gateway?",
+      "deleteConfirmTitle": "Delete payment gateway \"{name}\"?",
       "deleteConfirmDescription": "This permanently removes the payment gateway and cannot be undone.",
       "columns": {
         "code": "Code",

@@ -110,7 +110,11 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      :title="t('accounting.financialPeriods.deleteConfirmTitle')"
+      :title="
+        confirmDelete
+          ? t('accounting.financialPeriods.deleteConfirmTitle', { name: confirmDelete.periodName })
+          : ''
+      "
       :description="t('accounting.financialPeriods.deleteConfirmDescription')"
       :confirm-label="t('common.delete')"
       color="red"
@@ -125,7 +129,13 @@
 
     <ConfirmModal
       :model-value="confirmClose !== null"
-      :title="t('accounting.financialPeriods.closePeriodConfirmTitle')"
+      :title="
+        confirmClose
+          ? t('accounting.financialPeriods.closePeriodConfirmTitle', {
+              name: confirmClose.periodName
+            })
+          : ''
+      "
       :description="t('accounting.financialPeriods.closePeriodConfirmDescription')"
       :confirm-label="t('accounting.financialPeriods.closePeriod')"
       color="orange"

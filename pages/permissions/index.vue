@@ -124,7 +124,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      :title="t('admin.permissions.deleteConfirmTitle')"
+      :title="
+        confirmDelete ? t('admin.permissions.deleteConfirmTitle', { name: confirmDelete.name }) : ''
+      "
       :description="t('admin.permissions.deleteConfirmDescription')"
       :confirm-label="t('common.delete')"
       color="red"
@@ -202,10 +204,18 @@ const columns = computed<ColumnDef<PermissionResponse>[]>(() => [
 
 const fields = computed<FieldDef[]>(() => [
   {
-    name: 'name',
-    label: t('admin.permissions.fields.name'),
-    hint: t('admin.permissions.fields.nameHint'),
-    required: true
+    name: 'module',
+    label: t('admin.permissions.fields.module'),
+    hint: t('admin.permissions.fields.moduleHint'),
+    required: true,
+    wrapper: 'half'
+  },
+  {
+    name: 'action',
+    label: t('admin.permissions.fields.action'),
+    hint: t('admin.permissions.fields.actionHint'),
+    required: true,
+    wrapper: 'half'
   },
   {
     name: 'description',
@@ -233,8 +243,12 @@ const {
   onDelete
 } = useCrudModals<PermissionResponse, PermissionRequest>('/auth/permissions', refresh, {
   entityName: t('admin.entities.permission'),
-  createDefaults: () => ({ name: '', description: '' }),
-  toForm: (row) => ({ name: row.name, description: row.description ?? '' }),
-  toPayload: (values) => ({ name: values.name, description: values.description || undefined })
+  createDefaults: () => ({ module: '', action: '', description: '' }),
+  toForm: (row) => ({ module: row.module, action: row.action, description: row.description ?? '' }),
+  toPayload: (values) => ({
+    module: values.module.trim().toUpperCase(),
+    action: values.action.trim().toUpperCase(),
+    description: values.description || undefined
+  })
 })
 </script>

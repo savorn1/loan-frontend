@@ -114,7 +114,7 @@
         "codeHint": "ឧ. LOAN_OFFICER",
         "description": "ការពិពណ៌នា"
       },
-      "deleteConfirmTitle": "លុបតួនាទីនេះ?",
+      "deleteConfirmTitle": "លុបតួនាទី \"{name}\"?",
       "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបវាចេញពីអ្នកប្រើប្រាស់ {userCount} នាក់ និងសិទ្ធិ {permissionCount} ដែលបានផ្តល់។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
       "detail": {
         "backToRoles": "ត្រឡប់ទៅតួនាទី",
@@ -215,11 +215,13 @@
       "createModalTitle": "សិទ្ធិថ្មី",
       "editModalTitle": "កែសម្រួលសិទ្ធិ",
       "fields": {
-        "name": "ឈ្មោះ",
-        "nameHint": "ឧ. LOAN_APPROVE",
+        "module": "ម៉ូឌុល",
+        "moduleHint": "ឧ. LOAN",
+        "action": "សកម្មភាព",
+        "actionHint": "ឧ. APPROVE",
         "description": "ការពិពណ៌នា"
       },
-      "deleteConfirmTitle": "លុបសិទ្ធិនេះ?",
+      "deleteConfirmTitle": "លុបសិទ្ធិ \"{name}\"?",
       "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបវាចេញពីគ្រប់តួនាទីដែលកំពុងភ្ជាប់ជាមួយ។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។"
     },
     "notifications": {

@@ -119,7 +119,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      :title="t('loanConfig.termTemplates.deleteTitle')"
+      :title="
+        confirmDelete ? t('loanConfig.termTemplates.deleteTitle', { name: confirmDelete.name }) : ''
+      "
       :description="t('loanConfig.termTemplates.deleteDescription')"
       :confirm-label="t('common.delete')"
       color="red"

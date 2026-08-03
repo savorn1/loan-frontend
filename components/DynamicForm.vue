@@ -13,9 +13,14 @@
     <UAlert v-if="displayError" color="red" variant="subtle" :title="displayError" />
 
     <div class="flex justify-end gap-2 pt-2">
-      <UButton v-if="cancelable" color="gray" variant="ghost" @click="emit('cancel')">{{
-        t('common.cancel')
-      }}</UButton>
+      <UButton
+        v-if="cancelable"
+        color="gray"
+        variant="ghost"
+        :disabled="loading"
+        @click="emit('cancel')"
+        >{{ t('common.cancel') }}</UButton
+      >
       <UButton type="submit" :loading="loading">{{ submitLabel || t('common.save') }}</UButton>
     </div>
   </UForm>

@@ -9,29 +9,14 @@
     <UCard>
       <template #header>
         <div class="flex flex-wrap items-center gap-3">
-          <UInput
-            v-model="search"
-            icon="i-heroicons-magnifying-glass"
-            :placeholder="t('loans.list.searchPlaceholder')"
-            class="max-w-xs w-full sm:w-auto"
-          >
-            <template v-if="search" #trailing>
-              <UButton
-                color="gray"
-                variant="link"
-                icon="i-heroicons-x-mark"
-                :aria-label="t('common.clearSearch')"
-                :padded="false"
-                @click="search = ''"
-              />
-            </template>
-          </UInput>
           <USelectMenu
-            v-model="statusFilter"
-            :options="statusOptions"
+            v-model="customerFilter"
+            :searchable="searchCustomerOptions"
+            searchable-lazy
             option-attribute="label"
             value-attribute="value"
-            class="w-40"
+            :placeholder="t('loans.list.customerFilter.all')"
+            class="w-48"
           />
           <USelectMenu
             v-model="branchFilter"
@@ -40,6 +25,23 @@
             value-attribute="value"
             class="w-48"
           />
+          <div class="flex items-center gap-1">
+            <UInput
+              :model-value="principalMin"
+              type="number"
+              :placeholder="t('loans.list.principalFilter.min')"
+              class="w-28"
+              @update:model-value="(v: string) => (principalMin = v === '' ? undefined : Number(v))"
+            />
+            <span class="text-gray-400 dark:text-gray-500 text-sm">–</span>
+            <UInput
+              :model-value="principalMax"
+              type="number"
+              :placeholder="t('loans.list.principalFilter.max')"
+              class="w-28"
+              @update:model-value="(v: string) => (principalMax = v === '' ? undefined : Number(v))"
+            />
+          </div>
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
           <UButton
             v-if="hasFilters"
@@ -115,23 +117,72 @@
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
 import type { BranchResponse } from '~/features/branches/types'
-import type { LoanRequest, LoanResponse, LoanStatus } from '~/features/loans/types'
+import type { LoanRequest, LoanResponse } from '~/features/loans/types'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const { t } = useI18n()
 const api = useApi()
 const router = useRouter()
 
+const page = ref(1)
+const pageSize = ref(10)
+const sort = ref<{ column: string; direction: 'asc' | 'desc' } | undefined>(undefined)
+const { from: dateFrom, to: dateTo } = useDateRangeFilter()
+const customerFilter = ref<number | ''>('')
+const branchFilter = ref<number | ''>('')
+const principalMin = ref<number | undefined>(undefined)
+const principalMax = ref<number | undefined>(undefined)
+
+function buildQuery() {
+  return {
+    page: page.value,
+    size: pageSize.value,
+    sortBy: sort.value?.column ?? 'createdAt',
+    sortOrder: sort.value?.direction ?? 'desc',
+    customerId: customerFilter.value || undefined,
+    branchId: branchFilter.value || undefined,
+    minPrincipal: principalMin.value,
+    maxPrincipal: principalMax.value,
+    dateFrom: dateFrom.value || undefined,
+    dateTo: dateTo.value || undefined
+  }
+}
+
 const {
-  data: loansRaw,
+  data: loansPage,
   pending,
   error: fetchError,
   refresh
 } = await useAsyncData('loans', () =>
-  api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
+  api<PageResponse<LoanResponse>>('/loans', { query: buildQuery() })
 )
 
-const loans = computed(() => loansRaw.value?.content ?? [])
+const rows = computed(() => loansPage.value?.content ?? [])
+const total = computed(() => loansPage.value?.totalElements ?? 0)
+
+watch(page, () => refresh())
+watch([pageSize, customerFilter, branchFilter, dateFrom, dateTo], () => {
+  page.value = 1
+  refresh()
+})
+
+// Debounced so we don't fire a request on every keystroke.
+let principalFilterTimer: ReturnType<typeof setTimeout>
+watch([principalMin, principalMax], () => {
+  clearTimeout(principalFilterTimer)
+  principalFilterTimer = setTimeout(() => {
+    page.value = 1
+    refresh()
+  }, 400)
+})
+watch(
+  sort,
+  () => {
+    page.value = 1
+    refresh()
+  },
+  { deep: true }
+)
 
 const { data: branchesData } = await useAsyncData('branches-all', () =>
   api<BranchResponse[]>('/branches')
@@ -143,7 +194,25 @@ const branchFilterOptions = computed(() => [
   { label: t('loans.list.branchFilter.all'), value: '' },
   ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
 ])
-const branchFilter = ref<number | ''>('')
+
+const hasFilters = computed(
+  () =>
+    customerFilter.value !== '' ||
+    branchFilter.value !== '' ||
+    principalMin.value !== undefined ||
+    principalMax.value !== undefined ||
+    !!dateFrom.value ||
+    !!dateTo.value
+)
+
+function clearFilters() {
+  customerFilter.value = ''
+  branchFilter.value = ''
+  principalMin.value = undefined
+  principalMax.value = undefined
+  dateFrom.value = ''
+  dateTo.value = ''
+}
 
 // Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
 // the customer list can be far larger than any dropdown should hold client-side.
@@ -157,9 +226,25 @@ async function searchCustomers(query: string) {
   }))
 }
 
+// Wraps searchCustomers for the filter dropdown: prepends an "All customers"
+// option, and keeps the current selection visible even when it falls outside
+// the latest search results (mirrors FieldRelationship's #id fallback).
+async function searchCustomerOptions(query: string) {
+  const options = [
+    { label: t('loans.list.customerFilter.all'), value: '' as number | '' },
+    ...(await searchCustomers(query))
+  ]
+  if (customerFilter.value === '' || options.some((o) => o.value === customerFilter.value)) {
+    return options
+  }
+  return [{ label: `#${customerFilter.value}`, value: customerFilter.value }, ...options]
+}
+
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   { key: 'id', label: t('loans.list.columns.id'), sortable: true },
-  { key: 'customerName', label: t('loans.list.columns.customer'), sortable: true },
+  { key: 'loanNo', label: t('loans.list.columns.reference') },
+  // customerName is stitched in per-row from customer-service, not a Loan column — not sortable server-side.
+  { key: 'customerName', label: t('loans.list.columns.customer') },
   {
     key: 'branchId',
     label: t('loans.list.columns.branch'),
@@ -173,48 +258,8 @@ const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   { key: 'createdAt', label: t('loans.list.columns.created'), type: 'datetime', sortable: true }
 ])
 
-const statusOptions = computed<{ label: string; value: LoanStatus | '' }[]>(() => [
-  { label: t('loans.list.statusFilter.all'), value: '' },
-  { label: t('loans.list.statusFilter.pending'), value: 'PENDING' },
-  { label: t('loans.list.statusFilter.approved'), value: 'APPROVED' },
-  { label: t('loans.list.statusFilter.active'), value: 'ACTIVE' },
-  { label: t('loans.list.statusFilter.rejected'), value: 'REJECTED' },
-  { label: t('loans.list.statusFilter.closed'), value: 'CLOSED' }
-])
-const statusFilter = ref<LoanStatus | ''>('')
-const { from: dateFrom, to: dateTo, inRange } = useDateRangeFilter()
-
-const filteredByStatus = computed(() =>
-  (loans.value ?? [])
-    .filter((l) => !statusFilter.value || l.status === statusFilter.value)
-    .filter((l) => branchFilter.value === '' || l.branchId === branchFilter.value)
-    .filter((l) => inRange(l.createdAt))
-)
-
-const { search, page, pageSize, sort, total, rows } = useClientTable(filteredByStatus, {
-  searchFields: ['customerName', 'purpose'],
-  pageSize: 10
-})
-
-const hasFilters = computed(
-  () =>
-    !!search.value ||
-    !!statusFilter.value ||
-    branchFilter.value !== '' ||
-    !!dateFrom.value ||
-    !!dateTo.value
-)
-
-function clearFilters() {
-  search.value = ''
-  statusFilter.value = ''
-  branchFilter.value = ''
-  dateFrom.value = ''
-  dateTo.value = ''
-}
-
 const totalLabel = computed(() => {
-  const count = loans.value?.length ?? 0
+  const count = total.value
   return count === 1 ? t('loans.list.totalOne') : t('loans.list.totalOther', { count })
 })
 

@@ -127,7 +127,9 @@
 
     <ConfirmModal
       :model-value="confirmDelete !== null"
-      :title="t('admin.roles.deleteConfirmTitle')"
+      :title="
+        confirmDelete ? t('admin.roles.deleteConfirmTitle', { name: confirmDelete.name }) : ''
+      "
       :description="
         confirmDelete
           ? t('admin.roles.deleteConfirmDescription', {

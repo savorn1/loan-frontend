@@ -33,7 +33,8 @@ export interface PermissionResponse {
 }
 
 export interface PermissionRequest {
-  name: string
+  module: string
+  action: string
   description?: string
 }
 

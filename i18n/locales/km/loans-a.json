@@ -20,8 +20,16 @@
       "branchFilter": {
         "all": "គ្រប់សាខា"
       },
+      "customerFilter": {
+        "all": "គ្រប់អតិថិជន"
+      },
+      "principalFilter": {
+        "min": "ប្រាក់ដើមអប្បបរមា",
+        "max": "ប្រាក់ដើមអតិបរមា"
+      },
       "columns": {
         "id": "លេខសម្គាល់",
+        "reference": "លេខយោង",
         "customer": "អតិថិជន",
         "branch": "សាខា",
         "principal": "ប្រាក់ដើម",
@@ -32,7 +40,7 @@
       },
       "empty": {
         "noLoansTitle": "មិនទាន់មានកម្ចីទេ",
-        "noMatchesDescription": "សូមសាកល្បងពាក្យស្វែងរក ឬតម្រងស្ថានភាពផ្សេង។",
+        "noMatchesDescription": "សូមសាកល្បងតម្រងផ្សេង។",
         "noLoansDescription": "បង្កើតកម្ចីសម្រាប់អតិថិជនណាមួយរបស់អ្នកដើម្បីចាប់ផ្តើម។"
       },
       "modalTitle": "កម្ចីថ្មី",
@@ -301,6 +309,7 @@
       "reasonFieldLabel": "ហេតុផល",
       "toastReversed": "ការទូទាត់ត្រូវបានបញ្ច្រាស",
       "columns": {
+        "paymentNo": "លេខបង្កាន់ដៃ",
         "date": "កាលបរិច្ឆេទ",
         "amount": "ចំនួនទឹកប្រាក់",
         "method": "វិធីសាស្ត្រ",
@@ -353,6 +362,7 @@
       "totalLabel": "សរុបបានចេញ (បានអនុម័ត)",
       "modalTitle": "បន្ថែមការចេញប្រាក់",
       "columns": {
+        "disbursementNo": "លេខបញ្ជូនប្រាក់",
         "date": "កាលបរិច្ឆេទ",
         "amount": "ចំនួនទឹកប្រាក់",
         "method": "វិធីសាស្ត្រ",

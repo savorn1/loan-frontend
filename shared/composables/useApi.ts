@@ -55,7 +55,16 @@ export function useApi() {
         return await client<T>(apiUrl, opts)
       } catch {
         await logout()
-        if (import.meta.client) navigateTo('/login')
+        await navigateTo('/login')
+        if (import.meta.server) {
+          // navigateTo() already queued the redirect into ssrContext['~renderResponse'];
+          // Nuxt's renderer only swaps that in when renderToString() itself rejects with
+          // this exact message (see nuxt/dist/app/entry.js, which throws the same string
+          // for a redirect discovered before render even starts). Rethrowing `err` here
+          // instead would let the original 401 leak through as the page's HTTP status —
+          // that's the bug this fixes.
+          throw new Error('skipping render')
+        }
         throw err
       }
     }

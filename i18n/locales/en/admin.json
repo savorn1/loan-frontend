@@ -114,7 +114,7 @@
         "codeHint": "e.g. LOAN_OFFICER",
         "description": "Description"
       },
-      "deleteConfirmTitle": "Delete this role?",
+      "deleteConfirmTitle": "Delete role \"{name}\"?",
       "deleteConfirmDescription": "This removes it from {userCount} user(s) and {permissionCount} permission assignment(s). This cannot be undone.",
       "detail": {
         "backToRoles": "Back to roles",
@@ -215,11 +215,13 @@
       "createModalTitle": "New Permission",
       "editModalTitle": "Edit Permission",
       "fields": {
-        "name": "Name",
-        "nameHint": "e.g. LOAN_APPROVE",
+        "module": "Module",
+        "moduleHint": "e.g. LOAN",
+        "action": "Action",
+        "actionHint": "e.g. APPROVE",
         "description": "Description"
       },
-      "deleteConfirmTitle": "Delete this permission?",
+      "deleteConfirmTitle": "Delete permission \"{name}\"?",
       "deleteConfirmDescription": "This removes it from every role it's currently attached to. This cannot be undone."
     },
     "notifications": {

@@ -5,7 +5,10 @@
     </UButton>
     <div class="flex items-center justify-between mb-6">
       <div class="flex items-center gap-3">
-        <h1 class="text-xl font-bold">{{ t('loans.shell.loanTitle', { id: loan.id }) }}</h1>
+        <div>
+          <h1 class="text-xl font-bold">{{ t('loans.shell.loanTitle', { id: loan.id }) }}</h1>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ loan.loanNo }}</p>
+        </div>
         <StatusBadge :status="loan.status" />
       </div>
       <div v-if="isAdmin" class="flex gap-2">

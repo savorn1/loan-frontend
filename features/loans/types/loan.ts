@@ -11,6 +11,7 @@ export interface LoanRequest {
 
 export interface LoanResponse {
   id: number
+  loanNo: string
   customerId: number
   branchId: number | null
   customerName: string

@@ -166,6 +166,7 @@ async function searchCustomers(query: string) {
 
 const columns = computed<ColumnDef<ApplicationResponse>[]>(() => [
   { key: 'id', label: t('applications.list.columns.id'), sortable: true },
+  { key: 'applicationNo', label: t('applications.list.columns.reference') },
   { key: 'customerName', label: t('applications.list.columns.customer'), sortable: true },
   {
     key: 'branchId',
