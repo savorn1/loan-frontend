@@ -19,6 +19,25 @@
       />
 
       <DataTable :rows="interest ?? []" :columns="columns" :loading="pending">
+        <template #actions-data="{ row }">
+          <div v-if="isAdmin" class="flex gap-1 justify-end">
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
+              @click="confirmDelete = row"
+            />
+          </div>
+        </template>
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-chart-bar"
@@ -35,23 +54,42 @@
       </DataTable>
     </UCard>
 
-    <UModal v-model="showCreate">
+    <UModal v-model="showForm">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loans.interest.modalTitle') }}</span>
+          <span class="font-semibold">{{
+            formMode === 'create'
+              ? t('loans.interest.modalTitle')
+              : t('loans.interest.editModalTitle')
+          }}</span>
         </template>
         <DynamicForm
-          v-model="createForm"
+          v-model="interestForm"
           :fields="fields"
-          :loading="creating"
+          :loading="submitting"
           :error="error"
-          :submit-label="t('loans.interest.submitLabel')"
+          :submit-label="formMode === 'create' ? t('loans.interest.submitLabel') : t('common.save')"
           cancelable
-          @submit="onCreate"
-          @cancel="showCreate = false"
+          @submit="onSubmitForm"
+          @cancel="showForm = false"
         />
       </UCard>
     </UModal>
+
+    <ConfirmModal
+      :model-value="!!confirmDelete"
+      :title="t('loans.interest.confirmDelete.title')"
+      :description="t('loans.interest.confirmDelete.description')"
+      :confirm-label="t('common.delete')"
+      color="red"
+      :loading="deleting"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
+      @confirm="onConfirmDelete"
+    />
   </div>
 </template>
 
@@ -83,7 +121,8 @@ const columns = computed<ColumnDef<LoanInterestResponse>[]>(() => [
   { key: 'rate', label: t('loans.interest.columns.rate'), type: 'percent' },
   { key: 'amount', label: t('loans.interest.columns.amount'), type: 'currency' },
   { key: 'accruedAt', label: t('loans.interest.columns.accrued'), type: 'date' },
-  { key: 'createdAt', label: t('loans.interest.columns.created'), type: 'datetime' }
+  { key: 'createdAt', label: t('loans.interest.columns.created'), type: 'datetime' },
+  { key: 'actions', label: '', class: 'text-right' }
 ])
 
 const fields = computed<FieldDef[]>(() => [
@@ -121,19 +160,36 @@ const fields = computed<FieldDef[]>(() => [
   }
 ])
 
-const showCreate = ref(false)
-const creating = ref(false)
+const showForm = ref(false)
+const formMode = ref<'create' | 'edit'>('create')
+const editingId = ref<number | null>(null)
+const submitting = ref(false)
 const error = ref('')
-const createForm = ref<Record<string, any>>({})
+const interestForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  createForm.value = { periodStart: '', periodEnd: '', rate: undefined, amount: undefined }
+  formMode.value = 'create'
+  editingId.value = null
+  interestForm.value = { periodStart: '', periodEnd: '', rate: undefined, amount: undefined }
   error.value = ''
-  showCreate.value = true
+  showForm.value = true
 }
 
-async function onCreate(values: Record<string, any>) {
-  creating.value = true
+function openEdit(row: LoanInterestResponse) {
+  formMode.value = 'edit'
+  editingId.value = row.id
+  interestForm.value = {
+    periodStart: row.periodStart,
+    periodEnd: row.periodEnd,
+    rate: row.rate,
+    amount: row.amount
+  }
+  error.value = ''
+  showForm.value = true
+}
+
+async function onSubmitForm(values: Record<string, any>) {
+  submitting.value = true
   error.value = ''
   try {
     const payload: LoanInterestRequest = {
@@ -142,14 +198,37 @@ async function onCreate(values: Record<string, any>) {
       rate: values.rate,
       amount: values.amount
     }
-    await api(`/loans/${loanId}/interest`, { method: 'POST', body: payload })
-    toast.add({ title: t('loans.interest.toastAdded'), color: 'green' })
-    showCreate.value = false
+    if (formMode.value === 'create') {
+      await api(`/loans/${loanId}/interest`, { method: 'POST', body: payload })
+      toast.add({ title: t('loans.interest.toastAdded'), color: 'green' })
+    } else {
+      await api(`/loans/${loanId}/interest/${editingId.value}`, { method: 'PUT', body: payload })
+      toast.add({ title: t('loans.interest.toastUpdated'), color: 'green' })
+    }
+    showForm.value = false
     await refresh()
   } catch (err) {
     error.value = apiErrorMessage(err)
   } finally {
-    creating.value = false
+    submitting.value = false
+  }
+}
+
+const confirmDelete = ref<LoanInterestResponse | null>(null)
+const deleting = ref(false)
+
+async function onConfirmDelete() {
+  if (!confirmDelete.value) return
+  deleting.value = true
+  try {
+    await api(`/loans/${loanId}/interest/${confirmDelete.value.id}`, { method: 'DELETE' })
+    toast.add({ title: t('loans.interest.toastDeleted'), color: 'green' })
+    confirmDelete.value = null
+    await refresh()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    deleting.value = false
   }
 }
 </script>

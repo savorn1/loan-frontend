@@ -44,6 +44,7 @@
         "noLoansDescription": "Create a loan for one of your customers to get started."
       },
       "modalTitle": "New Loan",
+      "editModalTitle": "Edit Loan",
       "fields": {
         "customer": "Customer",
         "customerPlaceholder": "Search customers…",
@@ -53,6 +54,10 @@
         "term": "Term (months)",
         "termHint": "1 – 360",
         "purpose": "Purpose"
+      },
+      "confirmDelete": {
+        "title": "Delete loan",
+        "description": "This pending loan will be permanently deleted. This cannot be undone."
       },
       "toastCreated": "Loan created"
     },
@@ -426,6 +431,7 @@
         "description": "Interest accrual entries for this loan will appear here."
       },
       "modalTitle": "Add interest accrual",
+      "editModalTitle": "Edit interest accrual",
       "columns": {
         "id": "ID",
         "periodStart": "Period start",
@@ -442,7 +448,13 @@
         "amount": "Amount"
       },
       "submitLabel": "Add",
-      "toastAdded": "Interest accrual added"
+      "confirmDelete": {
+        "title": "Delete interest accrual",
+        "description": "This interest accrual entry will be permanently deleted."
+      },
+      "toastAdded": "Interest accrual added",
+      "toastUpdated": "Interest accrual updated",
+      "toastDeleted": "Interest accrual deleted"
     },
     "fees": {
       "title": "Fees",
@@ -455,6 +467,7 @@
       },
       "totalLabel": "Total fees",
       "modalTitle": "Add fee",
+      "editModalTitle": "Edit fee",
       "columns": {
         "type": "Type",
         "charged": "Charged",
@@ -476,8 +489,14 @@
         "other": "Other"
       },
       "submitLabel": "Add",
+      "confirmDelete": {
+        "title": "Delete fee",
+        "description": "This pending fee will be permanently deleted."
+      },
       "toast": {
         "added": "Fee added",
+        "updated": "Fee updated",
+        "deleted": "Fee deleted",
         "markedPaid": "Fee marked as paid",
         "waived": "Fee waived"
       }

@@ -20,15 +20,31 @@
 
       <DataTable :rows="guarantors ?? []" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
-          <UButton
-            v-if="isAdmin && row.status === 'ACTIVE'"
-            size="2xs"
-            variant="soft"
-            :loading="releasing === row.id"
-            @click="onRelease(row.id)"
-          >
-            {{ t('loans.guarantors.release') }}
-          </UButton>
+          <div v-if="isAdmin && row.status === 'ACTIVE'" class="flex gap-1 justify-end">
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
+              @click="confirmDelete = row"
+            />
+            <UButton
+              size="2xs"
+              variant="soft"
+              :loading="releasing === row.id"
+              @click="onRelease(row.id)"
+            >
+              {{ t('loans.guarantors.release') }}
+            </UButton>
+          </div>
         </template>
         <template #empty-state>
           <EmptyState
@@ -46,23 +62,40 @@
       </DataTable>
     </UCard>
 
-    <UModal v-model="showCreate">
+    <UModal v-model="showForm">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loans.guarantors.add') }}</span>
+          <span class="font-semibold">{{
+            formMode === 'create' ? t('loans.guarantors.add') : t('loans.guarantors.editTitle')
+          }}</span>
         </template>
         <DynamicForm
-          v-model="createForm"
+          v-model="guarantorForm"
           :fields="fields"
-          :loading="creating"
+          :loading="submitting"
           :error="error"
-          :submit-label="t('loans.guarantors.submit')"
+          :submit-label="formMode === 'create' ? t('loans.guarantors.submit') : t('common.save')"
           cancelable
-          @submit="onCreate"
-          @cancel="showCreate = false"
+          @submit="onSubmitForm"
+          @cancel="showForm = false"
         />
       </UCard>
     </UModal>
+
+    <ConfirmModal
+      :model-value="!!confirmDelete"
+      :title="t('loans.guarantors.confirmDelete.title')"
+      :description="t('loans.guarantors.confirmDelete.description')"
+      :confirm-label="t('common.delete')"
+      color="red"
+      :loading="deleting"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
+      @confirm="onConfirmDelete"
+    />
   </div>
 </template>
 
@@ -98,7 +131,7 @@ const columns = computed<ColumnDef<LoanGuarantorResponse>[]>(() => [
   },
   { key: 'status', label: t('loans.guarantors.columns.status'), type: 'status' },
   { key: 'createdAt', label: t('loans.guarantors.columns.created'), type: 'datetime' },
-  { key: 'actions', label: t('loans.guarantors.columns.actions') }
+  { key: 'actions', label: t('loans.guarantors.columns.actions'), class: 'text-right' }
 ])
 
 const fields = computed<FieldDef[]>(() => [
@@ -120,20 +153,37 @@ const fields = computed<FieldDef[]>(() => [
   }
 ])
 
-const showCreate = ref(false)
-const creating = ref(false)
+const showForm = ref(false)
+const formMode = ref<'create' | 'edit'>('create')
+const editingId = ref<number | null>(null)
+const submitting = ref(false)
 const releasing = ref<number | null>(null)
 const error = ref('')
-const createForm = ref<Record<string, any>>({})
+const guarantorForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  createForm.value = { name: '', phone: '', relationship: '', guaranteedAmount: undefined }
+  formMode.value = 'create'
+  editingId.value = null
+  guarantorForm.value = { name: '', phone: '', relationship: '', guaranteedAmount: undefined }
   error.value = ''
-  showCreate.value = true
+  showForm.value = true
 }
 
-async function onCreate(values: Record<string, any>) {
-  creating.value = true
+function openEdit(row: LoanGuarantorResponse) {
+  formMode.value = 'edit'
+  editingId.value = row.id
+  guarantorForm.value = {
+    name: row.name,
+    phone: row.phone,
+    relationship: row.relationship ?? '',
+    guaranteedAmount: row.guaranteedAmount ?? undefined
+  }
+  error.value = ''
+  showForm.value = true
+}
+
+async function onSubmitForm(values: Record<string, any>) {
+  submitting.value = true
   error.value = ''
   try {
     const payload: LoanGuarantorRequest = {
@@ -142,14 +192,37 @@ async function onCreate(values: Record<string, any>) {
       relationship: values.relationship || undefined,
       guaranteedAmount: values.guaranteedAmount || undefined
     }
-    await api(`/loans/${loanId}/guarantors`, { method: 'POST', body: payload })
-    toast.add({ title: t('loans.guarantors.toast.added'), color: 'green' })
-    showCreate.value = false
+    if (formMode.value === 'create') {
+      await api(`/loans/${loanId}/guarantors`, { method: 'POST', body: payload })
+      toast.add({ title: t('loans.guarantors.toast.added'), color: 'green' })
+    } else {
+      await api(`/loans/${loanId}/guarantors/${editingId.value}`, { method: 'PUT', body: payload })
+      toast.add({ title: t('loans.guarantors.toast.updated'), color: 'green' })
+    }
+    showForm.value = false
     await refresh()
   } catch (err) {
     error.value = apiErrorMessage(err)
   } finally {
-    creating.value = false
+    submitting.value = false
+  }
+}
+
+const confirmDelete = ref<LoanGuarantorResponse | null>(null)
+const deleting = ref(false)
+
+async function onConfirmDelete() {
+  if (!confirmDelete.value) return
+  deleting.value = true
+  try {
+    await api(`/loans/${loanId}/guarantors/${confirmDelete.value.id}`, { method: 'DELETE' })
+    toast.add({ title: t('loans.guarantors.toast.deleted'), color: 'green' })
+    confirmDelete.value = null
+    await refresh()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    deleting.value = false
   }
 }
 

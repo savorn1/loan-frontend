@@ -70,6 +70,25 @@
         :loading="pending"
         @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
       >
+        <template #actions-data="{ row }">
+          <div v-if="isAdmin && row.status === 'PENDING'" class="flex gap-1 justify-end">
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click.stop="openEdit(row)"
+            />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
+              @click.stop="confirmDelete = row"
+            />
+          </div>
+        </template>
         <template #empty-state>
           <EmptyState
             :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-banknotes'"
@@ -111,6 +130,39 @@
         />
       </UCard>
     </UModal>
+
+    <UModal v-model="showEdit">
+      <UCard>
+        <template #header>
+          <span class="font-semibold">{{ t('loans.list.editModalTitle') }}</span>
+        </template>
+        <DynamicForm
+          v-model="editForm"
+          :fields="loanFields"
+          :loading="editing"
+          :error="editError"
+          :submit-label="t('common.saveChanges')"
+          cancelable
+          @submit="onEdit"
+          @cancel="showEdit = false"
+        />
+      </UCard>
+    </UModal>
+
+    <ConfirmModal
+      :model-value="confirmDelete !== null"
+      :title="t('loans.list.confirmDelete.title')"
+      :description="t('loans.list.confirmDelete.description')"
+      :confirm-label="t('common.delete')"
+      color="red"
+      :loading="deleting"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
+      @confirm="onDelete"
+    />
   </div>
 </template>
 
@@ -123,6 +175,7 @@ import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 const { t } = useI18n()
 const api = useApi()
 const router = useRouter()
+const { isAdmin } = storeToRefs(useAuth())
 
 const page = ref(1)
 const pageSize = ref(10)
@@ -255,7 +308,8 @@ const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   { key: 'interestRate', label: t('loans.list.columns.rate'), type: 'percent', sortable: true },
   { key: 'termMonths', label: t('loans.list.columns.term'), sortable: true },
   { key: 'status', label: t('loans.list.columns.status'), type: 'status', sortable: true },
-  { key: 'createdAt', label: t('loans.list.columns.created'), type: 'datetime', sortable: true }
+  { key: 'createdAt', label: t('loans.list.columns.created'), type: 'datetime', sortable: true },
+  { key: 'actions', label: '', class: 'text-right' }
 ])
 
 const totalLabel = computed(() => {
@@ -306,10 +360,23 @@ const loanFields = computed<FieldDef[]>(() => [
   { name: 'purpose', label: t('loans.list.fields.purpose'), type: 'textarea' }
 ])
 
-const { showCreate, creating, error, createForm, openCreate, onCreate } = useCrudModals<
-  LoanResponse,
-  LoanRequest
->('/loans', refresh, {
+const {
+  showCreate,
+  creating,
+  error,
+  createForm,
+  openCreate,
+  onCreate,
+  showEdit,
+  editing,
+  editError,
+  editForm,
+  openEdit,
+  onEdit,
+  deleting,
+  confirmDelete,
+  onDelete
+} = useCrudModals<LoanResponse, LoanRequest>('/loans', refresh, {
   entityName: t('loans.entities.loan'),
   createDefaults: () => ({
     customerId: undefined,
@@ -318,7 +385,13 @@ const { showCreate, creating, error, createForm, openCreate, onCreate } = useCru
     termMonths: 12,
     purpose: ''
   }),
-  toForm: () => ({}),
+  toForm: (row) => ({
+    customerId: row.customerId,
+    principal: row.principal,
+    interestRate: row.interestRate,
+    termMonths: row.termMonths,
+    purpose: row.purpose ?? ''
+  }),
   toPayload: (values) => ({
     customerId: values.customerId,
     principal: values.principal,

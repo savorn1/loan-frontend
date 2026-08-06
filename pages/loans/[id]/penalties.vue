@@ -25,6 +25,23 @@
               v-if="isAdmin && row.status === 'PENDING'"
               size="2xs"
               variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
+            <UButton
+              v-if="isAdmin && row.status === 'PENDING'"
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
+              @click="confirmDelete = row"
+            />
+            <UButton
+              v-if="isAdmin && row.status === 'PENDING'"
+              size="2xs"
+              variant="soft"
               :loading="marking === row.id"
               @click="onMarkPaid(row.id)"
             >
@@ -58,23 +75,40 @@
       </DataTable>
     </UCard>
 
-    <UModal v-model="showCreate">
+    <UModal v-model="showForm">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loans.penalties.add') }}</span>
+          <span class="font-semibold">{{
+            formMode === 'create' ? t('loans.penalties.add') : t('loans.penalties.editTitle')
+          }}</span>
         </template>
         <DynamicForm
-          v-model="createForm"
+          v-model="penaltyForm"
           :fields="fields"
-          :loading="creating"
+          :loading="submitting"
           :error="error"
-          :submit-label="t('loans.penalties.submit')"
+          :submit-label="formMode === 'create' ? t('loans.penalties.submit') : t('common.save')"
           cancelable
-          @submit="onCreate"
-          @cancel="showCreate = false"
+          @submit="onSubmitForm"
+          @cancel="showForm = false"
         />
       </UCard>
     </UModal>
+
+    <ConfirmModal
+      :model-value="!!confirmDelete"
+      :title="t('loans.penalties.confirmDelete.title')"
+      :description="t('loans.penalties.confirmDelete.description')"
+      :confirm-label="t('common.delete')"
+      color="red"
+      :loading="deleting"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
+      @confirm="onConfirmDelete"
+    />
   </div>
 </template>
 
@@ -121,21 +155,37 @@ const fields = computed<FieldDef[]>(() => [
   { name: 'reason', label: t('loans.penalties.fields.reason'), type: 'textarea', required: true }
 ])
 
-const showCreate = ref(false)
-const creating = ref(false)
+const showForm = ref(false)
+const formMode = ref<'create' | 'edit'>('create')
+const editingId = ref<number | null>(null)
+const submitting = ref(false)
 const error = ref('')
 const marking = ref<number | null>(null)
 const waiving = ref<number | null>(null)
-const createForm = ref<Record<string, any>>({})
+const penaltyForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  createForm.value = { appliedDate: '', amount: undefined, reason: '' }
+  formMode.value = 'create'
+  editingId.value = null
+  penaltyForm.value = { appliedDate: '', amount: undefined, reason: '' }
   error.value = ''
-  showCreate.value = true
+  showForm.value = true
 }
 
-async function onCreate(values: Record<string, any>) {
-  creating.value = true
+function openEdit(row: LoanPenaltyResponse) {
+  formMode.value = 'edit'
+  editingId.value = row.id
+  penaltyForm.value = {
+    appliedDate: row.appliedDate,
+    amount: row.amount,
+    reason: row.reason
+  }
+  error.value = ''
+  showForm.value = true
+}
+
+async function onSubmitForm(values: Record<string, any>) {
+  submitting.value = true
   error.value = ''
   try {
     const payload: LoanPenaltyRequest = {
@@ -143,14 +193,37 @@ async function onCreate(values: Record<string, any>) {
       reason: values.reason,
       appliedDate: values.appliedDate
     }
-    await api(`/loans/${loanId}/penalties`, { method: 'POST', body: payload })
-    toast.add({ title: t('loans.penalties.toast.added'), color: 'green' })
-    showCreate.value = false
+    if (formMode.value === 'create') {
+      await api(`/loans/${loanId}/penalties`, { method: 'POST', body: payload })
+      toast.add({ title: t('loans.penalties.toast.added'), color: 'green' })
+    } else {
+      await api(`/loans/${loanId}/penalties/${editingId.value}`, { method: 'PUT', body: payload })
+      toast.add({ title: t('loans.penalties.toast.updated'), color: 'green' })
+    }
+    showForm.value = false
     await refresh()
   } catch (err) {
     error.value = apiErrorMessage(err)
   } finally {
-    creating.value = false
+    submitting.value = false
+  }
+}
+
+const confirmDelete = ref<LoanPenaltyResponse | null>(null)
+const deleting = ref(false)
+
+async function onConfirmDelete() {
+  if (!confirmDelete.value) return
+  deleting.value = true
+  try {
+    await api(`/loans/${loanId}/penalties/${confirmDelete.value.id}`, { method: 'DELETE' })
+    toast.add({ title: t('loans.penalties.toast.deleted'), color: 'green' })
+    confirmDelete.value = null
+    await refresh()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    deleting.value = false
   }
 }
 

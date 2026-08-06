@@ -20,15 +20,31 @@
 
       <DataTable :rows="collaterals ?? []" :columns="columns" :loading="pending">
         <template #actions-data="{ row }">
-          <UButton
-            v-if="isAdmin && row.status === 'PLEDGED'"
-            size="2xs"
-            variant="soft"
-            :loading="releasing === row.id"
-            @click="onRelease(row.id)"
-          >
-            {{ t('loans.collaterals.release') }}
-          </UButton>
+          <div v-if="isAdmin && row.status === 'PLEDGED'" class="flex gap-1 justify-end">
+            <UButton
+              size="2xs"
+              variant="soft"
+              icon="i-heroicons-pencil"
+              :aria-label="t('common.edit')"
+              @click="openEdit(row)"
+            />
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-trash"
+              :aria-label="t('common.delete')"
+              @click="confirmDelete = row"
+            />
+            <UButton
+              size="2xs"
+              variant="soft"
+              :loading="releasing === row.id"
+              @click="onRelease(row.id)"
+            >
+              {{ t('loans.collaterals.release') }}
+            </UButton>
+          </div>
         </template>
         <template #empty-state>
           <EmptyState
@@ -54,23 +70,40 @@
       </div>
     </UCard>
 
-    <UModal v-model="showCreate">
+    <UModal v-model="showForm">
       <UCard>
         <template #header>
-          <span class="font-semibold">{{ t('loans.collaterals.add') }}</span>
+          <span class="font-semibold">{{
+            formMode === 'create' ? t('loans.collaterals.add') : t('loans.collaterals.editTitle')
+          }}</span>
         </template>
         <DynamicForm
-          v-model="createForm"
+          v-model="collateralForm"
           :fields="fields"
-          :loading="creating"
+          :loading="submitting"
           :error="error"
-          :submit-label="t('loans.collaterals.submit')"
+          :submit-label="formMode === 'create' ? t('loans.collaterals.submit') : t('common.save')"
           cancelable
-          @submit="onCreate"
-          @cancel="showCreate = false"
+          @submit="onSubmitForm"
+          @cancel="showForm = false"
         />
       </UCard>
     </UModal>
+
+    <ConfirmModal
+      :model-value="!!confirmDelete"
+      :title="t('loans.collaterals.confirmDelete.title')"
+      :description="t('loans.collaterals.confirmDelete.description')"
+      :confirm-label="t('common.delete')"
+      color="red"
+      :loading="deleting"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDelete = null
+        }
+      "
+      @confirm="onConfirmDelete"
+    />
   </div>
 </template>
 
@@ -108,7 +141,7 @@ const columns = computed<ColumnDef<LoanCollateralResponse>[]>(() => [
   { key: 'reference', label: t('loans.collaterals.columns.reference') },
   { key: 'status', label: t('loans.collaterals.columns.status'), type: 'status' },
   { key: 'createdAt', label: t('loans.collaterals.columns.created'), type: 'datetime' },
-  { key: 'actions', label: t('loans.collaterals.columns.actions') }
+  { key: 'actions', label: t('loans.collaterals.columns.actions'), class: 'text-right' }
 ])
 
 const fields = computed<FieldDef[]>(() => [
@@ -142,20 +175,42 @@ const fields = computed<FieldDef[]>(() => [
   { name: 'reference', label: t('loans.collaterals.fields.reference') }
 ])
 
-const showCreate = ref(false)
-const creating = ref(false)
+const showForm = ref(false)
+const formMode = ref<'create' | 'edit'>('create')
+const editingId = ref<number | null>(null)
+const submitting = ref(false)
 const releasing = ref<number | null>(null)
 const error = ref('')
-const createForm = ref<Record<string, any>>({})
+const collateralForm = ref<Record<string, any>>({})
 
 function openCreate() {
-  createForm.value = { type: undefined, estimatedValue: undefined, description: '', reference: '' }
+  formMode.value = 'create'
+  editingId.value = null
+  collateralForm.value = {
+    type: undefined,
+    estimatedValue: undefined,
+    description: '',
+    reference: ''
+  }
   error.value = ''
-  showCreate.value = true
+  showForm.value = true
 }
 
-async function onCreate(values: Record<string, any>) {
-  creating.value = true
+function openEdit(row: LoanCollateralResponse) {
+  formMode.value = 'edit'
+  editingId.value = row.id
+  collateralForm.value = {
+    type: row.type,
+    estimatedValue: row.estimatedValue,
+    description: row.description,
+    reference: row.reference ?? ''
+  }
+  error.value = ''
+  showForm.value = true
+}
+
+async function onSubmitForm(values: Record<string, any>) {
+  submitting.value = true
   error.value = ''
   try {
     const payload: LoanCollateralRequest = {
@@ -164,14 +219,37 @@ async function onCreate(values: Record<string, any>) {
       estimatedValue: values.estimatedValue,
       reference: values.reference || undefined
     }
-    await api(`/loans/${loanId}/collaterals`, { method: 'POST', body: payload })
-    toast.add({ title: t('loans.collaterals.toast.recorded'), color: 'green' })
-    showCreate.value = false
+    if (formMode.value === 'create') {
+      await api(`/loans/${loanId}/collaterals`, { method: 'POST', body: payload })
+      toast.add({ title: t('loans.collaterals.toast.recorded'), color: 'green' })
+    } else {
+      await api(`/loans/${loanId}/collaterals/${editingId.value}`, { method: 'PUT', body: payload })
+      toast.add({ title: t('loans.collaterals.toast.updated'), color: 'green' })
+    }
+    showForm.value = false
     await refresh()
   } catch (err) {
     error.value = apiErrorMessage(err)
   } finally {
-    creating.value = false
+    submitting.value = false
+  }
+}
+
+const confirmDelete = ref<LoanCollateralResponse | null>(null)
+const deleting = ref(false)
+
+async function onConfirmDelete() {
+  if (!confirmDelete.value) return
+  deleting.value = true
+  try {
+    await api(`/loans/${loanId}/collaterals/${confirmDelete.value.id}`, { method: 'DELETE' })
+    toast.add({ title: t('loans.collaterals.toast.deleted'), color: 'green' })
+    confirmDelete.value = null
+    await refresh()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    deleting.value = false
   }
 }
 

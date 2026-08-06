@@ -3,6 +3,7 @@
     "penalties": {
       "title": "Penalties",
       "add": "Add penalty",
+      "editTitle": "Edit penalty",
       "markPaid": "Mark paid",
       "waive": "Waive",
       "empty": {
@@ -25,8 +26,14 @@
         "reason": "Reason"
       },
       "submit": "Add",
+      "confirmDelete": {
+        "title": "Delete penalty",
+        "description": "This pending penalty will be permanently deleted."
+      },
       "toast": {
         "added": "Penalty added",
+        "updated": "Penalty updated",
+        "deleted": "Penalty deleted",
         "markedPaid": "Penalty marked as paid",
         "waived": "Penalty waived"
       }
@@ -104,6 +111,7 @@
     "collaterals": {
       "title": "Collateral",
       "add": "Add collateral",
+      "editTitle": "Edit collateral",
       "release": "Release",
       "empty": {
         "title": "No collateral pledged",
@@ -133,14 +141,21 @@
         "reference": "Reference"
       },
       "submit": "Add",
+      "confirmDelete": {
+        "title": "Delete collateral",
+        "description": "This pledged collateral will be permanently deleted."
+      },
       "toast": {
         "recorded": "Collateral recorded",
+        "updated": "Collateral updated",
+        "deleted": "Collateral deleted",
         "released": "Collateral released"
       }
     },
     "guarantors": {
       "title": "Guarantors",
       "add": "Add guarantor",
+      "editTitle": "Edit guarantor",
       "release": "Release",
       "empty": {
         "title": "No guarantors",
@@ -163,8 +178,14 @@
         "guaranteedAmountHint": "Optional — leave blank if unspecified"
       },
       "submit": "Add",
+      "confirmDelete": {
+        "title": "Delete guarantor",
+        "description": "This guarantor will be permanently removed from the loan."
+      },
       "toast": {
         "added": "Guarantor added",
+        "updated": "Guarantor updated",
+        "deleted": "Guarantor deleted",
         "released": "Guarantor released"
       }
     },
