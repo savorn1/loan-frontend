@@ -39,7 +39,14 @@
           type="button"
           class="flex items-center gap-2 rounded-full pl-1 pr-1.5 sm:pr-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         >
+          <img
+            v-if="avatarUrl"
+            :src="avatarUrl"
+            class="w-8 h-8 rounded-full object-cover shrink-0 shadow-sm"
+            alt=""
+          />
           <div
+            v-else
             class="flex items-center justify-center w-8 h-8 rounded-full text-white text-xs font-semibold uppercase shrink-0 shadow-sm"
             :class="avatarGradient(username)"
           >
@@ -68,12 +75,12 @@ const props = defineProps<{
   username?: string | null
   role?: string | null
   isAdmin?: boolean
+  avatarUrl?: string | null
 }>()
 
 const emit = defineEmits<{
   'open-menu': []
   'open-search': []
-  'change-password': []
   logout: []
 }>()
 
@@ -88,9 +95,9 @@ const menuItems = computed(() => [
   ],
   [
     {
-      label: t('common.password'),
-      icon: 'i-heroicons-key',
-      click: () => emit('change-password')
+      label: t('common.profile'),
+      icon: 'i-heroicons-user-circle',
+      to: '/profile'
     }
   ],
   [

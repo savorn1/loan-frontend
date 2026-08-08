@@ -18,7 +18,7 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="payments ?? []" :columns="columns" :loading="pending">
+      <DataTable :rows="payments ?? []" :columns="columns" :loading="pending" numbered>
         <template #reversed-data="{ row }">
           <StatusBadge v-if="row.reversed" status="REVERSED" />
           <span v-else>—</span>
@@ -103,6 +103,7 @@
           :rows="viewingAllocations.allocations"
           :columns="allocationColumns"
           export-filename="payment-allocations.csv"
+          numbered
         />
       </UCard>
     </UModal>

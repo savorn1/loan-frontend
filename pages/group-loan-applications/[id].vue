@@ -91,25 +91,25 @@
         <span class="font-semibold">{{ t('groupLoanApplications.detail.documents') }}</span>
       </template>
 
-      <UForm :state="documentForm" class="space-y-2 mb-6" @submit="onAddDocument">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <UInput
-            v-model="documentForm.documentType"
-            :placeholder="t('groupLoanApplications.detail.documentTypePlaceholder')"
-          />
-          <UInput
-            v-model="documentForm.fileName"
-            :placeholder="t('groupLoanApplications.detail.fileNamePlaceholder')"
-          />
-          <UInput
-            v-model="documentForm.fileUrl"
-            :placeholder="t('groupLoanApplications.detail.fileUrlPlaceholder')"
-          />
-        </div>
+      <UForm :state="documentForm" class="space-y-3 mb-6" @submit="onUploadDocument">
+        <UInput
+          v-model="documentForm.documentType"
+          :placeholder="t('groupLoanApplications.detail.documentTypePlaceholder')"
+        />
+        <FileUpload
+          v-model="documentForm.files"
+          multiple
+          :max-size-mb="10"
+          :disabled="uploadingDocument"
+        />
         <div class="flex justify-end">
-          <UButton type="submit" size="xs" :loading="addingDocument" :disabled="!canAddDocument">{{
-            t('groupLoanApplications.detail.addDocument')
-          }}</UButton>
+          <UButton
+            type="submit"
+            size="xs"
+            :loading="uploadingDocument"
+            :disabled="!canUploadDocument"
+            >{{ t('groupLoanApplications.detail.uploadDocument') }}</UButton
+          >
         </div>
       </UForm>
 
@@ -120,7 +120,14 @@
           class="flex items-center justify-between gap-2 border-b border-gray-100 dark:border-gray-800 pb-3 last:border-0 last:pb-0"
         >
           <div class="min-w-0">
-            <p class="text-sm font-medium truncate">{{ d.fileName }}</p>
+            <a
+              :href="d.fileUrl"
+              target="_blank"
+              rel="noopener"
+              class="text-sm font-medium truncate block text-primary-500 hover:underline"
+            >
+              {{ d.fileName }}
+            </a>
             <p class="text-xs text-gray-500">
               {{ d.documentType }} · {{ formatDateTime(d.uploadedAt) }}
             </p>
@@ -258,7 +265,6 @@
 <script setup lang="ts">
 import type {
   GroupLoanApplicationApprovalRequest,
-  GroupLoanApplicationDocumentRequest,
   GroupLoanApplicationResponse,
   GroupLoanApprovalDecision,
   GroupLoanApprovalMemberDecision,
@@ -401,30 +407,46 @@ async function onDecide() {
 }
 
 // ── Documents ───────────────────────────────────────────────────────────────
-const addingDocument = ref(false)
-const documentForm = reactive({ documentType: '', fileName: '', fileUrl: '' })
-const canAddDocument = computed(
-  () =>
-    documentForm.documentType.trim() && documentForm.fileName.trim() && documentForm.fileUrl.trim()
+const uploadingDocument = ref(false)
+const documentForm = reactive<{ documentType: string; files: File[] }>({
+  documentType: '',
+  files: []
+})
+const canUploadDocument = computed(
+  () => documentForm.documentType.trim() && documentForm.files.length > 0
 )
 
-async function onAddDocument() {
-  if (!canAddDocument.value) return
-  addingDocument.value = true
+async function onUploadDocument() {
+  if (!canUploadDocument.value) return
+  uploadingDocument.value = true
+  const documentType = documentForm.documentType.trim()
+  const failed: string[] = []
   try {
-    const payload: GroupLoanApplicationDocumentRequest = { ...documentForm }
-    await api(`/group-loan-applications/${applicationId}/documents`, {
-      method: 'POST',
-      body: payload
-    })
-    documentForm.documentType = ''
-    documentForm.fileName = ''
-    documentForm.fileUrl = ''
+    // Backend takes one file per request, so a multi-file selection uploads
+    // sequentially, all tagged with the same documentType.
+    for (const file of documentForm.files) {
+      try {
+        const formData = new FormData()
+        formData.append('documentType', documentType)
+        formData.append('file', file)
+        await api(`/group-loan-applications/${applicationId}/documents/upload`, {
+          method: 'POST',
+          body: formData
+        })
+      } catch (err) {
+        failed.push(`${file.name}: ${apiErrorMessage(err)}`)
+      }
+    }
+    if (failed.length) {
+      toast.add({ title: failed.join('; '), color: 'red' })
+    }
+    if (failed.length < documentForm.files.length) {
+      documentForm.documentType = ''
+      documentForm.files = []
+    }
     await refresh()
-  } catch (err) {
-    toast.add({ title: apiErrorMessage(err), color: 'red' })
   } finally {
-    addingDocument.value = false
+    uploadingDocument.value = false
   }
 }
 

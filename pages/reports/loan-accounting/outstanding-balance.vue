@@ -1,11 +1,13 @@
 <template>
   <div>
-    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
-      {{ t('admin.reports.title') }}
-    </UButton>
     <PageHeader
       :title="t('accounting.loanAccountingReports.outstandingBalance.title')"
       :description="t('accounting.loanAccountingReports.outstandingBalance.description')"
+      :crumbs="[
+        { label: t('admin.reports.title'), to: '/reports' },
+        { label: t('admin.reports.loanAccountingReportsHeader') },
+        { label: t('accounting.loanAccountingReports.outstandingBalance.title') }
+      ]"
     />
 
     <UCard>
@@ -27,7 +29,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
+      <DataTable
+        v-model:sort="sort"
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
+      >
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-banknotes"
@@ -72,11 +81,6 @@ const { search, page, pageSize, sort, total, rows } = useClientTable(loans, {
 })
 
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
-  {
-    key: 'id',
-    label: t('accounting.loanAccountingReports.outstandingBalance.columns.id'),
-    sortable: true
-  },
   {
     key: 'customerName',
     label: t('accounting.loanAccountingReports.outstandingBalance.columns.customer'),

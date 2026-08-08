@@ -18,7 +18,7 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="adjustments ?? []" :columns="columns" :loading="pending">
+      <DataTable :rows="adjustments ?? []" :columns="columns" :loading="pending" numbered>
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-adjustments-horizontal"
@@ -77,7 +77,6 @@ const {
 )
 
 const columns = computed<ColumnDef<LoanAdjustmentResponse>[]>(() => [
-  { key: 'id', label: t('loans.adjustments.columns.id') },
   { key: 'createdAt', label: t('loans.adjustments.columns.date'), type: 'datetime' },
   {
     key: 'type',

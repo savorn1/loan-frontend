@@ -45,7 +45,11 @@
       "emptyDescription": "Add a reusable document requirement (e.g. Payslip) that loan products can select.",
       "deleteTitle": "Delete document template \"{name}\"?",
       "deleteDescription": "This permanently removes the document template and cannot be undone.",
-      "total": { "one": "1 document template", "other": "{count} document templates" }
+      "total": { "one": "1 document template", "other": "{count} document templates" },
+      "sampleFile": "Sample file",
+      "noSampleFileTitle": "No sample file yet",
+      "noSampleFileDescription": "Attach an example of a valid document so applicants know what to submit.",
+      "uploadSampleFile": "Upload sample file"
     },
     "feeSchemes": {
       "title": "Fee Schemes",

@@ -43,6 +43,14 @@
             <UButton
               size="2xs"
               variant="soft"
+              :color="row.sampleFileUrl ? 'primary' : 'gray'"
+              icon="i-heroicons-paper-clip"
+              :aria-label="t('loanConfig.documentTemplates.sampleFile')"
+              @click="openSampleFile(row)"
+            />
+            <UButton
+              size="2xs"
+              variant="soft"
               icon="i-heroicons-pencil"
               :aria-label="t('common.edit')"
               @click="openEdit(row)"
@@ -119,6 +127,70 @@
       </UCard>
     </UModal>
 
+    <UModal
+      :model-value="sampleFileTarget !== null"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) sampleFileTarget = null
+        }
+      "
+    >
+      <UCard v-if="sampleFileTarget">
+        <template #header>
+          <span class="font-semibold">{{ t('loanConfig.documentTemplates.sampleFile') }}</span>
+        </template>
+
+        <div
+          v-if="sampleFileTarget.sampleFileUrl"
+          class="flex items-center justify-between gap-2 mb-4"
+        >
+          <a
+            :href="sampleFileTarget.sampleFileUrl"
+            target="_blank"
+            rel="noopener"
+            class="text-sm font-medium truncate text-primary-500 hover:underline"
+          >
+            {{ sampleFileTarget.sampleFileName }}
+          </a>
+          <UButton
+            size="2xs"
+            color="red"
+            variant="soft"
+            icon="i-heroicons-trash"
+            :loading="removingSampleFile"
+            @click="onRemoveSampleFile"
+          >
+            {{ t('common.remove') }}
+          </UButton>
+        </div>
+        <EmptyState
+          v-else
+          icon="i-heroicons-paper-clip"
+          :title="t('loanConfig.documentTemplates.noSampleFileTitle')"
+          :description="t('loanConfig.documentTemplates.noSampleFileDescription')"
+        />
+
+        <FileUpload
+          v-model="sampleFileToUpload"
+          :max-size-mb="10"
+          :disabled="uploadingSampleFile"
+          class="mt-4"
+        />
+        <div class="flex justify-end gap-2 pt-4">
+          <UButton color="gray" variant="ghost" @click="sampleFileTarget = null">{{
+            t('common.close')
+          }}</UButton>
+          <UButton
+            :loading="uploadingSampleFile"
+            :disabled="!sampleFileToUpload"
+            @click="onUploadSampleFile"
+          >
+            {{ t('loanConfig.documentTemplates.uploadSampleFile') }}
+          </UButton>
+        </div>
+      </UCard>
+    </UModal>
+
     <ConfirmModal
       :model-value="confirmDelete !== null"
       :title="
@@ -149,6 +221,7 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const { t } = useI18n()
 const api = useApi()
+const toast = useToast()
 
 const {
   data: templates,
@@ -201,6 +274,54 @@ const fields = computed<FieldDef[]>(() => [
     ]
   }
 ])
+
+// ── Sample file ──────────────────────────────────────────────────────────────
+const sampleFileTarget = ref<DocumentTemplateResponse | null>(null)
+const sampleFileToUpload = ref<File | null>(null)
+const uploadingSampleFile = ref(false)
+const removingSampleFile = ref(false)
+
+function openSampleFile(row: DocumentTemplateResponse) {
+  sampleFileTarget.value = row
+  sampleFileToUpload.value = null
+}
+
+async function onUploadSampleFile() {
+  if (!sampleFileTarget.value || !sampleFileToUpload.value) return
+  uploadingSampleFile.value = true
+  try {
+    const formData = new FormData()
+    formData.append('file', sampleFileToUpload.value)
+    const updated = await api<DocumentTemplateResponse>(
+      `/document-templates/${sampleFileTarget.value.id}/sample-file`,
+      { method: 'POST', body: formData }
+    )
+    sampleFileTarget.value = updated
+    sampleFileToUpload.value = null
+    await refresh()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    uploadingSampleFile.value = false
+  }
+}
+
+async function onRemoveSampleFile() {
+  if (!sampleFileTarget.value) return
+  removingSampleFile.value = true
+  try {
+    const updated = await api<DocumentTemplateResponse>(
+      `/document-templates/${sampleFileTarget.value.id}/sample-file`,
+      { method: 'DELETE' }
+    )
+    sampleFileTarget.value = updated
+    await refresh()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    removingSampleFile.value = false
+  }
+}
 
 const {
   showCreate,

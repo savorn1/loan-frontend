@@ -47,7 +47,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
+      <DataTable
+        v-model:sort="sort"
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
+      >
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton
@@ -209,7 +216,6 @@ function clearFilters() {
 }
 
 const columns = computed<ColumnDef<PaymentResponse>[]>(() => [
-  { key: 'id', label: t('payments.list.columns.id'), sortable: true },
   {
     key: 'loanId',
     label: t('payments.list.columns.loan'),

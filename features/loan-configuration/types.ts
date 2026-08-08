@@ -187,6 +187,8 @@ export interface DocumentTemplateResponse {
   name: string
   description: string | null
   status: DocumentTemplateStatus
+  sampleFileName: string | null
+  sampleFileUrl: string | null
   createdAt: string
   updatedAt: string
 }

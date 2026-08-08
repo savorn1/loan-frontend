@@ -34,3 +34,21 @@ export interface ChangePasswordRequest {
   currentPassword: string
   newPassword: string
 }
+
+export interface UserProfileResponse {
+  id: number
+  uuid: string
+  username: string
+  email: string | null
+  avatarUrl: string | null
+  role: Role
+  status: string
+  branchId: number | null
+  branchName: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface UpdateProfileRequest {
+  email?: string
+}

@@ -62,6 +62,8 @@
         :rows="rows"
         :columns="columns"
         :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
         @select="onSelect"
       >
         <template #empty-state>
@@ -187,7 +189,6 @@ const showCreate = ref(false)
 const creating = ref(false)
 
 const columns = computed<ColumnDef<CustomerResponse>[]>(() => [
-  { key: 'id', label: t('customers.list.columns.id'), sortable: true },
   { key: 'customerNo', label: t('customers.list.columns.reference') },
   { key: 'firstName', label: t('customers.list.columns.firstName'), sortable: true },
   { key: 'lastName', label: t('customers.list.columns.lastName'), sortable: true },

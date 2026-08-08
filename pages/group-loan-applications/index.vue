@@ -62,6 +62,8 @@
         :rows="rows"
         :columns="columns"
         :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
         @select="
           (row: GroupLoanApplicationResponse) => router.push(`/group-loan-applications/${row.id}`)
         "
@@ -123,7 +125,6 @@ const branchFilterOptions = computed(() => [
 const branchFilter = ref<number | ''>('')
 
 const columns = computed<ColumnDef<GroupLoanApplicationResponse>[]>(() => [
-  { key: 'id', label: t('groupLoanApplications.list.columns.id'), sortable: true },
   {
     key: 'groupName',
     label: t('groupLoanApplications.list.columns.group'),

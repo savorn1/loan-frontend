@@ -56,7 +56,13 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="users?.content ?? []" :columns="columns" :loading="pending">
+      <DataTable
+        :rows="users?.content ?? []"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
+      >
         <template #actions-data="{ row }">
           <div class="flex items-center justify-end gap-1">
             <UButton
@@ -346,7 +352,6 @@ const branchOptions = computed(() => [
 ])
 
 const columns = computed<ColumnDef<UserResponse>[]>(() => [
-  { key: 'id', label: t('admin.users.columns.id') },
   { key: 'username', label: t('admin.users.columns.username') },
   { key: 'branchName', label: t('admin.users.columns.branch') },
   {

@@ -1,11 +1,13 @@
 <template>
   <div>
-    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
-      {{ t('admin.reports.title') }}
-    </UButton>
     <PageHeader
       :title="t('accounting.customerReports.loanHistory.title')"
       :description="t('accounting.customerReports.loanHistory.description')"
+      :crumbs="[
+        { label: t('admin.reports.title'), to: '/reports' },
+        { label: t('admin.reports.customerReportsHeader') },
+        { label: t('accounting.customerReports.loanHistory.title') }
+      ]"
     />
 
     <UCard class="mb-6">
@@ -40,7 +42,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
+      <DataTable
+        v-model:sort="sort"
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
+      >
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-banknotes"
@@ -114,7 +123,6 @@ const filtered = computed(() => {
 const { page, pageSize, sort, total, rows } = useClientTable(filtered, { pageSize: 15 })
 
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
-  { key: 'id', label: t('accounting.customerReports.loanHistory.columns.id'), sortable: true },
   {
     key: 'principal',
     label: t('accounting.customerReports.loanHistory.columns.principal'),

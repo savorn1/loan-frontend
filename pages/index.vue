@@ -124,6 +124,7 @@
           :columns="columns"
           :loading="pending"
           export-filename="loans-awaiting-review.csv"
+          numbered
           @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
         >
           <template #empty-state>
@@ -481,7 +482,6 @@ const upcomingColumns = computed<ColumnDef<PaymentResponse>[]>(() => [
 ])
 
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
-  { key: 'id', label: t('admin.dashboard.columns.id') },
   { key: 'customerName', label: t('admin.dashboard.columns.customer') },
   { key: 'principal', label: t('admin.dashboard.columns.principal'), type: 'currency' },
   { key: 'status', label: t('admin.dashboard.columns.status'), type: 'status' },

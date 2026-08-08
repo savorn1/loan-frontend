@@ -2,7 +2,8 @@ import type {
   AuthResponse,
   ChangePasswordRequest,
   LoginRequest,
-  RegisterRequest
+  RegisterRequest,
+  UserProfileResponse
 } from '~/features/auth/types'
 import type { Role } from '~/shared/types'
 import { unwrapApiResponse } from '~/shared/utils/apiResponse'
@@ -38,6 +39,11 @@ export const useAuth = defineStore('auth', () => {
     sameSite: 'lax'
   })
   const branchName = useCookie<string | null>('auth_branch_name', {
+    default: () => null,
+    sameSite: 'lax'
+  })
+  const email = useCookie<string | null>('auth_email', { default: () => null, sameSite: 'lax' })
+  const avatarUrl = useCookie<string | null>('auth_avatar_url', {
     default: () => null,
     sameSite: 'lax'
   })
@@ -92,6 +98,24 @@ export const useAuth = defineStore('auth', () => {
     })
   }
 
+  function applyProfile(profile: UserProfileResponse) {
+    email.value = profile.email
+    avatarUrl.value = profile.avatarUrl
+  }
+
+  // Populates email/avatarUrl (not carried in the login response/JWT) so the
+  // AppBar can show the real avatar without every page having to fetch it.
+  async function fetchProfile() {
+    if (!token.value) return
+    const profile = await $fetch<UserProfileResponse>('/api/auth/me', {
+      baseURL: apiBase,
+      headers: { Authorization: `Bearer ${token.value}` },
+      onResponse: unwrapApiResponse
+    })
+    applyProfile(profile)
+    return profile
+  }
+
   async function logout() {
     const pendingRefreshToken = refreshToken.value
     token.value = null
@@ -100,6 +124,8 @@ export const useAuth = defineStore('auth', () => {
     role.value = null
     branchId.value = null
     branchName.value = null
+    email.value = null
+    avatarUrl.value = null
     if (pendingRefreshToken) {
       // Best-effort server-side revocation — the client-side session is already
       // cleared above regardless of whether this call succeeds.
@@ -117,12 +143,16 @@ export const useAuth = defineStore('auth', () => {
     role,
     branchId,
     branchName,
+    email,
+    avatarUrl,
     isAuthenticated,
     isAdmin,
     login,
     register,
     refresh,
     changePassword,
+    applyProfile,
+    fetchProfile,
     logout
   }
 })

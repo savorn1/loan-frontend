@@ -78,6 +78,8 @@ export interface CustomerIdentityResponse {
   expiryDate: string | null
   issuingCountry: string | null
   status: IdentityStatus
+  scanFileName: string | null
+  scanFileUrl: string | null
   createdAt: string
   updatedAt: string
 }

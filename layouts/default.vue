@@ -20,9 +20,9 @@
         :username="username"
         :role="role"
         :is-admin="isAdmin"
+        :avatar-url="avatarUrl"
         @open-menu="mobileNavOpen = true"
         @open-search="commandPaletteOpen = true"
-        @change-password="showChangePassword = true"
         @logout="onLogout"
       />
 
@@ -43,9 +43,16 @@
 
 <script setup lang="ts">
 const auth = useAuth()
-const { username, role, isAdmin } = storeToRefs(auth)
-const { logout } = auth
+const { username, role, isAdmin, avatarUrl } = storeToRefs(auth)
+const { logout, fetchProfile } = auth
 const { t } = useI18n()
+
+// Populates email/avatarUrl once per session load — not carried in the login
+// response/JWT, so the AppBar wouldn't otherwise know about them until the
+// profile page itself was visited.
+onMounted(() => {
+  fetchProfile().catch(() => {})
+})
 
 const groups = computed(() => [
   {

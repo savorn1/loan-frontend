@@ -68,6 +68,8 @@
         :rows="rows"
         :columns="columns"
         :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
         @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
       >
         <template #actions-data="{ row }">
@@ -294,7 +296,6 @@ async function searchCustomerOptions(query: string) {
 }
 
 const columns = computed<ColumnDef<LoanResponse>[]>(() => [
-  { key: 'id', label: t('loans.list.columns.id'), sortable: true },
   { key: 'loanNo', label: t('loans.list.columns.reference') },
   // customerName is stitched in per-row from customer-service, not a Loan column — not sortable server-side.
   { key: 'customerName', label: t('loans.list.columns.customer') },

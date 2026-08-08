@@ -37,7 +37,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="rows" :columns="columns" :loading="pending" @select="onSelect">
+      <DataTable
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
+        @select="onSelect"
+      >
         <template #permissionCount-data="{ row }">
           <UBadge color="gray" variant="subtle">{{ row.permissionCount }}</UBadge>
         </template>

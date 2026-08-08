@@ -13,7 +13,7 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="transactions ?? []" :columns="columns" :loading="pending">
+      <DataTable :rows="transactions ?? []" :columns="columns" :loading="pending" numbered>
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-banknotes"

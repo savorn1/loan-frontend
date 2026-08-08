@@ -18,7 +18,7 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="interest ?? []" :columns="columns" :loading="pending">
+      <DataTable :rows="interest ?? []" :columns="columns" :loading="pending" numbered>
         <template #actions-data="{ row }">
           <div v-if="isAdmin" class="flex gap-1 justify-end">
             <UButton
@@ -115,7 +115,6 @@ const {
 )
 
 const columns = computed<ColumnDef<LoanInterestResponse>[]>(() => [
-  { key: 'id', label: t('loans.interest.columns.id') },
   { key: 'periodStart', label: t('loans.interest.columns.periodStart'), type: 'date' },
   { key: 'periodEnd', label: t('loans.interest.columns.periodEnd'), type: 'date' },
   { key: 'rate', label: t('loans.interest.columns.rate'), type: 'percent' },

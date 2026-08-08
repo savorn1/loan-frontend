@@ -60,6 +60,7 @@
           :columns="loanColumns"
           :loading="loansPending"
           export-filename="customer-loans.csv"
+          numbered
           @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
         >
           <template #empty-state>
@@ -89,6 +90,14 @@
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
+              <UButton
+                size="2xs"
+                variant="soft"
+                :color="row.scanFileUrl ? 'primary' : 'gray'"
+                icon="i-heroicons-paper-clip"
+                :aria-label="t('customers.detail.identity.scan')"
+                @click="openIdentityScan(row)"
+              />
               <UButton
                 size="2xs"
                 variant="soft"
@@ -475,6 +484,71 @@
       "
       @confirm="onDeleteIdentity"
     />
+
+    <UModal
+      :model-value="identityScanTarget !== null"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) identityScanTarget = null
+        }
+      "
+    >
+      <UCard v-if="identityScanTarget">
+        <template #header>
+          <span class="font-semibold">{{ t('customers.detail.identity.scan') }}</span>
+        </template>
+
+        <div
+          v-if="identityScanTarget.scanFileUrl"
+          class="flex items-center justify-between gap-2 mb-4"
+        >
+          <a
+            :href="identityScanTarget.scanFileUrl"
+            target="_blank"
+            rel="noopener"
+            class="text-sm font-medium truncate text-primary-500 hover:underline"
+          >
+            {{ identityScanTarget.scanFileName }}
+          </a>
+          <UButton
+            size="2xs"
+            color="red"
+            variant="soft"
+            icon="i-heroicons-trash"
+            :loading="removingIdentityScan"
+            @click="onRemoveIdentityScan"
+          >
+            {{ t('common.remove') }}
+          </UButton>
+        </div>
+        <EmptyState
+          v-else
+          icon="i-heroicons-paper-clip"
+          :title="t('customers.detail.identity.noScanTitle')"
+          :description="t('customers.detail.identity.noScanDescription')"
+        />
+
+        <FileUpload
+          v-model="identityScanToUpload"
+          accept="image/*,application/pdf"
+          :max-size-mb="10"
+          :disabled="uploadingIdentityScan"
+          class="mt-4"
+        />
+        <div class="flex justify-end gap-2 pt-4">
+          <UButton color="gray" variant="ghost" @click="identityScanTarget = null">{{
+            t('common.close')
+          }}</UButton>
+          <UButton
+            :loading="uploadingIdentityScan"
+            :disabled="!identityScanToUpload"
+            @click="onUploadIdentityScan"
+          >
+            {{ t('customers.detail.identity.uploadScan') }}
+          </UButton>
+        </div>
+      </UCard>
+    </UModal>
 
     <UModal v-model="showCreateAddress">
       <UCard>
@@ -906,7 +980,6 @@ const deleting = ref(false)
 const confirmDelete = ref(false)
 
 const loanColumns: ColumnDef<LoanResponse>[] = [
-  { key: 'id', label: 'ID' },
   { key: 'principal', type: 'currency' },
   { key: 'termMonths', label: 'Term (mo)' },
   { key: 'status', type: 'status' },
@@ -1002,6 +1075,54 @@ const {
     })
   }
 )
+
+// ── Identity scan ────────────────────────────────────────────────────────────
+const identityScanTarget = ref<CustomerIdentityResponse | null>(null)
+const identityScanToUpload = ref<File | null>(null)
+const uploadingIdentityScan = ref(false)
+const removingIdentityScan = ref(false)
+
+function openIdentityScan(row: CustomerIdentityResponse) {
+  identityScanTarget.value = row
+  identityScanToUpload.value = null
+}
+
+async function onUploadIdentityScan() {
+  if (!identityScanTarget.value || !identityScanToUpload.value) return
+  uploadingIdentityScan.value = true
+  try {
+    const formData = new FormData()
+    formData.append('file', identityScanToUpload.value)
+    const updated = await api<CustomerIdentityResponse>(
+      `/customers/${customerId}/identities/${identityScanTarget.value.id}/scan`,
+      { method: 'POST', body: formData }
+    )
+    identityScanTarget.value = updated
+    identityScanToUpload.value = null
+    await refreshIdentities()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    uploadingIdentityScan.value = false
+  }
+}
+
+async function onRemoveIdentityScan() {
+  if (!identityScanTarget.value) return
+  removingIdentityScan.value = true
+  try {
+    const updated = await api<CustomerIdentityResponse>(
+      `/customers/${customerId}/identities/${identityScanTarget.value.id}/scan`,
+      { method: 'DELETE' }
+    )
+    identityScanTarget.value = updated
+    await refreshIdentities()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    removingIdentityScan.value = false
+  }
+}
 
 const addressColumns: ColumnDef<CustomerAddressResponse>[] = [
   { key: 'addressType', label: 'Type', type: 'enum' },

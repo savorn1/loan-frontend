@@ -153,6 +153,7 @@
         :columns="applicationColumns"
         :loading="applicationsPending"
         :exportable="false"
+        numbered
         @select="
           (row: GroupLoanApplicationResponse) => router.push(`/group-loan-applications/${row.id}`)
         "
@@ -182,6 +183,7 @@
         :columns="loanColumns"
         :loading="loansPending"
         :exportable="false"
+        numbered
         @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
       >
         <template #empty-state>
@@ -500,7 +502,6 @@ const {
 )
 
 const applicationColumns = computed<ColumnDef<GroupLoanApplicationResponse>[]>(() => [
-  { key: 'id', label: t('groupLoanApplications.groupCard.columns.id') },
   { key: 'status', label: t('groupLoanApplications.groupCard.columns.status'), type: 'status' },
   {
     key: 'submittedAt',
@@ -592,7 +593,6 @@ const { data: groupLoans, pending: loansPending } = await useAsyncData(
 )
 
 const loanColumns = computed<ColumnDef<LoanResponse>[]>(() => [
-  { key: 'id', label: t('groupLoanApplications.loanAccounts.columns.id') },
   { key: 'customerName', label: t('groupLoanApplications.loanAccounts.columns.customer') },
   {
     key: 'principal',

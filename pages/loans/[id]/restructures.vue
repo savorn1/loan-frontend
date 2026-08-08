@@ -18,7 +18,7 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="restructures ?? []" :columns="columns" :loading="pending">
+      <DataTable :rows="restructures ?? []" :columns="columns" :loading="pending" numbered>
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-arrow-path-rounded-square"

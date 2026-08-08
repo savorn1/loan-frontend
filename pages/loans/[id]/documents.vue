@@ -18,7 +18,7 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="documents ?? []" :columns="columns" :loading="pending">
+      <DataTable :rows="documents ?? []" :columns="columns" :loading="pending" numbered>
         <template #status-data="{ row }">
           <USelectMenu
             v-if="isAdmin"

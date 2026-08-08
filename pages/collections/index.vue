@@ -46,7 +46,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
+      <DataTable
+        v-model:sort="sort"
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
+      >
         <template #bucket-data="{ row }">
           <UBadge :color="bucketColor(row.bucket)" variant="subtle">{{
             bucketLabel(row.bucket)

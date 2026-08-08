@@ -44,6 +44,8 @@
         :rows="rows"
         :columns="columns"
         :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
         @select="
           (row: PaymentTransactionResponse) => router.push(`/payment-transactions/${row.id}`)
         "

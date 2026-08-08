@@ -85,6 +85,7 @@
           :columns="paymentColumns"
           :loading="paymentsPending"
           export-filename="loan-contract-payments.csv"
+          numbered
         >
           <template #empty-state>
             <EmptyState
@@ -111,6 +112,7 @@
             :columns="collateralColumns"
             :loading="collateralsPending"
             export-filename="loan-contract-collaterals.csv"
+            numbered
           >
             <template #empty-state>
               <EmptyState
@@ -131,6 +133,7 @@
             :columns="guarantorColumns"
             :loading="guarantorsPending"
             export-filename="loan-contract-guarantors.csv"
+            numbered
           >
             <template #empty-state>
               <EmptyState
@@ -152,6 +155,7 @@
           :columns="statusColumns"
           :loading="statusPending"
           export-filename="loan-contract-status-history.csv"
+          numbered
         >
           <template #empty-state>
             <EmptyState
@@ -177,6 +181,7 @@
           :columns="disbursementColumns"
           :loading="disbursementsPending"
           export-filename="loan-contract-disbursements.csv"
+          numbered
         >
           <template #empty-state>
             <EmptyState
@@ -197,6 +202,7 @@
           :columns="restructureColumns"
           :loading="restructuresPending"
           export-filename="loan-contract-restructures.csv"
+          numbered
         >
           <template #empty-state>
             <EmptyState

@@ -1,11 +1,13 @@
 <template>
   <div>
-    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
-      {{ t('admin.reports.title') }}
-    </UButton>
     <PageHeader
       :title="t('accounting.penaltyReports.outstanding.title')"
       :description="t('accounting.penaltyReports.outstanding.description')"
+      :crumbs="[
+        { label: t('admin.reports.title'), to: '/reports' },
+        { label: t('admin.reports.penaltyReportsHeader') },
+        { label: t('accounting.penaltyReports.outstanding.title') }
+      ]"
     />
 
     <UCard v-if="total > 0" class="mb-6">

@@ -49,7 +49,13 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="rows" :columns="columns" :loading="pending">
+      <DataTable
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
+      >
         <template #status-data="{ row }">
           <UBadge :color="row.status === 'ACTIVE' ? 'green' : 'gray'" variant="subtle">
             {{ row.status === 'ACTIVE' ? t('common.active') : t('common.inactive') }}

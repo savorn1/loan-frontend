@@ -18,7 +18,7 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="penalties ?? []" :columns="columns" :loading="pending">
+      <DataTable :rows="penalties ?? []" :columns="columns" :loading="pending" numbered>
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton
@@ -134,7 +134,6 @@ const {
 )
 
 const columns = computed<ColumnDef<LoanPenaltyResponse>[]>(() => [
-  { key: 'id', label: t('loans.penalties.columns.id') },
   { key: 'appliedDate', label: t('loans.penalties.columns.applied'), type: 'date' },
   { key: 'reason', label: t('loans.penalties.columns.reason') },
   { key: 'amount', label: t('loans.penalties.columns.amount'), type: 'currency' },
