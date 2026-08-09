@@ -1,3 +1,5 @@
+import type { DisbursementMethod } from './ledger'
+
 // ── Loan penalties (late fees / charges applied to a loan) ──────────────────
 export type PenaltyStatus = 'PENDING' | 'WAIVED' | 'PAID'
 
@@ -125,4 +127,44 @@ export interface LoanWriteoffResponse {
   status: WriteoffStatus
   createdAt: string
   updatedAt: string
+}
+
+// ── Write-off recovery (cash recovered on a loan already written off — the
+// loan stays CLOSED, this doesn't reopen it) ────────────────────────────────
+
+export interface LoanWriteoffRecoveryRequest {
+  amount: number
+  recoveryDate: string // ISO date
+  method: DisbursementMethod
+  reference?: string
+}
+
+export interface LoanWriteoffRecoveryResponse {
+  id: number
+  writeoffId: number
+  loanId: number
+  amount: number
+  recoveryDate: string
+  method: DisbursementMethod
+  reference: string | null
+  createdAt: string
+}
+
+// ── Payoff quote (what it actually costs to close the loan today — lower
+// than outstandingBalance, which bakes in a full term's interest regardless
+// of how early you pay) ──────────────────────────────────────────────────
+
+export interface LoanPayoffQuoteResponse {
+  loanId: number
+  asOfDate: string
+  remainingPrincipal: number
+  accruedInterest: number
+  outstandingFees: number
+  outstandingPenalties: number
+  totalPayoffAmount: number
+}
+
+export interface LoanPayoffRequest {
+  method: DisbursementMethod
+  reference?: string
 }

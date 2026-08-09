@@ -115,6 +115,41 @@
         "searchButton": "View entry",
         "notFound": "No journal entry found with that entry number."
       },
+      "reconciliation": {
+        "title": "GL Reconciliation",
+        "description": "Compares the Loans Receivable control account against loan-service's own portfolio total.",
+        "matched": "The general ledger and loan portfolio agree.",
+        "mismatched": "The general ledger and loan portfolio don't agree — investigate before relying on either figure.",
+        "glAccount": "GL account",
+        "glBalance": "GL balance",
+        "loanServiceTotal": "Loan portfolio total",
+        "variance": "Variance",
+        "explanation": "A non-zero variance usually means a missed accounting posting, a manual journal entry that bypassed loan-service, or a bug — not something to ignore.",
+        "refresh": "Refresh",
+        "matchedShort": "Matched",
+        "mismatchedShort": "Mismatched",
+        "historyTitle": "History",
+        "historyEmpty": {
+          "title": "No history yet",
+          "description": "The daily reconciliation check hasn't run yet — history appears here after its first run."
+        },
+        "postingsTitle": "Postings this period",
+        "postingsDescription": "Every posting to the Loans Receivable account in the current financial period — a starting point for investigating a mismatch.",
+        "postingsEmpty": {
+          "title": "No postings this period",
+          "description": "Nothing has posted to the Loans Receivable account in the current financial period yet."
+        },
+        "columns": {
+          "checkedAt": "Checked at",
+          "matched": "Result",
+          "date": "Date",
+          "entryNo": "Entry no.",
+          "transactionType": "Type",
+          "side": "Side",
+          "amount": "Amount",
+          "reference": "Reference"
+        }
+      },
       "ledgerByBranch": {
         "title": "Ledger by Branch",
         "description": "Posted journal activity across every GL account for a single branch.",

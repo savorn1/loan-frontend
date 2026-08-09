@@ -186,6 +186,11 @@ const tabGroups = computed(() => [
         icon: 'i-heroicons-adjustments-horizontal'
       },
       {
+        label: t('loans.shell.tabs.payoff'),
+        to: `/loans/${loanId}/payoff`,
+        icon: 'i-heroicons-currency-dollar'
+      },
+      {
         label: t('loans.shell.tabs.settlement'),
         to: `/loans/${loanId}/settlement`,
         icon: 'i-heroicons-check-badge'

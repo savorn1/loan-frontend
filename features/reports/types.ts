@@ -39,3 +39,13 @@ export interface CollectionTrendPoint {
   paymentCount: number
   totalCollected: number
 }
+
+// A single link in one of the reports index page's ~19 category sections
+// (see ~/components/ReportCategoryCard.vue) — not a backend response, just
+// the shape those sections' hardcoded tile arrays share.
+export interface ReportTile {
+  to: string
+  icon: string
+  label: string
+  description: string
+}

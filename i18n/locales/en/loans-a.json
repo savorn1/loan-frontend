@@ -108,6 +108,7 @@
         "fees": "Fees",
         "penalties": "Penalties",
         "adjustments": "Adjustments",
+        "payoff": "Payoff",
         "settlement": "Settlement",
         "writeoff": "Write-off",
         "collateral": "Collateral",

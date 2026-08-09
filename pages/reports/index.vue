@@ -103,748 +103,97 @@
       </div>
     </UCard>
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.generalLedgerReportsHeader') }}</span>
-          <UInput
-            v-model="generalLedgerReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredGeneralLedgerReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: generalLedgerReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.generalLedgerReportsHeader')"
+      :tiles="generalLedgerReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.trialBalanceReportsHeader') }}</span>
-          <UInput
-            v-model="trialBalanceReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredTrialBalanceReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: trialBalanceReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.trialBalanceReportsHeader')"
+      :tiles="trialBalanceReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.financialStatementsHeader') }}</span>
-          <UInput
-            v-model="financialStatementsSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredFinancialStatementTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: financialStatementsSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.financialStatementsHeader')"
+      :tiles="financialStatementTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.loanAccountingReportsHeader') }}</span>
-          <UInput
-            v-model="loanAccountingReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredLoanAccountingReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: loanAccountingReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.loanAccountingReportsHeader')"
+      :tiles="loanAccountingReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.receivablesReportsHeader') }}</span>
-          <UInput
-            v-model="receivablesReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredReceivablesReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: receivablesReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.receivablesReportsHeader')"
+      :tiles="receivablesReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.cashReportsHeader') }}</span>
-          <UInput
-            v-model="cashReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredCashReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: cashReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard :title="t('admin.reports.cashReportsHeader')" :tiles="cashReportTiles" />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.branchAccountingReportsHeader') }}</span>
-          <UInput
-            v-model="branchAccountingReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredBranchAccountingReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: branchAccountingReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.branchAccountingReportsHeader')"
+      :tiles="branchAccountingReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.expenseReportsHeader') }}</span>
-          <UInput
-            v-model="expenseReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredExpenseReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: expenseReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.expenseReportsHeader')"
+      :tiles="expenseReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.revenueReportsHeader') }}</span>
-          <UInput
-            v-model="revenueReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredRevenueReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: revenueReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.revenueReportsHeader')"
+      :tiles="revenueReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.loanPortfolioReportsHeader') }}</span>
-          <UInput
-            v-model="loanPortfolioReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredLoanPortfolioReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: loanPortfolioReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.loanPortfolioReportsHeader')"
+      :tiles="loanPortfolioReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.repaymentReportsHeader') }}</span>
-          <UInput
-            v-model="repaymentReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredRepaymentReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: repaymentReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.repaymentReportsHeader')"
+      :tiles="repaymentReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.outstandingReportsHeader') }}</span>
-          <UInput
-            v-model="outstandingReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredOutstandingReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: outstandingReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.outstandingReportsHeader')"
+      :tiles="outstandingReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.overdueReportsHeader') }}</span>
-          <UInput
-            v-model="overdueReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredOverdueReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: overdueReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.overdueReportsHeader')"
+      :tiles="overdueReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.penaltyReportsHeader') }}</span>
-          <UInput
-            v-model="penaltyReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredPenaltyReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: penaltyReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.penaltyReportsHeader')"
+      :tiles="penaltyReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.interestReportsHeader') }}</span>
-          <UInput
-            v-model="interestReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredInterestReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: interestReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.interestReportsHeader')"
+      :tiles="interestReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.customerReportsHeader') }}</span>
-          <UInput
-            v-model="customerReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredCustomerReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: customerReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.customerReportsHeader')"
+      :tiles="customerReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.scheduleReportsHeader') }}</span>
-          <UInput
-            v-model="scheduleReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredScheduleReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: scheduleReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.scheduleReportsHeader')"
+      :tiles="scheduleReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{
-            t('admin.reports.writeoffRestructureReportsHeader')
-          }}</span>
-          <UInput
-            v-model="writeoffRestructureReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredWriteoffRestructureReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: writeoffRestructureReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.writeoffRestructureReportsHeader')"
+      :tiles="writeoffRestructureReportTiles"
+    />
 
-    <UCard class="mt-6">
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="font-semibold">{{ t('admin.reports.dashboardReportsHeader') }}</span>
-          <UInput
-            v-model="dashboardReportSearch"
-            icon="i-heroicons-magnifying-glass"
-            size="sm"
-            class="w-56"
-            :placeholder="t('common.searchEllipsis')"
-          />
-        </div>
-      </template>
-      <DataTable
-        :rows="filteredDashboardReportTiles"
-        :columns="reportColumns"
-        :exportable="false"
-        @select="(row: GeneralLedgerReportTile) => router.push(row.to)"
-      >
-        <template #label-data="{ row }">
-          <div class="flex items-center gap-3">
-            <div
-              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
-            >
-              <UIcon :name="row.icon" class="w-5 h-5" />
-            </div>
-            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            icon="i-heroicons-magnifying-glass"
-            :title="t('common.noMatches')"
-            :description="t('common.nothingMatches', { query: dashboardReportSearch })"
-          />
-        </template>
-      </DataTable>
-    </UCard>
+    <ReportCategoryCard
+      :title="t('admin.reports.dashboardReportsHeader')"
+      :tiles="dashboardReportTiles"
+    />
   </div>
 </template>
 
@@ -862,20 +211,19 @@ import {
 import { Line } from 'vue-chartjs'
 import type { CollectionBucket } from '~/features/collections/types'
 import type { LoanStatus } from '~/features/loans/types'
-import type { ColumnDef } from '~/shared/types'
 import type {
   CollectionTrendPoint,
   DisbursementTrendPoint,
   LoanStatusBreakdown,
   ParSummaryResponse,
-  PortfolioSummaryResponse
+  PortfolioSummaryResponse,
+  ReportTile
 } from '~/features/reports/types'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const { t } = useI18n()
 const api = useApi()
-const router = useRouter()
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')
 
@@ -997,14 +345,7 @@ const trendChartData = computed(() => ({
   ]
 }))
 
-interface GeneralLedgerReportTile {
-  to: string
-  icon: string
-  label: string
-  description: string
-}
-
-const generalLedgerReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const generalLedgerReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/general-ledger',
     icon: 'i-heroicons-book-open',
@@ -1046,10 +387,16 @@ const generalLedgerReportTiles = computed<GeneralLedgerReportTile[]>(() => [
     icon: 'i-heroicons-clock',
     label: t('admin.reports.generalLedgerReportsTiles.accountTransactionHistory.label'),
     description: t('admin.reports.generalLedgerReportsTiles.accountTransactionHistory.description')
+  },
+  {
+    to: '/reports/general-ledger/reconciliation',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.generalLedgerReportsTiles.reconciliation.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.reconciliation.description')
   }
 ])
 
-const trialBalanceReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const trialBalanceReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/trial-balance',
     icon: 'i-heroicons-scale',
@@ -1070,27 +417,9 @@ const trialBalanceReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-function filterReportTiles(tiles: GeneralLedgerReportTile[], query: string) {
-  const q = query.trim().toLowerCase()
-  if (!q) return tiles
-  return tiles.filter(
-    (t) => t.label.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
-  )
-}
-
-const generalLedgerReportSearch = ref('')
-const filteredGeneralLedgerReportTiles = computed(() =>
-  filterReportTiles(generalLedgerReportTiles.value, generalLedgerReportSearch.value)
-)
-
-const trialBalanceReportSearch = ref('')
-const filteredTrialBalanceReportTiles = computed(() =>
-  filterReportTiles(trialBalanceReportTiles.value, trialBalanceReportSearch.value)
-)
-
 // "Financial Position Report" is the same statement as "Balance Sheet" under a different
 // (IFRS) name — both tiles link to the same page rather than duplicating the report.
-const financialStatementTiles = computed<GeneralLedgerReportTile[]>(() => [
+const financialStatementTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/financial-statements/balance-sheet',
     icon: 'i-heroicons-scale',
@@ -1123,12 +452,7 @@ const financialStatementTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const financialStatementsSearch = ref('')
-const filteredFinancialStatementTiles = computed(() =>
-  filterReportTiles(financialStatementTiles.value, financialStatementsSearch.value)
-)
-
-const loanAccountingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const loanAccountingReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/loan-accounting/portfolio-summary',
     icon: 'i-heroicons-briefcase',
@@ -1173,12 +497,7 @@ const loanAccountingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const loanAccountingReportSearch = ref('')
-const filteredLoanAccountingReportTiles = computed(() =>
-  filterReportTiles(loanAccountingReportTiles.value, loanAccountingReportSearch.value)
-)
-
-const receivablesReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const receivablesReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/receivables/aging',
     icon: 'i-heroicons-clock',
@@ -1193,12 +512,7 @@ const receivablesReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const receivablesReportSearch = ref('')
-const filteredReceivablesReportTiles = computed(() =>
-  filterReportTiles(receivablesReportTiles.value, receivablesReportSearch.value)
-)
-
-const cashReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const cashReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/cash/cash-book',
     icon: 'i-heroicons-book-open',
@@ -1231,12 +545,7 @@ const cashReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const cashReportSearch = ref('')
-const filteredCashReportTiles = computed(() =>
-  filterReportTiles(cashReportTiles.value, cashReportSearch.value)
-)
-
-const branchAccountingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const branchAccountingReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/branch-accounting/profit-and-loss',
     icon: 'i-heroicons-chart-bar',
@@ -1269,12 +578,7 @@ const branchAccountingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const branchAccountingReportSearch = ref('')
-const filteredBranchAccountingReportTiles = computed(() =>
-  filterReportTiles(branchAccountingReportTiles.value, branchAccountingReportSearch.value)
-)
-
-const expenseReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const expenseReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/expenses/operating-expenses',
     icon: 'i-heroicons-receipt-percent',
@@ -1295,12 +599,7 @@ const expenseReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const expenseReportSearch = ref('')
-const filteredExpenseReportTiles = computed(() =>
-  filterReportTiles(expenseReportTiles.value, expenseReportSearch.value)
-)
-
-const revenueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const revenueReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/loan-accounting/interest-income',
     icon: 'i-heroicons-chart-bar',
@@ -1333,12 +632,7 @@ const revenueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const revenueReportSearch = ref('')
-const filteredRevenueReportTiles = computed(() =>
-  filterReportTiles(revenueReportTiles.value, revenueReportSearch.value)
-)
-
-const loanPortfolioReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const loanPortfolioReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/loan-accounting/portfolio-summary',
     icon: 'i-heroicons-briefcase',
@@ -1395,12 +689,7 @@ const loanPortfolioReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const loanPortfolioReportSearch = ref('')
-const filteredLoanPortfolioReportTiles = computed(() =>
-  filterReportTiles(loanPortfolioReportTiles.value, loanPortfolioReportSearch.value)
-)
-
-const repaymentReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const repaymentReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/repayments/daily',
     icon: 'i-heroicons-calendar-days',
@@ -1433,12 +722,7 @@ const repaymentReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const repaymentReportSearch = ref('')
-const filteredRepaymentReportTiles = computed(() =>
-  filterReportTiles(repaymentReportTiles.value, repaymentReportSearch.value)
-)
-
-const outstandingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const outstandingReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/loan-accounting/loans-receivable',
     icon: 'i-heroicons-banknotes',
@@ -1471,12 +755,7 @@ const outstandingReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const outstandingReportSearch = ref('')
-const filteredOutstandingReportTiles = computed(() =>
-  filterReportTiles(outstandingReportTiles.value, outstandingReportSearch.value)
-)
-
-const overdueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const overdueReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/receivables/aging',
     icon: 'i-heroicons-clock',
@@ -1521,12 +800,7 @@ const overdueReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const overdueReportSearch = ref('')
-const filteredOverdueReportTiles = computed(() =>
-  filterReportTiles(overdueReportTiles.value, overdueReportSearch.value)
-)
-
-const penaltyReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const penaltyReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/penalties/charges',
     icon: 'i-heroicons-exclamation-triangle',
@@ -1553,12 +827,7 @@ const penaltyReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const penaltyReportSearch = ref('')
-const filteredPenaltyReportTiles = computed(() =>
-  filterReportTiles(penaltyReportTiles.value, penaltyReportSearch.value)
-)
-
-const interestReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const interestReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/interest/accrued',
     icon: 'i-heroicons-chart-bar',
@@ -1579,12 +848,7 @@ const interestReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const interestReportSearch = ref('')
-const filteredInterestReportTiles = computed(() =>
-  filterReportTiles(interestReportTiles.value, interestReportSearch.value)
-)
-
-const customerReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const customerReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/customers/loan-history',
     icon: 'i-heroicons-clock',
@@ -1617,12 +881,7 @@ const customerReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const customerReportSearch = ref('')
-const filteredCustomerReportTiles = computed(() =>
-  filterReportTiles(customerReportTiles.value, customerReportSearch.value)
-)
-
-const scheduleReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const scheduleReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/overdue/collection-due?range=upcoming',
     icon: 'i-heroicons-calendar-days',
@@ -1661,12 +920,7 @@ const scheduleReportTiles = computed<GeneralLedgerReportTile[]>(() => [
   }
 ])
 
-const scheduleReportSearch = ref('')
-const filteredScheduleReportTiles = computed(() =>
-  filterReportTiles(scheduleReportTiles.value, scheduleReportSearch.value)
-)
-
-const writeoffRestructureReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const writeoffRestructureReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/writeoffs-restructures/writeoffs',
     icon: 'i-heroicons-trash',
@@ -1693,12 +947,7 @@ const writeoffRestructureReportTiles = computed<GeneralLedgerReportTile[]>(() =>
   }
 ])
 
-const writeoffRestructureReportSearch = ref('')
-const filteredWriteoffRestructureReportTiles = computed(() =>
-  filterReportTiles(writeoffRestructureReportTiles.value, writeoffRestructureReportSearch.value)
-)
-
-const dashboardReportTiles = computed<GeneralLedgerReportTile[]>(() => [
+const dashboardReportTiles = computed<ReportTile[]>(() => [
   {
     to: '/reports/dashboard/summary',
     icon: 'i-heroicons-briefcase',
@@ -1758,23 +1007,6 @@ const dashboardReportTiles = computed<GeneralLedgerReportTile[]>(() => [
     icon: 'i-heroicons-calculator',
     label: t('admin.reports.dashboardReportsTiles.averageLoanAmount.label'),
     description: t('admin.reports.dashboardReportsTiles.averageLoanAmount.description')
-  }
-])
-
-const dashboardReportSearch = ref('')
-const filteredDashboardReportTiles = computed(() =>
-  filterReportTiles(dashboardReportTiles.value, dashboardReportSearch.value)
-)
-
-const reportColumns = computed<ColumnDef<GeneralLedgerReportTile>[]>(() => [
-  { key: 'label', label: t('admin.reports.reportsTable.columns.name') },
-  { key: 'description', label: t('admin.reports.reportsTable.columns.description') },
-  {
-    key: 'actions',
-    label: '',
-    type: 'link',
-    value: () => t('admin.reports.reportsTable.open'),
-    href: (row) => row.to
   }
 ])
 

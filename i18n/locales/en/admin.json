@@ -321,6 +321,10 @@
         "accountTransactionHistory": {
           "label": "Account Transaction History",
           "description": "Full transaction trail for an account"
+        },
+        "reconciliation": {
+          "label": "GL Reconciliation",
+          "description": "Does the GL agree with the loan portfolio?"
         }
       },
       "trialBalanceReportsHeader": "Trial Balance Reports",

@@ -66,9 +66,37 @@
         "added": "Adjustment added"
       }
     },
+    "payoff": {
+      "title": "Payoff quote",
+      "labels": {
+        "remainingPrincipal": "Remaining principal",
+        "accruedInterest": "Interest accrued to date",
+        "outstandingFees": "Outstanding fees",
+        "outstandingPenalties": "Outstanding penalties",
+        "total": "Total payoff amount",
+        "asOf": "As of"
+      },
+      "disclaimer": "Interest accrues daily on the remaining principal since the last payment — this is lower than the loan's outstanding balance, which assumes every future installment is paid on schedule.",
+      "notAvailable": "A payoff quote is only available for active loans.",
+      "payoffNow": "Pay off now",
+      "confirmTitle": "Confirm payoff",
+      "confirmDescription": "This will close the loan for {amount}. This can't be undone.",
+      "confirmSubmit": "Confirm payoff",
+      "fields": {
+        "method": "Payment method",
+        "reference": "Reference"
+      },
+      "toast": {
+        "paidOff": "Loan paid off"
+      }
+    },
     "settlement": {
       "title": "Settlement",
       "markCompleted": "Mark completed",
+      "confirmComplete": {
+        "title": "Complete this settlement?",
+        "description": "This closes the loan for the settlement amount. This can't be undone."
+      },
       "labels": {
         "amount": "Settlement amount",
         "date": "Settlement date",
@@ -90,6 +118,10 @@
     "writeoff": {
       "title": "Write-off",
       "markCompleted": "Mark completed",
+      "confirmComplete": {
+        "title": "Complete this write-off?",
+        "description": "This permanently closes the loan and books it as an uncollectable loss. This can't be undone."
+      },
       "labels": {
         "amount": "Amount",
         "date": "Write-off date",
@@ -106,6 +138,31 @@
       "toast": {
         "recorded": "Write-off recorded",
         "completed": "Write-off completed"
+      }
+    },
+    "writeoffRecovery": {
+      "title": "Recoveries",
+      "add": "Record recovery",
+      "summary": "{recovered} recovered of {writtenOff} written off",
+      "empty": {
+        "title": "No recoveries yet",
+        "description": "No cash has been recovered on this written-off loan yet."
+      },
+      "columns": {
+        "date": "Date",
+        "amount": "Amount",
+        "method": "Method",
+        "reference": "Reference",
+        "created": "Recorded"
+      },
+      "fields": {
+        "amount": "Amount",
+        "recoveryDate": "Recovery date",
+        "method": "Payment method",
+        "reference": "Reference"
+      },
+      "toast": {
+        "recorded": "Recovery recorded"
       }
     },
     "collaterals": {

@@ -368,3 +368,50 @@ export interface TrialBalanceResponse {
   totalCredit: number
   lines: TrialBalanceRowResponse[]
 }
+
+// ── Reconciliation ─────────────────────────────────────────────────────────
+// Compares the GL's Loans Receivable control account against loan-service's
+// own portfolio total — the two are maintained by completely independent code
+// paths, so nothing guarantees they agree without this check.
+//
+//   GET /reconciliation/loans-receivable -> LoansReceivableReconciliationResponse
+
+export interface LoansReceivableReconciliationResponse {
+  glAccountNo: string
+  glBalance: number
+  loanServiceOutstandingTotal: number
+  variance: number
+  matched: boolean
+}
+
+// One persisted daily check (see ReconciliationScheduler) — lets the report show a trend
+// instead of only the current instant.
+//
+//   GET /reconciliation/loans-receivable/history -> ReconciliationSnapshotResponse[]
+
+export interface ReconciliationSnapshotResponse {
+  id: number
+  checkedAt: string
+  glAccountNo: string
+  glBalance: number
+  loanServiceOutstandingTotal: number
+  variance: number
+  matched: boolean
+}
+
+// The individual postings behind the current period's Loans Receivable balance — the
+// starting point for investigating a mismatch. referenceType/referenceId point back at
+// loan-service's own record (almost always a LoanTransaction id).
+//
+//   GET /reconciliation/loans-receivable/postings -> ReconciliationPostingResponse[]
+
+export interface ReconciliationPostingResponse {
+  entryNo: string | null
+  transactionDate: string
+  transactionType: string
+  referenceType: string | null
+  referenceId: string | null
+  entrySide: 'DEBIT' | 'CREDIT'
+  amount: number
+  description: string | null
+}

@@ -321,6 +321,10 @@
         "accountTransactionHistory": {
           "label": "ប្រវត្តិប្រតិបត្តិការគណនី",
           "description": "ដានប្រតិបត្តិការពេញលេញសម្រាប់គណនីមួយ"
+        },
+        "reconciliation": {
+          "label": "ការផ្ទៀងផ្ទាត់បញ្ជីទូទៅ",
+          "description": "តើបញ្ជីទូទៅត្រូវគ្នានឹងប័ណ្ណកម្ចីដែរឬទេ?"
         }
       },
       "trialBalanceReportsHeader": "របាយការណ៍តារាងតុល្យការសាកល្បង",

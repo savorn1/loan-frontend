@@ -28,7 +28,7 @@
       <UButton
         v-if="isAdmin && settlement.status === 'PENDING'"
         :loading="completing"
-        @click="onComplete"
+        @click="showCompleteConfirm = true"
       >
         {{ t('loans.settlement.markCompleted') }}
       </UButton>
@@ -51,6 +51,16 @@
         @submit="onCreate"
       />
     </UCard>
+
+    <ConfirmModal
+      v-model="showCompleteConfirm"
+      :title="t('loans.settlement.confirmComplete.title')"
+      :description="t('loans.settlement.confirmComplete.description')"
+      :confirm-label="t('loans.settlement.markCompleted')"
+      color="primary"
+      :loading="completing"
+      @confirm="onComplete"
+    />
   </div>
 </template>
 
@@ -101,6 +111,7 @@ const fields = computed<FieldDef[]>(() => [
 
 const creating = ref(false)
 const completing = ref(false)
+const showCompleteConfirm = ref(false)
 const error = ref('')
 const createForm = ref<Record<string, any>>({
   settlementAmount: undefined,
@@ -132,6 +143,7 @@ async function onComplete() {
   try {
     await api(`/loans/${loanId}/settlement/complete`, { method: 'PUT' })
     toast.add({ title: t('loans.settlement.toast.completed'), color: 'green' })
+    showCompleteConfirm.value = false
     await refresh()
   } catch (err) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
