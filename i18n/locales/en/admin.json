@@ -425,7 +425,10 @@
           "label": "Daily Cash Summary",
           "description": "Receipts, payments and balance per day"
         },
-        "position": { "label": "Cash Position", "description": "Cash balance as of a chosen date" }
+        "position": {
+          "label": "Cash Position",
+          "description": "Cash balance as of a chosen date"
+        }
       },
       "branchAccountingReportsHeader": "Branch Accounting Reports",
       "branchAccountingReportsTiles": {
@@ -591,7 +594,10 @@
           "label": "Delinquent Loans",
           "description": "Loans 90+ days past due"
         },
-        "dueToday": { "label": "Collection Due Today", "description": "Installments due today" },
+        "dueToday": {
+          "label": "Collection Due Today",
+          "description": "Installments due today"
+        },
         "dueWeek": {
           "label": "Collection Due This Week",
           "description": "Installments due in the next 7 days"
@@ -664,7 +670,10 @@
           "label": "Upcoming Installments",
           "description": "All not-yet-due installments"
         },
-        "dueToday": { "label": "Installments Due Today", "description": "Installments due today" },
+        "dueToday": {
+          "label": "Installments Due Today",
+          "description": "Installments due today"
+        },
         "dueTomorrow": {
           "label": "Installments Due Tomorrow",
           "description": "Installments due tomorrow"
@@ -745,9 +754,69 @@
         }
       },
       "reportsTable": {
-        "columns": { "name": "Report", "description": "Description" },
+        "columns": {
+          "name": "Report",
+          "description": "Description",
+          "category": "Category"
+        },
         "open": "Open"
-      }
+      },
+      "riskComplianceReportsHeader": "Risk & Compliance Reports",
+      "riskComplianceReportsTiles": {
+        "vintageAnalysis": {
+          "label": "Vintage Analysis",
+          "description": "Loan performance by disbursement-month cohort"
+        },
+        "concentrationRisk": {
+          "label": "Concentration Risk",
+          "description": "Portfolio exposure by branch and top borrowers"
+        },
+        "provisioning": {
+          "label": "Provisioning / ECL Summary",
+          "description": "Simplified IFRS 9-style staging and provision estimate"
+        },
+        "largeTransactions": {
+          "label": "Large Transaction Monitoring",
+          "description": "Payments above a threshold amount"
+        },
+        "pricing": {
+          "label": "Loan Pricing Report",
+          "description": "Portfolio by interest rate and term band"
+        }
+      },
+      "operationalPerformanceReportsHeader": "Operational Performance Reports",
+      "operationalPerformanceReportsTiles": {
+        "collectorProductivity": {
+          "label": "Collector Productivity",
+          "description": "Caseload and amounts collected per collector"
+        },
+        "approvalFunnel": {
+          "label": "Approval Funnel",
+          "description": "Applications submitted, approved, rejected and decision time"
+        },
+        "statusAuditTrail": {
+          "label": "Loan Status Audit Trail",
+          "description": "Every loan status change, who made it and when"
+        },
+        "dataQuality": {
+          "label": "Data Quality / Exceptions",
+          "description": "Loans and applications with missing fields, inconsistent state, or stuck progress"
+        }
+      },
+      "productProfitabilityReportsHeader": "Product & Profitability Reports",
+      "productProfitabilityReportsTiles": {
+        "incomeByBranch": {
+          "label": "Income by Branch",
+          "description": "Interest/fee income and expenses per branch"
+        },
+        "budgetVsActual": {
+          "label": "Budget vs Actual",
+          "description": "Budgeted vs actual GL account activity for a period"
+        }
+      },
+      "backToReports": "Back to Reports",
+      "globalSearchPlaceholder": "Search all reports...",
+      "globalSearchResultsHeader": "{count} matching reports"
     },
     "dashboard": {
       "greetingAnon": "Welcome back 👋",

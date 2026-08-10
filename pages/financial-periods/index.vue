@@ -193,6 +193,7 @@ const fields = computed<FieldDef[]>(() => [
     name: 'periodName',
     label: t('accounting.financialPeriods.fields.periodName'),
     required: true,
+    maxLength: 20,
     placeholder: t('accounting.financialPeriods.fields.periodNamePlaceholder'),
     wrapper: 'full'
   },

@@ -7,6 +7,7 @@
     :disabled="field.disabled"
     :readonly="field.readonly"
     :required="field.required"
+    :maxlength="field.maxLength"
     :aria-label="field.label ?? field.name"
   >
     <template v-if="field.prefix" #leading>

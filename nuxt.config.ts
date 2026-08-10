@@ -105,7 +105,8 @@ export default defineNuxtConfig({
         '/api/financial-periods/**': { proxy: `${apiBase}/api/financial-periods/**` },
         '/api/journal-entries/**': { proxy: `${apiBase}/api/journal-entries/**` },
         '/api/trial-balance/**': { proxy: `${apiBase}/api/trial-balance/**` },
-        '/api/reports/**': { proxy: `${apiBase}/api/reports/**` }
+        '/api/reports/**': { proxy: `${apiBase}/api/reports/**` },
+        '/api/budgets/**': { proxy: `${apiBase}/api/budgets/**` }
       },
   typescript: {
     strict: true

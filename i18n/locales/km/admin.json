@@ -391,7 +391,10 @@
           "label": "ចំណូលពិន័យ",
           "description": "សមតុល្យ និងសកម្មភាពគណនីចំណូលពិន័យ"
         },
-        "feeIncome": { "label": "ចំណូលកម្រៃ", "description": "សមតុល្យ និងសកម្មភាពគណនីចំណូលកម្រៃ" }
+        "feeIncome": {
+          "label": "ចំណូលកម្រៃ",
+          "description": "សមតុល្យ និងសកម្មភាពគណនីចំណូលកម្រៃ"
+        }
       },
       "receivablesReportsHeader": "របាយការណ៍គណនីត្រូវទទួល",
       "receivablesReportsTiles": {
@@ -483,7 +486,10 @@
           "label": "របាយការណ៍ចំណូលផ្សេងទៀត",
           "description": "គណនីចំណូលក្រៅពីចំណូលការប្រាក់ កម្រៃ ឬពិន័យ"
         },
-        "byBranch": { "label": "ចំណូលតាមសាខា", "description": "ចំណូលសរុបដែលបានកត់ត្រាទៅសាខានីមួយៗ" }
+        "byBranch": {
+          "label": "ចំណូលតាមសាខា",
+          "description": "ចំណូលសរុបដែលបានកត់ត្រាទៅសាខានីមួយៗ"
+        }
       },
       "loanPortfolioReportsHeader": "របាយការណ៍ផលប័ត្រកម្ចី",
       "loanPortfolioReportsTiles": {
@@ -491,8 +497,14 @@
           "label": "សេចក្តីសង្ខេបផលប័ត្រកម្ចី",
           "description": "ចំនួនកម្ចីសកម្ម ប្រាក់ដើម និងសមតុល្យនៅសល់តាមស្ថានភាព"
         },
-        "activeLoans": { "label": "កម្ចីសកម្ម", "description": "កម្ចីដែលមានស្ថានភាព ACTIVE" },
-        "closedLoans": { "label": "កម្ចីបានបិទ", "description": "កម្ចីដែលមានស្ថានភាព CLOSED" },
+        "activeLoans": {
+          "label": "កម្ចីសកម្ម",
+          "description": "កម្ចីដែលមានស្ថានភាព ACTIVE"
+        },
+        "closedLoans": {
+          "label": "កម្ចីបានបិទ",
+          "description": "កម្ចីដែលមានស្ថានភាព CLOSED"
+        },
         "pendingApplications": {
           "label": "ពាក្យសុំកម្ចីកំពុងរង់ចាំ",
           "description": "ពាក្យសុំដែលមិនទាន់សម្រេចចិត្ត"
@@ -509,7 +521,10 @@
           "label": "កម្ចីតាមស្ថានភាព",
           "description": "កម្ចីទាំងអស់ អាចច្រោះតាមស្ថានភាព"
         },
-        "byBranch": { "label": "កម្ចីតាមសាខា", "description": "ចំនួនកម្ចី និងសមតុល្យតាមសាខា" },
+        "byBranch": {
+          "label": "កម្ចីតាមសាខា",
+          "description": "ចំនួនកម្ចី និងសមតុល្យតាមសាខា"
+        },
         "byCustomer": {
           "label": "កម្ចីតាមអតិថិជន",
           "description": "ចំនួនកម្ចី និងសមតុល្យតាមអតិថិជន"
@@ -556,7 +571,10 @@
           "label": "នៅសល់តាមអតិថិជន",
           "description": "ចំនួនកម្ចី និងសមតុល្យតាមអតិថិជន"
         },
-        "byBranch": { "label": "នៅសល់តាមសាខា", "description": "ចំនួនកម្ចី និងសមតុល្យតាមសាខា" }
+        "byBranch": {
+          "label": "នៅសល់តាមសាខា",
+          "description": "ចំនួនកម្ចី និងសមតុល្យតាមសាខា"
+        }
       },
       "overdueReportsHeader": "របាយការណ៍ហួសកំណត់ និងបំណុលយឺតយ៉ាវ",
       "overdueReportsTiles": {
@@ -599,7 +617,10 @@
           "label": "ការលើកលែងពិន័យ",
           "description": "ពិន័យដែលបានលើកលែងសម្រាប់ដែនកាលបរិច្ឆេទមួយ"
         },
-        "outstanding": { "label": "ពិន័យនៅសល់", "description": "ពិន័យដែលមិនទាន់សង ឬលើកលែង" },
+        "outstanding": {
+          "label": "ពិន័យនៅសល់",
+          "description": "ពិន័យដែលមិនទាន់សង ឬលើកលែង"
+        },
         "collection": {
           "label": "ការប្រមូលពិន័យ",
           "description": "ពិន័យដែលបានសងសម្រាប់ដែនកាលបរិច្ឆេទមួយ"
@@ -733,9 +754,69 @@
         }
       },
       "reportsTable": {
-        "columns": { "name": "របាយការណ៍", "description": "ការពិពណ៌នា" },
+        "columns": {
+          "name": "របាយការណ៍",
+          "description": "ការពិពណ៌នា",
+          "category": "ប្រភេទ"
+        },
         "open": "បើក"
-      }
+      },
+      "riskComplianceReportsHeader": "របាយការណ៍ហានិភ័យ និងអនុលោមភាព",
+      "riskComplianceReportsTiles": {
+        "vintageAnalysis": {
+          "label": "ការវិភាគតាមកម្មបរិច្ឆេទ",
+          "description": "ដំណើរការកម្ចីតាមខែចេញផ្តល់ប្រាក់កម្ចី"
+        },
+        "concentrationRisk": {
+          "label": "ហានិភ័យការប្រមូលផ្តុំ",
+          "description": "ការប្រឈមផលប័ត្រតាមសាខា និងអតិថិជនកំពូល"
+        },
+        "provisioning": {
+          "label": "សេចក្តីសង្ខេបការបម្រុងទុក / ECL",
+          "description": "ការវាយតម្លៃការបម្រុងទុកតាមគំរូ IFRS 9 សាមញ្ញ"
+        },
+        "largeTransactions": {
+          "label": "ការត្រួតពិនិត្យប្រតិបត្តិការធំ",
+          "description": "ការទូទាត់ដែលលើសពីកម្រិតកំណត់"
+        },
+        "pricing": {
+          "label": "របាយការណ៍តម្លៃកម្ចី",
+          "description": "ផលប័ត្រតាមអត្រាការប្រាក់ និងរយៈពេលកម្ចី"
+        }
+      },
+      "operationalPerformanceReportsHeader": "របាយការណ៍សមិទ្ធកម្មប្រតិបត្តិការ",
+      "operationalPerformanceReportsTiles": {
+        "collectorProductivity": {
+          "label": "សមិទ្ធកម្មអ្នកប្រមូលបំណុល",
+          "description": "ចំនួនករណី និងចំនួនទឹកប្រាក់ប្រមូលបានក្នុងមួយអ្នកប្រមូល"
+        },
+        "approvalFunnel": {
+          "label": "ដំណើរការអនុម័ត",
+          "description": "ពាក្យស្នើសុំដែលបានដាក់ស្នើ អនុម័ត បដិសេធ និងរយៈពេលសម្រេចចិត្ត"
+        },
+        "statusAuditTrail": {
+          "label": "កំណត់ត្រាត្រួតពិនិត្យស្ថានភាពកម្ចី",
+          "description": "រាល់ការផ្លាស់ប្តូរស្ថានភាពកម្ចី អ្នកអនុវត្ត និងពេលវេលា"
+        },
+        "dataQuality": {
+          "label": "គុណភាពទិន្នន័យ /ករណីលើកលែង",
+          "description": "កម្ចី និងពាក្យស្នើសុំដែលខ្វះទិន្នន័យ ស្ថានភាពមិនស្របគ្នា ឬជាប់គាំង"
+        }
+      },
+      "productProfitabilityReportsHeader": "របាយការណ៍ផលិតផល និងប្រាក់ចំណេញ",
+      "productProfitabilityReportsTiles": {
+        "incomeByBranch": {
+          "label": "ចំណូលតាមសាខា",
+          "description": "ចំណូលការប្រាក់/កម្រៃជើងសារ និងចំណាយក្នុងមួយសាខា"
+        },
+        "budgetVsActual": {
+          "label": "ថវិកា និងលទ្ធផលជាក់ស្តែង",
+          "description": "ការប្រៀបធៀបថវិកា និងសកម្មភាពគណនីទូទៅសម្រាប់រយៈពេលមួយ"
+        }
+      },
+      "backToReports": "ត្រឡប់ទៅរបាយការណ៍",
+      "globalSearchPlaceholder": "ស្វែងរករបាយការណ៍ទាំងអស់...",
+      "globalSearchResultsHeader": "របាយការណ៍ដែលត្រូវគ្នា {count}"
     },
     "dashboard": {
       "greetingAnon": "សូមស្វាគមន៍ការត្រឡប់មកវិញ 👋",

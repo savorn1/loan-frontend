@@ -74,6 +74,8 @@ export interface FieldDef {
   /** Text shown before/after the input (Backpack's `prefix`/`suffix`). */
   prefix?: string
   suffix?: string
+  /** text: native maxlength constraint. */
+  maxLength?: number
   /** Initial value applied by DynamicForm when the model has none. */
   default?: unknown
   required?: boolean

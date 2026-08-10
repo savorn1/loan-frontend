@@ -2,198 +2,256 @@
   <div>
     <PageHeader :title="t('admin.reports.title')" :description="t('admin.reports.description')" />
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <template v-if="loading">
-        <UCard v-for="i in 4" :key="i">
-          <div class="flex items-center gap-4">
-            <USkeleton class="w-10 h-10 rounded-lg shrink-0" />
-            <div class="min-w-0 flex-1 space-y-2">
-              <USkeleton class="h-3 w-20" />
-              <USkeleton class="h-6 w-16" />
-            </div>
-          </div>
-        </UCard>
+    <UCard class="mb-6">
+      <UInput
+        v-model="globalSearch"
+        icon="i-heroicons-magnifying-glass"
+        size="lg"
+        :placeholder="t('admin.reports.globalSearchPlaceholder')"
+      />
+    </UCard>
+
+    <UCard v-if="globalSearch.trim()">
+      <template #header>
+        <span class="font-semibold">{{
+          t('admin.reports.globalSearchResultsHeader', { count: globalSearchResults.length })
+        }}</span>
       </template>
-      <template v-else>
-        <UCard v-for="tile in statTiles" :key="tile.label">
-          <div class="flex items-center gap-4">
-            <div class="shrink-0 rounded-xl p-2.5 text-white shadow-sm" :class="tile.iconBg">
-              <UIcon :name="tile.icon" class="w-5 h-5" />
+      <DataTable
+        :rows="globalSearchResults"
+        :columns="globalSearchColumns"
+        :exportable="false"
+        @select="(row: SearchResultTile) => router.push(row.to)"
+      >
+        <template #label-data="{ row }">
+          <div class="flex items-center gap-3">
+            <div
+              class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
+            >
+              <UIcon :name="row.icon" class="w-5 h-5" />
             </div>
-            <div class="min-w-0">
-              <div class="text-sm text-gray-500 dark:text-gray-400">{{ tile.label }}</div>
-              <div class="text-2xl font-semibold text-gray-900 dark:text-white">
-                {{ tile.value }}
+            <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+          </div>
+        </template>
+        <template #empty-state>
+          <EmptyState
+            icon="i-heroicons-magnifying-glass"
+            :title="t('common.noMatches')"
+            :description="t('common.nothingMatches', { query: globalSearch })"
+          />
+        </template>
+      </DataTable>
+    </UCard>
+
+    <template v-else>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <template v-if="loading">
+          <UCard v-for="i in 4" :key="i">
+            <div class="flex items-center gap-4">
+              <USkeleton class="w-10 h-10 rounded-lg shrink-0" />
+              <div class="min-w-0 flex-1 space-y-2">
+                <USkeleton class="h-3 w-20" />
+                <USkeleton class="h-6 w-16" />
               </div>
             </div>
-          </div>
-        </UCard>
-      </template>
-    </div>
-
-    <UCard class="mb-6">
-      <template #header>
-        <span class="font-semibold">{{ t('admin.reports.loansByStatusHeader') }}</span>
-      </template>
-      <div v-if="loading" class="h-24">
-        <USkeleton class="w-full h-full" />
+          </UCard>
+        </template>
+        <template v-else>
+          <UCard v-for="tile in statTiles" :key="tile.label">
+            <div class="flex items-center gap-4">
+              <div class="shrink-0 rounded-xl p-2.5 text-white shadow-sm" :class="tile.iconBg">
+                <UIcon :name="tile.icon" class="w-5 h-5" />
+              </div>
+              <div class="min-w-0">
+                <div class="text-sm text-gray-500 dark:text-gray-400">{{ tile.label }}</div>
+                <div class="text-2xl font-semibold text-gray-900 dark:text-white">
+                  {{ tile.value }}
+                </div>
+              </div>
+            </div>
+          </UCard>
+        </template>
       </div>
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div
-          v-for="s in statusBreakdown"
-          :key="s.status"
-          class="rounded-lg border border-gray-100 dark:border-gray-800 p-4"
-        >
-          <StatusBadge :status="s.status" class="mb-2" />
-          <div class="text-xl font-semibold text-gray-900 dark:text-white">
-            {{ formatCurrency(s.totalPrincipal) }}
-          </div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">
-            {{
-              s.loanCount === 1
-                ? t('admin.reports.loanCount.one')
-                : t('admin.reports.loanCount.other', { count: s.loanCount })
-            }}
+
+      <UCard class="mb-6">
+        <template #header>
+          <span class="font-semibold">{{ t('admin.reports.loansByStatusHeader') }}</span>
+        </template>
+        <div v-if="loading" class="h-24">
+          <USkeleton class="w-full h-full" />
+        </div>
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div
+            v-for="s in statusBreakdown"
+            :key="s.status"
+            class="rounded-lg border border-gray-100 dark:border-gray-800 p-4"
+          >
+            <StatusBadge :status="s.status" class="mb-2" />
+            <div class="text-xl font-semibold text-gray-900 dark:text-white">
+              {{ formatCurrency(s.totalPrincipal) }}
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">
+              {{
+                s.loanCount === 1
+                  ? t('admin.reports.loanCount.one')
+                  : t('admin.reports.loanCount.other', { count: s.loanCount })
+              }}
+            </div>
           </div>
         </div>
-      </div>
-    </UCard>
+      </UCard>
 
-    <UCard class="mb-6">
-      <template #header>
-        <span class="font-semibold">{{ t('admin.reports.parByBucketHeader') }}</span>
-      </template>
-      <div v-if="loading" class="h-32">
-        <USkeleton class="w-full h-full" />
-      </div>
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div
-          v-for="b in parSummary?.buckets ?? []"
-          :key="b.bucket"
-          class="rounded-lg border border-gray-100 dark:border-gray-800 p-4"
-        >
-          <UBadge :color="bucketColor(b.bucket)" variant="subtle" class="mb-2">{{
-            bucketLabel(b.bucket)
-          }}</UBadge>
-          <div class="text-xl font-semibold text-gray-900 dark:text-white">
-            {{ formatCurrency(b.overdueAmount) }}
-          </div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">
-            {{
-              b.loanCount === 1
-                ? t('admin.reports.loanCount.one')
-                : t('admin.reports.loanCount.other', { count: b.loanCount })
-            }}
+      <UCard class="mb-6">
+        <template #header>
+          <span class="font-semibold">{{ t('admin.reports.parByBucketHeader') }}</span>
+        </template>
+        <div v-if="loading" class="h-32">
+          <USkeleton class="w-full h-full" />
+        </div>
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div
+            v-for="b in parSummary?.buckets ?? []"
+            :key="b.bucket"
+            class="rounded-lg border border-gray-100 dark:border-gray-800 p-4"
+          >
+            <UBadge :color="bucketColor(b.bucket)" variant="subtle" class="mb-2">{{
+              bucketLabel(b.bucket)
+            }}</UBadge>
+            <div class="text-xl font-semibold text-gray-900 dark:text-white">
+              {{ formatCurrency(b.overdueAmount) }}
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">
+              {{
+                b.loanCount === 1
+                  ? t('admin.reports.loanCount.one')
+                  : t('admin.reports.loanCount.other', { count: b.loanCount })
+              }}
+            </div>
           </div>
         </div>
-      </div>
-    </UCard>
+      </UCard>
 
-    <UCard>
-      <template #header>
-        <span class="font-semibold">{{ t('admin.reports.trendsHeader') }}</span>
-      </template>
-      <div v-if="loading" class="h-64">
-        <USkeleton class="w-full h-full" />
-      </div>
-      <div v-else class="h-64">
-        <ClientOnly>
-          <Line :data="trendChartData" :options="trendChartOptions" />
-        </ClientOnly>
-      </div>
-    </UCard>
+      <UCard>
+        <template #header>
+          <span class="font-semibold">{{ t('admin.reports.trendsHeader') }}</span>
+        </template>
+        <div v-if="loading" class="h-64">
+          <USkeleton class="w-full h-full" />
+        </div>
+        <div v-else class="h-64">
+          <ClientOnly>
+            <Line :data="trendChartData" :options="trendChartOptions" />
+          </ClientOnly>
+        </div>
+      </UCard>
 
-    <ReportCategoryCard
-      :title="t('admin.reports.generalLedgerReportsHeader')"
-      :tiles="generalLedgerReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.generalLedgerReportsHeader')"
+        :tiles="generalLedgerReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.trialBalanceReportsHeader')"
-      :tiles="trialBalanceReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.trialBalanceReportsHeader')"
+        :tiles="trialBalanceReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.financialStatementsHeader')"
-      :tiles="financialStatementTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.financialStatementsHeader')"
+        :tiles="financialStatementTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.loanAccountingReportsHeader')"
-      :tiles="loanAccountingReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.loanAccountingReportsHeader')"
+        :tiles="loanAccountingReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.receivablesReportsHeader')"
-      :tiles="receivablesReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.receivablesReportsHeader')"
+        :tiles="receivablesReportTiles"
+      />
 
-    <ReportCategoryCard :title="t('admin.reports.cashReportsHeader')" :tiles="cashReportTiles" />
+      <ReportCategoryCard :title="t('admin.reports.cashReportsHeader')" :tiles="cashReportTiles" />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.branchAccountingReportsHeader')"
-      :tiles="branchAccountingReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.branchAccountingReportsHeader')"
+        :tiles="branchAccountingReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.expenseReportsHeader')"
-      :tiles="expenseReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.expenseReportsHeader')"
+        :tiles="expenseReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.revenueReportsHeader')"
-      :tiles="revenueReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.revenueReportsHeader')"
+        :tiles="revenueReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.loanPortfolioReportsHeader')"
-      :tiles="loanPortfolioReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.loanPortfolioReportsHeader')"
+        :tiles="loanPortfolioReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.repaymentReportsHeader')"
-      :tiles="repaymentReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.repaymentReportsHeader')"
+        :tiles="repaymentReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.outstandingReportsHeader')"
-      :tiles="outstandingReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.outstandingReportsHeader')"
+        :tiles="outstandingReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.overdueReportsHeader')"
-      :tiles="overdueReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.overdueReportsHeader')"
+        :tiles="overdueReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.penaltyReportsHeader')"
-      :tiles="penaltyReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.penaltyReportsHeader')"
+        :tiles="penaltyReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.interestReportsHeader')"
-      :tiles="interestReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.interestReportsHeader')"
+        :tiles="interestReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.customerReportsHeader')"
-      :tiles="customerReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.customerReportsHeader')"
+        :tiles="customerReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.scheduleReportsHeader')"
-      :tiles="scheduleReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.scheduleReportsHeader')"
+        :tiles="scheduleReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.writeoffRestructureReportsHeader')"
-      :tiles="writeoffRestructureReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.writeoffRestructureReportsHeader')"
+        :tiles="writeoffRestructureReportTiles"
+      />
 
-    <ReportCategoryCard
-      :title="t('admin.reports.dashboardReportsHeader')"
-      :tiles="dashboardReportTiles"
-    />
+      <ReportCategoryCard
+        :title="t('admin.reports.dashboardReportsHeader')"
+        :tiles="dashboardReportTiles"
+      />
+
+      <ReportCategoryCard
+        :title="t('admin.reports.riskComplianceReportsHeader')"
+        :tiles="riskComplianceReportTiles"
+      />
+
+      <ReportCategoryCard
+        :title="t('admin.reports.operationalPerformanceReportsHeader')"
+        :tiles="operationalPerformanceReportTiles"
+      />
+
+      <ReportCategoryCard
+        :title="t('admin.reports.productProfitabilityReportsHeader')"
+        :tiles="productProfitabilityReportTiles"
+      />
+    </template>
   </div>
 </template>
 
@@ -219,11 +277,13 @@ import type {
   PortfolioSummaryResponse,
   ReportTile
 } from '~/features/reports/types'
+import type { ColumnDef } from '~/shared/types'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const { t } = useI18n()
 const api = useApi()
+const router = useRouter()
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')
 
@@ -1007,6 +1067,164 @@ const dashboardReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-calculator',
     label: t('admin.reports.dashboardReportsTiles.averageLoanAmount.label'),
     description: t('admin.reports.dashboardReportsTiles.averageLoanAmount.description')
+  }
+])
+
+const riskComplianceReportTiles = computed<ReportTile[]>(() => [
+  {
+    to: '/reports/risk-compliance/vintage-analysis',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.riskComplianceReportsTiles.vintageAnalysis.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.vintageAnalysis.description')
+  },
+  {
+    to: '/reports/risk-compliance/concentration-risk',
+    icon: 'i-heroicons-chart-pie',
+    label: t('admin.reports.riskComplianceReportsTiles.concentrationRisk.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.concentrationRisk.description')
+  },
+  {
+    to: '/reports/risk-compliance/provisioning',
+    icon: 'i-heroicons-shield-exclamation',
+    label: t('admin.reports.riskComplianceReportsTiles.provisioning.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.provisioning.description')
+  },
+  {
+    to: '/reports/risk-compliance/large-transactions',
+    icon: 'i-heroicons-magnifying-glass-circle',
+    label: t('admin.reports.riskComplianceReportsTiles.largeTransactions.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.largeTransactions.description')
+  },
+  {
+    to: '/reports/risk-compliance/pricing',
+    icon: 'i-heroicons-tag',
+    label: t('admin.reports.riskComplianceReportsTiles.pricing.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.pricing.description')
+  }
+])
+
+const operationalPerformanceReportTiles = computed<ReportTile[]>(() => [
+  {
+    to: '/reports/operational-performance/collector-productivity',
+    icon: 'i-heroicons-user-group',
+    label: t('admin.reports.operationalPerformanceReportsTiles.collectorProductivity.label'),
+    description: t(
+      'admin.reports.operationalPerformanceReportsTiles.collectorProductivity.description'
+    )
+  },
+  {
+    to: '/reports/operational-performance/approval-funnel',
+    icon: 'i-heroicons-funnel',
+    label: t('admin.reports.operationalPerformanceReportsTiles.approvalFunnel.label'),
+    description: t('admin.reports.operationalPerformanceReportsTiles.approvalFunnel.description')
+  },
+  {
+    to: '/reports/operational-performance/status-audit-trail',
+    icon: 'i-heroicons-clipboard-document-list',
+    label: t('admin.reports.operationalPerformanceReportsTiles.statusAuditTrail.label'),
+    description: t('admin.reports.operationalPerformanceReportsTiles.statusAuditTrail.description')
+  },
+  {
+    to: '/reports/operational-performance/data-quality',
+    icon: 'i-heroicons-exclamation-circle',
+    label: t('admin.reports.operationalPerformanceReportsTiles.dataQuality.label'),
+    description: t('admin.reports.operationalPerformanceReportsTiles.dataQuality.description')
+  }
+])
+
+const productProfitabilityReportTiles = computed<ReportTile[]>(() => [
+  {
+    to: '/reports/product-profitability/income-by-branch',
+    icon: 'i-heroicons-building-office-2',
+    label: t('admin.reports.productProfitabilityReportsTiles.incomeByBranch.label'),
+    description: t('admin.reports.productProfitabilityReportsTiles.incomeByBranch.description')
+  },
+  {
+    to: '/reports/product-profitability/budget-vs-actual',
+    icon: 'i-heroicons-calculator',
+    label: t('admin.reports.productProfitabilityReportsTiles.budgetVsActual.label'),
+    description: t('admin.reports.productProfitabilityReportsTiles.budgetVsActual.description')
+  }
+])
+
+// Global search across every category's tiles — the per-category search in
+// ReportCategoryCard only filters within its own ~5-tile list, which stops helping
+// once there are 20+ categories and you don't know which one a report lives in.
+type SearchResultTile = ReportTile & { category: string }
+
+const globalSearch = ref('')
+
+const categorizedTileGroups = computed(() => [
+  {
+    category: t('admin.reports.generalLedgerReportsHeader'),
+    tiles: generalLedgerReportTiles.value
+  },
+  { category: t('admin.reports.trialBalanceReportsHeader'), tiles: trialBalanceReportTiles.value },
+  { category: t('admin.reports.financialStatementsHeader'), tiles: financialStatementTiles.value },
+  {
+    category: t('admin.reports.loanAccountingReportsHeader'),
+    tiles: loanAccountingReportTiles.value
+  },
+  { category: t('admin.reports.receivablesReportsHeader'), tiles: receivablesReportTiles.value },
+  { category: t('admin.reports.cashReportsHeader'), tiles: cashReportTiles.value },
+  {
+    category: t('admin.reports.branchAccountingReportsHeader'),
+    tiles: branchAccountingReportTiles.value
+  },
+  { category: t('admin.reports.expenseReportsHeader'), tiles: expenseReportTiles.value },
+  { category: t('admin.reports.revenueReportsHeader'), tiles: revenueReportTiles.value },
+  {
+    category: t('admin.reports.loanPortfolioReportsHeader'),
+    tiles: loanPortfolioReportTiles.value
+  },
+  { category: t('admin.reports.repaymentReportsHeader'), tiles: repaymentReportTiles.value },
+  { category: t('admin.reports.outstandingReportsHeader'), tiles: outstandingReportTiles.value },
+  { category: t('admin.reports.overdueReportsHeader'), tiles: overdueReportTiles.value },
+  { category: t('admin.reports.penaltyReportsHeader'), tiles: penaltyReportTiles.value },
+  { category: t('admin.reports.interestReportsHeader'), tiles: interestReportTiles.value },
+  { category: t('admin.reports.customerReportsHeader'), tiles: customerReportTiles.value },
+  { category: t('admin.reports.scheduleReportsHeader'), tiles: scheduleReportTiles.value },
+  {
+    category: t('admin.reports.writeoffRestructureReportsHeader'),
+    tiles: writeoffRestructureReportTiles.value
+  },
+  { category: t('admin.reports.dashboardReportsHeader'), tiles: dashboardReportTiles.value },
+  {
+    category: t('admin.reports.riskComplianceReportsHeader'),
+    tiles: riskComplianceReportTiles.value
+  },
+  {
+    category: t('admin.reports.operationalPerformanceReportsHeader'),
+    tiles: operationalPerformanceReportTiles.value
+  },
+  {
+    category: t('admin.reports.productProfitabilityReportsHeader'),
+    tiles: productProfitabilityReportTiles.value
+  }
+])
+
+const globalSearchResults = computed<SearchResultTile[]>(() => {
+  const q = globalSearch.value.trim().toLowerCase()
+  if (!q) return []
+  return categorizedTileGroups.value.flatMap((group) =>
+    group.tiles
+      .filter(
+        (tile) => tile.label.toLowerCase().includes(q) || tile.description.toLowerCase().includes(q)
+      )
+      .map((tile) => ({ ...tile, category: group.category }))
+  )
+})
+
+const globalSearchColumns = computed<ColumnDef<SearchResultTile>[]>(() => [
+  { key: 'category', label: t('admin.reports.reportsTable.columns.category') },
+  { key: 'label', label: t('admin.reports.reportsTable.columns.name') },
+  { key: 'description', label: t('admin.reports.reportsTable.columns.description') },
+  {
+    key: 'actions',
+    label: '',
+    type: 'link',
+    value: () => t('admin.reports.reportsTable.open'),
+    href: (row) => row.to
   }
 ])
 

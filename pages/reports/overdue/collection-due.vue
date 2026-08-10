@@ -1,5 +1,8 @@
 <template>
   <div>
+    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
+      {{ t('admin.reports.backToReports') }}
+    </UButton>
     <PageHeader
       :title="t('accounting.overdueReports.collectionDue.title')"
       :description="t('accounting.overdueReports.collectionDue.description')"

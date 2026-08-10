@@ -480,7 +480,11 @@
         "emptyDescriptionPick": "ជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុខាងលើ ដើម្បីមើលសន្លឹកតុល្យការ។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គ្មានគណនីណាមួយមានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រាគិតត្រឹមរយៈពេលដែលបានជ្រើសរើសទេ។",
-        "columns": { "accountNo": "លេខគណនី", "accountName": "ឈ្មោះគណនី", "balance": "សមតុល្យ" }
+        "columns": {
+          "accountNo": "លេខគណនី",
+          "accountName": "ឈ្មោះគណនី",
+          "balance": "សមតុល្យ"
+        }
       },
       "incomeStatement": {
         "title": "របាយការណ៍ចំណូល",
@@ -497,7 +501,11 @@
         "emptyDescriptionPick": "ជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុខាងលើ ដើម្បីមើលរបាយការណ៍ចំណូល។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គ្មានគណនីចំណូល ឬចំណាយណាមួយមានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
-        "columns": { "accountNo": "លេខគណនី", "accountName": "ឈ្មោះគណនី", "amount": "ចំនួន" }
+        "columns": {
+          "accountNo": "លេខគណនី",
+          "accountName": "ឈ្មោះគណនី",
+          "amount": "ចំនួន"
+        }
       },
       "cashFlow": {
         "title": "របាយការណ៍លំហូរសាច់ប្រាក់",
@@ -815,7 +823,11 @@
         "emptyDescriptionPick": "ជ្រើសរើសសាខា និងដែនកាលបរិច្ឆេទខាងលើ ដើម្បីមើលចំណូល-ចំណាយរបស់វា។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "សាខានេះគ្មានធាតុចំណូល ឬចំណាយដែលបានកត់ត្រានៅក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "accountNo": "លេខគណនី", "accountName": "ឈ្មោះគណនី", "amount": "ចំនួន" }
+        "columns": {
+          "accountNo": "លេខគណនី",
+          "accountName": "ឈ្មោះគណនី",
+          "amount": "ចំនួន"
+        }
       },
       "balanceSheet": {
         "title": "សន្លឹកតុល្យការសាខា",
@@ -838,7 +850,11 @@
         "emptyDescriptionPick": "ជ្រើសរើសសាខា និងកាលបរិច្ឆេទគិតត្រឹមខាងលើ ដើម្បីមើលសន្លឹកតុល្យការរបស់វា។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "សាខានេះគ្មានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រាគិតត្រឹមកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "accountNo": "លេខគណនី", "accountName": "ឈ្មោះគណនី", "balance": "សមតុល្យ" }
+        "columns": {
+          "accountNo": "លេខគណនី",
+          "accountName": "ឈ្មោះគណនី",
+          "balance": "សមតុល្យ"
+        }
       },
       "trialBalance": {
         "title": "តារាងតុល្យការសាកល្បងសាខា",
@@ -927,7 +943,10 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលចំណាយតាមសាខា។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពចំណាយ",
         "emptyDescriptionNoActivity": "គ្មានសាខាណាមួយមានធាតុចំណាយដែលបានកត់ត្រានៅក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "branch": "សាខា", "totalExpense": "ចំណាយសរុប" }
+        "columns": {
+          "branch": "សាខា",
+          "totalExpense": "ចំណាយសរុប"
+        }
       },
       "byCategory": {
         "title": "ចំណាយតាមប្រភេទ",
@@ -940,7 +959,10 @@
         "emptyDescriptionPick": "ជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុខាងលើ ដើម្បីមើលចំណាយតាមប្រភេទ។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គ្មានគណនីចំណាយណាមួយមានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
-        "columns": { "category": "ប្រភេទ", "amount": "ចំនួន" }
+        "columns": {
+          "category": "ប្រភេទ",
+          "amount": "ចំនួន"
+        }
       }
     },
     "revenueReports": {
@@ -952,7 +974,10 @@
         "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលចំណូលតាមសាខា។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពចំណូល",
         "emptyDescriptionNoActivity": "គ្មានសាខាណាមួយមានធាតុចំណូលដែលបានកត់ត្រានៅក្នុងដែនកាលបរិច្ឆេទដែលបានជ្រើសរើសទេ។",
-        "columns": { "branch": "សាខា", "totalRevenue": "ចំណូលសរុប" }
+        "columns": {
+          "branch": "សាខា",
+          "totalRevenue": "ចំណូលសរុប"
+        }
       },
       "otherIncome": {
         "title": "របាយការណ៍ចំណូលផ្សេងទៀត",
@@ -966,7 +991,11 @@
         "emptyDescriptionNoAccounts": "ចំណូលទាំងអស់នៅក្នុងប្រព័ន្ធនេះបច្ចុប្បន្នត្រូវបានតាមដានក្រោមចំណូលការប្រាក់ ចំណូលកម្រៃ និងចំណូលពិន័យ។ ដើម្បីរាយការណ៍ចំណូលផ្សេងទៀតនៅទីនេះ សូមបង្កើតគណនីប្រភេទចំណូលថ្មីនៅទំព័រតារាងគណនី។",
         "emptyTitleNoActivity": "គ្មានសកម្មភាពដែលបានកត់ត្រា",
         "emptyDescriptionNoActivity": "គ្មានគណនីចំណូលផ្សេងទៀតណាមួយមានធាតុទិនានុប្បវត្តិដែលបានកត់ត្រានៅក្នុងរយៈពេលដែលបានជ្រើសរើសទេ។",
-        "columns": { "accountNo": "លេខគណនី", "accountName": "ឈ្មោះគណនី", "amount": "ចំនួន" }
+        "columns": {
+          "accountNo": "លេខគណនី",
+          "accountName": "ឈ្មោះគណនី",
+          "amount": "ចំនួន"
+        }
       }
     },
     "loanPortfolioReports": {
@@ -1354,6 +1383,200 @@
         "portfolioAtRisk": "ផលប័ត្រប្រថុយប្រថាន",
         "nonPerformingLoans": "កម្ចីមិនដំណើរការ (ហួសកំណត់ ៩០+ ថ្ងៃ)",
         "averageLoanAmount": "ចំនួនកម្ចីជាមធ្យម"
+      }
+    },
+    "riskComplianceReports": {
+      "vintageAnalysis": {
+        "title": "ការវិភាគតាមកម្មបរិច្ឆេទ",
+        "description": "ដំណើរការកម្ចីដែលបានដាក់ជាក្រុមតាមខែចេញផ្តល់ប្រាក់កម្ចី។",
+        "cohortsHeader": "ក្រុមកម្ចី",
+        "months6": "៦ខែចុងក្រោយ",
+        "months12": "១២ខែចុងក្រោយ",
+        "months24": "២៤ខែចុងក្រោយ",
+        "months36": "៣៦ខែចុងក្រោយ",
+        "emptyTitle": "គ្មានកម្ចីបានចេញផ្តល់ក្នុងចន្លោះពេលនេះទេ",
+        "emptyDescription": "សូមព្យាយាមជ្រើសរើសរយៈពេលវែងជាងនេះ។",
+        "columns": {
+          "cohortMonth": "ក្រុមខែ",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប",
+          "activeCount": "កម្ចីសកម្ម",
+          "activePrincipal": "ប្រាក់ដើមកម្ចីសកម្ម",
+          "closedCount": "កម្ចីបានបិទ",
+          "closedPrincipal": "ប្រាក់ដើមកម្ចីបានបិទ"
+        }
+      },
+      "concentrationRisk": {
+        "title": "ហានិភ័យការប្រមូលផ្តុំ",
+        "description": "កម្រិតដែលផលប័ត្រសកម្មប្រមូលផ្តុំនៅសាខា ឬអតិថិជនតែមួយ។",
+        "byBranchHeader": "តាមសាខា",
+        "topBorrowersHeader": "អតិថិជនកម្ចីខ្ពស់បំផុត",
+        "columns": {
+          "branch": "សាខា",
+          "customer": "អតិថិជន",
+          "loanCount": "ចំនួនកម្ចី",
+          "outstandingBalance": "សមតុល្យនៅសល់",
+          "percentOfPortfolio": "% នៃផលប័ត្រ"
+        }
+      },
+      "provisioning": {
+        "title": "សេចក្តីសង្ខេបការបម្រុងទុក / ECL",
+        "description": "គំរូវាយតម្លៃការបម្រុងទុកសម្រាប់ការខាតបង់ឥណទានរំពឹងទុក ដោយផ្អែកលើគំរូ IFRS 9 សាមញ្ញ។",
+        "totalOutstanding": "សមតុល្យនៅសល់សរុប",
+        "totalProvision": "ការបម្រុងទុកសរុប",
+        "stagesHeader": "ដំណាក់កាល",
+        "note": "សម្រាប់តែគោលបំណងរបាយការណ៍៖ ដំណាក់កាលនីមួយៗត្រូវបានកំណត់ដោយផ្អែកលើចំនួនថ្ងៃហួសកាលកំណត់ និងអត្រាបម្រុងទុកថេរ មិនមែនជាគំរូ ECL ពេញលេញតាមបទប្បញ្ញត្តិទេ។",
+        "columns": {
+          "stage": "ដំណាក់កាល",
+          "loanCount": "ចំនួនកម្ចី",
+          "outstandingBalance": "សមតុល្យនៅសល់",
+          "provisionRate": "អត្រាបម្រុងទុក",
+          "provisionAmount": "ចំនួនបម្រុងទុក"
+        }
+      },
+      "largeTransactions": {
+        "title": "ការត្រួតពិនិត្យប្រតិបត្តិការធំ",
+        "description": "ការទូទាត់ដែលមានចំនួនស្មើ ឬលើសពីកម្រិតកំណត់ សម្រាប់ការត្រួតពិនិត្យប្រភេទប្រឆាំងការសម្អាតលុយ។",
+        "threshold": "កម្រិតកំណត់",
+        "months": "រយៈពេល",
+        "months1": "ខែមុន",
+        "months3": "៣ខែចុងក្រោយ",
+        "months6": "៦ខែចុងក្រោយ",
+        "months12": "១២ខែចុងក្រោយ",
+        "emptyTitle": "រកមិនឃើញការទូទាត់ធំ",
+        "emptyDescription": "សូមកាត់បន្ថយកម្រិតកំណត់ ឬពង្រីករយៈពេល។",
+        "columns": {
+          "loanId": "លេខសម្គាល់កម្ចី",
+          "amount": "ចំនួនទឹកប្រាក់",
+          "paidAt": "ថ្ងៃទូទាត់",
+          "installmentNumber": "ការទូទាត់លើកទី"
+        }
+      },
+      "pricing": {
+        "title": "របាយការណ៍តម្លៃកម្ចី",
+        "description": "ផលប័ត្រកម្ចីដែលបានចេញផ្តល់ បែងចែកតាមអត្រាការប្រាក់ និងរយៈពេលកម្ចី។",
+        "byRateHeader": "តាមអត្រាការប្រាក់",
+        "byTermHeader": "តាមរយៈពេល",
+        "columns": {
+          "band": "ចន្លោះ",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប",
+          "avgInterestRate": "អត្រាការប្រាក់មធ្យម"
+        }
+      }
+    },
+    "operationalPerformanceReports": {
+      "collectorProductivity": {
+        "title": "សមិទ្ធកម្មអ្នកប្រមូលបំណុល",
+        "description": "បរិមាណករណី និងចំនួនទឹកប្រាក់ប្រមូលបានក្នុងមួយអ្នកប្រមូលបំណុល។",
+        "tableHeader": "អ្នកប្រមូលបំណុល",
+        "months1": "ខែមុន",
+        "months3": "៣ខែចុងក្រោយ",
+        "months6": "៦ខែចុងក្រោយ",
+        "months12": "១២ខែចុងក្រោយ",
+        "emptyTitle": "គ្មានករណីប្រមូលបំណុលដែលបានចាត់តាំង",
+        "emptyDescription": "ករណីនឹងបង្ហាញនៅទីនេះនៅពេលអ្នកប្រមូលបំណុលត្រូវបានចាត់តាំង។",
+        "collectorLabel": "អ្នកប្រមូលបំណុល #{id}",
+        "columns": {
+          "collector": "អ្នកប្រមូលបំណុល",
+          "caseCount": "ចំនួនករណី",
+          "openCaseCount": "ករណីកំពុងបើក",
+          "resolvedCaseCount": "ករណីបានដោះស្រាយ",
+          "paymentCount": "ចំនួនការទូទាត់",
+          "totalCollected": "ចំនួនប្រមូលបានសរុប"
+        }
+      },
+      "approvalFunnel": {
+        "title": "ដំណើរការអនុម័ត",
+        "description": "ពាក្យស្នើសុំដែលបានដាក់ស្នើ អនុម័ត និងបដិសេធ ព្រមទាំងរយៈពេលសម្រេចចិត្តជាមធ្យម។",
+        "totalSubmitted": "ចំនួនបានដាក់ស្នើសរុប",
+        "totalApproved": "ចំនួនបានអនុម័តសរុប",
+        "totalRejected": "ចំនួនបានបដិសេធសរុប",
+        "approvalRate": "អត្រាអនុម័ត",
+        "avgDecisionDays": "ចំនួនថ្ងៃសម្រេចចិត្តជាមធ្យម",
+        "breakdownHeader": "ការបែងចែកតាមស្ថានភាព",
+        "months3": "៣ខែចុងក្រោយ",
+        "months6": "៦ខែចុងក្រោយ",
+        "months12": "១២ខែចុងក្រោយ",
+        "columns": {
+          "status": "ស្ថានភាព",
+          "count": "ចំនួន"
+        }
+      },
+      "statusAuditTrail": {
+        "title": "កំណត់ត្រាត្រួតពិនិត្យស្ថានភាពកម្ចី",
+        "description": "រាល់ការផ្លាស់ប្តូរស្ថានភាពកម្ចីទាំងអស់ ព្រមទាំងអ្នកអនុវត្ត និងពេលវេលា។",
+        "dateFrom": "ពីថ្ងៃ",
+        "dateTo": "ដល់ថ្ងៃ",
+        "status": "ស្ថានភាពថ្មី",
+        "statusAll": "គ្រប់ស្ថានភាព",
+        "emptyTitle": "រកមិនឃើញការផ្លាស់ប្តូរស្ថានភាព",
+        "emptyDescription": "សូមពង្រីកចន្លោះកាលបរិច្ឆេទ ឬសម្អាតតម្រងស្ថានភាព។",
+        "columns": {
+          "loanNo": "លេខកម្ចី",
+          "fromStatus": "ពីស្ថានភាព",
+          "toStatus": "ទៅស្ថានភាព",
+          "note": "កំណត់ចំណាំ",
+          "changedBy": "អ្នកផ្លាស់ប្តូរ",
+          "changedAt": "ពេលវេលាផ្លាស់ប្តូរ"
+        }
+      },
+      "dataQuality": {
+        "title": "គុណភាពទិន្នន័យ / ករណីលើកលែង",
+        "description": "កម្ចី និងពាក្យស្នើសុំដែលខ្វះទិន្នន័យ ស្ថានភាពមិនស្របគ្នា ឬជាប់គាំងដំណើរការ។",
+        "tableHeader": "ករណីលើកលែង ({count})",
+        "staleDays": "ជាប់គាំងក្រោយ (ថ្ងៃ)",
+        "emptyTitle": "រកមិនឃើញករណីលើកលែងទេ",
+        "emptyDescription": "កម្ចី និងពាក្យស្នើសុំទាំងអស់ត្រូវបានពិនិត្យ ហើយគ្មានបញ្ហា។",
+        "columns": {
+          "entityType": "ប្រភេទ",
+          "identifier": "លេខសម្គាល់",
+          "issueType": "បញ្ហា",
+          "description": "ការពិពណ៌នា",
+          "recordCreatedAt": "ថ្ងៃបង្កើត"
+        }
+      }
+    },
+    "productProfitabilityReports": {
+      "incomeByBranch": {
+        "title": "ចំណូលតាមសាខា",
+        "description": "សកម្មភាពចំណូល និងចំណាយដែលបានកត់ត្រាក្នុងមួយសាខាសម្រាប់ចន្លោះកាលបរិច្ឆេទ។",
+        "dateFrom": "ពីថ្ងៃ",
+        "dateTo": "ដល់ថ្ងៃ",
+        "emptyTitle": "រកមិនឃើញសកម្មភាពដែលបានកត់ត្រា",
+        "emptyDescription": "សូមពង្រីកចន្លោះកាលបរិច្ឆេទ។",
+        "columns": {
+          "branch": "សាខា",
+          "totalIncome": "ចំណូលសរុប",
+          "totalExpense": "ចំណាយសរុប",
+          "netIncome": "ចំណូលសុទ្ធ"
+        }
+      },
+      "budgetVsActual": {
+        "title": "ថវិកា និងលទ្ធផលជាក់ស្តែង",
+        "description": "ប្រៀបធៀបចំនួនថវិកាគណនីទូទៅជាមួយសកម្មភាពជាក់ស្តែងសម្រាប់រយៈពេលមួយ។",
+        "financialPeriod": "រយៈពេលហិរញ្ញវត្ថុ",
+        "financialPeriodPlaceholder": "ជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុ",
+        "manageHeader": "គ្រប់គ្រងបន្ទាត់ថវិកា",
+        "glAccount": "គណនីទូទៅ",
+        "glAccountPlaceholder": "ជ្រើសរើសគណនី",
+        "budgetAmount": "ចំនួនថវិកា",
+        "addLine": "បន្ថែមបន្ទាត់",
+        "lineAdded": "បានបន្ថែមបន្ទាត់ថវិកា",
+        "lineDeleted": "បានលុបបន្ទាត់ថវិកា",
+        "linesEmptyTitle": "មិនទាន់មានបន្ទាត់ថវិកាទេ",
+        "linesEmptyTitlePick": "សូមជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុ",
+        "reportHeader": "ថវិកា និងលទ្ធផលជាក់ស្តែង",
+        "reportEmptyTitle": "គ្មានបន្ទាត់ថវិកាសម្រាប់រយៈពេលនេះទេ",
+        "reportEmptyTitlePick": "សូមជ្រើសរើសរយៈពេលហិរញ្ញវត្ថុ",
+        "columns": {
+          "accountNo": "លេខគណនី",
+          "accountName": "ឈ្មោះគណនី",
+          "budgetAmount": "ថវិកា",
+          "actualAmount": "លទ្ធផលជាក់ស្តែង",
+          "variance": "គម្លាត",
+          "variancePercent": "% គម្លាត"
+        }
       }
     }
   }

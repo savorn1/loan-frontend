@@ -501,7 +501,11 @@
         "emptyDescriptionPick": "Select a financial period above to view its income statement.",
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "No income or expense accounts have posted journal entries in the selected period.",
-        "columns": { "accountNo": "Account no.", "accountName": "Account name", "amount": "Amount" }
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "amount": "Amount"
+        }
       },
       "cashFlow": {
         "title": "Cash Flow Statement",
@@ -516,7 +520,10 @@
         "emptyDescriptionPick": "Select the GL account representing cash and a date range above.",
         "emptyTitleNoActivity": "No cash movement",
         "emptyDescriptionNoActivity": "This account has no posted journal entries in the selected range.",
-        "columns": { "transactionType": "Transaction type", "amount": "Net cash impact" }
+        "columns": {
+          "transactionType": "Transaction type",
+          "amount": "Net cash impact"
+        }
       },
       "changesInEquity": {
         "title": "Statement of Changes in Equity",
@@ -816,7 +823,11 @@
         "emptyDescriptionPick": "Select a branch and a date range above to view its profit & loss.",
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "This branch has no posted income or expense entries in the selected range.",
-        "columns": { "accountNo": "Account no.", "accountName": "Account name", "amount": "Amount" }
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "amount": "Amount"
+        }
       },
       "balanceSheet": {
         "title": "Branch Balance Sheet",
@@ -932,7 +943,10 @@
         "emptyDescriptionPick": "Select a from and to date above to view expenses by branch.",
         "emptyTitleNoActivity": "No expense activity",
         "emptyDescriptionNoActivity": "No branch has posted expense entries in the selected range.",
-        "columns": { "branch": "Branch", "totalExpense": "Total expense" }
+        "columns": {
+          "branch": "Branch",
+          "totalExpense": "Total expense"
+        }
       },
       "byCategory": {
         "title": "Expense by Category",
@@ -945,7 +959,10 @@
         "emptyDescriptionPick": "Select a financial period above to view expenses by category.",
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "No expense accounts have posted journal entries in the selected period.",
-        "columns": { "category": "Category", "amount": "Amount" }
+        "columns": {
+          "category": "Category",
+          "amount": "Amount"
+        }
       }
     },
     "revenueReports": {
@@ -957,7 +974,10 @@
         "emptyDescriptionPick": "Select a from and to date above to view revenue by branch.",
         "emptyTitleNoActivity": "No revenue activity",
         "emptyDescriptionNoActivity": "No branch has posted income entries in the selected range.",
-        "columns": { "branch": "Branch", "totalRevenue": "Total revenue" }
+        "columns": {
+          "branch": "Branch",
+          "totalRevenue": "Total revenue"
+        }
       },
       "otherIncome": {
         "title": "Other Income Report",
@@ -971,7 +991,11 @@
         "emptyDescriptionNoAccounts": "All income in this system is currently tracked under Interest Income, Fee Income, and Penalty Income. To report other income here, create a new Income-type account on the Chart of Accounts page.",
         "emptyTitleNoActivity": "No posted activity",
         "emptyDescriptionNoActivity": "No other income accounts have posted journal entries in the selected period.",
-        "columns": { "accountNo": "Account no.", "accountName": "Account name", "amount": "Amount" }
+        "columns": {
+          "accountNo": "Account no.",
+          "accountName": "Account name",
+          "amount": "Amount"
+        }
       }
     },
     "loanPortfolioReports": {
@@ -1179,7 +1203,12 @@
         "emptyDescriptionPick": "Select a from and to date above to view collected penalties.",
         "emptyTitleNoActivity": "No penalties collected",
         "emptyDescriptionNoActivity": "No penalties were paid in the selected range.",
-        "columns": { "loanId": "Loan", "amount": "Amount", "reason": "Reason", "paidAt": "Paid at" }
+        "columns": {
+          "loanId": "Loan",
+          "amount": "Amount",
+          "reason": "Reason",
+          "paidAt": "Paid at"
+        }
       }
     },
     "interestReports": {
@@ -1354,6 +1383,200 @@
         "portfolioAtRisk": "Portfolio at risk",
         "nonPerformingLoans": "Non-performing loans (90+ DPD)",
         "averageLoanAmount": "Average loan amount"
+      }
+    },
+    "riskComplianceReports": {
+      "vintageAnalysis": {
+        "title": "Vintage Analysis",
+        "description": "Loan performance grouped by the month each cohort was disbursed.",
+        "cohortsHeader": "Cohorts",
+        "months6": "Last 6 months",
+        "months12": "Last 12 months",
+        "months24": "Last 24 months",
+        "months36": "Last 36 months",
+        "emptyTitle": "No disbursed loans in this window",
+        "emptyDescription": "Try a longer time range.",
+        "columns": {
+          "cohortMonth": "Cohort",
+          "loanCount": "Loans",
+          "totalPrincipal": "Total Principal",
+          "activeCount": "Active",
+          "activePrincipal": "Active Principal",
+          "closedCount": "Closed",
+          "closedPrincipal": "Closed Principal"
+        }
+      },
+      "concentrationRisk": {
+        "title": "Concentration Risk",
+        "description": "How much of the active portfolio is concentrated in a single branch or borrower.",
+        "byBranchHeader": "By Branch",
+        "topBorrowersHeader": "Top Borrowers",
+        "columns": {
+          "branch": "Branch",
+          "customer": "Customer",
+          "loanCount": "Loans",
+          "outstandingBalance": "Outstanding Balance",
+          "percentOfPortfolio": "% of Portfolio"
+        }
+      },
+      "provisioning": {
+        "title": "Provisioning / ECL Summary",
+        "description": "A simplified IFRS 9-style staging model estimating expected credit loss provisions.",
+        "totalOutstanding": "Total Outstanding",
+        "totalProvision": "Total Provision",
+        "stagesHeader": "Stages",
+        "note": "Simplified for reporting purposes: stages are derived from days-past-due buckets and a flat provision rate per stage, not a full regulatory ECL model.",
+        "columns": {
+          "stage": "Stage",
+          "loanCount": "Loans",
+          "outstandingBalance": "Outstanding Balance",
+          "provisionRate": "Provision Rate",
+          "provisionAmount": "Provision Amount"
+        }
+      },
+      "largeTransactions": {
+        "title": "Large Transaction Monitoring",
+        "description": "Payments at or above a threshold amount, for AML-style monitoring.",
+        "threshold": "Threshold",
+        "months": "Period",
+        "months1": "Last month",
+        "months3": "Last 3 months",
+        "months6": "Last 6 months",
+        "months12": "Last 12 months",
+        "emptyTitle": "No large payments found",
+        "emptyDescription": "Try lowering the threshold or widening the period.",
+        "columns": {
+          "loanId": "Loan ID",
+          "amount": "Amount",
+          "paidAt": "Paid At",
+          "installmentNumber": "Installment #"
+        }
+      },
+      "pricing": {
+        "title": "Loan Pricing Report",
+        "description": "Disbursed portfolio broken down by interest rate and term band.",
+        "byRateHeader": "By Interest Rate",
+        "byTermHeader": "By Term",
+        "columns": {
+          "band": "Band",
+          "loanCount": "Loans",
+          "totalPrincipal": "Total Principal",
+          "avgInterestRate": "Avg. Interest Rate"
+        }
+      }
+    },
+    "operationalPerformanceReports": {
+      "collectorProductivity": {
+        "title": "Collector Productivity",
+        "description": "Caseload and amounts collected per collector.",
+        "tableHeader": "Collectors",
+        "months1": "Last month",
+        "months3": "Last 3 months",
+        "months6": "Last 6 months",
+        "months12": "Last 12 months",
+        "emptyTitle": "No assigned collection cases",
+        "emptyDescription": "Cases will appear here once collectors are assigned.",
+        "collectorLabel": "Collector #{id}",
+        "columns": {
+          "collector": "Collector",
+          "caseCount": "Cases",
+          "openCaseCount": "Open Cases",
+          "resolvedCaseCount": "Resolved Cases",
+          "paymentCount": "Payments",
+          "totalCollected": "Total Collected"
+        }
+      },
+      "approvalFunnel": {
+        "title": "Approval Funnel",
+        "description": "Applications submitted, approved and rejected, with average decision time.",
+        "totalSubmitted": "Total Submitted",
+        "totalApproved": "Total Approved",
+        "totalRejected": "Total Rejected",
+        "approvalRate": "Approval Rate",
+        "avgDecisionDays": "Avg. Decision Days",
+        "breakdownHeader": "Status Breakdown",
+        "months3": "Last 3 months",
+        "months6": "Last 6 months",
+        "months12": "Last 12 months",
+        "columns": {
+          "status": "Status",
+          "count": "Count"
+        }
+      },
+      "statusAuditTrail": {
+        "title": "Loan Status Audit Trail",
+        "description": "Every loan status change across the portfolio, with who made it and when.",
+        "dateFrom": "From",
+        "dateTo": "To",
+        "status": "New Status",
+        "statusAll": "All statuses",
+        "emptyTitle": "No status changes found",
+        "emptyDescription": "Try widening the date range or clearing the status filter.",
+        "columns": {
+          "loanNo": "Loan No.",
+          "fromStatus": "From",
+          "toStatus": "To",
+          "note": "Note",
+          "changedBy": "Changed By",
+          "changedAt": "Changed At"
+        }
+      },
+      "dataQuality": {
+        "title": "Data Quality / Exceptions",
+        "description": "Loans and applications with missing fields, inconsistent state, or stuck progress.",
+        "tableHeader": "Exceptions ({count})",
+        "staleDays": "Stale after (days)",
+        "emptyTitle": "No exceptions found",
+        "emptyDescription": "Every loan and application checked out clean.",
+        "columns": {
+          "entityType": "Type",
+          "identifier": "Identifier",
+          "issueType": "Issue",
+          "description": "Description",
+          "recordCreatedAt": "Created At"
+        }
+      }
+    },
+    "productProfitabilityReports": {
+      "incomeByBranch": {
+        "title": "Income by Branch",
+        "description": "Posted income and expense activity per branch for a date range.",
+        "dateFrom": "From",
+        "dateTo": "To",
+        "emptyTitle": "No posted activity found",
+        "emptyDescription": "Try widening the date range.",
+        "columns": {
+          "branch": "Branch",
+          "totalIncome": "Total Income",
+          "totalExpense": "Total Expense",
+          "netIncome": "Net Income"
+        }
+      },
+      "budgetVsActual": {
+        "title": "Budget vs Actual",
+        "description": "Compare budgeted GL account amounts against actual posted activity for a period.",
+        "financialPeriod": "Financial Period",
+        "financialPeriodPlaceholder": "Select a financial period",
+        "manageHeader": "Manage Budget Lines",
+        "glAccount": "GL Account",
+        "glAccountPlaceholder": "Select an account",
+        "budgetAmount": "Budget Amount",
+        "addLine": "Add Line",
+        "lineAdded": "Budget line added",
+        "lineDeleted": "Budget line deleted",
+        "linesEmptyTitle": "No budget lines yet",
+        "linesEmptyTitlePick": "Select a financial period",
+        "reportHeader": "Budget vs Actual",
+        "reportEmptyTitle": "No budget lines for this period",
+        "reportEmptyTitlePick": "Select a financial period",
+        "columns": {
+          "accountNo": "Account No.",
+          "accountName": "Account Name",
+          "budgetAmount": "Budget",
+          "actualAmount": "Actual",
+          "variance": "Variance",
+          "variancePercent": "Variance %"
+        }
       }
     }
   }
