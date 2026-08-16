@@ -125,6 +125,7 @@ const branchFilterOptions = computed(() => [
 const branchFilter = ref<number | ''>('')
 
 const columns = computed<ColumnDef<GroupLoanApplicationResponse>[]>(() => [
+  { key: 'applicationNo', label: t('groupLoanApplications.list.columns.reference') },
   {
     key: 'groupName',
     label: t('groupLoanApplications.list.columns.group'),

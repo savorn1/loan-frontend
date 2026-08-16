@@ -169,7 +169,14 @@
             </div>
             <div>
               <dt class="text-gray-500 mb-1">{{ t('auth.profile.theme') }}</dt>
-              <dd><ColorModeToggle /></dd>
+              <dd>
+                <ClientOnly>
+                  <ColorModeToggle />
+                  <template #fallback>
+                    <div class="w-7 h-7" />
+                  </template>
+                </ClientOnly>
+              </dd>
             </div>
             <div>
               <dt class="text-gray-500 mb-1">{{ t('auth.profile.tableStyle') }}</dt>

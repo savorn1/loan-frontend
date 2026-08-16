@@ -271,8 +271,13 @@ const createFields = computed<FieldDef[]>(() => [
   {
     name: 'currency',
     label: t('accounting.glAccounts.fields.currency'),
+    type: 'select',
     required: true,
-    wrapper: 'half'
+    wrapper: 'half',
+    options: [
+      { label: 'USD', value: 'USD' },
+      { label: 'KHR', value: 'KHR' }
+    ]
   },
   {
     name: 'allowPosting',
@@ -332,8 +337,13 @@ const editFields = computed<FieldDef[]>(() => [
   {
     name: 'currency',
     label: t('accounting.glAccounts.fields.currency'),
+    type: 'select',
     required: true,
-    wrapper: 'half'
+    wrapper: 'half',
+    options: [
+      { label: 'USD', value: 'USD' },
+      { label: 'KHR', value: 'KHR' }
+    ]
   },
   {
     name: 'allowPosting',
@@ -376,7 +386,7 @@ const {
     parentId: undefined,
     accountType: undefined,
     normalBalance: undefined,
-    currency: '',
+    currency: 'USD',
     allowPosting: true,
     status: 'ACTIVE'
   }),

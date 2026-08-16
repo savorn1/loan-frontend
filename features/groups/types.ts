@@ -128,6 +128,7 @@ export interface GroupLoanMemberLine {
 
 export interface GroupLoanApplicationResponse {
   id: number
+  applicationNo: string | null
   groupId: number
   groupName: string
   branchId: number | null

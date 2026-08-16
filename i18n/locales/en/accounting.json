@@ -352,8 +352,10 @@
         "description": "Description",
         "lines": "Lines",
         "addLine": "Add line",
+        "lineLabel": "Line {n}",
         "accountRole": "Account role",
         "accountRolePlaceholder": "Account role (e.g. CASH)",
+        "entrySide": "Side",
         "lineDescription": "Description",
         "lineDescriptionPlaceholder": "Description",
         "rolesHint": "Roles are symbolic (e.g. CASH, LOAN_RECEIVABLE) — an accounting scheme binds each one to a real GL account per currency."

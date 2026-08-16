@@ -58,6 +58,9 @@
     "delete": "Delete",
     "edit": "Edit",
     "remove": "Remove",
+    "addRow": "Add row",
+    "row": "Row {n}",
+    "minRowsReached": "At least {min} row(s) required",
     "close": "Close",
     "tableStylePlain": "Plain",
     "tableStyleStriped": "Striped",
@@ -146,11 +149,11 @@
       "BROKEN": "Broken",
       "PARTIAL": "Partial",
       "DELIVERED": "Delivered"
+    },
+    "errorState": {
+      "title": "Couldn't load this page",
+      "retry": "Retry"
     }
-  },
-  "errorState": {
-    "title": "Couldn't load this page",
-    "retry": "Retry"
   },
   "appError": {
     "notFoundTitle": "Page not found",

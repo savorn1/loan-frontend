@@ -114,6 +114,8 @@
         "codeHint": "ឧ. LOAN_OFFICER",
         "description": "ការពិពណ៌នា"
       },
+      "deleteTooltip": "លុប",
+      "deleteTooltipWarning": "លុប — នឹងលុបចេញពីអ្នកប្រើប្រាស់ {userCount} នាក់ដែលមានតួនាទីនេះ",
       "deleteConfirmTitle": "លុបតួនាទី \"{name}\"?",
       "deleteConfirmDescription": "សកម្មភាពនេះនឹងលុបវាចេញពីអ្នកប្រើប្រាស់ {userCount} នាក់ និងសិទ្ធិ {permissionCount} ដែលបានផ្តល់។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
       "detail": {

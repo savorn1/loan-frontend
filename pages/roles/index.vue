@@ -46,28 +46,45 @@
         @select="onSelect"
       >
         <template #permissionCount-data="{ row }">
-          <UBadge color="gray" variant="subtle">{{ row.permissionCount }}</UBadge>
+          <UBadge
+            color="gray"
+            variant="subtle"
+            :class="{ 'opacity-50': row.permissionCount === 0 }"
+            >{{ row.permissionCount }}</UBadge
+          >
         </template>
         <template #userCount-data="{ row }">
-          <UBadge color="gray" variant="subtle">{{ row.userCount }}</UBadge>
+          <UBadge color="gray" variant="subtle" :class="{ 'opacity-50': row.userCount === 0 }">{{
+            row.userCount
+          }}</UBadge>
         </template>
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
-            <UButton
-              size="2xs"
-              variant="soft"
-              icon="i-heroicons-pencil"
-              :aria-label="t('common.edit')"
-              @click.stop="openEdit(row)"
-            />
-            <UButton
-              size="2xs"
-              color="red"
-              variant="soft"
-              icon="i-heroicons-trash"
-              :aria-label="t('common.delete')"
-              @click.stop="confirmDelete = row"
-            />
+            <UTooltip :text="t('common.edit')">
+              <UButton
+                size="2xs"
+                variant="soft"
+                icon="i-heroicons-pencil"
+                :aria-label="t('common.edit')"
+                @click.stop="openEdit(row)"
+              />
+            </UTooltip>
+            <UTooltip
+              :text="
+                row.userCount > 0
+                  ? t('admin.roles.deleteTooltipWarning', { userCount: row.userCount })
+                  : t('admin.roles.deleteTooltip')
+              "
+            >
+              <UButton
+                size="2xs"
+                color="red"
+                variant="soft"
+                icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
+                @click.stop="confirmDelete = row"
+              />
+            </UTooltip>
           </div>
         </template>
         <template #empty-state>

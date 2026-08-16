@@ -2,6 +2,24 @@
   <div>
     <PageHeader :title="t('payments.list.title')" :description="totalLabel">
       <template #actions>
+        <UButtonGroup size="sm">
+          <UButton
+            :color="view === 'list' ? 'primary' : 'gray'"
+            :variant="view === 'list' ? 'solid' : 'soft'"
+            icon="i-heroicons-list-bullet"
+            @click="view = 'list'"
+          >
+            {{ t('payments.list.calendar.listView') }}
+          </UButton>
+          <UButton
+            :color="view === 'calendar' ? 'primary' : 'gray'"
+            :variant="view === 'calendar' ? 'solid' : 'soft'"
+            icon="i-heroicons-calendar-days"
+            @click="view = 'calendar'"
+          >
+            {{ t('payments.list.calendar.calendarView') }}
+          </UButton>
+        </UButtonGroup>
         <UButton icon="i-heroicons-plus" @click="openCreate">{{
           t('payments.list.newPayment')
         }}</UButton>
@@ -16,7 +34,7 @@
           option-attribute="label"
           searchable
           :placeholder="t('payments.list.filterByLoanPlaceholder')"
-          class="max-w-xs w-full sm:w-auto"
+          class="w-full sm:w-72"
         />
         <USelectMenu
           v-model="statusFilter"
@@ -47,58 +65,68 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable
-        v-model:sort="sort"
-        :rows="rows"
-        :columns="columns"
-        :loading="pending"
-        numbered
-        :row-number-start="(page - 1) * pageSize"
-      >
-        <template #actions-data="{ row }">
-          <div class="flex gap-1 justify-end">
-            <UButton
-              v-if="row.status !== 'PAID'"
-              size="2xs"
-              variant="soft"
-              :loading="markingPaid === row.id"
-              @click="onMarkPaid(row.id)"
-            >
-              {{ t('payments.list.markPaid') }}
-            </UButton>
-            <UButton
-              v-if="isAdmin"
-              size="2xs"
-              color="red"
-              variant="soft"
-              icon="i-heroicons-trash"
-              :aria-label="t('common.delete')"
-              @click="confirmDeleteId = row.id"
-            />
-          </div>
-        </template>
-        <template #empty-state>
-          <EmptyState
-            :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-credit-card'"
-            :title="hasFilters ? t('common.noMatches') : t('payments.list.emptyTitle')"
-            :description="
-              hasFilters
-                ? t('payments.list.emptySearchDescription')
-                : t('payments.list.emptyDescription')
-            "
-          >
-            <template v-if="!hasFilters" #action>
-              <UButton icon="i-heroicons-plus" @click="openCreate">{{
-                t('payments.list.newPayment')
-              }}</UButton>
-            </template>
-          </EmptyState>
-        </template>
-      </DataTable>
+      <PaymentCalendar
+        v-if="view === 'calendar'"
+        :payments="filteredByStatus"
+        :loan-label="loanLabel"
+        :marking-paid-id="markingPaid"
+        @mark-paid="onMarkPaid"
+      />
 
-      <div v-if="total > 0" class="pt-4">
-        <DataPagination v-model:page="page" v-model:page-size="pageSize" :total="total" />
-      </div>
+      <template v-else>
+        <DataTable
+          v-model:sort="sort"
+          :rows="rows"
+          :columns="columns"
+          :loading="pending"
+          numbered
+          :row-number-start="(page - 1) * pageSize"
+        >
+          <template #actions-data="{ row }">
+            <div class="flex gap-1 justify-end">
+              <UButton
+                v-if="row.status !== 'PAID'"
+                size="2xs"
+                variant="soft"
+                :loading="markingPaid === row.id"
+                @click="onMarkPaid(row.id)"
+              >
+                {{ t('payments.list.markPaid') }}
+              </UButton>
+              <UButton
+                v-if="isAdmin"
+                size="2xs"
+                color="red"
+                variant="soft"
+                icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
+                @click="confirmDeleteId = row.id"
+              />
+            </div>
+          </template>
+          <template #empty-state>
+            <EmptyState
+              :icon="hasFilters ? 'i-heroicons-magnifying-glass' : 'i-heroicons-credit-card'"
+              :title="hasFilters ? t('common.noMatches') : t('payments.list.emptyTitle')"
+              :description="
+                hasFilters
+                  ? t('payments.list.emptySearchDescription')
+                  : t('payments.list.emptyDescription')
+              "
+            >
+              <template v-if="!hasFilters" #action>
+                <UButton icon="i-heroicons-plus" @click="openCreate">{{
+                  t('payments.list.newPayment')
+                }}</UButton>
+              </template>
+            </EmptyState>
+          </template>
+        </DataTable>
+
+        <div v-if="total > 0" class="pt-4">
+          <DataPagination v-model:page="page" v-model:page-size="pageSize" :total="total" />
+        </div>
+      </template>
     </UCard>
 
     <UModal v-model="showCreate">
@@ -175,10 +203,20 @@ const { data: loansRaw } = await useAsyncData('payments-loans', () =>
 
 const loanOptions = computed<LoanOption[]>(() =>
   (loansRaw.value?.content ?? []).map((l) => ({
-    label: `#${l.id} — ${l.customerName} (${l.status})`,
+    label: `${l.loanNo || `#${l.id}`} — ${l.customerName} (${l.status})`,
     value: l.id
   }))
 )
+
+const loanNoById = computed(
+  () => new Map((loansRaw.value?.content ?? []).map((l) => [l.id, l.loanNo]))
+)
+
+const view = ref<'list' | 'calendar'>('list')
+
+function loanLabel(loanId: number): string {
+  return loanNoById.value.get(loanId) || `#${loanId}`
+}
 
 const statusOptions = computed<{ label: string; value: PaymentStatus | '' }[]>(() => [
   { label: t('payments.list.statusOptions.all'), value: '' },
@@ -222,7 +260,7 @@ const columns = computed<ColumnDef<PaymentResponse>[]>(() => [
     type: 'link',
     sortable: true,
     href: (row) => `/loans/${row.loanId}`,
-    prefix: () => '#'
+    value: (row) => loanNoById.value.get(row.loanId) || `#${row.loanId}`
   },
   {
     key: 'installmentNumber',

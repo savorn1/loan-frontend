@@ -155,8 +155,12 @@ function templateLabel(id: number) {
 const templateOptions = computed(() =>
   (templates.value ?? []).map((t) => ({ label: `${t.name} (${t.code})`, value: t.id }))
 )
+// Only postable (leaf) accounts belong here — a scheme mapping a role to a
+// header account fails at posting time with "GL account X does not allow direct posting".
 const glAccountOptions = computed(() =>
-  (glAccounts.value ?? []).map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
+  (glAccounts.value ?? [])
+    .filter((a) => a.allowPosting)
+    .map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
 )
 
 function rolesFor(templateId: number | undefined) {
@@ -226,8 +230,13 @@ const createFields = computed<FieldDef[]>(() => [
   {
     name: 'currency',
     label: t('accounting.accountingSchemes.fields.currency'),
+    type: 'select',
     required: true,
-    wrapper: 'half'
+    wrapper: 'half',
+    options: [
+      { label: 'USD', value: 'USD' },
+      { label: 'KHR', value: 'KHR' }
+    ]
   },
   {
     name: 'status',
@@ -268,8 +277,13 @@ const editFields = computed<FieldDef[]>(() => [
   {
     name: 'currency',
     label: t('accounting.accountingSchemes.fields.currency'),
+    type: 'select',
     required: true,
-    wrapper: 'half'
+    wrapper: 'half',
+    options: [
+      { label: 'USD', value: 'USD' },
+      { label: 'KHR', value: 'KHR' }
+    ]
   },
   {
     name: 'status',
@@ -306,7 +320,7 @@ const {
       journalTemplateId: undefined,
       accountRole: undefined,
       glAccountId: undefined,
-      currency: '',
+      currency: 'USD',
       status: 'ACTIVE'
     }),
     toForm: (row) => ({

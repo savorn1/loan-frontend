@@ -44,7 +44,12 @@
     <!-- Form panel -->
     <div class="flex-1 flex items-center justify-center px-6 py-12 relative">
       <div class="absolute top-4 right-4 flex items-center gap-1.5">
-        <ColorModeToggle />
+        <ClientOnly>
+          <ColorModeToggle />
+          <template #fallback>
+            <div class="w-7 h-7" />
+          </template>
+        </ClientOnly>
         <LanguageSwitcher />
       </div>
 

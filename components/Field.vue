@@ -40,6 +40,7 @@ import FieldWeek from './fields/FieldWeek.vue'
 import FieldFile from './fields/FieldFile.vue'
 import FieldImage from './fields/FieldImage.vue'
 import FieldBase64Image from './fields/FieldBase64Image.vue'
+import FieldRepeatable from './fields/FieldRepeatable.vue'
 
 const props = defineProps<{ field: FieldDef }>()
 
@@ -67,7 +68,8 @@ const CONTROLS: Record<Exclude<FieldType, 'hidden'>, Component> = {
   week: FieldWeek,
   file: FieldFile,
   image: FieldImage,
-  base64Image: FieldBase64Image
+  base64Image: FieldBase64Image,
+  repeatable: FieldRepeatable
 }
 
 const control = computed(

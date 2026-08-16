@@ -2,8 +2,10 @@
   "groups": {
     "list": {
       "title": "Groups",
+      "totalOne": "1 group",
+      "totalOther": "{count} groups",
       "newGroup": "New Group",
-      "searchPlaceholder": "Search by name or code...",
+      "searchPlaceholder": "Search by name or reference no...",
       "branchLabel": "Branch",
       "statusLabel": "Status",
       "branchFilterAll": "All branches",
@@ -12,7 +14,7 @@
       },
       "columns": {
         "name": "Name",
-        "code": "Code",
+        "code": "Reference No.",
         "branch": "Branch",
         "leader": "Leader",
         "members": "Members",

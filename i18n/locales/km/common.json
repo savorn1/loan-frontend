@@ -58,6 +58,9 @@
     "delete": "លុប",
     "edit": "កែសម្រួល",
     "remove": "ដកចេញ",
+    "addRow": "បន្ថែមជួរ",
+    "row": "ជួរទី {n}",
+    "minRowsReached": "ត្រូវការយ៉ាងតិច {min} ជួរ",
     "close": "បិទ",
     "tableStylePlain": "ធម្មតា",
     "tableStyleStriped": "ឆ្នូតៗ",
@@ -146,11 +149,11 @@
       "BROKEN": "បំពាន",
       "PARTIAL": "ដោយផ្នែក",
       "DELIVERED": "បានប្រគល់"
+    },
+    "errorState": {
+      "title": "មិនអាចផ្ទុកទំព័រនេះបានទេ",
+      "retry": "ព្យាយាមម្តងទៀត"
     }
-  },
-  "errorState": {
-    "title": "មិនអាចផ្ទុកទំព័រនេះបានទេ",
-    "retry": "ព្យាយាមម្តងទៀត"
   },
   "appError": {
     "notFoundTitle": "រកមិនឃើញទំព័រ",

@@ -114,6 +114,8 @@
         "codeHint": "e.g. LOAN_OFFICER",
         "description": "Description"
       },
+      "deleteTooltip": "Delete",
+      "deleteTooltipWarning": "Delete — also removes {userCount} user(s) from this role",
       "deleteConfirmTitle": "Delete role \"{name}\"?",
       "deleteConfirmDescription": "This removes it from {userCount} user(s) and {permissionCount} permission assignment(s). This cannot be undone.",
       "detail": {

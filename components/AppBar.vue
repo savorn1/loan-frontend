@@ -31,7 +31,12 @@
         :aria-label="t('commandPalette.open')"
         @click="emit('open-search')"
       />
-      <ColorModeToggle />
+      <ClientOnly>
+        <ColorModeToggle />
+        <template #fallback>
+          <div class="w-7 h-7" />
+        </template>
+      </ClientOnly>
       <LanguageSwitcher />
 
       <UDropdown :items="menuItems" :popper="{ placement: 'bottom-end' }">

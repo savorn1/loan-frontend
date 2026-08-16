@@ -199,6 +199,11 @@
         "dueDate": "Due date",
         "dueDatePlaceholder": "Select due date",
         "note": "Note"
+      },
+      "calendar": {
+        "listView": "List",
+        "calendarView": "Calendar",
+        "more": "+{count} more"
       }
     }
   }

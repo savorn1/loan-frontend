@@ -60,6 +60,8 @@
         :rows="groups?.content ?? []"
         :columns="columns"
         :loading="pending"
+        numbered
+        :row-number-start="(page - 1) * pageSize"
         @select="onSelect"
       >
         <template #actions-data="{ row }">

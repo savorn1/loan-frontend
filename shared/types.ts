@@ -52,6 +52,7 @@ export type FieldType =
   | 'file'
   | 'image'
   | 'base64Image'
+  | 'repeatable'
   | 'hidden'
 
 export interface FieldOption {
@@ -104,6 +105,18 @@ export interface FieldDef {
   defaultCountry?: string
   /** Layout in DynamicForm's 2-column grid (Backpack's `wrapper`). */
   wrapper?: 'full' | 'half'
+  /** repeatable: field definitions rendered inside each row (Backpack's repeatable `fields`). */
+  subfields?: FieldDef[]
+  /** repeatable: floor for row count — the remove button disables at this floor. Default 0. */
+  minRows?: number
+  /** repeatable: ceiling for row count — the add button disables at this ceiling. */
+  maxRows?: number
+  /** repeatable: builds a new row's default values, called when "add row" is clicked. */
+  newRow?: () => Record<string, unknown>
+  /** repeatable: label for the add-row button. Defaults to a generic "Add row". */
+  addLabel?: string
+  /** repeatable: label for a row's header, e.g. `(i) => \`Line ${i + 1}\``. Defaults to a generic "Row N". */
+  rowLabel?: (index: number) => string
   /** Hide the field (and skip its `required` check) when this returns false for the current form values. */
   // `any` matches DynamicForm's own model type (Record<string, any>) — form
   // values are a dynamic Backpack-style bag of unrelated field types.

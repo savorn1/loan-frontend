@@ -352,8 +352,10 @@
         "description": "ការពិពណ៌នា",
         "lines": "ជួរដេក",
         "addLine": "បន្ថែមជួរដេក",
+        "lineLabel": "ជួរដេកទី {n}",
         "accountRole": "តួនាទីគណនី",
         "accountRolePlaceholder": "តួនាទីគណនី (ឧទាហរណ៍ CASH)",
+        "entrySide": "ភាគី",
         "lineDescription": "ការពិពណ៌នា",
         "lineDescriptionPlaceholder": "ការពិពណ៌នា",
         "rolesHint": "តួនាទីជានិមិត្តសញ្ញា (ឧទាហរណ៍ CASH, LOAN_RECEIVABLE) — គ្រោងការណ៍គណនេយ្យនឹងភ្ជាប់នីមួយៗទៅនឹងគណនីបញ្ជីមេពិតប្រាកដសម្រាប់រូបិយប័ណ្ណនីមួយៗ។"

@@ -6,6 +6,7 @@
       "branchFilterAll": "គ្រប់សាខា",
       "columns": {
         "id": "លេខសម្គាល់",
+        "reference": "លេខយោង",
         "group": "ក្រុម",
         "branch": "សាខា",
         "members": "សមាជិក",

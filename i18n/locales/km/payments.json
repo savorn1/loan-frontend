@@ -199,6 +199,11 @@
         "dueDate": "កាលបរិច្ឆេទកំណត់",
         "dueDatePlaceholder": "ជ្រើសរើសកាលបរិច្ឆេទកំណត់",
         "note": "កំណត់ចំណាំ"
+      },
+      "calendar": {
+        "listView": "បញ្ជី",
+        "calendarView": "ប្រតិទិន",
+        "more": "+{count} ទៀត"
       }
     }
   }

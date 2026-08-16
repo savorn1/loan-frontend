@@ -104,10 +104,7 @@
               name="currency"
               required
             >
-              <UInput
-                v-model="createForm.currency"
-                :placeholder="t('accounting.journalEntries.fields.currencyPlaceholder')"
-              />
+              <UInput v-model="createForm.currency" readonly />
             </UFormGroup>
             <UFormGroup
               :label="t('accounting.journalEntries.fields.reference')"
@@ -227,8 +224,12 @@ const { data: branches } = await useAsyncData('journal-entries-branches', () =>
   api<BranchResponse[]>('/branches')
 )
 
+// Only postable (leaf) accounts belong here — posting to a header account fails
+// server-side with "GL account X does not allow direct posting".
 const glAccountOptions = computed(() =>
-  (glAccounts.value ?? []).map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
+  (glAccounts.value ?? [])
+    .filter((a) => a.allowPosting)
+    .map((a) => ({ label: `${a.accountNo} — ${a.accountName}`, value: a.id }))
 )
 const branchOptions = computed(() =>
   (branches.value ?? []).map((b) => ({ label: b.name, value: b.id }))
@@ -328,7 +329,7 @@ const createForm = reactive<{
   transactionType: undefined,
   transactionDate: '',
   branchId: undefined,
-  currency: '',
+  currency: 'USD',
   referenceId: '',
   description: '',
   lines: [emptyLine(), { ...emptyLine(), entrySide: 'CREDIT' }]

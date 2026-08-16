@@ -5,18 +5,45 @@ export function formatCurrency(value: number | null | undefined): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
 }
 
+// Backend LocalDateTime values arrive with no timezone suffix (e.g. "2026-08-08T14:09:07"),
+// which the JS Date parser treats as local time — local to whichever environment reads it.
+// That differs between SSR (the server's timezone) and the browser (the viewer's), shifting
+// the displayed value and causing hydration mismatches. Appending 'Z' before parsing plus
+// timeZone: 'UTC' on the formatter treats the string's digits as literal wall-clock values
+// everywhere, independent of where it's parsed or rendered. Date-only strings (no time part,
+// used by formatDate) already parse as UTC per spec, so only the formatter needs pinning there.
+function parseBackendDateTime(value: string): Date {
+  return new Date(value.endsWith('Z') ? value : `${value}Z`)
+}
+
+// Different Intl/ICU builds render the space before AM/PM differently (regular space vs.
+// U+202F narrow no-break space) — normalized here so output is byte-identical regardless
+// of which ICU version formatted it, another common, invisible hydration-mismatch source.
+function normalizeSpaces(text: string): string {
+  return text.replace(/[\u202f\xa0]/g, ' ')
+}
+
 export function formatDate(value: string | null | undefined): string {
   if (!value) return '—'
-  return new Date(value).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
+  return normalizeSpaces(
+    new Date(value).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'UTC'
+    })
+  )
 }
 
 export function formatDateTime(value: string | null | undefined): string {
   if (!value) return '—'
-  return new Date(value).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+  return normalizeSpaces(
+    parseBackendDateTime(value).toLocaleString('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+      timeZone: 'UTC'
+    })
+  )
 }
 
 // 'PAST_DUE' / 'past_due' both become 'Past due' — shared by <ColumnValue>'s

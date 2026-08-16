@@ -2,8 +2,10 @@
   "groups": {
     "list": {
       "title": "ក្រុម",
+      "totalOne": "ក្រុម ១",
+      "totalOther": "ក្រុម {count}",
       "newGroup": "ក្រុមថ្មី",
-      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ ឬលេខកូដ...",
+      "searchPlaceholder": "ស្វែងរកតាមឈ្មោះ ឬលេខយោង...",
       "branchLabel": "សាខា",
       "statusLabel": "ស្ថានភាព",
       "branchFilterAll": "គ្រប់សាខា",
@@ -12,7 +14,7 @@
       },
       "columns": {
         "name": "ឈ្មោះ",
-        "code": "លេខកូដ",
+        "code": "លេខយោង",
         "branch": "សាខា",
         "leader": "ប្រធានក្រុម",
         "members": "សមាជិក",
