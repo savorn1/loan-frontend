@@ -18,7 +18,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="disbursements ?? []" :columns="columns" :loading="pending" numbered>
+      <DataTable
+        :rows="disbursements ?? []"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        refreshable
+        @refresh="refresh"
+      >
         <template #actions-data="{ row }">
           <div v-if="isAdmin" class="flex gap-1 justify-end">
             <template v-if="row.status === 'PENDING_APPROVAL'">

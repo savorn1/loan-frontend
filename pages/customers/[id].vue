@@ -87,6 +87,8 @@
           :columns="identityColumns"
           :loading="identitiesPending"
           export-filename="customer-identities.csv"
+          refreshable
+          @refresh="refreshIdentities"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
@@ -145,6 +147,8 @@
           :columns="addressColumns"
           :loading="addressesPending"
           export-filename="customer-addresses.csv"
+          refreshable
+          @refresh="refreshAddresses"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
@@ -195,6 +199,8 @@
           :columns="contactColumns"
           :loading="contactsPending"
           export-filename="customer-contacts.csv"
+          refreshable
+          @refresh="refreshContacts"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
@@ -245,6 +251,8 @@
           :columns="employmentColumns"
           :loading="employmentsPending"
           export-filename="customer-employments.csv"
+          refreshable
+          @refresh="refreshEmployments"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
@@ -295,6 +303,8 @@
           :columns="incomeColumns"
           :loading="incomesPending"
           export-filename="customer-incomes.csv"
+          refreshable
+          @refresh="refreshIncomes"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
@@ -345,6 +355,8 @@
           :columns="relationshipColumns"
           :loading="relationshipsPending"
           export-filename="customer-relationships.csv"
+          refreshable
+          @refresh="refreshRelationships"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
@@ -416,6 +428,8 @@
           :columns="auditLogColumns"
           :loading="auditLogsPending"
           export-filename="customer-audit-log.csv"
+          refreshable
+          @refresh="refreshAuditLogs"
         >
           <template #empty-state>
             <EmptyState
@@ -963,9 +977,12 @@ const { data: preferences, refresh: refreshPreferences } = await useAsyncData(
   `customer-${customerId}-preferences`,
   () => api<CustomerPreferenceResponse | null>(`/customers/${customerId}/preferences`)
 )
-const { data: auditLogs, pending: auditLogsPending } = await useAsyncData(
-  `customer-${customerId}-audit-logs`,
-  () => api<CustomerAuditLogResponse[]>(`/customers/${customerId}/audit-logs`)
+const {
+  data: auditLogs,
+  pending: auditLogsPending,
+  refresh: refreshAuditLogs
+} = await useAsyncData(`customer-${customerId}-audit-logs`, () =>
+  api<CustomerAuditLogResponse[]>(`/customers/${customerId}/audit-logs`)
 )
 
 const initials = computed(() => {

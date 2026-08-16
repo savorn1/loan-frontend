@@ -63,8 +63,10 @@
         :columns="columns"
         :loading="pending"
         numbered
+        refreshable
         :row-number-start="(page - 1) * pageSize"
         @select="onSelect"
+        @refresh="refresh"
       >
         <template #empty-state>
           <EmptyState

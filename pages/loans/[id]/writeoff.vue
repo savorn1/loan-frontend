@@ -95,6 +95,8 @@
         :columns="recoveryColumns"
         :loading="recoveriesPending"
         numbered
+        refreshable
+        @refresh="refreshRecoveries"
       >
         <template #empty-state>
           <EmptyState

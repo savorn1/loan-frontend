@@ -37,7 +37,9 @@
         :rows="rows"
         :columns="columns"
         :loading="pending"
+        refreshable
         @select="(row: JournalEntryResponse) => router.push(`/journal-entries/${row.id}`)"
+        @refresh="refresh"
       >
         <template #empty-state>
           <EmptyState

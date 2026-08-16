@@ -102,7 +102,13 @@
             </UButton>
           </div>
         </template>
-        <DataTable :rows="payments ?? []" :columns="paymentColumns" :loading="paymentsPending">
+        <DataTable
+          :rows="payments ?? []"
+          :columns="paymentColumns"
+          :loading="paymentsPending"
+          refreshable
+          @refresh="refreshPayments"
+        >
           <template #actions-data="{ row }">
             <UButton
               v-if="row.status !== 'PAID'"

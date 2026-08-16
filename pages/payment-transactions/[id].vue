@@ -177,7 +177,7 @@
           }}</UBadge>
         </div>
       </template>
-      <DataTable :rows="transaction.items" :columns="itemColumns">
+      <DataTable :rows="transaction.items" :columns="itemColumns" refreshable @refresh="refresh">
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-list-bullet"

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { deriveExportBaseName, downloadCsv } from './csv'
+import { downloadCsv } from './csv'
+import { deriveExportBaseName } from './tableExport'
 import type { ColumnDef } from '~/shared/types'
 
 interface Row extends Record<string, unknown> {

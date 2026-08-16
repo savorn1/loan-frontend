@@ -76,7 +76,13 @@
         <template #header>
           <span class="font-semibold">{{ t('groupLoanApplications.detail.membersHeader') }}</span>
         </template>
-        <DataTable :rows="application.members" :columns="memberColumns" :exportable="false">
+        <DataTable
+          :rows="application.members"
+          :columns="memberColumns"
+          :exportable="false"
+          refreshable
+          @refresh="refresh"
+        >
           <template #loanId-data="{ row }">
             <NuxtLink
               v-if="row.loanId"

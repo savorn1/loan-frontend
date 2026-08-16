@@ -18,7 +18,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="payments ?? []" :columns="columns" :loading="pending" numbered>
+      <DataTable
+        :rows="payments ?? []"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        refreshable
+        @refresh="refresh"
+      >
         <template #reversed-data="{ row }">
           <StatusBadge v-if="row.reversed" status="REVERSED" />
           <span v-else>—</span>

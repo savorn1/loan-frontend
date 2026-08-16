@@ -17,7 +17,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
+      <DataTable
+        v-model:sort="sort"
+        :rows="rows"
+        :columns="columns"
+        :loading="pending"
+        refreshable
+        @refresh="refresh"
+      >
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton

@@ -45,10 +45,12 @@
         :columns="columns"
         :loading="pending"
         numbered
+        refreshable
         :row-number-start="(page - 1) * pageSize"
         @select="
           (row: PaymentTransactionResponse) => router.push(`/payment-transactions/${row.id}`)
         "
+        @refresh="refresh"
       >
         <template #empty-state>
           <EmptyState

@@ -18,7 +18,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="fees ?? []" :columns="columns" :loading="pending" numbered>
+      <DataTable
+        :rows="fees ?? []"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        refreshable
+        @refresh="refresh"
+      >
         <template #actions-data="{ row }">
           <div class="flex gap-1 justify-end">
             <UButton

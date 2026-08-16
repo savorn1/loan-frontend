@@ -112,7 +112,14 @@
             }}</UButton>
           </div>
         </template>
-        <DataTable :rows="roleUsers ?? []" :columns="userColumns" :loading="usersPending" numbered>
+        <DataTable
+          :rows="roleUsers ?? []"
+          :columns="userColumns"
+          :loading="usersPending"
+          numbered
+          refreshable
+          @refresh="refreshRoleUsers"
+        >
           <template #actions-data="{ row }">
             <UButton
               size="2xs"

@@ -93,7 +93,9 @@
         :columns="snapshotColumns"
         :loading="snapshotsPending"
         export-filename="trial-balance-snapshots.csv"
+        refreshable
         @select="(row: TrialBalanceResponse) => router.push(`/trial-balance/snapshots/${row.id}`)"
+        @refresh="refreshSnapshots"
       >
         <template #empty-state>
           <EmptyState

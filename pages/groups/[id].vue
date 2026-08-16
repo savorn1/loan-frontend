@@ -79,6 +79,8 @@
           :columns="memberColumns"
           :loading="membersPending"
           export-filename="group-members.csv"
+          refreshable
+          @refresh="refreshMembers"
         >
           <template #actions-data="{ row }">
             <div class="flex items-center justify-end gap-1">
@@ -154,9 +156,11 @@
         :loading="applicationsPending"
         :exportable="false"
         numbered
+        refreshable
         @select="
           (row: GroupLoanApplicationResponse) => router.push(`/group-loan-applications/${row.id}`)
         "
+        @refresh="refreshApplications"
       >
         <template #empty-state>
           <EmptyState

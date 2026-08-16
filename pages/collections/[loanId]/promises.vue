@@ -17,7 +17,13 @@
       :title="apiErrorMessage(fetchError)"
     />
 
-    <DataTable :rows="promises ?? []" :columns="columns" :loading="pending">
+    <DataTable
+      :rows="promises ?? []"
+      :columns="columns"
+      :loading="pending"
+      refreshable
+      @refresh="refresh"
+    >
       <template #status-data="{ row }">
         <StatusBadge :status="row.status" />
       </template>

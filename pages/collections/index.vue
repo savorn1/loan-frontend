@@ -52,7 +52,9 @@
         :columns="columns"
         :loading="pending"
         numbered
+        refreshable
         :row-number-start="(page - 1) * pageSize"
+        @refresh="refresh"
       >
         <template #bucket-data="{ row }">
           <UBadge :color="bucketColor(row.bucket)" variant="subtle">{{

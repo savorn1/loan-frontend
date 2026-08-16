@@ -18,7 +18,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="refinances ?? []" :columns="columns" :loading="pending" numbered>
+      <DataTable
+        :rows="refinances ?? []"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        refreshable
+        @refresh="refresh"
+      >
         <template #empty-state>
           <EmptyState
             icon="i-heroicons-arrows-right-left"

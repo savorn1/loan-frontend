@@ -69,8 +69,10 @@
         :columns="columns"
         :loading="pending"
         numbered
+        refreshable
         :row-number-start="(page - 1) * pageSize"
         @select="(row: ApplicationResponse) => router.push(`/applications/${row.id}`)"
+        @refresh="refresh"
       >
         <template #empty-state>
           <EmptyState

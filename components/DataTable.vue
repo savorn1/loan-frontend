@@ -1,15 +1,48 @@
 <template>
   <div>
-    <div v-if="exportable && rows.length > 0" class="flex justify-end mb-2">
+    <div
+      v-if="refreshable || ((exportable || showColumnToggle) && rows.length > 0)"
+      class="flex justify-end items-center gap-2 mb-2"
+    >
       <UButton
+        v-if="refreshable"
         size="xs"
         variant="soft"
         color="gray"
-        icon="i-heroicons-arrow-down-tray"
-        @click="downloadCsv(resolvedExportFilename, columns, rows)"
+        icon="i-heroicons-arrow-path"
+        :loading="loading"
+        @click="emit('refresh')"
       >
-        {{ t('common.exportCsv') }}
+        {{ t('common.refresh') }}
       </UButton>
+
+      <UPopover v-if="showColumnToggle && rows.length > 0" :popper="{ placement: 'bottom-end' }">
+        <UButton size="xs" variant="soft" color="gray" icon="i-heroicons-view-columns">
+          {{ t('common.columns') }}
+        </UButton>
+
+        <template #panel>
+          <div class="p-3 space-y-2 min-w-[12rem]">
+            <UCheckbox
+              v-for="column in columns"
+              :key="column.key"
+              :model-value="!hiddenColumnKeys.has(column.key)"
+              :label="column.label || humanize(column.key)"
+              @update:model-value="(v: boolean) => setColumnVisible(column.key, v)"
+            />
+          </div>
+        </template>
+      </UPopover>
+
+      <UDropdown
+        v-if="exportable && rows.length > 0"
+        :items="exportItems"
+        :popper="{ placement: 'bottom-end' }"
+      >
+        <UButton size="xs" variant="soft" color="gray" icon="i-heroicons-arrow-down-tray">
+          {{ t('common.export') }}
+        </UButton>
+      </UDropdown>
     </div>
 
     <div
@@ -43,7 +76,11 @@
         <template v-if="numbered" #[`${ROW_NUMBER_KEY}-data`]="{ index }">
           {{ rowNumberStart + index + 1 }}
         </template>
-        <template v-for="column in columns" :key="column.key" #[`${column.key}-data`]="{ row }">
+        <template
+          v-for="column in visibleColumns"
+          :key="column.key"
+          #[`${column.key}-data`]="{ row }"
+        >
           <slot :name="`${column.key}-data`" :row="row">
             <ColumnValue :column="column" :row="row" />
           </slot>
@@ -61,7 +98,7 @@
           @click="emit('select', row)"
         >
           <div
-            v-for="column in columns"
+            v-for="column in visibleColumns"
             :key="column.key"
             class="flex items-start justify-between gap-3 py-1 text-sm first:pt-0 last:pb-0"
           >
@@ -82,7 +119,10 @@
 
 <script setup lang="ts" generic="T extends Record<string, any>">
 import type { ColumnDef } from '~/shared/types'
-import { deriveExportBaseName } from '~/shared/utils/csv'
+import { downloadCsv } from '~/shared/utils/csv'
+import { downloadXlsx } from '~/shared/utils/xlsx'
+import { downloadPdf } from '~/shared/utils/pdf'
+import { copyTableToClipboard, deriveExportBaseName } from '~/shared/utils/tableExport'
 import type { Button } from '#ui/types'
 
 const props = withDefaults(
@@ -91,7 +131,12 @@ const props = withDefaults(
     columns: ColumnDef<T>[]
     loading?: boolean
     exportable?: boolean
+    /** Base filename (no extension) — each export format appends its own. */
     exportFilename?: string
+    /** Lets users show/hide individual columns via a "Columns" popover. */
+    columnsToggleable?: boolean
+    /** Shows a "Refresh" button that emits `refresh` — the caller re-fetches. */
+    refreshable?: boolean
     /** Adds a leading "No." column, numbered `rowNumberStart + index + 1`. */
     numbered?: boolean
     /** Offset for numbering, e.g. `(page - 1) * pageSize` so it stays continuous across pages. */
@@ -99,6 +144,8 @@ const props = withDefaults(
   }>(),
   {
     exportable: true,
+    columnsToggleable: true,
+    refreshable: false,
     numbered: false,
     rowNumberStart: 0
   }
@@ -106,19 +153,67 @@ const props = withDefaults(
 
 const ROW_NUMBER_KEY = '__rowNumber'
 
-const emit = defineEmits<{ select: [row: T] }>()
+const emit = defineEmits<{ select: [row: T]; refresh: [] }>()
 
 const { t } = useI18n()
 const route = useRoute()
 const attrs = useAttrs()
+const toast = useToast()
 
 const hasSelectListener = computed(() => !!attrs.onSelect)
 
-const resolvedExportFilename = computed(
+const resolvedExportBaseName = computed(
   () =>
     props.exportFilename ??
-    `${deriveExportBaseName(route.path, route.params as Record<string, string | string[]>)}.csv`
+    deriveExportBaseName(route.path, route.params as Record<string, string | string[]>)
 )
+
+function exportCsv() {
+  downloadCsv(`${resolvedExportBaseName.value}.csv`, props.columns, props.rows)
+}
+function exportExcel() {
+  downloadXlsx(`${resolvedExportBaseName.value}.xlsx`, props.columns, props.rows)
+}
+function exportPdf() {
+  downloadPdf(`${resolvedExportBaseName.value}.pdf`, props.columns, props.rows)
+}
+async function copyTable() {
+  try {
+    await copyTableToClipboard(props.columns, props.rows)
+    toast.add({ title: t('common.copiedToClipboard'), color: 'green' })
+  } catch {
+    toast.add({ title: t('common.copyFailed'), color: 'red' })
+  }
+}
+
+const exportItems = computed(() => [
+  [
+    { label: t('common.exportCsv'), icon: 'i-heroicons-table-cells', click: exportCsv },
+    { label: t('common.exportExcel'), icon: 'i-heroicons-document-chart-bar', click: exportExcel },
+    { label: t('common.exportPdf'), icon: 'i-heroicons-document-text', click: exportPdf }
+  ],
+  [{ label: t('common.copyTable'), icon: 'i-heroicons-clipboard-document', click: copyTable }]
+])
+
+// Hidden-by-key (not index) so visibility survives column list re-renders as
+// long as keys stay the same.
+const hiddenColumnKeys = ref<Set<string>>(new Set())
+
+const showColumnToggle = computed(() => props.columnsToggleable && props.columns.length > 1)
+
+const visibleColumns = computed(() =>
+  props.columns.filter((c) => !hiddenColumnKeys.value.has(c.key))
+)
+
+function setColumnVisible(key: string, visible: boolean) {
+  // Always leave at least one column visible — hiding the last one would
+  // render an empty table with no way back to the toggle.
+  if (!visible && visibleColumns.value.length <= 1) return
+  const next = new Set(hiddenColumnKeys.value)
+  if (visible) next.delete(key)
+  else next.add(key)
+  hiddenColumnKeys.value = next
+}
 
 const sort = defineModel<{ column: string; direction: 'asc' | 'desc' } | undefined>('sort')
 
@@ -143,7 +238,7 @@ const sortButtonOverride = computed<(Button & { class?: string }) | undefined>((
 )
 
 const uColumns = computed(() => {
-  const mapped = props.columns.map((c) => ({
+  const mapped = visibleColumns.value.map((c) => ({
     key: c.key,
     label: c.label ?? humanize(c.key),
     sortable: c.sortable,

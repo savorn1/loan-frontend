@@ -18,7 +18,14 @@
         :title="apiErrorMessage(fetchError)"
       />
 
-      <DataTable :rows="collaterals ?? []" :columns="columns" :loading="pending" numbered>
+      <DataTable
+        :rows="collaterals ?? []"
+        :columns="columns"
+        :loading="pending"
+        numbered
+        refreshable
+        @refresh="refresh"
+      >
         <template #actions-data="{ row }">
           <div v-if="isAdmin && row.status === 'PLEDGED'" class="flex gap-1 justify-end">
             <UButton

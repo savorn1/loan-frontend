@@ -54,7 +54,9 @@
         :columns="columns"
         :loading="pending"
         numbered
+        refreshable
         :row-number-start="(page - 1) * pageSize"
+        @refresh="refresh"
       >
         <template #status-data="{ row }">
           <UBadge :color="row.status === 'ACTIVE' ? 'green' : 'gray'" variant="subtle">

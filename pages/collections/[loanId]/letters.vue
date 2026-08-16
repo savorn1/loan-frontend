@@ -17,7 +17,13 @@
       :title="apiErrorMessage(fetchError)"
     />
 
-    <DataTable :rows="letters ?? []" :columns="columns" :loading="pending">
+    <DataTable
+      :rows="letters ?? []"
+      :columns="columns"
+      :loading="pending"
+      refreshable
+      @refresh="refresh"
+    >
       <template #letterType-data="{ row }">
         <UBadge color="gray" variant="subtle">{{ formatEnum(row.letterType) }}</UBadge>
       </template>

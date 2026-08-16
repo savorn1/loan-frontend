@@ -101,6 +101,8 @@
         :rows="auditLogs ?? []"
         :columns="auditColumns"
         export-filename="journal-entry-audit-log.csv"
+        refreshable
+        @refresh="refreshAuditLogs"
       />
     </UCard>
   </div>

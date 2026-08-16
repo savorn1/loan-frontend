@@ -61,8 +61,10 @@
         :columns="columns"
         :loading="pending"
         numbered
+        refreshable
         :row-number-start="(page - 1) * pageSize"
         @select="onSelect"
+        @refresh="refresh"
       >
         <template #actions-data="{ row }">
           <div class="flex items-center justify-end gap-1" @click.stop>

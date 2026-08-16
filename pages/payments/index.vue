@@ -80,7 +80,9 @@
           :columns="columns"
           :loading="pending"
           numbered
+          refreshable
           :row-number-start="(page - 1) * pageSize"
+          @refresh="refresh"
         >
           <template #actions-data="{ row }">
             <div class="flex gap-1 justify-end">
