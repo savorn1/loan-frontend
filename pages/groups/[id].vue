@@ -215,8 +215,8 @@
             #{{ row.loanId }}
           </NuxtLink>
         </template>
-        <template #reversed-data="{ row }">
-          <StatusBadge v-if="row.reversed" status="REVERSED" />
+        <template #reversalStatus-data="{ row }">
+          <StatusBadge v-if="row.reversalStatus" :status="row.reversalStatus" />
           <span v-else>—</span>
         </template>
         <template #empty-state>
@@ -641,7 +641,7 @@ const paymentColumns = computed<ColumnDef<GroupPaymentRow>[]>(() => [
   { key: 'amount', label: t('groupLoanApplications.repayments.columns.amount'), type: 'currency' },
   { key: 'paymentDate', label: t('groupLoanApplications.repayments.columns.date'), type: 'date' },
   { key: 'method', label: t('groupLoanApplications.repayments.columns.method'), type: 'enum' },
-  { key: 'reversed', label: t('groupLoanApplications.repayments.columns.status') }
+  { key: 'reversalStatus', label: t('groupLoanApplications.repayments.columns.status') }
 ])
 
 // ── Close group ─────────────────────────────────────────────────────────

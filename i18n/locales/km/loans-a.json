@@ -313,7 +313,22 @@
       "reverseButton": "បញ្ច្រាស",
       "reverseModalTitle": "បញ្ច្រាសការទូទាត់",
       "reasonFieldLabel": "ហេតុផល",
-      "toastReversed": "ការទូទាត់ត្រូវបានបញ្ច្រាស",
+      "toastReversed": "បានស្នើសុំបញ្ច្រាសការទូទាត់",
+      "toastReversalApproved": "ការបញ្ច្រាសត្រូវបានអនុម័ត",
+      "toastReversalRejected": "ការបញ្ច្រាសត្រូវបានបដិសេធ",
+      "reversalActions": {
+        "approve": "អនុម័ត",
+        "reject": "បដិសេធ"
+      },
+      "reversalConfirm": {
+        "approve": {
+          "title": "អនុម័តការបញ្ច្រាស",
+          "description": "សកម្មភាពនេះនឹងស្តារកម្រិតទូទាត់ដែលរងផលប៉ះពាល់ និងសមតុល្យនៅសល់របស់កម្ចី។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។"
+        },
+        "reject": {
+          "title": "បដិសេធការបញ្ច្រាស"
+        }
+      },
       "columns": {
         "paymentNo": "លេខបង្កាន់ដៃ",
         "date": "កាលបរិច្ឆេទ",

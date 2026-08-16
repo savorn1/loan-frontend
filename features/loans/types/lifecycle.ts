@@ -1,10 +1,17 @@
-// ── Loan restructures (in-place term/rate change — a request + history log,
-// not a PENDING/APPROVED workflow: recalculation and application is backend logic) ─
+// ── Loan restructures (in-place term/rate change — maker-checker like
+// disbursements: requesting one only logs the request, the recalculation and
+// application to the loan happen on approval by a different admin) ──────────
+export type RestructureStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED'
+
 export interface LoanRestructureRequest {
   newTermMonths: number
   newInterestRate?: number
   reason: string
   effectiveDate: string // ISO date
+}
+
+export interface LoanRestructureRejectRequest {
+  reason: string
 }
 
 export interface LoanRestructureResponse {
@@ -14,6 +21,11 @@ export interface LoanRestructureResponse {
   newInterestRate: number | null
   reason: string
   effectiveDate: string
+  status: RestructureStatus
+  createdBy: string | null
+  reviewedBy: string | null
+  reviewedAt: string | null
+  rejectionReason: string | null
   createdAt: string
   updatedAt: string
 }
@@ -72,13 +84,17 @@ export interface LoanDocumentResponse {
 // ── Loan collateral (assets pledged as security — a loan may have several;
 // each is released independently, typically once the loan is settled/closed) ─
 export type CollateralType = 'REAL_ESTATE' | 'VEHICLE' | 'EQUIPMENT' | 'CASH_DEPOSIT' | 'OTHER'
-export type CollateralStatus = 'PLEDGED' | 'RELEASED'
+export type CollateralStatus = 'PLEDGED' | 'RELEASED' | 'SEIZED'
 
 export interface LoanCollateralRequest {
   type: CollateralType
   description: string
   estimatedValue: number
   reference?: string
+}
+
+export interface LoanCollateralSeizeRequest {
+  reason: string
 }
 
 export interface LoanCollateralResponse {
@@ -90,6 +106,8 @@ export interface LoanCollateralResponse {
   reference: string | null
   status: CollateralStatus
   releasedAt: string | null
+  seizedAt: string | null
+  seizureReason: string | null
   createdAt: string
   updatedAt: string
 }

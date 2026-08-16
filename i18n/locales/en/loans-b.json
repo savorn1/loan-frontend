@@ -170,6 +170,10 @@
       "add": "Add collateral",
       "editTitle": "Edit collateral",
       "release": "Release",
+      "seize": "Seize",
+      "seizeModalTitle": "Seize collateral",
+      "seizeReasonLabel": "Reason",
+      "seizeSubmit": "Seize",
       "empty": {
         "title": "No collateral pledged",
         "description": "Record assets pledged as security for this loan — property, vehicles, equipment or a cash deposit."
@@ -206,7 +210,8 @@
         "recorded": "Collateral recorded",
         "updated": "Collateral updated",
         "deleted": "Collateral deleted",
-        "released": "Collateral released"
+        "released": "Collateral released",
+        "seized": "Collateral seized"
       }
     },
     "guarantors": {
@@ -255,10 +260,10 @@
     },
     "restructures": {
       "title": "Restructures",
-      "add": "Add restructure",
+      "add": "Request restructure",
       "empty": {
         "title": "No restructures",
-        "description": "Log a change to this loan's term or rate — e.g. a hardship extension or rate adjustment."
+        "description": "Request a change to this loan's term or rate — e.g. a hardship extension or rate adjustment. Another admin must approve it before it takes effect."
       },
       "columns": {
         "effective": "Effective",
@@ -266,6 +271,8 @@
         "newTermSuffix": " months",
         "newRate": "New rate",
         "reason": "Reason",
+        "status": "Status",
+        "createdBy": "Requested by",
         "created": "Created"
       },
       "fields": {
@@ -275,9 +282,24 @@
         "effectiveDate": "Effective date",
         "reason": "Reason"
       },
-      "submit": "Add",
+      "submit": "Request",
+      "actions": {
+        "approve": "Approve",
+        "reject": "Reject"
+      },
+      "confirm": {
+        "approve": {
+          "title": "Approve restructure",
+          "description": "This re-amortizes the loan's remaining balance over the new term/rate and replaces its active schedule. This cannot be undone."
+        },
+        "reject": {
+          "title": "Reject restructure"
+        }
+      },
       "toast": {
-        "recorded": "Restructure recorded"
+        "recorded": "Restructure requested",
+        "approved": "Restructure approved",
+        "rejected": "Restructure rejected"
       }
     },
     "refinances": {

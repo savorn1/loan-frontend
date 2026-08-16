@@ -18,6 +18,8 @@ export interface LoanPenaltyResponse {
   status: PenaltyStatus
   waivedAt: string | null
   paidAt: string | null
+  // Non-null only for penalties OverdueInstallmentScheduler auto-charged.
+  scheduleInstallmentId: number | null
   createdAt: string
   updatedAt: string
 }

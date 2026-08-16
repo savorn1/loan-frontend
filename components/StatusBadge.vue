@@ -26,6 +26,7 @@ const STATUS_META: Record<string, { color: StatusColor; icon: string }> = {
   COMPLETED: { color: 'teal', icon: 'i-heroicons-flag' },
   PLEDGED: { color: 'teal', icon: 'i-heroicons-lock-closed' },
   RELEASED: { color: 'gray', icon: 'i-heroicons-lock-open' },
+  SEIZED: { color: 'red', icon: 'i-heroicons-exclamation-triangle' },
   REJECTED: { color: 'red', icon: 'i-heroicons-x-circle' },
   FAILED: { color: 'red', icon: 'i-heroicons-x-circle' },
   REVOKED: { color: 'red', icon: 'i-heroicons-x-circle' },

@@ -14,6 +14,7 @@ export interface PaymentResponse {
   amount: number
   dueDate: string
   paidAt: string | null
+  paidBy: string | null
   status: PaymentStatus
   note: string | null
   installmentNumber: number | null
@@ -21,6 +22,18 @@ export interface PaymentResponse {
   interestComponent: number | null
   createdAt: string
   updatedAt: string
+}
+
+// Read-only audit trail — one row per payment status transition (e.g. PENDING
+// -> PAID), returned oldest-status-last by GET /payments/{id}/status-history.
+export interface PaymentStatusHistoryResponse {
+  id: number
+  paymentId: number
+  fromStatus: PaymentStatus | null
+  toStatus: PaymentStatus
+  changedBy: string
+  note: string | null
+  changedAt: string
 }
 
 export interface ScheduleInstallmentRequest {

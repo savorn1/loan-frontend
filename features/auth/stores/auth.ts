@@ -2,7 +2,6 @@ import type {
   AuthResponse,
   ChangePasswordRequest,
   LoginRequest,
-  RegisterRequest,
   UserProfileResponse
 } from '~/features/auth/types'
 import type { Role } from '~/shared/types'
@@ -62,15 +61,6 @@ export const useAuth = defineStore('auth', () => {
 
   async function login(payload: LoginRequest) {
     const res = await authClient<AuthResponse>('/api/auth/login', { method: 'POST', body: payload })
-    applySession(res)
-    return res
-  }
-
-  async function register(payload: RegisterRequest) {
-    const res = await authClient<AuthResponse>('/api/auth/register', {
-      method: 'POST',
-      body: payload
-    })
     applySession(res)
     return res
   }
@@ -148,7 +138,6 @@ export const useAuth = defineStore('auth', () => {
     isAuthenticated,
     isAdmin,
     login,
-    register,
     refresh,
     changePassword,
     applyProfile,

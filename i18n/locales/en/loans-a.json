@@ -313,7 +313,22 @@
       "reverseButton": "Reverse",
       "reverseModalTitle": "Reverse payment",
       "reasonFieldLabel": "Reason",
-      "toastReversed": "Payment reversed",
+      "toastReversed": "Reversal requested",
+      "toastReversalApproved": "Reversal approved",
+      "toastReversalRejected": "Reversal rejected",
+      "reversalActions": {
+        "approve": "Approve",
+        "reject": "Reject"
+      },
+      "reversalConfirm": {
+        "approve": {
+          "title": "Approve reversal",
+          "description": "This restores the affected installments and the loan's outstanding balance. This cannot be undone."
+        },
+        "reject": {
+          "title": "Reject reversal"
+        }
+      },
       "columns": {
         "paymentNo": "Receipt No.",
         "date": "Date",

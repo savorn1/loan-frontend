@@ -55,13 +55,6 @@
         {{ t('auth.signIn') }}
       </UButton>
     </UForm>
-
-    <p class="text-sm text-center mt-6 text-gray-500">
-      {{ t('auth.noAccount') }}
-      <NuxtLink to="/register" class="text-primary-500 font-medium">{{
-        t('auth.signUp')
-      }}</NuxtLink>
-    </p>
   </div>
 </template>
 

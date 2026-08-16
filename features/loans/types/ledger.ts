@@ -102,6 +102,15 @@ export interface LoanPaymentAllocationResponse {
   createdAt: string
 }
 
+// Maker-checker like disbursements/restructures: reversing a payment only
+// requests it (LoanPaymentReverseRequest); a different admin must approve
+// before the schedule/balance actually change. Null means never requested.
+export type PaymentReversalStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED'
+
+export interface LoanPaymentReversalRejectRequest {
+  reason: string
+}
+
 export interface LoanPaymentResponse {
   id: number
   paymentNo: string
@@ -111,9 +120,13 @@ export interface LoanPaymentResponse {
   method: DisbursementMethod
   reference: string | null
   allocations: LoanPaymentAllocationResponse[]
-  reversed: boolean
-  reversedAt: string | null
+  reversalStatus: PaymentReversalStatus | null
   reversalReason: string | null
+  reversalRequestedBy: string | null
+  reversalRequestedAt: string | null
+  reversalReviewedBy: string | null
+  reversalReviewedAt: string | null
+  reversalRejectionReason: string | null
   createdAt: string
   updatedAt: string
 }

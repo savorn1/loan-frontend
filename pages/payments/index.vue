@@ -96,6 +96,13 @@
                 {{ t('payments.list.markPaid') }}
               </UButton>
               <UButton
+                size="2xs"
+                variant="soft"
+                icon="i-heroicons-clock"
+                :aria-label="t('payments.list.viewHistory')"
+                @click="openHistory(row)"
+              />
+              <UButton
                 v-if="isAdmin"
                 size="2xs"
                 color="red"
@@ -149,6 +156,31 @@
       </UCard>
     </UModal>
 
+    <UModal
+      :model-value="!!viewingHistory"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) viewingHistory = null
+        }
+      "
+    >
+      <UCard v-if="viewingHistory">
+        <template #header>
+          <span class="font-semibold">{{ t('payments.list.historyModalTitle') }}</span>
+        </template>
+        <DataTable
+          :rows="historyRows"
+          :columns="historyColumns"
+          :loading="loadingHistory"
+          :exportable="false"
+        >
+          <template #empty-state>
+            <EmptyState icon="i-heroicons-clock" :title="t('payments.list.historyEmpty')" />
+          </template>
+        </DataTable>
+      </UCard>
+    </UModal>
+
     <ConfirmModal
       :model-value="confirmDeleteId !== null"
       :title="t('payments.list.deleteConfirmTitle')"
@@ -168,7 +200,12 @@
 
 <script setup lang="ts">
 import type { LoanResponse } from '~/features/loans/types'
-import type { PaymentRequest, PaymentResponse, PaymentStatus } from '~/features/payments/types'
+import type {
+  PaymentRequest,
+  PaymentResponse,
+  PaymentStatus,
+  PaymentStatusHistoryResponse
+} from '~/features/payments/types'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const api = useApi()
@@ -272,6 +309,7 @@ const columns = computed<ColumnDef<PaymentResponse>[]>(() => [
   { key: 'amount', label: t('payments.list.columns.amount'), type: 'currency', sortable: true },
   { key: 'dueDate', label: t('payments.list.columns.due'), type: 'date', sortable: true },
   { key: 'status', label: t('payments.list.columns.status'), type: 'status', sortable: true },
+  { key: 'paidBy', label: t('payments.list.columns.paidBy') },
   {
     key: 'createdAt',
     label: t('payments.list.columns.created'),
@@ -349,6 +387,33 @@ async function onMarkPaid(id: number) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
   } finally {
     markingPaid.value = null
+  }
+}
+
+const viewingHistory = ref<PaymentResponse | null>(null)
+const historyRows = ref<PaymentStatusHistoryResponse[]>([])
+const loadingHistory = ref(false)
+
+const historyColumns = computed<ColumnDef<PaymentStatusHistoryResponse>[]>(() => [
+  { key: 'fromStatus', label: t('payments.list.historyColumns.from'), type: 'enum' },
+  { key: 'toStatus', label: t('payments.list.historyColumns.to'), type: 'status' },
+  { key: 'changedBy', label: t('payments.list.historyColumns.changedBy') },
+  { key: 'changedAt', label: t('payments.list.historyColumns.changedAt'), type: 'datetime' },
+  { key: 'note', label: t('payments.list.historyColumns.note') }
+])
+
+async function openHistory(row: PaymentResponse) {
+  viewingHistory.value = row
+  loadingHistory.value = true
+  historyRows.value = []
+  try {
+    historyRows.value = await api<PaymentStatusHistoryResponse[]>(
+      `/payments/${row.id}/status-history`
+    )
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    loadingHistory.value = false
   }
 }
 

@@ -51,6 +51,15 @@
             >
               {{ t('loans.collaterals.release') }}
             </UButton>
+            <UButton
+              size="2xs"
+              color="red"
+              variant="soft"
+              icon="i-heroicons-exclamation-triangle"
+              @click="openSeize(row)"
+            >
+              {{ t('loans.collaterals.seize') }}
+            </UButton>
           </div>
         </template>
         <template #empty-state>
@@ -111,11 +120,33 @@
       "
       @confirm="onConfirmDelete"
     />
+
+    <UModal v-model="showSeize">
+      <UCard>
+        <template #header>
+          <span class="font-semibold">{{ t('loans.collaterals.seizeModalTitle') }}</span>
+        </template>
+        <DynamicForm
+          v-model="seizeForm"
+          :fields="seizeFields"
+          :loading="seizing"
+          :error="seizeError"
+          :submit-label="t('loans.collaterals.seizeSubmit')"
+          cancelable
+          @submit="onSubmitSeize"
+          @cancel="showSeize = false"
+        />
+      </UCard>
+    </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { LoanCollateralRequest, LoanCollateralResponse } from '~/features/loans/types'
+import type {
+  LoanCollateralRequest,
+  LoanCollateralResponse,
+  LoanCollateralSeizeRequest
+} from '~/features/loans/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const route = useRoute()
@@ -270,6 +301,48 @@ async function onRelease(collateralId: number) {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
   } finally {
     releasing.value = null
+  }
+}
+
+const showSeize = ref(false)
+const seizing = ref(false)
+const seizeError = ref('')
+const seizeForm = ref<Record<string, any>>({ reason: '' })
+const seizeTarget = ref<LoanCollateralResponse | null>(null)
+
+const seizeFields = computed<FieldDef[]>(() => [
+  {
+    name: 'reason',
+    label: t('loans.collaterals.seizeReasonLabel'),
+    type: 'textarea',
+    required: true
+  }
+])
+
+function openSeize(row: LoanCollateralResponse) {
+  seizeTarget.value = row
+  seizeForm.value = { reason: '' }
+  seizeError.value = ''
+  showSeize.value = true
+}
+
+async function onSubmitSeize(values: Record<string, any>) {
+  if (!seizeTarget.value) return
+  seizing.value = true
+  seizeError.value = ''
+  try {
+    const payload: LoanCollateralSeizeRequest = { reason: values.reason }
+    await api(`/loans/${loanId}/collaterals/${seizeTarget.value.id}/seize`, {
+      method: 'PUT',
+      body: payload
+    })
+    toast.add({ title: t('loans.collaterals.toast.seized'), color: 'green' })
+    showSeize.value = false
+    await refresh()
+  } catch (err) {
+    seizeError.value = apiErrorMessage(err)
+  } finally {
+    seizing.value = false
   }
 }
 </script>

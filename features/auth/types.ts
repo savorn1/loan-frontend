@@ -1,12 +1,9 @@
-// Mirrors auth-service's dto package (register/login/refresh/logout/change-password).
+// Mirrors auth-service's dto package (login/refresh/logout/change-password). No
+// register — this is a staff-only system with no self-signup; new users are
+// created by an admin via the users management page.
 import type { Role } from '~/shared/types'
 
 export interface LoginRequest {
-  username: string
-  password: string
-}
-
-export interface RegisterRequest {
   username: string
   password: string
 }

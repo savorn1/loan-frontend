@@ -177,6 +177,9 @@
       "created": "Payment created",
       "markedPaid": "Payment marked as paid",
       "deleted": "Payment deleted",
+      "viewHistory": "View history",
+      "historyModalTitle": "Status history",
+      "historyEmpty": "No status changes recorded yet",
       "statusOptions": {
         "all": "All statuses",
         "pending": "Pending",
@@ -190,7 +193,15 @@
         "amount": "Amount",
         "due": "Due",
         "status": "Status",
+        "paidBy": "Paid by",
         "created": "Created"
+      },
+      "historyColumns": {
+        "from": "From",
+        "to": "To",
+        "changedBy": "Changed by",
+        "changedAt": "Changed at",
+        "note": "Note"
       },
       "fields": {
         "loan": "Loan",

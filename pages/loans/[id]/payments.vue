@@ -26,8 +26,8 @@
         refreshable
         @refresh="refresh"
       >
-        <template #reversed-data="{ row }">
-          <StatusBadge v-if="row.reversed" status="REVERSED" />
+        <template #reversalStatus-data="{ row }">
+          <StatusBadge v-if="row.reversalStatus" :status="row.reversalStatus" />
           <span v-else>—</span>
         </template>
         <template #actions-data="{ row }">
@@ -41,7 +41,7 @@
               {{ t('loans.payments.viewAllocationsButton') }}
             </UButton>
             <UButton
-              v-if="isAdmin && !row.reversed"
+              v-if="isAdmin && !row.reversalStatus"
               size="2xs"
               color="orange"
               variant="soft"
@@ -50,6 +50,30 @@
             >
               {{ t('loans.payments.reverseButton') }}
             </UButton>
+            <template
+              v-if="
+                isAdmin &&
+                row.reversalStatus === 'PENDING_APPROVAL' &&
+                row.reversalRequestedBy !== username
+              "
+            >
+              <UButton
+                size="2xs"
+                color="green"
+                variant="soft"
+                icon="i-heroicons-check"
+                :aria-label="t('loans.payments.reversalActions.approve')"
+                @click="confirmApproveReversal = row"
+              />
+              <UButton
+                size="2xs"
+                color="red"
+                variant="soft"
+                icon="i-heroicons-x-mark"
+                :aria-label="t('loans.payments.reversalActions.reject')"
+                @click="openRejectReversal(row)"
+              />
+            </template>
           </div>
         </template>
         <template #empty-state>
@@ -132,12 +156,45 @@
         />
       </UCard>
     </UModal>
+
+    <UModal v-model="showRejectReversal">
+      <UCard>
+        <template #header>
+          <span class="font-semibold">{{ t('loans.payments.reversalConfirm.reject.title') }}</span>
+        </template>
+        <DynamicForm
+          v-model="rejectReversalForm"
+          :fields="rejectReversalFields"
+          :loading="rejectingReversal"
+          :error="rejectReversalError"
+          :submit-label="t('common.confirm')"
+          cancelable
+          @submit="onSubmitRejectReversal"
+          @cancel="showRejectReversal = false"
+        />
+      </UCard>
+    </UModal>
+
+    <ConfirmModal
+      :model-value="!!confirmApproveReversal"
+      :title="t('loans.payments.reversalConfirm.approve.title')"
+      :description="t('loans.payments.reversalConfirm.approve.description')"
+      color="green"
+      :loading="approvingReversal"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmApproveReversal = null
+        }
+      "
+      @confirm="onConfirmApproveReversal"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type {
   LoanPaymentAllocationResponse,
+  LoanPaymentReversalRejectRequest,
   LoanPaymentRequest,
   LoanPaymentResponse
 } from '~/features/loans/types'
@@ -147,7 +204,7 @@ const { t } = useI18n()
 const route = useRoute()
 const api = useApi()
 const toast = useToast()
-const { isAdmin } = storeToRefs(useAuth())
+const { isAdmin, username } = storeToRefs(useAuth())
 
 const loanId = route.params.id as string
 
@@ -168,7 +225,7 @@ const columns = computed<ColumnDef<LoanPaymentResponse>[]>(() => [
   { key: 'amount', label: t('loans.payments.columns.amount'), type: 'currency' },
   { key: 'method', label: t('loans.payments.columns.method'), type: 'enum' },
   { key: 'reference', label: t('loans.payments.columns.reference') },
-  { key: 'reversed', label: t('loans.payments.columns.status') },
+  { key: 'reversalStatus', label: t('loans.payments.columns.status') },
   { key: 'createdAt', label: t('loans.payments.columns.created'), type: 'datetime' },
   { key: 'actions', label: '' }
 ])
@@ -292,6 +349,63 @@ async function onSubmitReverse(values: Record<string, any>) {
     reverseError.value = apiErrorMessage(err)
   } finally {
     reversing.value = false
+  }
+}
+
+const confirmApproveReversal = ref<LoanPaymentResponse | null>(null)
+const approvingReversal = ref(false)
+
+async function onConfirmApproveReversal() {
+  if (!confirmApproveReversal.value) return
+  approvingReversal.value = true
+  try {
+    await api(`/loans/${loanId}/payments/${confirmApproveReversal.value.id}/reverse/approve`, {
+      method: 'PUT'
+    })
+    toast.add({ title: t('loans.payments.toastReversalApproved'), color: 'green' })
+    confirmApproveReversal.value = null
+    await refresh()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    approvingReversal.value = false
+  }
+}
+
+const showRejectReversal = ref(false)
+const rejectReversalTarget = ref<LoanPaymentResponse | null>(null)
+const rejectReversalForm = ref<Record<string, any>>({ reason: '' })
+const rejectingReversal = ref(false)
+const rejectReversalError = ref('')
+
+const rejectReversalFields = computed<FieldDef[]>(() => [
+  { name: 'reason', label: t('loans.payments.reasonFieldLabel'), type: 'textarea', required: true }
+])
+
+function openRejectReversal(row: LoanPaymentResponse) {
+  rejectReversalTarget.value = row
+  rejectReversalForm.value = { reason: '' }
+  rejectReversalError.value = ''
+  showRejectReversal.value = true
+}
+
+async function onSubmitRejectReversal(values: Record<string, any>) {
+  if (!rejectReversalTarget.value) return
+  rejectingReversal.value = true
+  rejectReversalError.value = ''
+  try {
+    const payload: LoanPaymentReversalRejectRequest = { reason: values.reason }
+    await api(`/loans/${loanId}/payments/${rejectReversalTarget.value.id}/reverse/reject`, {
+      method: 'PUT',
+      body: payload
+    })
+    toast.add({ title: t('loans.payments.toastReversalRejected'), color: 'green' })
+    showRejectReversal.value = false
+    await refresh()
+  } catch (err) {
+    rejectReversalError.value = apiErrorMessage(err)
+  } finally {
+    rejectingReversal.value = false
   }
 }
 </script>
