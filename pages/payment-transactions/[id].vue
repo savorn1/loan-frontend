@@ -9,14 +9,14 @@
     >
       {{ t('payments.transactions.detail.backToList') }}
     </UButton>
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-3">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div class="flex items-center gap-3 min-w-0">
         <h1 class="text-xl font-bold">
           {{ t('payments.transactions.detail.detailTitle', { paymentNo: transaction.paymentNo }) }}
         </h1>
         <StatusBadge :status="transaction.status" />
       </div>
-      <div v-if="isAdmin && transaction.status === 'PENDING'" class="flex gap-2">
+      <div v-if="isAdmin && transaction.status === 'PENDING'" class="flex flex-wrap gap-2">
         <UButton
           color="green"
           :loading="actionLoading === 'SUCCESS'"
@@ -35,8 +35,7 @@
         v-else-if="isAdmin && transaction.status === 'SUCCESS'"
         color="gray"
         variant="soft"
-        :loading="actionLoading === 'REFUNDED'"
-        @click="onSetStatus('REFUNDED')"
+        @click="showRefund = true"
       >
         {{ t('payments.transactions.detail.refund') }}
       </UButton>
@@ -98,6 +97,27 @@
               {{ transaction.completedAt ? formatDateTime(transaction.completedAt) : '—' }}
             </dd>
           </div>
+          <template v-if="transaction.status === 'REFUNDED'">
+            <div class="flex items-center justify-between gap-4 py-3 text-sm">
+              <dt class="flex items-center gap-2 text-gray-500">
+                <UIcon name="i-heroicons-arrow-uturn-left" class="w-4 h-4 shrink-0" />
+                {{ t('payments.transactions.detail.refundedAt') }}
+              </dt>
+              <dd class="font-medium text-right">
+                {{ transaction.refundedAt ? formatDateTime(transaction.refundedAt) : '—' }}
+                <span v-if="transaction.refundedBy" class="block text-xs text-gray-500">{{
+                  transaction.refundedBy
+                }}</span>
+              </dd>
+            </div>
+            <div v-if="transaction.refundReason" class="py-3 text-sm">
+              <dt class="flex items-center gap-2 text-gray-500 mb-1">
+                <UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-4 h-4 shrink-0" />
+                {{ t('payments.transactions.detail.refundReason') }}
+              </dt>
+              <dd class="font-medium">{{ transaction.refundReason }}</dd>
+            </div>
+          </template>
         </dl>
       </UCard>
 
@@ -187,6 +207,26 @@
         </template>
       </DataTable>
     </UCard>
+
+    <UModal v-model="showRefund">
+      <UCard>
+        <template #header>
+          <span class="font-semibold">{{
+            t('payments.transactions.detail.refundModalTitle')
+          }}</span>
+        </template>
+        <DynamicForm
+          v-model="refundForm"
+          :fields="refundFields"
+          :loading="refunding"
+          :error="refundError"
+          :submit-label="t('payments.transactions.detail.refund')"
+          cancelable
+          @submit="onSubmitRefund"
+          @cancel="showRefund = false"
+        />
+      </UCard>
+    </UModal>
   </div>
   <div v-else-if="error" class="py-8">
     <ErrorState :title="t('common.errorState.title')" :description="apiErrorMessage(error)">
@@ -214,7 +254,7 @@ import type {
   PaymentTransactionResponse,
   TransactionStatus
 } from '~/features/payments/types'
-import type { ColumnDef } from '~/shared/types'
+import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const route = useRoute()
 const api = useApi()
@@ -247,7 +287,7 @@ const statusWordKeys: Record<'SUCCESS' | 'FAILED' | 'REFUNDED', string> = {
   REFUNDED: 'payments.transactions.detail.statusWords.refunded'
 }
 
-async function onSetStatus(status: Extract<TransactionStatus, 'SUCCESS' | 'FAILED' | 'REFUNDED'>) {
+async function onSetStatus(status: Extract<TransactionStatus, 'SUCCESS' | 'FAILED'>) {
   actionLoading.value = status
   try {
     await api(`/payments/transactions/${transactionId}/status`, { method: 'PUT', body: { status } })
@@ -260,6 +300,43 @@ async function onSetStatus(status: Extract<TransactionStatus, 'SUCCESS' | 'FAILE
     toast.add({ title: apiErrorMessage(err), color: 'red' })
   } finally {
     actionLoading.value = null
+  }
+}
+
+const showRefund = ref(false)
+const refunding = ref(false)
+const refundForm = ref<Record<string, any>>({ reason: '' })
+const refundError = ref('')
+
+const refundFields = computed<FieldDef[]>(() => [
+  {
+    name: 'reason',
+    label: t('payments.transactions.detail.refundReasonLabel'),
+    type: 'textarea',
+    required: true
+  }
+])
+
+async function onSubmitRefund(values: Record<string, any>) {
+  refunding.value = true
+  refundError.value = ''
+  try {
+    await api(`/payments/transactions/${transactionId}/status`, {
+      method: 'PUT',
+      body: { status: 'REFUNDED', reason: values.reason }
+    })
+    toast.add({
+      title: t('payments.transactions.detail.statusUpdated', {
+        status: t(statusWordKeys.REFUNDED)
+      }),
+      color: 'green'
+    })
+    showRefund.value = false
+    await refresh()
+  } catch (err) {
+    refundError.value = apiErrorMessage(err)
+  } finally {
+    refunding.value = false
   }
 }
 </script>

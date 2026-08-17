@@ -4,7 +4,7 @@
 
     <UCard class="mb-4">
       <div class="flex flex-wrap items-end gap-4">
-        <UFormGroup :label="t('admin.notifications.recipientTypeLabel')" class="w-40">
+        <UFormGroup :label="t('admin.notifications.recipientTypeLabel')" class="w-full sm:w-40">
           <USelectMenu
             v-model="filters.recipientType"
             :options="recipientTypeOptions"
@@ -12,7 +12,7 @@
             value-attribute="value"
           />
         </UFormGroup>
-        <UFormGroup :label="t('admin.notifications.channelLabel')" class="w-40">
+        <UFormGroup :label="t('admin.notifications.channelLabel')" class="w-full sm:w-40">
           <USelectMenu
             v-model="filters.channel"
             :options="channelOptions"
@@ -20,7 +20,7 @@
             value-attribute="value"
           />
         </UFormGroup>
-        <UFormGroup :label="t('admin.notifications.statusLabel')" class="w-40">
+        <UFormGroup :label="t('admin.notifications.statusLabel')" class="w-full sm:w-40">
           <USelectMenu
             v-model="filters.status"
             :options="statusOptions"

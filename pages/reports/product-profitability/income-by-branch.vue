@@ -16,11 +16,17 @@
     <UCard>
       <template #header>
         <div class="flex flex-wrap items-center gap-3">
-          <UFormGroup :label="t('accounting.productProfitabilityReports.incomeByBranch.dateFrom')">
-            <UInput v-model="dateFrom" type="date" size="sm" />
+          <UFormGroup
+            class="w-full sm:w-auto"
+            :label="t('accounting.productProfitabilityReports.incomeByBranch.dateFrom')"
+          >
+            <UInput v-model="dateFrom" type="date" size="sm" class="w-full sm:w-40" />
           </UFormGroup>
-          <UFormGroup :label="t('accounting.productProfitabilityReports.incomeByBranch.dateTo')">
-            <UInput v-model="dateTo" type="date" size="sm" />
+          <UFormGroup
+            class="w-full sm:w-auto"
+            :label="t('accounting.productProfitabilityReports.incomeByBranch.dateTo')"
+          >
+            <UInput v-model="dateTo" type="date" size="sm" class="w-full sm:w-40" />
           </UFormGroup>
         </div>
       </template>

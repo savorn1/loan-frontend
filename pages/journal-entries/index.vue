@@ -133,14 +133,18 @@
               }}</UButton>
             </div>
             <div class="space-y-2">
-              <div v-for="(line, i) in createForm.lines" :key="i" class="flex items-center gap-2">
+              <div
+                v-for="(line, i) in createForm.lines"
+                :key="i"
+                class="flex flex-wrap items-center gap-2"
+              >
                 <USelectMenu
                   v-model="line.glAccountId"
                   :options="glAccountOptions"
                   option-attribute="label"
                   value-attribute="value"
                   :placeholder="t('accounting.journalEntries.fields.account')"
-                  class="flex-1"
+                  class="w-full sm:flex-1"
                 />
                 <USelectMenu
                   v-model="line.entrySide"

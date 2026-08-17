@@ -17,16 +17,19 @@
       <template #header>
         <div class="flex flex-wrap items-center gap-3">
           <UFormGroup
+            class="w-full sm:w-auto"
             :label="t('accounting.operationalPerformanceReports.statusAuditTrail.dateFrom')"
           >
-            <UInput v-model="dateFrom" type="date" size="sm" />
+            <UInput v-model="dateFrom" type="date" size="sm" class="w-full sm:w-40" />
           </UFormGroup>
           <UFormGroup
+            class="w-full sm:w-auto"
             :label="t('accounting.operationalPerformanceReports.statusAuditTrail.dateTo')"
           >
-            <UInput v-model="dateTo" type="date" size="sm" />
+            <UInput v-model="dateTo" type="date" size="sm" class="w-full sm:w-40" />
           </UFormGroup>
           <UFormGroup
+            class="w-full sm:w-auto"
             :label="t('accounting.operationalPerformanceReports.statusAuditTrail.status')"
           >
             <USelectMenu
@@ -35,7 +38,7 @@
               option-attribute="label"
               value-attribute="value"
               size="sm"
-              class="w-40"
+              class="w-full sm:w-40"
             />
           </UFormGroup>
         </div>

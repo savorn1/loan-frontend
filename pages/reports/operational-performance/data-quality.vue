@@ -21,8 +21,11 @@
               count: rows.length
             })
           }}</span>
-          <UFormGroup :label="t('accounting.operationalPerformanceReports.dataQuality.staleDays')">
-            <UInput v-model.number="staleDays" type="number" size="sm" class="w-28" />
+          <UFormGroup
+            class="w-full sm:w-auto"
+            :label="t('accounting.operationalPerformanceReports.dataQuality.staleDays')"
+          >
+            <UInput v-model.number="staleDays" type="number" size="sm" class="w-full sm:w-28" />
           </UFormGroup>
         </div>
       </template>

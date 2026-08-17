@@ -16,7 +16,7 @@
     <UCard class="mb-6">
       <UFormGroup
         :label="t('accounting.productProfitabilityReports.budgetVsActual.financialPeriod')"
-        class="max-w-xs"
+        class="max-w-xs w-full sm:w-auto"
       >
         <USelectMenu
           v-model="financialPeriodId"
@@ -38,23 +38,27 @@
       </template>
 
       <div class="flex flex-wrap items-end gap-3 mb-4">
-        <UFormGroup :label="t('accounting.productProfitabilityReports.budgetVsActual.glAccount')">
+        <UFormGroup
+          class="w-full sm:w-auto"
+          :label="t('accounting.productProfitabilityReports.budgetVsActual.glAccount')"
+        >
           <USelectMenu
             v-model="newGlAccountId"
             :options="glAccountOptions"
             option-attribute="label"
             value-attribute="value"
             size="sm"
-            class="w-64"
+            class="w-full sm:w-64"
             :placeholder="
               t('accounting.productProfitabilityReports.budgetVsActual.glAccountPlaceholder')
             "
           />
         </UFormGroup>
         <UFormGroup
+          class="w-full sm:w-auto"
           :label="t('accounting.productProfitabilityReports.budgetVsActual.budgetAmount')"
         >
-          <UInput v-model.number="newBudgetAmount" type="number" size="sm" class="w-40" />
+          <UInput v-model.number="newBudgetAmount" type="number" size="sm" class="w-full sm:w-40" />
         </UFormGroup>
         <UButton
           size="sm"

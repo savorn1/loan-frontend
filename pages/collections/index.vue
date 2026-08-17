@@ -22,7 +22,7 @@
           :options="assignedFilterOptions"
           option-attribute="label"
           value-attribute="value"
-          class="w-48"
+          class="w-full sm:w-48"
         />
 
         <UButton

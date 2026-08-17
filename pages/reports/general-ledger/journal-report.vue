@@ -22,14 +22,14 @@
             :options="branchFilterOptions"
             option-attribute="label"
             value-attribute="value"
-            class="w-44"
+            class="w-full sm:w-44"
           />
           <USelectMenu
             v-model="statusFilter"
             :options="statusFilterOptions"
             option-attribute="label"
             value-attribute="value"
-            class="w-40"
+            class="w-full sm:w-40"
           />
           <UButton
             v-if="hasFilters"

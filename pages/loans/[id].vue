@@ -3,15 +3,15 @@
     <UButton to="/loans" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
       {{ t('loans.shell.backToLoans') }}
     </UButton>
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-3">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div class="flex items-center gap-3 min-w-0">
         <div>
           <h1 class="text-xl font-bold">{{ t('loans.shell.loanTitle', { id: loan.id }) }}</h1>
           <p class="text-sm text-gray-500 dark:text-gray-400">{{ loan.loanNo }}</p>
         </div>
         <StatusBadge :status="loan.status" />
       </div>
-      <div v-if="isAdmin" class="flex gap-2">
+      <div v-if="isAdmin" class="flex flex-wrap gap-2">
         <UButton v-if="loan.status === 'PENDING'" color="green" @click="confirmAction = 'approve'">
           {{ t('loans.shell.actions.approve') }}
         </UButton>

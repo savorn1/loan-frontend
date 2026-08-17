@@ -9,8 +9,8 @@
     >
       {{ t('groupLoanApplications.detail.backToList') }}
     </UButton>
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-3">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div class="flex items-center gap-3 min-w-0">
         <div>
           <h1 class="text-xl font-bold">
             {{ t('groupLoanApplications.detail.title', { id: application.id }) }}
@@ -21,7 +21,7 @@
         </div>
         <StatusBadge :status="application.status" />
       </div>
-      <div v-if="isAdmin" class="flex gap-2">
+      <div v-if="isAdmin" class="flex flex-wrap gap-2">
         <UButton v-if="application.status === 'SUBMITTED'" variant="soft" @click="onStartReview">{{
           t('groupLoanApplications.detail.startReview')
         }}</UButton>

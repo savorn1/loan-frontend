@@ -16,17 +16,23 @@
     <UCard>
       <template #header>
         <div class="flex flex-wrap items-center gap-3">
-          <UFormGroup :label="t('accounting.riskComplianceReports.largeTransactions.threshold')">
-            <UInput v-model.number="threshold" type="number" size="sm" class="w-40" />
+          <UFormGroup
+            class="w-full sm:w-auto"
+            :label="t('accounting.riskComplianceReports.largeTransactions.threshold')"
+          >
+            <UInput v-model.number="threshold" type="number" size="sm" class="w-full sm:w-40" />
           </UFormGroup>
-          <UFormGroup :label="t('accounting.riskComplianceReports.largeTransactions.months')">
+          <UFormGroup
+            class="w-full sm:w-auto"
+            :label="t('accounting.riskComplianceReports.largeTransactions.months')"
+          >
             <USelectMenu
               v-model="months"
               :options="monthsOptions"
               option-attribute="label"
               value-attribute="value"
               size="sm"
-              class="w-32"
+              class="w-full sm:w-32"
             />
           </UFormGroup>
         </div>

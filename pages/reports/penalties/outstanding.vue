@@ -28,7 +28,7 @@
           v-model="search"
           icon="i-heroicons-magnifying-glass"
           size="sm"
-          class="w-56"
+          class="w-full sm:w-56"
           :placeholder="t('accounting.penaltyReports.outstanding.searchPlaceholder')"
         />
       </template>

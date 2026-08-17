@@ -125,8 +125,11 @@
         "currency": "Currency",
         "amount": "Amount",
         "businessType": "Business type",
-        "businessTypePlaceholder": "e.g. LOAN_PAYMENT",
-        "businessReference": "Business reference",
+        "businessTypeOptions": {
+          "loanPayment": "Loan payment"
+        },
+        "businessReference": "Loan",
+        "businessReferencePlaceholder": "Search loans…",
         "referenceNo": "Reference no."
       },
       "detail": {
@@ -146,6 +149,10 @@
         "referenceNo": "Reference no.",
         "requested": "Requested",
         "completed": "Completed",
+        "refundedAt": "Refunded",
+        "refundReason": "Refund reason",
+        "refundModalTitle": "Refund transaction",
+        "refundReasonLabel": "Reason",
         "itemsTitle": "Items",
         "itemColumns": {
           "referenceType": "Reference type",

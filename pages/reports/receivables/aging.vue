@@ -46,7 +46,7 @@
               v-model="search"
               icon="i-heroicons-magnifying-glass"
               size="sm"
-              class="w-56"
+              class="w-full sm:w-56"
               :placeholder="t('accounting.receivablesReports.aging.searchPlaceholder')"
             />
             <USelectMenu
@@ -55,7 +55,7 @@
               option-attribute="label"
               value-attribute="value"
               size="sm"
-              class="w-40"
+              class="w-full sm:w-40"
             />
           </div>
         </div>

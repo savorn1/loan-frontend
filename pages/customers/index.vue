@@ -15,7 +15,7 @@
             v-model="search"
             icon="i-heroicons-magnifying-glass"
             :placeholder="t('customers.list.searchPlaceholder')"
-            class="max-w-xs"
+            class="max-w-xs w-full sm:w-auto"
             :ui="{ icon: { trailing: { pointer: '' } } }"
           >
             <template v-if="search" #trailing>
@@ -34,7 +34,7 @@
             :options="branchFilterOptions"
             option-attribute="label"
             value-attribute="value"
-            class="w-48"
+            class="w-full sm:w-48"
           />
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
           <UButton

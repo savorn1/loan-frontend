@@ -9,13 +9,13 @@
     >
       {{ t('accounting.journalEntries.backToList') }}
     </UButton>
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-xl font-bold">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <h1 class="text-xl font-bold min-w-0">
         {{
           t('accounting.journalEntries.detailTitle', { entryNo: entry.entryNo ?? `#${entry.id}` })
         }}
       </h1>
-      <div class="flex gap-2">
+      <div class="flex flex-wrap gap-2">
         <UButton
           v-if="entry.status === 'DRAFT'"
           icon="i-heroicons-check-circle"

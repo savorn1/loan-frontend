@@ -17,7 +17,7 @@
       <form class="flex flex-wrap items-end gap-3" @submit.prevent="onSearch">
         <UFormGroup
           :label="t('accounting.generalLedgerReports.journalEntryDetails.searchLabel')"
-          class="w-64"
+          class="w-full sm:w-64"
         >
           <UInput
             v-model="entryNo"

@@ -33,14 +33,14 @@
             :options="statusOptions"
             option-attribute="label"
             value-attribute="value"
-            class="w-40"
+            class="w-full sm:w-40"
           />
           <USelectMenu
             v-model="branchFilter"
             :options="branchFilterOptions"
             option-attribute="label"
             value-attribute="value"
-            class="w-48"
+            class="w-full sm:w-48"
           />
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
           <UButton

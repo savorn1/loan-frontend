@@ -25,7 +25,7 @@
             option-attribute="label"
             value-attribute="value"
             size="sm"
-            class="w-40"
+            class="w-full sm:w-40"
           />
         </div>
       </template>

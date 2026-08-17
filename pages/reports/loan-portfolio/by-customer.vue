@@ -19,7 +19,7 @@
           v-model="search"
           icon="i-heroicons-magnifying-glass"
           size="sm"
-          class="w-64"
+          class="w-full sm:w-64"
           :placeholder="t('accounting.loanPortfolioReports.byCustomer.searchPlaceholder')"
         />
       </template>

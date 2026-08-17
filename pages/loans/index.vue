@@ -16,21 +16,21 @@
             option-attribute="label"
             value-attribute="value"
             :placeholder="t('loans.list.customerFilter.all')"
-            class="w-48"
+            class="w-full sm:w-48"
           />
           <USelectMenu
             v-model="branchFilter"
             :options="branchFilterOptions"
             option-attribute="label"
             value-attribute="value"
-            class="w-48"
+            class="w-full sm:w-48"
           />
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-1 w-full sm:w-auto">
             <UInput
               :model-value="principalMin"
               type="number"
               :placeholder="t('loans.list.principalFilter.min')"
-              class="w-28"
+              class="flex-1 sm:w-28"
               @update:model-value="(v: string) => (principalMin = v === '' ? undefined : Number(v))"
             />
             <span class="text-gray-400 dark:text-gray-500 text-sm">–</span>
@@ -38,7 +38,7 @@
               :model-value="principalMax"
               type="number"
               :placeholder="t('loans.list.principalFilter.max')"
-              class="w-28"
+              class="flex-1 sm:w-28"
               @update:model-value="(v: string) => (principalMax = v === '' ? undefined : Number(v))"
             />
           </div>

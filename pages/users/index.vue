@@ -10,7 +10,7 @@
 
     <UCard class="mb-4">
       <div class="flex flex-wrap items-end gap-4">
-        <UFormGroup :label="t('admin.users.searchLabel')" class="w-56">
+        <UFormGroup :label="t('admin.users.searchLabel')" class="w-full sm:w-56">
           <UInput
             v-model="filters.username"
             :placeholder="t('admin.users.searchPlaceholder')"
@@ -28,7 +28,7 @@
             </template>
           </UInput>
         </UFormGroup>
-        <UFormGroup :label="t('admin.users.roleLabel')" class="w-40">
+        <UFormGroup :label="t('admin.users.roleLabel')" class="w-full sm:w-40">
           <USelectMenu
             v-model="filters.role"
             :options="roleFilterOptions"
@@ -36,7 +36,7 @@
             value-attribute="value"
           />
         </UFormGroup>
-        <UFormGroup :label="t('admin.users.statusLabel')" class="w-40">
+        <UFormGroup :label="t('admin.users.statusLabel')" class="w-full sm:w-40">
           <USelectMenu
             v-model="filters.status"
             :options="statusFilterOptions"

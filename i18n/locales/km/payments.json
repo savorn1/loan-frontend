@@ -125,8 +125,11 @@
         "currency": "រូបិយប័ណ្ណ",
         "amount": "ចំនួនទឹកប្រាក់",
         "businessType": "ប្រភេទអាជីវកម្ម",
-        "businessTypePlaceholder": "ឧទាហរណ៍ LOAN_PAYMENT",
-        "businessReference": "លេខយោងអាជីវកម្ម",
+        "businessTypeOptions": {
+          "loanPayment": "ការទូទាត់កម្ចី"
+        },
+        "businessReference": "កម្ចី",
+        "businessReferencePlaceholder": "ស្វែងរកកម្ចី…",
         "referenceNo": "លេខយោង"
       },
       "detail": {
@@ -146,6 +149,10 @@
         "referenceNo": "លេខយោង",
         "requested": "ស្នើសុំនៅ",
         "completed": "បញ្ចប់នៅ",
+        "refundedAt": "បានសងប្រាក់វិញ",
+        "refundReason": "មូលហេតុសងប្រាក់វិញ",
+        "refundModalTitle": "សងប្រាក់ប្រតិបត្តិការវិញ",
+        "refundReasonLabel": "មូលហេតុ",
         "itemsTitle": "ធាតុ",
         "itemColumns": {
           "referenceType": "ប្រភេទឯកសារយោង",

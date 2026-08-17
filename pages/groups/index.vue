@@ -10,7 +10,7 @@
 
     <UCard class="mb-4">
       <div class="flex flex-wrap items-end gap-4">
-        <UFormGroup :label="t('common.search')" class="w-56">
+        <UFormGroup :label="t('common.search')" class="w-full sm:w-56">
           <UInput
             v-model="filters.search"
             :placeholder="t('groups.list.searchPlaceholder')"
@@ -28,7 +28,7 @@
             </template>
           </UInput>
         </UFormGroup>
-        <UFormGroup :label="t('groups.list.branchLabel')" class="w-48">
+        <UFormGroup :label="t('groups.list.branchLabel')" class="w-full sm:w-48">
           <USelectMenu
             v-model="filters.branchId"
             :options="branchFilterOptions"
@@ -36,7 +36,7 @@
             value-attribute="value"
           />
         </UFormGroup>
-        <UFormGroup :label="t('groups.list.statusLabel')" class="w-40">
+        <UFormGroup :label="t('groups.list.statusLabel')" class="w-full sm:w-40">
           <USelectMenu
             v-model="filters.status"
             :options="statusFilterOptions"

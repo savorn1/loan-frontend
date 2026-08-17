@@ -15,7 +15,7 @@
             v-model="search"
             icon="i-heroicons-magnifying-glass"
             :placeholder="t('admin.branches.searchPlaceholder')"
-            class="max-w-xs"
+            class="max-w-xs w-full sm:w-auto"
           >
             <template v-if="search" #trailing>
               <UButton

@@ -160,5 +160,9 @@ export interface PaymentTransactionResponse {
   status: TransactionStatus
   requestedAt: string
   completedAt: string | null
+  // Set only on the SUCCESS -> REFUNDED transition.
+  refundedBy: string | null
+  refundedAt: string | null
+  refundReason: string | null
   items: PaymentTransactionItemResponse[]
 }

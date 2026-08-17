@@ -33,7 +33,7 @@
             :options="statusOptions"
             option-attribute="label"
             value-attribute="value"
-            class="w-40"
+            class="w-full sm:w-40"
           />
         </div>
       </template>
