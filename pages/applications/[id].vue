@@ -61,6 +61,8 @@
               application.customerName
             }}</NuxtLink>
           </dd>
+          <dt class="text-gray-500">{{ t('applications.detail.loanProduct') }}</dt>
+          <dd>{{ application.loanProductName || '—' }}</dd>
           <dt class="text-gray-500">{{ t('applications.detail.requestedAmount') }}</dt>
           <dd>{{ formatCurrency(application.requestedAmount) }}</dd>
           <dt class="text-gray-500">{{ t('applications.detail.requestedTerm') }}</dt>

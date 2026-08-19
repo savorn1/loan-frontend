@@ -23,6 +23,9 @@
       "customerFilter": {
         "all": "All customers"
       },
+      "loanProductFilter": {
+        "all": "All loan products"
+      },
       "principalFilter": {
         "min": "Min principal",
         "max": "Max principal"
@@ -31,6 +34,7 @@
         "id": "ID",
         "reference": "Reference No.",
         "customer": "Customer",
+        "loanProduct": "Loan product",
         "branch": "Branch",
         "principal": "Principal",
         "rate": "Rate",
@@ -125,6 +129,7 @@
       "paidOff": "Paid off",
       "fields": {
         "customer": "Customer",
+        "loanProduct": "Loan product",
         "principal": "Principal",
         "interestRate": "Interest rate",
         "term": "Term",

@@ -34,6 +34,8 @@
                 loan.customerName
               }}</NuxtLink>
             </dd>
+            <dt class="text-gray-500">{{ t('loans.overview.fields.loanProduct') }}</dt>
+            <dd>{{ loan.loanProductName || '—' }}</dd>
             <dt class="text-gray-500">{{ t('loans.overview.fields.principal') }}</dt>
             <dd>{{ formatCurrency(loan.principal) }}</dd>
             <dt class="text-gray-500">{{ t('loans.overview.fields.interestRate') }}</dt>

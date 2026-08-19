@@ -43,6 +43,13 @@
             <UButton
               size="2xs"
               variant="soft"
+              icon="i-heroicons-list-bullet"
+              :aria-label="t('loanConfig.feeSchemes.details.manageButton')"
+              @click="openDetails(row)"
+            />
+            <UButton
+              size="2xs"
+              variant="soft"
               icon="i-heroicons-pencil"
               :aria-label="t('common.edit')"
               @click="openEdit(row)"
@@ -133,15 +140,101 @@
       "
       @confirm="onDelete"
     />
+
+    <UModal v-model="showDetails" :ui="{ width: 'sm:max-w-2xl' }">
+      <UCard v-if="detailsScheme">
+        <template #header>
+          <span class="font-semibold">{{
+            t('loanConfig.feeSchemes.details.title', { name: detailsScheme.name })
+          }}</span>
+        </template>
+
+        <DataTable
+          :rows="details"
+          :columns="detailColumns"
+          :loading="detailsLoading"
+          numbered
+          class="mb-6"
+        >
+          <template #actions-data="{ row }">
+            <div class="flex gap-1 justify-end">
+              <UButton
+                size="2xs"
+                variant="soft"
+                icon="i-heroicons-pencil"
+                :aria-label="t('common.edit')"
+                @click="openEditDetail(row)"
+              />
+              <UButton
+                size="2xs"
+                color="red"
+                variant="soft"
+                icon="i-heroicons-trash"
+                :aria-label="t('common.delete')"
+                @click="confirmDeleteDetail = row"
+              />
+            </div>
+          </template>
+          <template #empty-state>
+            <EmptyState
+              icon="i-heroicons-currency-dollar"
+              :title="t('loanConfig.feeSchemes.details.emptyTitle')"
+              :description="t('loanConfig.feeSchemes.details.emptyDescription')"
+            />
+          </template>
+        </DataTable>
+
+        <h4 class="text-sm font-medium mb-2">
+          {{
+            editingDetailId
+              ? t('loanConfig.feeSchemes.details.editHeader')
+              : t('loanConfig.feeSchemes.details.addHeader')
+          }}
+        </h4>
+        <DynamicForm
+          v-model="detailForm"
+          :fields="detailFields"
+          :loading="savingDetail"
+          :error="detailError"
+          :submit-label="
+            editingDetailId ? t('common.saveChanges') : t('loanConfig.feeSchemes.details.addButton')
+          "
+          cancelable
+          @submit="onSubmitDetail"
+          @cancel="cancelDetails"
+        />
+      </UCard>
+    </UModal>
+
+    <ConfirmModal
+      :model-value="confirmDeleteDetail !== null"
+      :title="t('loanConfig.feeSchemes.details.deleteTitle')"
+      :description="t('loanConfig.feeSchemes.details.deleteDescription')"
+      :confirm-label="t('common.delete')"
+      color="red"
+      :loading="deletingDetail"
+      @update:model-value="
+        (v: boolean) => {
+          if (!v) confirmDeleteDetail = null
+        }
+      "
+      @confirm="onDeleteDetail"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { FeeSchemeRequest, FeeSchemeResponse } from '~/features/loan-configuration/types'
+import type {
+  FeeSchemeDetailRequest,
+  FeeSchemeDetailResponse,
+  FeeSchemeRequest,
+  FeeSchemeResponse
+} from '~/features/loan-configuration/types'
 import type { ColumnDef, FieldDef } from '~/shared/types'
 
 const { t } = useI18n()
 const api = useApi()
+const toast = useToast()
 
 const {
   data: schemes,
@@ -214,4 +307,191 @@ const {
   toForm: (row) => ({ code: row.code, name: row.name, status: row.status }),
   toPayload: (values) => ({ code: values.code, name: values.name, status: values.status })
 })
+
+// ── Fee line items (fee_scheme_details) — nested under a scheme, so this manages
+// its own CRUD state instead of useCrudModals (built for a single fixed basePath).
+const showDetails = ref(false)
+const detailsScheme = ref<FeeSchemeResponse | null>(null)
+const details = ref<FeeSchemeDetailResponse[]>([])
+const detailsLoading = ref(false)
+
+const detailColumns = computed<ColumnDef<FeeSchemeDetailResponse>[]>(() => [
+  { key: 'type', label: t('loanConfig.shared.typeColumn'), type: 'enum' },
+  {
+    key: 'calculationMethod',
+    label: t('loanConfig.feeSchemes.details.calculationMethodColumn'),
+    type: 'enum'
+  },
+  { key: 'amount', label: t('loanConfig.shared.valueColumn') },
+  {
+    key: 'chargeTiming',
+    label: t('loanConfig.feeSchemes.details.chargeTimingColumn'),
+    type: 'enum'
+  },
+  { key: 'actions', label: '', class: 'text-right' }
+])
+
+async function openDetails(row: FeeSchemeResponse) {
+  detailsScheme.value = row
+  resetDetailForm()
+  showDetails.value = true
+  await refreshDetails()
+}
+
+async function refreshDetails() {
+  if (!detailsScheme.value) return
+  detailsLoading.value = true
+  try {
+    details.value = await api<FeeSchemeDetailResponse[]>(
+      `/fee-schemes/${detailsScheme.value.id}/details`
+    )
+  } finally {
+    detailsLoading.value = false
+  }
+}
+
+const detailFields = computed<FieldDef[]>(() => [
+  {
+    name: 'type',
+    label: t('loanConfig.shared.typeColumn'),
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: [
+      { label: t('loanConfig.feeSchemes.details.typeOptions.origination'), value: 'ORIGINATION' },
+      { label: t('loanConfig.feeSchemes.details.typeOptions.processing'), value: 'PROCESSING' },
+      { label: t('loanConfig.feeSchemes.details.typeOptions.latePayment'), value: 'LATE_PAYMENT' },
+      { label: t('loanConfig.feeSchemes.details.typeOptions.prepayment'), value: 'PREPAYMENT' },
+      { label: t('loanConfig.feeSchemes.details.typeOptions.other'), value: 'OTHER' }
+    ]
+  },
+  {
+    name: 'calculationMethod',
+    label: t('loanConfig.feeSchemes.details.calculationMethodColumn'),
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: [
+      { label: t('loanConfig.feeSchemes.details.calculationOptions.flat'), value: 'FLAT' },
+      {
+        label: t('loanConfig.feeSchemes.details.calculationOptions.percentage'),
+        value: 'PERCENTAGE'
+      }
+    ]
+  },
+  {
+    name: 'amount',
+    label: t('loanConfig.shared.valueColumn'),
+    type: 'number',
+    required: true,
+    min: 0,
+    step: 0.01,
+    hint: t('loanConfig.feeSchemes.details.amountHint'),
+    wrapper: 'half'
+  },
+  {
+    name: 'chargeTiming',
+    label: t('loanConfig.feeSchemes.details.chargeTimingColumn'),
+    type: 'select',
+    required: true,
+    wrapper: 'half',
+    options: [
+      { label: t('loanConfig.feeSchemes.details.timingOptions.upfront'), value: 'UPFRONT' },
+      {
+        label: t('loanConfig.feeSchemes.details.timingOptions.onDisbursement'),
+        value: 'ON_DISBURSEMENT'
+      },
+      { label: t('loanConfig.feeSchemes.details.timingOptions.recurring'), value: 'RECURRING' }
+    ]
+  }
+])
+
+const detailForm = ref<Record<string, any>>({})
+const editingDetailId = ref<string | null>(null)
+const savingDetail = ref(false)
+const detailError = ref('')
+
+function resetDetailForm() {
+  editingDetailId.value = null
+  detailForm.value = {
+    type: undefined,
+    calculationMethod: undefined,
+    amount: undefined,
+    chargeTiming: undefined
+  }
+  detailError.value = ''
+}
+
+// Cancel on the line-item form closes the whole modal (not just the form) —
+// resetDetailForm() alone is also reused after a successful add/edit, where
+// staying open to add another item is the point.
+function cancelDetails() {
+  resetDetailForm()
+  showDetails.value = false
+}
+
+function openEditDetail(row: FeeSchemeDetailResponse) {
+  editingDetailId.value = row.id
+  detailForm.value = {
+    type: row.type,
+    calculationMethod: row.calculationMethod,
+    amount: row.amount,
+    chargeTiming: row.chargeTiming
+  }
+  detailError.value = ''
+}
+
+async function onSubmitDetail(values: Record<string, any>) {
+  if (!detailsScheme.value) return
+  savingDetail.value = true
+  detailError.value = ''
+  try {
+    const payload: FeeSchemeDetailRequest = {
+      type: values.type,
+      calculationMethod: values.calculationMethod,
+      amount: values.amount,
+      chargeTiming: values.chargeTiming
+    }
+    const entity = t('loanConfig.entities.feeSchemeDetail')
+    if (editingDetailId.value) {
+      await api(`/fee-schemes/${detailsScheme.value.id}/details/${editingDetailId.value}`, {
+        method: 'PUT',
+        body: payload
+      })
+      toast.add({ title: t('common.entityUpdated', { entity }), color: 'green' })
+    } else {
+      await api(`/fee-schemes/${detailsScheme.value.id}/details`, { method: 'POST', body: payload })
+      toast.add({ title: t('common.entityCreated', { entity }), color: 'green' })
+    }
+    resetDetailForm()
+    await refreshDetails()
+  } catch (err) {
+    detailError.value = apiErrorMessage(err)
+  } finally {
+    savingDetail.value = false
+  }
+}
+
+const confirmDeleteDetail = ref<FeeSchemeDetailResponse | null>(null)
+const deletingDetail = ref(false)
+
+async function onDeleteDetail() {
+  if (!confirmDeleteDetail.value || !detailsScheme.value) return
+  deletingDetail.value = true
+  try {
+    await api(`/fee-schemes/${detailsScheme.value.id}/details/${confirmDeleteDetail.value.id}`, {
+      method: 'DELETE'
+    })
+    toast.add({
+      title: t('common.entityDeleted', { entity: t('loanConfig.entities.feeSchemeDetail') }),
+      color: 'green'
+    })
+    confirmDeleteDetail.value = null
+    await refreshDetails()
+  } catch (err) {
+    toast.add({ title: apiErrorMessage(err), color: 'red' })
+  } finally {
+    deletingDetail.value = false
+  }
+}
 </script>

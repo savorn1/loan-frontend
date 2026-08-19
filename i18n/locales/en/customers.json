@@ -321,6 +321,7 @@
         "id": "ID",
         "reference": "Reference No.",
         "customer": "Customer",
+        "loanProduct": "Loan product",
         "branch": "Branch",
         "requested": "Requested",
         "term": "Term (mo)",
@@ -338,10 +339,13 @@
       "fields": {
         "customer": "Customer",
         "searchPlaceholder": "Search customers…",
+        "loanProduct": "Loan product",
         "requestedAmount": "Requested amount",
         "requestedAmountHint": "Minimum 1000",
+        "requestedAmountRangeHint": "{min} – {max}",
         "requestedTerm": "Requested term (months)",
         "requestedTermHint": "1 – 360",
+        "requestedTermRangeHint": "{min} – {max} months",
         "purpose": "Purpose"
       }
     },
@@ -354,6 +358,7 @@
       "withdraw": "Withdraw",
       "details": "Details",
       "customer": "Customer",
+      "loanProduct": "Loan product",
       "requestedAmount": "Requested amount",
       "requestedTerm": "Requested term",
       "monthsUnit": "months",

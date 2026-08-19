@@ -127,6 +127,9 @@ export interface PaymentTransactionRequest {
   businessReference?: string
   currency: string
   amount: number
+  // Optional breakdown of `amount` — not validated against it server-side.
+  principalAmount?: number
+  interestAmount?: number
   referenceNo?: string
 }
 
@@ -149,6 +152,7 @@ export interface PaymentTransactionResponse {
   customerName: string
   paymentMethodId: number
   paymentMethodName: string
+  paymentMethodCode: string
   paymentChannelId: number
   paymentChannelName: string
   paymentGatewayId: number
@@ -157,6 +161,8 @@ export interface PaymentTransactionResponse {
   businessReference: string | null
   currency: string
   amount: number
+  principalAmount: number | null
+  interestAmount: number | null
   status: TransactionStatus
   requestedAt: string
   completedAt: string | null

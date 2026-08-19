@@ -105,7 +105,7 @@ const [{ data: parSummary, pending: p1, error: e1 }, { data: workqueue, pending:
       api<ParSummaryResponse>('/payments/reports/par-summary')
     ),
     useAsyncData('receivables-aging-workqueue', () =>
-      api<CollectionWorkqueueItemResponse[]>('/payments/collections')
+      api<CollectionWorkqueueItemResponse[]>('/payments/collections/live')
     )
   ])
 

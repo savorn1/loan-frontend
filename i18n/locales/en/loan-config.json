@@ -3,7 +3,9 @@
     "entities": {
       "documentTemplate": "Document template",
       "feeScheme": "Fee scheme",
+      "feeSchemeDetail": "Fee line item",
       "interestScheme": "Interest scheme",
+      "interestSchemeDetail": "Rate tier",
       "loanProduct": "Loan product",
       "ruleTemplate": "Rule template",
       "termTemplate": "Term template"
@@ -59,7 +61,37 @@
       "emptyDescription": "Add a reusable fee scheme (a bundle of fee line items) that loan products can select.",
       "deleteTitle": "Delete fee scheme \"{name}\"?",
       "deleteDescription": "This permanently removes the fee scheme and cannot be undone.",
-      "total": { "one": "1 fee scheme", "other": "{count} fee schemes" }
+      "total": { "one": "1 fee scheme", "other": "{count} fee schemes" },
+      "details": {
+        "manageButton": "Manage line items",
+        "title": "Fee Line Items — {name}",
+        "emptyTitle": "No fee line items yet",
+        "emptyDescription": "Add a fee line item (e.g. an origination fee) to this scheme.",
+        "addHeader": "Add Line Item",
+        "editHeader": "Edit Line Item",
+        "addButton": "Add line item",
+        "deleteTitle": "Delete this fee line item?",
+        "deleteDescription": "This permanently removes the line item from the scheme and cannot be undone.",
+        "calculationMethodColumn": "Calculation method",
+        "chargeTimingColumn": "Charge timing",
+        "amountHint": "A flat currency amount, or a percentage (0-100) when calculation method is Percentage",
+        "typeOptions": {
+          "origination": "Origination",
+          "processing": "Processing",
+          "latePayment": "Late payment",
+          "prepayment": "Prepayment",
+          "other": "Other"
+        },
+        "calculationOptions": {
+          "flat": "Flat",
+          "percentage": "Percentage"
+        },
+        "timingOptions": {
+          "upfront": "Upfront",
+          "onDisbursement": "On disbursement",
+          "recurring": "Recurring"
+        }
+      }
     },
     "interestSchemes": {
       "title": "Interest Schemes",
@@ -77,7 +109,24 @@
       "optionActual365": "Actual/365",
       "optionActual360": "Actual/360",
       "optionThirty360": "30/360",
-      "total": { "one": "1 interest scheme", "other": "{count} interest schemes" }
+      "total": { "one": "1 interest scheme", "other": "{count} interest schemes" },
+      "details": {
+        "manageButton": "Manage rate tiers",
+        "title": "Rate Tiers — {name}",
+        "emptyTitle": "No rate tiers yet",
+        "emptyDescription": "Add a term/amount tier with its own rate to this scheme.",
+        "addHeader": "Add Rate Tier",
+        "editHeader": "Edit Rate Tier",
+        "addButton": "Add tier",
+        "deleteTitle": "Delete this rate tier?",
+        "deleteDescription": "This permanently removes the tier from the scheme and cannot be undone.",
+        "minTermColumn": "Min term",
+        "maxTermColumn": "Max term",
+        "minAmountColumn": "Min amount",
+        "maxAmountColumn": "Max amount",
+        "interestRateColumn": "Interest rate",
+        "termHint": "Interpreted using the assigned product's term unit (Day/Month/Year)"
+      }
     },
     "loanProducts": {
       "title": "Loan Products",

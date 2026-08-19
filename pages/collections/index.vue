@@ -210,13 +210,16 @@ const toast = useToast()
 const { t } = useI18n()
 const { isAdmin } = storeToRefs(useAuth())
 
+// /live computes overdue status from due dates on the fly instead of relying on
+// OverdueScheduler's nightly cron to have already flagged a payment OVERDUE — so a
+// loan that just crossed its due date shows up here immediately, not tomorrow.
 const {
   data: items,
   pending,
   error: fetchError,
   refresh
 } = await useAsyncData('collections-workqueue', () =>
-  api<CollectionWorkqueueItemResponse[]>('/payments/collections')
+  api<CollectionWorkqueueItemResponse[]>('/payments/collections/live')
 )
 
 const { data: usersPage } = await useAsyncData('collections-users', () =>

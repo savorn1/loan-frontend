@@ -17,6 +17,7 @@ export type ApplicationStatus = 'SUBMITTED' | 'UNDER_REVIEW' | 'APPROVED' | 'REJ
 
 export interface ApplicationRequest {
   customerId: number
+  loanProductId: string
   requestedAmount: number
   requestedTermMonths: number
   purpose?: string
@@ -28,6 +29,8 @@ export interface ApplicationResponse {
   customerId: number
   branchId: number | null
   customerName: string
+  loanProductId: string | null
+  loanProductName: string | null
   requestedAmount: number
   requestedTermMonths: number
   purpose: string | null

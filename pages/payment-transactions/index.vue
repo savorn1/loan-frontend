@@ -103,6 +103,7 @@ import type {
   PaymentChannelResponse,
   PaymentGatewayResponse,
   PaymentMethodResponse,
+  PaymentResponse,
   PaymentTransactionRequest,
   PaymentTransactionResponse,
   TransactionStatus
@@ -150,16 +151,15 @@ async function searchCustomers(query: string) {
   }))
 }
 
-async function searchLoans(query: string) {
-  const q = query.trim().toLowerCase()
-  return (loansRaw.value?.content ?? [])
-    .filter(
-      (l) =>
-        !q || (l.loanNo ?? '').toLowerCase().includes(q) || l.customerName.toLowerCase().includes(q)
-    )
-    .slice(0, 20)
+// Scoped to the create form's currently selected customer — a loan belongs to
+// exactly one customer, so there's no reason to let the picker offer any other
+// customer's loans. A plain option list rather than a search: the customer's
+// loan count is small enough that typing to filter would be unnecessary friction.
+const loanOptionsForCustomer = computed(() =>
+  (loansRaw.value?.content ?? [])
+    .filter((l) => l.customerId === createForm.value.customerId)
     .map((l) => ({ label: `${l.loanNo || `#${l.id}`} — ${l.customerName}`, value: l.id }))
-}
+)
 
 const methodOptions = computed(() =>
   (methodsRaw.value?.content ?? [])
@@ -184,6 +184,16 @@ const columns = computed<ColumnDef<PaymentTransactionResponse>[]>(() => [
     key: 'businessType',
     label: t('payments.transactions.columns.businessType'),
     sortable: true
+  },
+  {
+    key: 'origin',
+    label: t('payments.transactions.columns.origin'),
+    type: 'badge',
+    value: (row) =>
+      row.paymentMethodCode === 'INTERNAL'
+        ? t('payments.transactions.originInternal')
+        : t('payments.transactions.originGateway'),
+    color: (row) => (row.paymentMethodCode === 'INTERNAL' ? 'gray' : 'primary')
   },
   {
     key: 'amount',
@@ -253,6 +263,14 @@ const fields = computed<FieldDef[]>(() => [
     placeholder: t('payments.transactions.fields.customerPlaceholder')
   },
   {
+    name: 'businessReference',
+    label: t('payments.transactions.fields.businessReference'),
+    type: 'select',
+    required: true,
+    options: loanOptionsForCustomer.value,
+    placeholder: t('payments.transactions.fields.businessReferencePlaceholder')
+  },
+  {
     name: 'paymentMethodId',
     label: t('payments.transactions.fields.paymentMethod'),
     type: 'select',
@@ -299,6 +317,19 @@ const fields = computed<FieldDef[]>(() => [
     wrapper: 'half'
   },
   {
+    name: 'principalAmount',
+    label: t('payments.transactions.fields.principalAmount'),
+    type: 'currency',
+    //hint: t('payments.transactions.fields.principalInterestHint'),
+    wrapper: 'half'
+  },
+  {
+    name: 'interestAmount',
+    label: t('payments.transactions.fields.interestAmount'),
+    type: 'currency',
+    wrapper: 'half'
+  },
+  {
     name: 'businessType',
     label: t('payments.transactions.fields.businessType'),
     type: 'select',
@@ -313,15 +344,6 @@ const fields = computed<FieldDef[]>(() => [
     ]
   },
   {
-    name: 'businessReference',
-    label: t('payments.transactions.fields.businessReference'),
-    type: 'relationship',
-    required: true,
-    wrapper: 'half',
-    search: searchLoans,
-    placeholder: t('payments.transactions.fields.businessReferencePlaceholder')
-  },
-  {
     name: 'referenceNo',
     label: t('payments.transactions.fields.referenceNo'),
     wrapper: 'half'
@@ -329,6 +351,50 @@ const fields = computed<FieldDef[]>(() => [
 ])
 
 const createForm = ref<Record<string, any>>({})
+const loanById = computed(() => new Map((loansRaw.value?.content ?? []).map((l) => [l.id, l])))
+
+// The loan picker is scoped to the selected customer (see searchLoans) — a loan
+// chosen before switching customers would no longer belong to the new one, so
+// drop it (and the amount it drove) rather than leave a stale, mismatched pick.
+watch(
+  () => createForm.value.customerId,
+  () => {
+    createForm.value.businessReference = undefined
+    createForm.value.amount = undefined
+    createForm.value.principalAmount = undefined
+    createForm.value.interestAmount = undefined
+  }
+)
+
+// Defaults the amount to what's actually owed on the selected loan — the common
+// case for a LOAN_PAYMENT transaction is paying it off, and the outstanding
+// balance is the one number the user would otherwise have to go look up. The
+// principal/interest split then comes from that loan's own installment
+// schedule (same service, GET /payments/loan/{id}) rather than a guess: summed
+// across whatever's still unpaid, since a payoff can span several installments.
+watch(
+  () => createForm.value.businessReference,
+  async (loanId) => {
+    const loan = loanById.value.get(loanId)
+    if (loan?.outstandingBalance != null) {
+      createForm.value.amount = loan.outstandingBalance
+    }
+    createForm.value.principalAmount = undefined
+    createForm.value.interestAmount = undefined
+    if (!loanId) return
+    try {
+      const installments = await api<PaymentResponse[]>(`/payments/loan/${loanId}`)
+      const pending = installments.filter((p) => p.status !== 'PAID')
+      const principal = pending.reduce((sum, p) => sum + (p.principalComponent ?? 0), 0)
+      const interest = pending.reduce((sum, p) => sum + (p.interestComponent ?? 0), 0)
+      createForm.value.principalAmount = principal || undefined
+      createForm.value.interestAmount = interest || undefined
+    } catch {
+      // No schedule generated for this loan yet — leave the breakdown blank
+      // rather than block the amount default that already succeeded above.
+    }
+  }
+)
 
 function openCreate() {
   createForm.value = {
@@ -338,6 +404,8 @@ function openCreate() {
     paymentGatewayId: undefined,
     currency: 'USD',
     amount: undefined,
+    principalAmount: undefined,
+    interestAmount: undefined,
     businessType: 'LOAN_PAYMENT',
     businessReference: undefined,
     referenceNo: ''
@@ -357,6 +425,8 @@ async function onCreate(values: Record<string, any>) {
       paymentGatewayId: values.paymentGatewayId,
       currency: values.currency,
       amount: values.amount,
+      principalAmount: values.principalAmount || undefined,
+      interestAmount: values.interestAmount || undefined,
       businessType: values.businessType,
       businessReference:
         values.businessReference != null ? String(values.businessReference) : undefined,

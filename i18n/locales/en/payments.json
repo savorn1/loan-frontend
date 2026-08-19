@@ -108,11 +108,14 @@
         "paymentNo": "Payment No",
         "customer": "Customer",
         "businessType": "Business type",
+        "origin": "Origin",
         "amount": "Amount",
         "status": "Status",
         "requested": "Requested",
         "completed": "Completed"
       },
+      "originInternal": "Internal",
+      "originGateway": "Gateway",
       "fields": {
         "customer": "Customer",
         "customerPlaceholder": "Search customers…",
@@ -124,6 +127,9 @@
         "paymentGatewayPlaceholder": "Select a gateway",
         "currency": "Currency",
         "amount": "Amount",
+        "principalAmount": "Principal",
+        "interestAmount": "Interest",
+        "principalInterestHint": "Optional breakdown of the amount above",
         "businessType": "Business type",
         "businessTypeOptions": {
           "loanPayment": "Loan payment"
@@ -146,6 +152,8 @@
         "businessType": "Business type",
         "businessReference": "Business reference",
         "amount": "Amount",
+        "principalAmount": "Principal",
+        "interestAmount": "Interest",
         "referenceNo": "Reference no.",
         "requested": "Requested",
         "completed": "Completed",
@@ -153,6 +161,7 @@
         "refundReason": "Refund reason",
         "refundModalTitle": "Refund transaction",
         "refundReasonLabel": "Reason",
+        "internalOriginNote": "Recorded automatically from a loan repayment — reverse the payment on the loan instead of refunding it here.",
         "itemsTitle": "Items",
         "itemColumns": {
           "referenceType": "Reference type",

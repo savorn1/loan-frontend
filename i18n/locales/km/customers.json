@@ -321,6 +321,7 @@
         "id": "លេខសម្គាល់",
         "reference": "លេខយោង",
         "customer": "អតិថិជន",
+        "loanProduct": "ផលិតផលកម្ចី",
         "branch": "សាខា",
         "requested": "ចំនួនស្នើសុំ",
         "term": "រយៈពេល (ខែ)",
@@ -338,10 +339,13 @@
       "fields": {
         "customer": "អតិថិជន",
         "searchPlaceholder": "ស្វែងរកអតិថិជន…",
+        "loanProduct": "ផលិតផលកម្ចី",
         "requestedAmount": "ចំនួនទឹកប្រាក់ស្នើសុំ",
         "requestedAmountHint": "អប្បបរមា ១០០០",
+        "requestedAmountRangeHint": "{min} – {max}",
         "requestedTerm": "រយៈពេលស្នើសុំ (ខែ)",
         "requestedTermHint": "១ – ៣៦០",
+        "requestedTermRangeHint": "{min} – {max} ខែ",
         "purpose": "គោលបំណង"
       }
     },
@@ -354,6 +358,7 @@
       "withdraw": "ដកចេញ",
       "details": "ព័ត៌មានលម្អិត",
       "customer": "អតិថិជន",
+      "loanProduct": "ផលិតផលកម្ចី",
       "requestedAmount": "ចំនួនទឹកប្រាក់ស្នើសុំ",
       "requestedTerm": "រយៈពេលស្នើសុំ",
       "monthsUnit": "ខែ",

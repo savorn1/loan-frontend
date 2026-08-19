@@ -108,11 +108,14 @@
         "paymentNo": "លេខទូទាត់",
         "customer": "អតិថិជន",
         "businessType": "ប្រភេទអាជីវកម្ម",
+        "origin": "ប្រភព",
         "amount": "ចំនួនទឹកប្រាក់",
         "status": "ស្ថានភាព",
         "requested": "ស្នើសុំនៅ",
         "completed": "បញ្ចប់នៅ"
       },
+      "originInternal": "ខាងក្នុង",
+      "originGateway": "ហ្គេតវេយ",
       "fields": {
         "customer": "អតិថិជន",
         "customerPlaceholder": "ស្វែងរកអតិថិជន...",
@@ -124,6 +127,9 @@
         "paymentGatewayPlaceholder": "ជ្រើសរើសច្រកមួយ",
         "currency": "រូបិយប័ណ្ណ",
         "amount": "ចំនួនទឹកប្រាក់",
+        "principalAmount": "ប្រាក់ដើម",
+        "interestAmount": "ការប្រាក់",
+        "principalInterestHint": "ការបំបែកចំនួនទឹកប្រាក់ខាងលើ (ស្រេចចិត្ត)",
         "businessType": "ប្រភេទអាជីវកម្ម",
         "businessTypeOptions": {
           "loanPayment": "ការទូទាត់កម្ចី"
@@ -146,6 +152,8 @@
         "businessType": "ប្រភេទអាជីវកម្ម",
         "businessReference": "លេខយោងអាជីវកម្ម",
         "amount": "ចំនួនទឹកប្រាក់",
+        "principalAmount": "ប្រាក់ដើម",
+        "interestAmount": "ការប្រាក់",
         "referenceNo": "លេខយោង",
         "requested": "ស្នើសុំនៅ",
         "completed": "បញ្ចប់នៅ",
@@ -153,6 +161,7 @@
         "refundReason": "មូលហេតុសងប្រាក់វិញ",
         "refundModalTitle": "សងប្រាក់ប្រតិបត្តិការវិញ",
         "refundReasonLabel": "មូលហេតុ",
+        "internalOriginNote": "បានកត់ត្រាដោយស្វ័យប្រវត្តិពីការសងប្រាក់កម្ចី — សូមដាក់បញ្ច្រាសការទូទាត់នៅលើកម្ចីជំនួសឱ្យការសងប្រាក់វិញនៅទីនេះ។",
         "itemsTitle": "ធាតុ",
         "itemColumns": {
           "referenceType": "ប្រភេទឯកសារយោង",

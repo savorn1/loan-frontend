@@ -3,9 +3,15 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
+  // devtools: {
+  //   enabled: true,
+
+  //   // timeline: {
+  //   //   enabled: true
+  //   // }
+  // },
   devServer: {
-    port: Number(process.env.NUXT_PORT) || 3002
+    port: Number(process.env.NUXT_PORT) || 3004
   },
   modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/eslint', '@nuxtjs/i18n'],
   i18n: {

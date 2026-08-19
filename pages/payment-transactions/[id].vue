@@ -32,7 +32,7 @@
         >
       </div>
       <UButton
-        v-else-if="isAdmin && transaction.status === 'SUCCESS'"
+        v-else-if="isAdmin && transaction.status === 'SUCCESS' && !isInternalOrigin"
         color="gray"
         variant="soft"
         @click="showRefund = true"
@@ -40,6 +40,14 @@
         {{ t('payments.transactions.detail.refund') }}
       </UButton>
     </div>
+
+    <UAlert
+      v-if="isInternalOrigin"
+      variant="subtle"
+      icon="i-heroicons-information-circle"
+      class="mb-6"
+      :title="t('payments.transactions.detail.internalOriginNote')"
+    />
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <UCard
@@ -61,7 +69,25 @@
           <p class="text-3xl font-bold tracking-tight tabular-nums">
             {{ transaction.currency }} {{ formatCurrency(transaction.amount) }}
           </p>
-          <UBadge color="gray" variant="subtle" size="sm">{{ transaction.businessType }}</UBadge>
+          <p
+            v-if="transaction.principalAmount != null || transaction.interestAmount != null"
+            class="text-xs text-gray-500"
+          >
+            {{ t('payments.transactions.detail.principalAmount') }}:
+            {{ formatCurrency(transaction.principalAmount ?? 0) }} ·
+            {{ t('payments.transactions.detail.interestAmount') }}:
+            {{ formatCurrency(transaction.interestAmount ?? 0) }}
+          </p>
+          <div class="flex items-center gap-2">
+            <UBadge color="gray" variant="subtle" size="sm">{{ transaction.businessType }}</UBadge>
+            <UBadge :color="isInternalOrigin ? 'gray' : 'primary'" variant="subtle" size="sm">
+              {{
+                isInternalOrigin
+                  ? t('payments.transactions.originInternal')
+                  : t('payments.transactions.originGateway')
+              }}
+            </UBadge>
+          </div>
         </div>
 
         <dl class="divide-y divide-gray-100 dark:divide-gray-800 px-5 pb-1">
@@ -272,6 +298,8 @@ const {
 } = await useAsyncData(`payment-transaction-${transactionId}`, () =>
   api<PaymentTransactionResponse>(`/payments/transactions/${transactionId}`)
 )
+
+const isInternalOrigin = computed(() => transaction.value?.paymentMethodCode === 'INTERNAL')
 
 const itemColumns = computed<ColumnDef<PaymentTransactionItemResponse>[]>(() => [
   { key: 'referenceType', label: t('payments.transactions.detail.itemColumns.referenceType') },

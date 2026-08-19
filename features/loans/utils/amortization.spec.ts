@@ -67,6 +67,8 @@ describe('generateAmortizationSchedule', () => {
     customerId: 1,
     branchId: null,
     customerName: 'Jane Doe',
+    loanProductId: null,
+    loanProductName: null,
     principal: 10000,
     interestRate: 12,
     termMonths: 12,

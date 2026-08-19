@@ -15,6 +15,8 @@ export interface LoanResponse {
   customerId: number
   branchId: number | null
   customerName: string
+  loanProductId: string | null
+  loanProductName: string | null
   principal: number
   interestRate: number
   termMonths: number

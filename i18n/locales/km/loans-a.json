@@ -23,6 +23,9 @@
       "customerFilter": {
         "all": "គ្រប់អតិថិជន"
       },
+      "loanProductFilter": {
+        "all": "គ្រប់ផលិតផលកម្ចី"
+      },
       "principalFilter": {
         "min": "ប្រាក់ដើមអប្បបរមា",
         "max": "ប្រាក់ដើមអតិបរមា"
@@ -31,6 +34,7 @@
         "id": "លេខសម្គាល់",
         "reference": "លេខយោង",
         "customer": "អតិថិជន",
+        "loanProduct": "ផលិតផលកម្ចី",
         "branch": "សាខា",
         "principal": "ប្រាក់ដើម",
         "rate": "អត្រា",
@@ -125,6 +129,7 @@
       "paidOff": "បានទូទាត់",
       "fields": {
         "customer": "អតិថិជន",
+        "loanProduct": "ផលិតផលកម្ចី",
         "principal": "ប្រាក់ដើម",
         "interestRate": "អត្រាការប្រាក់",
         "term": "រយៈពេល",

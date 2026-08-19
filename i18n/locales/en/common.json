@@ -179,6 +179,8 @@
     "clear": "Clear",
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
+    "previousYear": "Previous year",
+    "nextYear": "Next year",
     "weekdaySu": "Su",
     "weekdayMo": "Mo",
     "weekdayTu": "Tu",

@@ -121,6 +121,7 @@
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
 import type { BranchResponse } from '~/features/branches/types'
+import type { LoanProductResponse } from '~/features/loan-products/types'
 import type {
   ApplicationRequest,
   ApplicationResponse,
@@ -156,6 +157,18 @@ const branchFilterOptions = computed(() => [
 ])
 const branchFilter = ref<number | ''>('')
 
+const { data: loanProductsData } = await useAsyncData('loan-products-all', () =>
+  api<LoanProductResponse[]>('/loan-products')
+)
+const loanProductOptions = computed(() =>
+  (loanProductsData.value ?? [])
+    .filter((p) => p.status === 'PUBLISHED')
+    .map((p) => ({ label: `${p.name} (${p.code})`, value: p.id }))
+)
+const loanProductById = computed(
+  () => new Map((loanProductsData.value ?? []).map((p) => [p.id, p]))
+)
+
 // Async-searched via the backend's CustomerFilterRequest.search — not preloaded, since
 // the customer list can be far larger than any dropdown should hold client-side.
 async function searchCustomers(query: string) {
@@ -171,6 +184,11 @@ async function searchCustomers(query: string) {
 const columns = computed<ColumnDef<ApplicationResponse>[]>(() => [
   { key: 'applicationNo', label: t('applications.list.columns.reference') },
   { key: 'customerName', label: t('applications.list.columns.customer'), sortable: true },
+  {
+    key: 'loanProductName',
+    label: t('applications.list.columns.loanProduct'),
+    value: (row) => row.loanProductName ?? '—'
+  },
   {
     key: 'branchId',
     label: t('applications.list.columns.branch'),
@@ -244,6 +262,15 @@ const showCreate = ref(false)
 const creating = ref(false)
 const error = ref('')
 
+const createForm = ref<Record<string, any>>({})
+
+// Drives the requested-amount/term bounds and hints below, and the auto-fill
+// watcher further down — the product carries the only source of truth for what
+// a valid request looks like.
+const selectedLoanProduct = computed(() =>
+  loanProductById.value.get(createForm.value.loanProductId)
+)
+
 const applicationFields = computed<FieldDef[]>(() => [
   {
     name: 'customerId',
@@ -254,11 +281,25 @@ const applicationFields = computed<FieldDef[]>(() => [
     placeholder: t('applications.list.fields.searchPlaceholder')
   },
   {
+    name: 'loanProductId',
+    label: t('applications.list.fields.loanProduct'),
+    type: 'select',
+    required: true,
+    options: loanProductOptions.value
+  },
+  {
     name: 'requestedAmount',
     label: t('applications.list.fields.requestedAmount'),
     type: 'currency',
     required: true,
-    hint: t('applications.list.fields.requestedAmountHint'),
+    min: selectedLoanProduct.value?.minAmount,
+    max: selectedLoanProduct.value?.maxAmount,
+    hint: selectedLoanProduct.value
+      ? t('applications.list.fields.requestedAmountRangeHint', {
+          min: selectedLoanProduct.value.minAmount,
+          max: selectedLoanProduct.value.maxAmount
+        })
+      : t('applications.list.fields.requestedAmountHint'),
     wrapper: 'half'
   },
   {
@@ -266,19 +307,35 @@ const applicationFields = computed<FieldDef[]>(() => [
     label: t('applications.list.fields.requestedTerm'),
     type: 'number',
     required: true,
-    min: 1,
-    max: 360,
-    hint: t('applications.list.fields.requestedTermHint'),
+    min: selectedLoanProduct.value?.minTerm ?? 1,
+    max: selectedLoanProduct.value?.maxTerm ?? 360,
+    hint: selectedLoanProduct.value
+      ? t('applications.list.fields.requestedTermRangeHint', {
+          min: selectedLoanProduct.value.minTerm,
+          max: selectedLoanProduct.value.maxTerm
+        })
+      : t('applications.list.fields.requestedTermHint'),
     wrapper: 'half'
   },
   { name: 'purpose', label: t('applications.list.fields.purpose'), type: 'textarea' }
 ])
 
-const createForm = ref<Record<string, any>>({})
+// Suggests sensible defaults as soon as a loan product is picked, so the user
+// isn't left guessing what falls inside the product's amount/term range.
+watch(
+  () => createForm.value.loanProductId,
+  (productId) => {
+    const product = loanProductById.value.get(productId)
+    if (!product) return
+    createForm.value.requestedAmount = product.minAmount
+    createForm.value.requestedTermMonths = product.minTerm
+  }
+)
 
 function openCreate() {
   createForm.value = {
     customerId: undefined,
+    loanProductId: undefined,
     requestedAmount: 1000,
     requestedTermMonths: 12,
     purpose: ''
@@ -293,6 +350,7 @@ async function onCreate(values: Record<string, any>) {
   try {
     const payload: ApplicationRequest = {
       customerId: values.customerId,
+      loanProductId: values.loanProductId,
       requestedAmount: values.requestedAmount,
       requestedTermMonths: values.requestedTermMonths,
       purpose: values.purpose || undefined

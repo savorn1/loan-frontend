@@ -25,6 +25,13 @@
             value-attribute="value"
             class="w-full sm:w-48"
           />
+          <USelectMenu
+            v-model="loanProductFilter"
+            :options="loanProductFilterOptions"
+            option-attribute="label"
+            value-attribute="value"
+            class="w-full sm:w-48"
+          />
           <div class="flex items-center gap-1 w-full sm:w-auto">
             <UInput
               :model-value="principalMin"
@@ -171,6 +178,7 @@
 <script setup lang="ts">
 import type { CustomerResponse } from '~/features/customers/types'
 import type { BranchResponse } from '~/features/branches/types'
+import type { LoanProductResponse } from '~/features/loan-products/types'
 import type { LoanRequest, LoanResponse } from '~/features/loans/types'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
@@ -185,6 +193,7 @@ const sort = ref<{ column: string; direction: 'asc' | 'desc' } | undefined>(unde
 const { from: dateFrom, to: dateTo } = useDateRangeFilter()
 const customerFilter = ref<number | ''>('')
 const branchFilter = ref<number | ''>('')
+const loanProductFilter = ref<string | ''>('')
 const principalMin = ref<number | undefined>(undefined)
 const principalMax = ref<number | undefined>(undefined)
 
@@ -196,6 +205,7 @@ function buildQuery() {
     sortOrder: sort.value?.direction ?? 'desc',
     customerId: customerFilter.value || undefined,
     branchId: branchFilter.value || undefined,
+    loanProductId: loanProductFilter.value || undefined,
     minPrincipal: principalMin.value,
     maxPrincipal: principalMax.value,
     dateFrom: dateFrom.value || undefined,
@@ -216,7 +226,7 @@ const rows = computed(() => loansPage.value?.content ?? [])
 const total = computed(() => loansPage.value?.totalElements ?? 0)
 
 watch(page, () => refresh())
-watch([pageSize, customerFilter, branchFilter, dateFrom, dateTo], () => {
+watch([pageSize, customerFilter, branchFilter, loanProductFilter, dateFrom, dateTo], () => {
   page.value = 1
   refresh()
 })
@@ -250,10 +260,21 @@ const branchFilterOptions = computed(() => [
   ...(branchesData.value ?? []).map((b) => ({ label: b.name, value: b.id }))
 ])
 
+// Unlike the create form's loanProductOptions (PUBLISHED only), the filter needs
+// every product a loan could actually reference, including ones since retired.
+const { data: loanProductsData } = await useAsyncData('loan-products-all', () =>
+  api<LoanProductResponse[]>('/loan-products')
+)
+const loanProductFilterOptions = computed(() => [
+  { label: t('loans.list.loanProductFilter.all'), value: '' },
+  ...(loanProductsData.value ?? []).map((p) => ({ label: `${p.name} (${p.code})`, value: p.id }))
+])
+
 const hasFilters = computed(
   () =>
     customerFilter.value !== '' ||
     branchFilter.value !== '' ||
+    loanProductFilter.value !== '' ||
     principalMin.value !== undefined ||
     principalMax.value !== undefined ||
     !!dateFrom.value ||
@@ -263,6 +284,7 @@ const hasFilters = computed(
 function clearFilters() {
   customerFilter.value = ''
   branchFilter.value = ''
+  loanProductFilter.value = ''
   principalMin.value = undefined
   principalMax.value = undefined
   dateFrom.value = ''
@@ -299,6 +321,11 @@ const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   { key: 'loanNo', label: t('loans.list.columns.reference') },
   // customerName is stitched in per-row from customer-service, not a Loan column — not sortable server-side.
   { key: 'customerName', label: t('loans.list.columns.customer') },
+  {
+    key: 'loanProductName',
+    label: t('loans.list.columns.loanProduct'),
+    value: (row) => row.loanProductName ?? '—'
+  },
   {
     key: 'branchId',
     label: t('loans.list.columns.branch'),

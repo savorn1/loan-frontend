@@ -3,7 +3,9 @@
     "entities": {
       "documentTemplate": "គំរូឯកសារ",
       "feeScheme": "គ្រោងការណ៍កម្រៃ",
+      "feeSchemeDetail": "ធាតុកម្រៃ",
       "interestScheme": "គ្រោងការណ៍ការប្រាក់",
+      "interestSchemeDetail": "កម្រិតអត្រាការប្រាក់",
       "loanProduct": "ផលិតផលកម្ចី",
       "ruleTemplate": "គំរូច្បាប់",
       "termTemplate": "គំរូលក្ខខណ្ឌ"
@@ -59,7 +61,37 @@
       "emptyDescription": "បន្ថែមគ្រោងការណ៍កម្រៃដែលអាចប្រើឡើងវិញ (សំណុំធាតុកម្រៃមួយចំនួន) ដែលផលិតផលកម្ចីអាចជ្រើសរើសបាន។",
       "deleteTitle": "លុបគ្រោងការណ៍កម្រៃ \"{name}\"?",
       "deleteDescription": "សកម្មភាពនេះនឹងលុបគ្រោងការណ៍កម្រៃជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
-      "total": { "one": "១ គ្រោងការណ៍កម្រៃ", "other": "{count} គ្រោងការណ៍កម្រៃ" }
+      "total": { "one": "១ គ្រោងការណ៍កម្រៃ", "other": "{count} គ្រោងការណ៍កម្រៃ" },
+      "details": {
+        "manageButton": "គ្រប់គ្រងធាតុកម្រៃ",
+        "title": "ធាតុកម្រៃ — {name}",
+        "emptyTitle": "មិនទាន់មានធាតុកម្រៃនៅឡើយទេ",
+        "emptyDescription": "បន្ថែមធាតុកម្រៃ (ឧ. កម្រៃដើមកំណើត) ទៅគ្រោងការណ៍នេះ។",
+        "addHeader": "បន្ថែមធាតុកម្រៃ",
+        "editHeader": "កែសម្រួលធាតុកម្រៃ",
+        "addButton": "បន្ថែមធាតុកម្រៃ",
+        "deleteTitle": "លុបធាតុកម្រៃនេះ?",
+        "deleteDescription": "សកម្មភាពនេះនឹងលុបធាតុកម្រៃចេញពីគ្រោងការណ៍ជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+        "calculationMethodColumn": "វិធីគណនា",
+        "chargeTimingColumn": "ពេលវេលាគិតកម្រៃ",
+        "amountHint": "ចំនួនទឹកប្រាក់ថេរ ឬភាគរយ (0-100) នៅពេលវិធីគណនាជាភាគរយ",
+        "typeOptions": {
+          "origination": "កម្រៃដើមកំណើត",
+          "processing": "កម្រៃដំណើរការ",
+          "latePayment": "កម្រៃពិន័យយឺតយ៉ាវ",
+          "prepayment": "កម្រៃទូទាត់មុនកាលកំណត់",
+          "other": "ផ្សេងទៀត"
+        },
+        "calculationOptions": {
+          "flat": "ថេរ",
+          "percentage": "ភាគរយ"
+        },
+        "timingOptions": {
+          "upfront": "មុនគេ",
+          "onDisbursement": "ពេលចេញប្រាក់",
+          "recurring": "ដដែលៗ"
+        }
+      }
     },
     "interestSchemes": {
       "title": "គ្រោងការណ៍ការប្រាក់",
@@ -77,7 +109,24 @@
       "optionActual365": "Actual/365",
       "optionActual360": "Actual/360",
       "optionThirty360": "30/360",
-      "total": { "one": "១ គ្រោងការណ៍ការប្រាក់", "other": "{count} គ្រោងការណ៍ការប្រាក់" }
+      "total": { "one": "១ គ្រោងការណ៍ការប្រាក់", "other": "{count} គ្រោងការណ៍ការប្រាក់" },
+      "details": {
+        "manageButton": "គ្រប់គ្រងកម្រិតអត្រា",
+        "title": "កម្រិតអត្រា — {name}",
+        "emptyTitle": "មិនទាន់មានកម្រិតអត្រានៅឡើយទេ",
+        "emptyDescription": "បន្ថែមកម្រិតលក្ខខណ្ឌ/ចំនួនទឹកប្រាក់ដែលមានអត្រារបស់ខ្លួនទៅគ្រោងការណ៍នេះ។",
+        "addHeader": "បន្ថែមកម្រិតអត្រា",
+        "editHeader": "កែសម្រួលកម្រិតអត្រា",
+        "addButton": "បន្ថែមកម្រិត",
+        "deleteTitle": "លុបកម្រិតអត្រានេះ?",
+        "deleteDescription": "សកម្មភាពនេះនឹងលុបកម្រិតចេញពីគ្រោងការណ៍ជាអចិន្ត្រៃយ៍ ហើយមិនអាចត្រឡប់វិញបានទេ។",
+        "minTermColumn": "លក្ខខណ្ឌអប្បបរមា",
+        "maxTermColumn": "លក្ខខណ្ឌអតិបរមា",
+        "minAmountColumn": "ចំនួនអប្បបរមា",
+        "maxAmountColumn": "ចំនួនអតិបរមា",
+        "interestRateColumn": "អត្រាការប្រាក់",
+        "termHint": "បកស្រាយដោយប្រើឯកតាលក្ខខណ្ឌរបស់ផលិតផលដែលបានចាត់តាំង (ថ្ងៃ/ខែ/ឆ្នាំ)"
+      }
     },
     "loanProducts": {
       "title": "ផលិតផលកម្ចី",

@@ -10,9 +10,53 @@
           :aria-label="t('datePicker.previousMonth')"
           @click="shiftMonth(-1)"
         />
-        <span class="text-sm font-semibold text-gray-900 dark:text-white min-w-[9rem] text-center">
-          {{ monthLabel }}
-        </span>
+        <UPopover v-model:open="jumpOpen" :popper="{ placement: 'bottom-start' }">
+          <button
+            type="button"
+            class="text-sm font-semibold text-gray-900 dark:text-white min-w-[9rem] text-center rounded px-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            {{ monthLabel }}
+          </button>
+
+          <template #panel>
+            <div class="p-3 w-56 select-none">
+              <div class="flex items-center justify-between mb-2">
+                <UButton
+                  icon="i-heroicons-chevron-left"
+                  color="gray"
+                  variant="ghost"
+                  size="xs"
+                  :aria-label="t('datePicker.previousYear')"
+                  @click="shiftJumpYear(-1)"
+                />
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{
+                  jumpYear
+                }}</span>
+                <UButton
+                  icon="i-heroicons-chevron-right"
+                  color="gray"
+                  variant="ghost"
+                  size="xs"
+                  :aria-label="t('datePicker.nextYear')"
+                  @click="shiftJumpYear(1)"
+                />
+              </div>
+
+              <div class="grid grid-cols-3 gap-1">
+                <button
+                  v-for="m in monthOptions"
+                  :key="m.index"
+                  type="button"
+                  class="h-9 rounded-md text-sm transition-colors"
+                  :class="monthButtonClass(m.index)"
+                  @click="pickMonth(m.index)"
+                >
+                  {{ m.label }}
+                </button>
+              </div>
+            </div>
+          </template>
+        </UPopover>
         <UButton
           icon="i-heroicons-chevron-right"
           color="gray"
@@ -111,12 +155,50 @@
             </template>
           </UPopover>
 
-          <span
-            v-if="cell.payments.length > 2"
-            class="text-[11px] text-gray-400 dark:text-gray-500 px-1"
-          >
-            {{ t('payments.list.calendar.more', { count: cell.payments.length - 2 }) }}
-          </span>
+          <UPopover v-if="cell.payments.length > 2" :popper="{ placement: 'right-start' }">
+            <button
+              type="button"
+              class="text-[11px] text-gray-400 dark:text-gray-500 px-1 hover:text-primary-500 dark:hover:text-primary-400 hover:underline text-left"
+            >
+              {{ t('payments.list.calendar.more', { count: cell.payments.length - 2 }) }}
+            </button>
+
+            <template #panel>
+              <div class="p-3 w-64 text-sm">
+                <div class="font-medium text-gray-900 dark:text-white mb-2">
+                  {{ formatDate(cell.iso) }}
+                </div>
+                <div class="flex flex-col gap-1 max-h-64 overflow-y-auto pr-1">
+                  <div
+                    v-for="p in cell.payments"
+                    :key="p.id"
+                    class="flex items-center justify-between gap-2 rounded px-1.5 py-1"
+                    :class="pillClass(p.status)"
+                  >
+                    <div class="min-w-0">
+                      <NuxtLink
+                        :to="`/loans/${p.loanId}`"
+                        class="block truncate font-medium hover:underline"
+                      >
+                        {{ loanLabel(p.loanId) }}
+                      </NuxtLink>
+                      <span class="text-[11px] opacity-80">{{ formatCurrency(p.amount) }}</span>
+                    </div>
+                    <UButton
+                      v-if="p.status !== 'PAID'"
+                      size="2xs"
+                      variant="soft"
+                      :loading="markingPaidId === p.id"
+                      @click="emit('mark-paid', p.id)"
+                    >
+                      {{ t('payments.list.markPaid') }}
+                    </UButton>
+                    <StatusBadge v-else :status="p.status" />
+                  </div>
+                </div>
+              </div>
+            </template>
+          </UPopover>
         </div>
       </div>
     </div>
@@ -189,6 +271,39 @@ function shiftMonth(delta: number) {
 
 function goToday() {
   view.value = startOfMonth(new Date())
+}
+
+const jumpOpen = ref(false)
+const jumpYear = ref(view.value.getFullYear())
+
+// Re-center the year switcher on the visible month each time the popover opens.
+watch(jumpOpen, (isOpen) => {
+  if (isOpen) jumpYear.value = view.value.getFullYear()
+})
+
+function shiftJumpYear(delta: number) {
+  jumpYear.value += delta
+}
+
+const monthOptions = computed(() =>
+  Array.from({ length: 12 }, (_, index) => ({
+    index,
+    label: new Date(2000, index, 1).toLocaleDateString(locale.value === 'km' ? 'km-KH' : 'en-US', {
+      month: 'short'
+    })
+  }))
+)
+
+function monthButtonClass(monthIndex: number): string {
+  if (jumpYear.value === view.value.getFullYear() && monthIndex === view.value.getMonth()) {
+    return 'bg-primary-500 text-white font-semibold'
+  }
+  return 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+}
+
+function pickMonth(monthIndex: number) {
+  view.value = new Date(jumpYear.value, monthIndex, 1)
+  jumpOpen.value = false
 }
 
 const paymentsByDate = computed(() => {

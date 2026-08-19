@@ -217,18 +217,15 @@ const api = useApi()
 const toast = useToast()
 const router = useRouter()
 
-const {
-  data: entries,
-  pending,
-  error: fetchError,
-  refresh
-} = await useAsyncData('journal-entries', () => api<JournalEntryResponse[]>('/journal-entries'))
-const { data: glAccounts } = await useAsyncData('journal-entries-gl-accounts', () =>
-  api<GlAccountResponse[]>('/gl-accounts')
-)
-const { data: branches } = await useAsyncData('journal-entries-branches', () =>
-  api<BranchResponse[]>('/branches')
-)
+const [
+  { data: entries, pending, error: fetchError, refresh },
+  { data: glAccounts },
+  { data: branches }
+] = await Promise.all([
+  useAsyncData('journal-entries', () => api<JournalEntryResponse[]>('/journal-entries')),
+  useAsyncData('journal-entries-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts')),
+  useAsyncData('journal-entries-branches', () => api<BranchResponse[]>('/branches'))
+])
 
 // Only postable (leaf) accounts belong here — posting to a header account fails
 // server-side with "GL account X does not allow direct posting".
@@ -368,7 +365,7 @@ function openCreate() {
   createForm.transactionType = undefined
   createForm.transactionDate = ''
   createForm.branchId = undefined
-  createForm.currency = ''
+  createForm.currency = 'USD'
   createForm.referenceId = ''
   createForm.description = ''
   createForm.lines = [emptyLine(), { ...emptyLine(), entrySide: 'CREDIT' }]
