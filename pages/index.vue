@@ -3,7 +3,13 @@
     <PageHeader
       :title="greeting"
       :description="`${dayGreeting} ${t('admin.dashboard.descriptionSuffix')}`"
-    />
+    >
+      <template #actions>
+        <UButton to="/reports" icon="i-heroicons-chart-bar-square" color="gray" variant="outline">
+          {{ t('admin.dashboard.browseReports') }}
+        </UButton>
+      </template>
+    </PageHeader>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
       <template v-if="loading">
@@ -71,11 +77,21 @@
 
       <UCard class="lg:col-span-3">
         <template #header>
-          <div class="flex items-center justify-between">
-            <span class="font-semibold">{{ t('admin.dashboard.dueNext7DaysHeader') }}</span>
-            <UBadge v-if="upcomingPayments.length" color="orange" variant="subtle">{{
-              upcomingPayments.length
-            }}</UBadge>
+          <div class="flex items-center justify-between gap-3">
+            <span class="font-semibold">{{ t('admin.dashboard.dueSoonHeader') }}</span>
+            <div class="flex items-center gap-2">
+              <UBadge v-if="upcomingPayments.length" color="orange" variant="subtle">{{
+                upcomingPayments.length
+              }}</UBadge>
+              <USelectMenu
+                v-model="dueSoonDays"
+                :options="dueSoonDaysOptions"
+                option-attribute="label"
+                value-attribute="value"
+                size="sm"
+                class="w-36"
+              />
+            </div>
           </div>
         </template>
         <DataTable
@@ -107,6 +123,30 @@
           <Line :data="trendChartData" :options="trendChartOptions" />
         </ClientOnly>
       </div>
+    </UCard>
+
+    <UCard v-if="needsAttention.length > 0" class="mb-6">
+      <template #header>
+        <span class="font-semibold">{{ t('admin.dashboard.needsAttentionHeader') }}</span>
+      </template>
+      <ul class="divide-y divide-gray-100 dark:divide-gray-800 -my-1">
+        <li v-for="item in needsAttention" :key="item.label">
+          <NuxtLink
+            :to="item.to"
+            class="py-3 flex items-center justify-between gap-3 hover:text-primary-500"
+          >
+            <span class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+              <span
+                class="shrink-0 rounded-full p-1.5 bg-amber-50 dark:bg-amber-400/10 text-amber-500"
+              >
+                <UIcon :name="item.icon" class="w-4 h-4" />
+              </span>
+              {{ item.label }}
+            </span>
+            <UBadge color="orange" variant="subtle">{{ item.count }}</UBadge>
+          </NuxtLink>
+        </li>
+      </ul>
     </UCard>
 
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -190,6 +230,7 @@ import { Doughnut, Line } from 'vue-chartjs'
 import type { LoanResponse, LoanStatus, ApplicationResponse } from '~/features/loans/types'
 import type { CustomerResponse } from '~/features/customers/types'
 import type { PaymentResponse } from '~/features/payments/types'
+import type { CollectionWorkqueueItemResponse } from '~/features/collections/types'
 import type { ColumnDef, PageResponse } from '~/shared/types'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
@@ -208,7 +249,8 @@ const [
   { data: customersRaw },
   { data: loansRaw, pending },
   { data: paymentsRaw },
-  { data: applicationsRaw }
+  { data: applicationsRaw },
+  { data: workqueueRaw }
 ] = await Promise.all([
   useAsyncData('dash-customers', () =>
     api<PageResponse<CustomerResponse>>('/customers', { query: { size: 1000 } })
@@ -221,6 +263,11 @@ const [
   ),
   useAsyncData('dash-applications', () =>
     api<PageResponse<ApplicationResponse>>('/loans/applications', { query: { size: 1000 } })
+  ),
+  // Single call, no per-loan fan-out — the workqueue already carries
+  // lastContactAt/nextFollowUpAt/maxDpd for every loan currently in collections.
+  useAsyncData('dash-collections-workqueue', () =>
+    api<CollectionWorkqueueItemResponse[]>('/payments/collections/live')
   )
 ])
 
@@ -228,6 +275,7 @@ const customers = computed(() => customersRaw.value?.content ?? [])
 const loans = computed(() => loansRaw.value?.content ?? [])
 const payments = computed(() => paymentsRaw.value?.content ?? [])
 const applications = computed(() => applicationsRaw.value?.content ?? [])
+const collectionCases = computed(() => workqueueRaw.value ?? [])
 
 const loading = computed(
   () =>
@@ -274,6 +322,59 @@ const pendingApplicationsCount = computed(
 const portfolioAtRisk = computed(() =>
   outstandingBalance.value > 0 ? (overdueAmount.value / outstandingBalance.value) * 100 : 0
 )
+
+function todayIsoDate() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+const todayIso = todayIsoDate()
+
+const casesNeedingContactCount = computed(
+  () =>
+    collectionCases.value.filter(
+      (c) => !c.lastContactAt || (c.nextFollowUpAt && c.nextFollowUpAt < todayIso)
+    ).length
+)
+const severelyDelinquentCount = computed(
+  () => collectionCases.value.filter((c) => c.maxDpd >= 90).length
+)
+
+type NeedsAttentionItem = { label: string; count: number; to: string; icon: string }
+
+const needsAttention = computed<NeedsAttentionItem[]>(() => {
+  const items: NeedsAttentionItem[] = []
+  if (pendingApplicationsCount.value > 0) {
+    items.push({
+      label: t('admin.dashboard.needsAttentionApplications', {
+        count: pendingApplicationsCount.value
+      }),
+      count: pendingApplicationsCount.value,
+      to: '/applications',
+      icon: 'i-heroicons-document-text'
+    })
+  }
+  if (casesNeedingContactCount.value > 0) {
+    items.push({
+      label: t('admin.dashboard.needsAttentionContact', {
+        count: casesNeedingContactCount.value
+      }),
+      count: casesNeedingContactCount.value,
+      to: '/collections',
+      icon: 'i-heroicons-phone'
+    })
+  }
+  if (severelyDelinquentCount.value > 0) {
+    items.push({
+      label: t('admin.dashboard.needsAttentionDelinquent', {
+        count: severelyDelinquentCount.value
+      }),
+      count: severelyDelinquentCount.value,
+      to: '/reports/receivables/aging?bucket=DPD_90_PLUS',
+      icon: 'i-heroicons-fire'
+    })
+  }
+  return items
+})
 
 const statTiles = computed(() => [
   {
@@ -461,14 +562,21 @@ const trendChartOptions = computed(() => {
   }
 })
 
+const dueSoonDays = ref(7)
+const dueSoonDaysOptions = computed(() => [
+  { label: t('admin.dashboard.dueSoonDays', { days: 7 }), value: 7 },
+  { label: t('admin.dashboard.dueSoonDays', { days: 14 }), value: 14 },
+  { label: t('admin.dashboard.dueSoonDays', { days: 30 }), value: 30 }
+])
+
 const upcomingPayments = computed(() => {
   const now = Date.now()
-  const in7Days = now + 7 * 24 * 60 * 60 * 1000
+  const windowEnd = now + dueSoonDays.value * 24 * 60 * 60 * 1000
   return (payments.value ?? [])
     .filter((p) => {
       if (p.status !== 'PENDING') return false
       const due = new Date(p.dueDate).getTime()
-      return due >= now && due <= in7Days
+      return due >= now && due <= windowEnd
     })
     .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
     .slice(0, 8)

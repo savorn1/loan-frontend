@@ -806,6 +806,35 @@
         "cashPosition": "ស្ថានភាពសាច់ប្រាក់",
         "totalReceiptsToDate": "ការទទួលសរុបគិតត្រឹមថ្ងៃនេះ",
         "totalPaymentsToDate": "ការទូទាត់សរុបគិតត្រឹមថ្ងៃនេះ"
+      },
+      "cashFlow": {
+        "title": "លំហូរសាច់ប្រាក់កម្ចី",
+        "description": "ការផ្តល់កម្ចី (សាច់ប្រាក់ចេញ) ធៀបនឹងការសងប្រាក់ដែលបានប្រមូល (សាច់ប្រាក់ចូល) តាមខែ។",
+        "totalDisbursed": "ចំនួនបានផ្តល់សរុប",
+        "totalCollected": "ចំនួនបានប្រមូលសរុប",
+        "netCashFlow": "លំហូរសាច់ប្រាក់សុទ្ធ",
+        "emptyTitle": "គ្មានសកម្មភាពលំហូរសាច់ប្រាក់",
+        "emptyDescription": "គ្មានការផ្តល់កម្ចី ឬការប្រមូលប្រាក់ត្រូវបានកត់ត្រាទេ។",
+        "columns": {
+          "month": "ខែ",
+          "totalDisbursed": "បានផ្តល់ (ចេញ)",
+          "totalCollected": "បានប្រមូល (ចូល)",
+          "netCashFlow": "លំហូរសាច់ប្រាក់សុទ្ធ"
+        }
+      },
+      "channelPerformance": {
+        "title": "សមិទ្ធកម្មបណ្តាញ និងច្រកទូទាត់",
+        "description": "បរិមាណប្រតិបត្តិការ និងអត្រាជោគជ័យ បែងចែកតាមបណ្តាញ និងតាមច្រកទូទាត់។",
+        "byChannelHeader": "តាមបណ្តាញ",
+        "byGatewayHeader": "តាមច្រកទូទាត់",
+        "columns": {
+          "name": "ឈ្មោះ",
+          "transactionCount": "ប្រតិបត្តិការ",
+          "totalAmount": "ចំនួនទឹកប្រាក់សរុប",
+          "successCount": "ជោគជ័យ",
+          "failedCount": "បរាជ័យ",
+          "successRate": "អត្រាជោគជ័យ"
+        }
       }
     },
     "branchAccountingReports": {
@@ -1041,6 +1070,84 @@
           "totalPrincipal": "ប្រាក់ដើមសរុប",
           "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប"
         }
+      },
+      "approachingMaturity": {
+        "title": "កម្ចីជិតដល់កាលកំណត់",
+        "description": "កម្ចីសកម្មដែលមានថ្ងៃកំណត់នៅក្នុងចន្លោះពេលដែលបានជ្រើសរើស។",
+        "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប",
+        "searchPlaceholder": "ស្វែងរកតាមកម្ចី ឬអតិថិជន…",
+        "emptyTitle": "គ្មានកម្ចីជិតដល់កាលកំណត់ទេ",
+        "emptyDescription": "គ្មានកម្ចីសកម្មណាមួយដល់កាលកំណត់ក្នុងចន្លោះពេលដែលបានជ្រើសរើសទេ។",
+        "range30": "៣០ថ្ងៃខាងមុខ",
+        "range60": "៦០ថ្ងៃខាងមុខ",
+        "range90": "៩០ថ្ងៃខាងមុខ",
+        "rangeAll": "ទាំងអស់ខាងមុខ",
+        "columns": {
+          "loan": "កម្ចី",
+          "customer": "អតិថិជន",
+          "branch": "សាខា",
+          "outstandingBalance": "សមតុល្យនៅសល់",
+          "maturityDate": "ថ្ងៃកំណត់",
+          "daysRemaining": "ថ្ងៃនៅសល់"
+        }
+      },
+      "byPurpose": {
+        "title": "របាយការណ៍គោលបំណងកម្ចី",
+        "description": "ចំនួនកម្ចី ប្រាក់ដើម និងសមតុល្យនៅសល់ តាមគោលបំណងកម្ចីដែលបានចែង។",
+        "emptyTitle": "គ្មានកម្ចី",
+        "emptyDescription": "គ្មានកម្ចីណាមួយមានគោលបំណងបានកត់ត្រានៅឡើយទេ។",
+        "columns": {
+          "purpose": "គោលបំណង",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប",
+          "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប"
+        }
+      },
+      "byDisbursementMethod": {
+        "title": "របាយការណ៍វិធីសាស្ត្រផ្តល់ប្រាក់",
+        "description": "ការផ្តល់ប្រាក់ដែលបានអនុម័ត បែងចែកតាមវិធីសាស្ត្រទូទាត់។",
+        "emptyTitle": "គ្មានការផ្តល់ប្រាក់",
+        "emptyDescription": "គ្មានកម្ចីណាមួយមានការផ្តល់ប្រាក់ដែលបានអនុម័តនៅឡើយទេ។",
+        "columns": {
+          "method": "វិធីសាស្ត្រ",
+          "disbursementCount": "ចំនួនការផ្តល់ប្រាក់",
+          "totalAmount": "ចំនួនទឹកប្រាក់សរុប"
+        }
+      }
+    },
+    "groupLendingReports": {
+      "groups": {
+        "title": "របាយការណ៍ក្រុម",
+        "description": "ក្រុមសាមគ្គីភាព អ្នកដឹកនាំ សាខា និងចំនួនសមាជិក។",
+        "searchPlaceholder": "ស្វែងរកតាមឈ្មោះក្រុម លេខកូដ ឬអ្នកដឹកនាំ…",
+        "emptyTitle": "គ្មានក្រុម",
+        "emptyDescription": "គ្មានក្រុមកម្ចីត្រូវបានបង្កើតនៅឡើយទេ។",
+        "columns": {
+          "name": "ក្រុម",
+          "code": "លេខកូដ",
+          "branch": "សាខា",
+          "leader": "អ្នកដឹកនាំ",
+          "memberCount": "សមាជិក",
+          "formationDate": "កាលបរិច្ឆេទបង្កើត",
+          "status": "ស្ថានភាព"
+        }
+      },
+      "applications": {
+        "title": "របាយការណ៍ពាក្យសុំកម្ចីជាក្រុម",
+        "description": "ពាក្យសុំកម្ចីជាក្រុម ជាមួយចំនួនស្នើសុំ ធៀបនឹងចំនួនអនុម័តនៅទូទាំងសមាជិកទាំងអស់។",
+        "searchPlaceholder": "ស្វែងរកតាមពាក្យសុំ ឬក្រុម…",
+        "emptyTitle": "គ្មានពាក្យសុំកម្ចីជាក្រុម",
+        "emptyDescription": "គ្មានក្រុមណាមួយបានដាក់ស្នើពាក្យសុំកម្ចីនៅឡើយទេ។",
+        "columns": {
+          "application": "ពាក្យសុំ",
+          "group": "ក្រុម",
+          "branch": "សាខា",
+          "memberCount": "សមាជិក",
+          "totalRequested": "ចំនួនស្នើសុំសរុប",
+          "totalApproved": "ចំនួនអនុម័តសរុប",
+          "status": "ស្ថានភាព",
+          "submittedAt": "ថ្ងៃដាក់ស្នើ"
+        }
       }
     },
     "repaymentReports": {
@@ -1124,6 +1231,130 @@
           "dueDate": "កាលបរិច្ឆេទដល់កំណត់",
           "daysOverdue": "ចំនួនថ្ងៃហួសកំណត់",
           "amount": "ចំនួនទឹកប្រាក់"
+        }
+      },
+      "firstPaymentDefault": {
+        "title": "របាយការណ៍ការខកខានទូទាត់លើកទីមួយ",
+        "description": "កម្ចីដែលដំណាក់កាលទូទាត់លើកទីមួយនៅតែមិនទាន់សងហួសកំណត់ ឬបានសងយឺត។",
+        "searchPlaceholder": "ស្វែងរកតាមកម្ចី ឬអតិថិជន…",
+        "emptyTitle": "គ្មានការខកខានទូទាត់លើកទីមួយ",
+        "emptyDescription": "កម្ចីទាំងអស់បានសងដំណាក់កាលទូទាត់លើកទីមួយទាន់ពេលវេលា។",
+        "columns": {
+          "loan": "កម្ចី",
+          "customer": "អតិថិជន",
+          "dueDate": "កាលបរិច្ឆេទដល់កំណត់",
+          "paidAt": "បានសងនៅ",
+          "daysLate": "ចំនួនថ្ងៃយឺត",
+          "amount": "ចំនួនទឹកប្រាក់"
+        }
+      }
+    },
+    "collectionReports": {
+      "daily": {
+        "title": "ការប្រមូលប្រាក់ប្រចាំថ្ងៃ",
+        "description": "ការប្រមូលប្រាក់ដែលទទួលបាន ដាក់ជាក្រុមតាមថ្ងៃ សម្រាប់ដែនកាលបរិច្ឆេទមួយ។",
+        "emptyTitlePick": "សូមជ្រើសរើសដែនកាលបរិច្ឆេទ",
+        "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលការប្រមូលប្រាក់ប្រចាំថ្ងៃ។",
+        "emptyTitleNoActivity": "គ្មានការប្រមូលប្រាក់",
+        "emptyDescriptionNoActivity": "គ្មានការទូទាត់ណាមួយត្រូវបានប្រមូលក្នុងចន្លោះពេលដែលបានជ្រើសរើសទេ។",
+        "columns": {
+          "date": "ថ្ងៃ",
+          "count": "ចំនួន",
+          "totalAmount": "ចំនួនទឹកប្រាក់សរុប",
+          "totalPrincipal": "ប្រាក់ដើម",
+          "totalInterest": "ការប្រាក់"
+        }
+      },
+      "performance": {
+        "title": "សមិទ្ធកម្មប្រមូលប្រាក់",
+        "description": "អត្រាប្រមូលប្រាក់ — ចំនួនប្រមូលបាន ធៀបនឹងចំនួនត្រូវសង — សម្រាប់ដែនកាលបរិច្ឆេទមួយ។",
+        "totalDue": "ចំនួនត្រូវសងសរុប",
+        "totalCollected": "ចំនួនប្រមូលបានសរុប",
+        "collectionRate": "អត្រាប្រមូលប្រាក់",
+        "searchPlaceholder": "ស្វែងរកតាមកម្ចី…",
+        "emptyTitlePick": "សូមជ្រើសរើសដែនកាលបរិច្ឆេទ",
+        "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលសមិទ្ធកម្មប្រមូលប្រាក់។",
+        "emptyTitleNoActivity": "គ្មានដំណាក់កាលទូទាត់ត្រូវសង",
+        "emptyDescriptionNoActivity": "គ្មានដំណាក់កាលទូទាត់ណាមួយត្រូវសងក្នុងចន្លោះពេលដែលបានជ្រើសរើសទេ។",
+        "columns": {
+          "loanId": "កម្ចី",
+          "dueDate": "កាលបរិច្ឆេទដល់កំណត់",
+          "amount": "ចំនួនត្រូវសង",
+          "status": "ស្ថានភាព",
+          "paidAt": "បានសងនៅ"
+        }
+      },
+      "officerPerformance": {
+        "title": "សមិទ្ធកម្មមន្ត្រីប្រមូលប្រាក់",
+        "description": "ការប្រមូលប្រាក់ និងសកម្មភាពករណីតាមមន្ត្រីប្រមូលប្រាក់។",
+        "tableHeader": "តាមមន្ត្រី",
+        "months1": "ខែមុន",
+        "months3": "៣ខែចុងក្រោយ",
+        "months6": "៦ខែចុងក្រោយ",
+        "months12": "១២ខែចុងក្រោយ",
+        "emptyTitle": "គ្មានសកម្មភាពប្រមូលប្រាក់",
+        "emptyDescription": "គ្មានមន្ត្រីប្រមូលប្រាក់ណាមួយមានសកម្មភាពករណីក្នុងអំឡុងពេលនេះទេ។",
+        "officerLabel": "មន្ត្រី #{id}",
+        "columns": {
+          "officer": "មន្ត្រី",
+          "caseCount": "ករណី",
+          "openCaseCount": "ករណីកំពុងបើក",
+          "resolvedCaseCount": "ករណីបានដោះស្រាយ",
+          "paymentCount": "ការទូទាត់",
+          "totalCollected": "ចំនួនប្រមូលបានសរុប"
+        }
+      },
+      "branchPerformance": {
+        "title": "សមិទ្ធកម្មសាខា",
+        "description": "អត្រាប្រមូលប្រាក់ និងចំនួនសរុបតាមសាខា សម្រាប់ដែនកាលបរិច្ឆេទមួយ។",
+        "emptyTitlePick": "សូមជ្រើសរើសដែនកាលបរិច្ឆេទ",
+        "emptyDescriptionPick": "ជ្រើសរើសកាលបរិច្ឆេទចាប់ផ្តើម និងបញ្ចប់ខាងលើ ដើម្បីមើលសមិទ្ធកម្មសាខា។",
+        "emptyTitleNoActivity": "គ្មានដំណាក់កាលទូទាត់ត្រូវសង",
+        "emptyDescriptionNoActivity": "គ្មានដំណាក់កាលទូទាត់ណាមួយត្រូវសងក្នុងចន្លោះពេលដែលបានជ្រើសរើសទេ។",
+        "columns": {
+          "branch": "សាខា",
+          "totalDue": "ចំនួនត្រូវសងសរុប",
+          "totalCollected": "ចំនួនប្រមូលបានសរុប",
+          "collectionRate": "អត្រាប្រមូលប្រាក់",
+          "paymentCount": "ការទូទាត់"
+        }
+      },
+      "promises": {
+        "title": "របាយការណ៍កិច្ចសន្យាសងប្រាក់",
+        "description": "កិច្ចសន្យាសងប្រាក់ដែលធ្វើឡើងដោយអតិថិជនកំពុងស្ថិតក្នុងការប្រមូលប្រាក់ និងថាតើបានគោរពតាមឬអត់។",
+        "totalPromised": "ចំនួនសន្យាសរុប",
+        "keptCount": "បានគោរពតាម",
+        "brokenCount": "មិនបានគោរពតាម",
+        "keptRate": "អត្រាគោរពតាម",
+        "searchPlaceholder": "ស្វែងរកតាមអតិថិជន…",
+        "emptyTitle": "គ្មានកិច្ចសន្យា",
+        "emptyDescription": "គ្មានករណីប្រមូលប្រាក់ណាមួយមានកិច្ចសន្យាសងប្រាក់បានកត់ត្រាទេ។",
+        "columns": {
+          "loan": "កម្ចី",
+          "customer": "អតិថិជន",
+          "promisedAmount": "ចំនួនបានសន្យា",
+          "promisedDate": "កាលបរិច្ឆេទសន្យា",
+          "status": "ស្ថានភាព",
+          "amountPaid": "ចំនួនបានសង",
+          "createdBy": "កត់ត្រាដោយ"
+        }
+      },
+      "activity": {
+        "title": "របាយការណ៍សកម្មភាពប្រមូលប្រាក់",
+        "description": "កំណត់ត្រាទំនាក់ទំនង និងលទ្ធផលនៅទូទាំងករណីប្រមូលប្រាក់សកម្មទាំងអស់។",
+        "outcomeBreakdownHeader": "តាមលទ្ធផល",
+        "searchPlaceholder": "ស្វែងរកតាមអតិថិជន អ្នកកត់ត្រា ឬកំណត់ចំណាំ…",
+        "emptyTitle": "គ្មានសកម្មភាព",
+        "emptyDescription": "គ្មានករណីប្រមូលប្រាក់ណាមួយមានសកម្មភាពទំនាក់ទំនងបានកត់ត្រាទេ។",
+        "columns": {
+          "loan": "កម្ចី",
+          "customer": "អតិថិជន",
+          "contactMethod": "វិធីទំនាក់ទំនង",
+          "outcome": "លទ្ធផល",
+          "note": "កំណត់ចំណាំ",
+          "author": "អ្នកកត់ត្រា",
+          "createdAt": "ពេលកត់ត្រា",
+          "count": "ចំនួន"
         }
       }
     },
@@ -1319,6 +1550,47 @@
           "principalComponent": "ប្រាក់ដើម",
           "interestComponent": "ការប្រាក់"
         }
+      },
+      "repeatBorrowers": {
+        "title": "របាយការណ៍អ្នកខ្ចីម្តងហើយម្តងទៀត",
+        "description": "អតិថិជនដែលមានកម្ចីចាប់ពីពីរឡើងទៅ។",
+        "searchPlaceholder": "ស្វែងរកតាមអតិថិជន…",
+        "emptyTitle": "គ្មានអ្នកខ្ចីម្តងហើយម្តងទៀត",
+        "emptyDescription": "គ្មានអតិថិជនណាមួយបានខ្ចីលើសពីមួយដងនៅឡើយទេ។",
+        "columns": {
+          "customer": "អតិថិជន",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប",
+          "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប",
+          "firstLoanDate": "កម្ចីដំបូង",
+          "latestLoanDate": "កម្ចីចុងក្រោយ"
+        }
+      },
+      "loanRenewals": {
+        "title": "របាយការណ៍ការបន្តកម្ចី",
+        "description": "អតិថិជនដែលបានខ្ចីកម្ចីថ្មីបន្ទាប់ពីកម្ចីមុនរបស់ពួកគេបានបិទ។",
+        "searchPlaceholder": "ស្វែងរកតាមអតិថិជន ឬកម្ចី…",
+        "emptyTitle": "គ្មានការបន្តកម្ចី",
+        "emptyDescription": "គ្មានអតិថិជនណាមួយបានខ្ចីកម្ចីថ្មីបន្ទាប់ពីកម្ចីមុនបានបិទទេ។",
+        "columns": {
+          "customer": "អតិថិជន",
+          "previousLoan": "កម្ចីមុន",
+          "previousClosedAt": "កម្ចីមុនបានបិទ",
+          "newLoan": "កម្ចីថ្មី",
+          "newLoanDate": "កាលបរិច្ឆេទកម្ចីថ្មី",
+          "gapDays": "គម្លាត (ថ្ងៃ)"
+        }
+      },
+      "growth": {
+        "title": "របាយការណ៍កំណើនអតិថិជន",
+        "description": "ការចុះឈ្មោះអតិថិជនថ្មី តាមខែ។",
+        "emptyTitle": "គ្មានអតិថិជន",
+        "emptyDescription": "គ្មានអតិថិជនណាមួយបានចុះឈ្មោះនៅឡើយទេ។",
+        "columns": {
+          "month": "ខែ",
+          "newCustomers": "អតិថិជនថ្មី",
+          "cumulativeTotal": "ចំនួនសរុបប្រមូលផ្តុំ"
+        }
       }
     },
     "writeoffRestructureReports": {
@@ -1369,6 +1641,23 @@
           "reason": "មូលហេតុ",
           "effectiveDate": "កាលបរិច្ឆេទចូលជាធរមាន"
         }
+      },
+      "recovery": {
+        "title": "របាយការណ៍ការសងត្រឡប់កម្ចី",
+        "description": "ចំនួនប្រាក់ដែលបានសងត្រឡប់លើកម្ចីដែលបានលុបចោល។",
+        "totalWrittenOff": "ចំនួនលុបចោលសរុប",
+        "totalRecovered": "ចំនួនសងត្រឡប់សរុប",
+        "recoveryRate": "អត្រាសងត្រឡប់",
+        "emptyTitle": "គ្មានការលុបចោលកម្ចី",
+        "emptyDescription": "គ្មានកម្ចីណាមួយត្រូវបានលុបចោលនៅឡើយទេ។",
+        "columns": {
+          "loan": "កម្ចី",
+          "writeoffDate": "កាលបរិច្ឆេទលុបចោល",
+          "writeoffAmount": "ចំនួនលុបចោល",
+          "recoveredAmount": "ចំនួនសងត្រឡប់",
+          "recoveryRate": "អត្រាសងត្រឡប់",
+          "status": "ស្ថានភាព"
+        }
       }
     },
     "dashboardReports": {
@@ -1385,6 +1674,32 @@
         "portfolioAtRisk": "ផលប័ត្រប្រថុយប្រថាន",
         "nonPerformingLoans": "កម្ចីមិនដំណើរការ (ហួសកំណត់ ៩០+ ថ្ងៃ)",
         "averageLoanAmount": "ចំនួនកម្ចីជាមធ្យម"
+      },
+      "byLoanProduct": {
+        "title": "ផលប័ត្រតាមផលិតផលកម្ចី",
+        "description": "ចំនួនកម្ចី ប្រាក់ដើម និងសមតុល្យនៅសល់ តាមផលិតផលកម្ចីនីមួយៗ។",
+        "emptyTitle": "គ្មានកម្ចី",
+        "emptyDescription": "គ្មានផលិតផលកម្ចីណាមួយមានកម្ចីនៅឡើយទេ។",
+        "columns": {
+          "loanProduct": "ផលិតផលកម្ចី",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប",
+          "totalOutstanding": "ចំនួនប្រាក់នៅសល់សរុប"
+        }
+      },
+      "forecast": {
+        "title": "របាយការណ៍ព្យាករណ៍",
+        "description": "ការសងប្រាក់ព្យាករណ៍នាពេលអនាគត ដោយផ្អែកលើកាលវិភាគទូទាត់បច្ចុប្បន្ន។",
+        "note": "ការព្យាករណ៍នេះជាការអានផ្ទាល់នៃដំណាក់កាលទូទាត់ដែលកំណត់ពេលហើយ ប៉ុន្តែមិនទាន់សង — វាមិនបានគិតគូរអំពីការផ្តល់កម្ចីថ្មី ការសងមុនកាលកំណត់ ឬការខកខានទូទាត់ទេ។",
+        "emptyTitle": "គ្មានដំណាក់កាលទូទាត់កំណត់ពេល",
+        "emptyDescription": "គ្មានដំណាក់កាលទូទាត់ណាមួយមិនទាន់សងសម្រាប់ព្យាករណ៍ទេ។",
+        "columns": {
+          "month": "ខែ",
+          "installmentCount": "ចំនួនដំណាក់កាលទូទាត់",
+          "expectedTotal": "ចំនួនរំពឹងទុកសរុប",
+          "expectedPrincipal": "ប្រាក់ដើមរំពឹងទុក",
+          "expectedInterest": "ការប្រាក់រំពឹងទុក"
+        }
       }
     },
     "riskComplianceReports": {
@@ -1465,6 +1780,76 @@
           "totalPrincipal": "ប្រាក់ដើមសរុប",
           "avgInterestRate": "អត្រាការប្រាក់មធ្យម"
         }
+      },
+      "collateral": {
+        "title": "របាយការណ៍វត្ថុបញ្ចាំ",
+        "description": "តម្លៃ និងស្ថានភាពវត្ថុបញ្ចាំដែលបានដាក់ សម្រាប់រាល់កម្ចីសកម្ម។",
+        "pledgedCount": "ចំនួនធាតុវត្ថុបញ្ចាំ",
+        "totalPledgedValue": "តម្លៃវត្ថុបញ្ចាំសរុប",
+        "searchPlaceholder": "ស្វែងរកតាមកម្ចី អតិថិជន ឬការពិពណ៌នា…",
+        "emptyTitle": "គ្មានវត្ថុបញ្ចាំ",
+        "emptyDescription": "គ្មានកម្ចីសកម្មណាមួយមានវត្ថុបញ្ចាំបានកត់ត្រាទេ។",
+        "columns": {
+          "loan": "កម្ចី",
+          "customer": "អតិថិជន",
+          "type": "ប្រភេទ",
+          "description": "ការពិពណ៌នា",
+          "estimatedValue": "តម្លៃប៉ាន់ស្មាន",
+          "status": "ស្ថានភាព"
+        }
+      },
+      "loanToValue": {
+        "title": "របាយការណ៍អត្រាកម្ចីធៀបនឹងតម្លៃ (LTV)",
+        "description": "សមតុល្យនៅសល់ធៀបនឹងតម្លៃវត្ថុបញ្ចាំ សម្រាប់រាល់កម្ចីសកម្មដែលមានវត្ថុបញ្ចាំ។",
+        "searchPlaceholder": "ស្វែងរកតាមកម្ចី ឬអតិថិជន…",
+        "emptyTitle": "គ្មានកម្ចីមានវត្ថុបញ្ចាំ",
+        "emptyDescription": "គ្មានកម្ចីសកម្មណាមួយមានវត្ថុបញ្ចាំសម្រាប់ប្រៀបធៀបទេ។",
+        "columns": {
+          "loan": "កម្ចី",
+          "customer": "អតិថិជន",
+          "outstandingBalance": "សមតុល្យនៅសល់",
+          "collateralValue": "តម្លៃវត្ថុបញ្ចាំ",
+          "ltvPercent": "LTV"
+        }
+      },
+      "guarantors": {
+        "title": "របាយការណ៍អ្នកធានា",
+        "description": "អ្នកធានា និងចំនួនទឹកប្រាក់ដែលធានា សម្រាប់រាល់កម្ចីសកម្ម។",
+        "activeCount": "អ្នកធានាសកម្ម",
+        "totalGuaranteedAmount": "ចំនួនទឹកប្រាក់ធានាសរុប",
+        "searchPlaceholder": "ស្វែងរកតាមកម្ចី អតិថិជន ឬអ្នកធានា…",
+        "emptyTitle": "គ្មានអ្នកធានា",
+        "emptyDescription": "គ្មានកម្ចីសកម្មណាមួយមានអ្នកធានាបានកត់ត្រាទេ។",
+        "columns": {
+          "loan": "កម្ចី",
+          "customer": "អតិថិជន",
+          "guarantor": "អ្នកធានា",
+          "phone": "លេខទូរស័ព្ទ",
+          "relationship": "ទំនាក់ទំនង",
+          "guaranteedAmount": "ចំនួនទឹកប្រាក់ធានា",
+          "status": "ស្ថានភាព"
+        }
+      },
+      "kycCompliance": {
+        "title": "របាយការណ៍អនុលោមភាព KYC",
+        "description": "ឯកសារសម្គាល់អតិថិជនដែលហួសកំណត់ ឬនឹងហួសកំណត់ឆាប់ៗនេះ។",
+        "expiredCount": "ហួសកំណត់",
+        "expiringCount": "ជិតហួសកំណត់",
+        "missingKycCount": "អតិថិជនគ្មានឯកសារសម្គាល់",
+        "range30": "៣០ថ្ងៃខាងមុខ",
+        "range60": "៦០ថ្ងៃខាងមុខ",
+        "range90": "៩០ថ្ងៃខាងមុខ",
+        "searchPlaceholder": "ស្វែងរកតាមអតិថិជន ឬលេខឯកសារ…",
+        "emptyTitle": "គ្មានឯកសារជិតហួសកំណត់",
+        "emptyDescription": "គ្មានឯកសារសម្គាល់ណាមួយហួសកំណត់ ឬជិតហួសកំណត់ក្នុងចន្លោះពេលដែលបានជ្រើសរើសទេ។",
+        "columns": {
+          "customer": "អតិថិជន",
+          "identityType": "ប្រភេទឯកសារ",
+          "identityNumber": "លេខឯកសារ",
+          "expiryDate": "ថ្ងៃផុតកំណត់",
+          "daysUntilExpiry": "ចំនួនថ្ងៃមុនផុតកំណត់",
+          "status": "ស្ថានភាព"
+        }
       }
     },
     "operationalPerformanceReports": {
@@ -1537,6 +1922,37 @@
           "description": "ការពិពណ៌នា",
           "recordCreatedAt": "ថ្ងៃបង្កើត"
         }
+      },
+      "disbursementTurnaround": {
+        "title": "របាយការណ៍រយៈពេលផ្តល់កម្ចី",
+        "description": "រយៈពេលចាប់ពីការអនុម័តរហូតដល់ការផ្តល់ប្រាក់កម្ចីជាក់ស្តែង តាមកម្ចីនីមួយៗ។",
+        "loanCount": "ចំនួនកម្ចី",
+        "avgTurnaroundDays": "រយៈពេលមធ្យម (ថ្ងៃ)",
+        "searchPlaceholder": "ស្វែងរកតាមកម្ចី ឬអតិថិជន…",
+        "emptyTitle": "គ្មានកម្ចីបានផ្តល់ប្រាក់",
+        "emptyDescription": "គ្មានកម្ចីណាមួយមានទាំងកាលបរិច្ឆេទអនុម័ត និងកាលបរិច្ឆេទផ្តល់ប្រាក់នៅឡើយទេ។",
+        "columns": {
+          "loan": "កម្ចី",
+          "customer": "អតិថិជន",
+          "approvedAt": "បានអនុម័ត",
+          "disbursedAt": "បានផ្តល់ប្រាក់",
+          "turnaroundDays": "រយៈពេល (ថ្ងៃ)"
+        }
+      },
+      "rejectionReasons": {
+        "title": "របាយការណ៍មូលហេតុបដិសេធពាក្យសុំ",
+        "description": "ពាក្យសុំដែលបានបដិសេធ ជាមួយមូលហេតុនៃការសម្រេចចិត្តដែលបានកត់ត្រានៅពេលបដិសេធ។",
+        "searchPlaceholder": "ស្វែងរកតាមពាក្យសុំ អតិថិជន ឬមូលហេតុ…",
+        "emptyTitle": "គ្មានពាក្យសុំបានបដិសេធ",
+        "emptyDescription": "គ្មានពាក្យសុំណាមួយត្រូវបានបដិសេធនៅឡើយទេ។",
+        "columns": {
+          "application": "ពាក្យសុំ",
+          "customer": "អតិថិជន",
+          "requestedAmount": "ចំនួនស្នើសុំ",
+          "rejectedBy": "បដិសេធដោយ",
+          "reason": "មូលហេតុ",
+          "decidedAt": "ថ្ងៃសម្រេចចិត្ត"
+        }
       }
     },
     "productProfitabilityReports": {
@@ -1578,6 +1994,19 @@
           "actualAmount": "លទ្ធផលជាក់ស្តែង",
           "variance": "គម្លាត",
           "variancePercent": "% គម្លាត"
+        }
+      },
+      "loanProfitability": {
+        "title": "ប្រាក់ចំណេញកម្ចី",
+        "description": "ចំណូលការប្រាក់ដែលបានប្រមូល និងអត្រាចំណេញលើប្រាក់ដើម តាមផលិតផលកម្ចី។",
+        "emptyTitle": "គ្មានកម្ចី",
+        "emptyDescription": "គ្មានផលិតផលកម្ចីណាមួយមានកម្ចីនៅឡើយទេ។",
+        "columns": {
+          "loanProduct": "ផលិតផលកម្ចី",
+          "loanCount": "ចំនួនកម្ចី",
+          "totalPrincipal": "ប្រាក់ដើមសរុប",
+          "totalInterestCollected": "ការប្រាក់ដែលបានប្រមូល",
+          "yieldPercent": "អត្រាចំណេញ"
         }
       }
     }

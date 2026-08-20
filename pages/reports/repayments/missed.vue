@@ -1,8 +1,6 @@
 <template>
   <div>
-    <UButton to="/reports" variant="link" icon="i-heroicons-arrow-left" size="xs" class="mb-1 px-0">
-      {{ t('admin.reports.backToReports') }}
-    </UButton>
+    <BackToReportsButton />
     <PageHeader
       :title="t('accounting.repaymentReports.missed.title')"
       :description="t('accounting.repaymentReports.missed.description')"

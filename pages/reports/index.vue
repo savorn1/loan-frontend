@@ -2,6 +2,21 @@
   <div>
     <PageHeader :title="t('admin.reports.title')" :description="t('admin.reports.description')" />
 
+    <nav
+      v-if="!globalSearch.trim()"
+      class="sticky top-0 z-10 -mx-1 mb-6 flex gap-1 overflow-x-auto px-1 py-2 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur"
+      :aria-label="t('admin.reports.jumpToCategory')"
+    >
+      <a
+        v-for="section in jumpNavSections"
+        :key="section.id"
+        :href="`#${section.id}`"
+        class="shrink-0 rounded-full px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-400 hover:text-primary-500 whitespace-nowrap"
+      >
+        {{ section.label }}
+      </a>
+    </nav>
+
     <UCard class="mb-6">
       <UInput
         v-model="globalSearch"
@@ -146,108 +161,152 @@
       </UCard>
 
       <ReportCategoryCard
+        v-if="pinnedTiles.length > 0"
+        id="pinned"
+        :title="t('admin.reports.pinnedReportsHeader')"
+        :tiles="pinnedTiles"
+      />
+
+      <ReportCategoryCard
+        id="general-ledger"
         :title="t('admin.reports.generalLedgerReportsHeader')"
         :tiles="generalLedgerReportTiles"
       />
 
       <ReportCategoryCard
+        id="trial-balance"
         :title="t('admin.reports.trialBalanceReportsHeader')"
         :tiles="trialBalanceReportTiles"
       />
 
       <ReportCategoryCard
+        id="financial-statements"
         :title="t('admin.reports.financialStatementsHeader')"
         :tiles="financialStatementTiles"
       />
 
       <ReportCategoryCard
+        id="loan-accounting"
         :title="t('admin.reports.loanAccountingReportsHeader')"
         :tiles="loanAccountingReportTiles"
       />
 
       <ReportCategoryCard
+        id="receivables"
         :title="t('admin.reports.receivablesReportsHeader')"
         :tiles="receivablesReportTiles"
       />
 
-      <ReportCategoryCard :title="t('admin.reports.cashReportsHeader')" :tiles="cashReportTiles" />
+      <ReportCategoryCard
+        id="cash"
+        :title="t('admin.reports.cashReportsHeader')"
+        :tiles="cashReportTiles"
+      />
 
       <ReportCategoryCard
+        id="branch-accounting"
         :title="t('admin.reports.branchAccountingReportsHeader')"
         :tiles="branchAccountingReportTiles"
       />
 
       <ReportCategoryCard
+        id="expenses"
         :title="t('admin.reports.expenseReportsHeader')"
         :tiles="expenseReportTiles"
       />
 
       <ReportCategoryCard
+        id="revenue"
         :title="t('admin.reports.revenueReportsHeader')"
         :tiles="revenueReportTiles"
       />
 
       <ReportCategoryCard
+        id="loan-portfolio"
         :title="t('admin.reports.loanPortfolioReportsHeader')"
         :tiles="loanPortfolioReportTiles"
       />
 
       <ReportCategoryCard
+        id="group-lending"
+        :title="t('admin.reports.groupLendingReportsHeader')"
+        :tiles="groupLendingReportTiles"
+      />
+
+      <ReportCategoryCard
+        id="repayments"
         :title="t('admin.reports.repaymentReportsHeader')"
         :tiles="repaymentReportTiles"
       />
 
       <ReportCategoryCard
+        id="collection"
+        :title="t('admin.reports.collectionReportsHeader')"
+        :tiles="collectionReportTiles"
+      />
+
+      <ReportCategoryCard
+        id="outstanding"
         :title="t('admin.reports.outstandingReportsHeader')"
         :tiles="outstandingReportTiles"
       />
 
       <ReportCategoryCard
+        id="overdue"
         :title="t('admin.reports.overdueReportsHeader')"
         :tiles="overdueReportTiles"
       />
 
       <ReportCategoryCard
+        id="penalties"
         :title="t('admin.reports.penaltyReportsHeader')"
         :tiles="penaltyReportTiles"
       />
 
       <ReportCategoryCard
+        id="interest"
         :title="t('admin.reports.interestReportsHeader')"
         :tiles="interestReportTiles"
       />
 
       <ReportCategoryCard
+        id="customers"
         :title="t('admin.reports.customerReportsHeader')"
         :tiles="customerReportTiles"
       />
 
       <ReportCategoryCard
+        id="schedule"
         :title="t('admin.reports.scheduleReportsHeader')"
         :tiles="scheduleReportTiles"
       />
 
       <ReportCategoryCard
+        id="writeoffs-restructures"
         :title="t('admin.reports.writeoffRestructureReportsHeader')"
         :tiles="writeoffRestructureReportTiles"
       />
 
       <ReportCategoryCard
+        id="dashboard-reports"
         :title="t('admin.reports.dashboardReportsHeader')"
         :tiles="dashboardReportTiles"
       />
 
       <ReportCategoryCard
+        id="risk-compliance"
         :title="t('admin.reports.riskComplianceReportsHeader')"
         :tiles="riskComplianceReportTiles"
       />
 
       <ReportCategoryCard
+        id="operational-performance"
         :title="t('admin.reports.operationalPerformanceReportsHeader')"
         :tiles="operationalPerformanceReportTiles"
       />
 
       <ReportCategoryCard
+        id="product-profitability"
         :title="t('admin.reports.productProfitabilityReportsHeader')"
         :tiles="productProfitabilityReportTiles"
       />
@@ -602,6 +661,18 @@ const cashReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-banknotes',
     label: t('admin.reports.cashReportsTiles.position.label'),
     description: t('admin.reports.cashReportsTiles.position.description')
+  },
+  {
+    to: '/reports/cash/cash-flow',
+    icon: 'i-heroicons-arrows-right-left',
+    label: t('admin.reports.cashReportsTiles.cashFlow.label'),
+    description: t('admin.reports.cashReportsTiles.cashFlow.description')
+  },
+  {
+    to: '/reports/cash/channel-performance',
+    icon: 'i-heroicons-signal',
+    label: t('admin.reports.cashReportsTiles.channelPerformance.label'),
+    description: t('admin.reports.cashReportsTiles.channelPerformance.description')
   }
 ])
 
@@ -746,6 +817,39 @@ const loanPortfolioReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-user-group',
     label: t('admin.reports.loanPortfolioReportsTiles.byCustomer.label'),
     description: t('admin.reports.loanPortfolioReportsTiles.byCustomer.description')
+  },
+  {
+    to: '/reports/loan-portfolio/approaching-maturity',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.loanPortfolioReportsTiles.approachingMaturity.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.approachingMaturity.description')
+  },
+  {
+    to: '/reports/loan-portfolio/by-purpose',
+    icon: 'i-heroicons-tag',
+    label: t('admin.reports.loanPortfolioReportsTiles.byPurpose.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.byPurpose.description')
+  },
+  {
+    to: '/reports/loan-portfolio/by-disbursement-method',
+    icon: 'i-heroicons-credit-card',
+    label: t('admin.reports.loanPortfolioReportsTiles.byDisbursementMethod.label'),
+    description: t('admin.reports.loanPortfolioReportsTiles.byDisbursementMethod.description')
+  }
+])
+
+const groupLendingReportTiles = computed<ReportTile[]>(() => [
+  {
+    to: '/reports/group-lending/groups',
+    icon: 'i-heroicons-user-group',
+    label: t('admin.reports.groupLendingReportsTiles.groups.label'),
+    description: t('admin.reports.groupLendingReportsTiles.groups.description')
+  },
+  {
+    to: '/reports/group-lending/applications',
+    icon: 'i-heroicons-document-text',
+    label: t('admin.reports.groupLendingReportsTiles.applications.label'),
+    description: t('admin.reports.groupLendingReportsTiles.applications.description')
   }
 ])
 
@@ -779,6 +883,51 @@ const repaymentReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-exclamation-triangle',
     label: t('admin.reports.repaymentReportsTiles.missed.label'),
     description: t('admin.reports.repaymentReportsTiles.missed.description')
+  },
+  {
+    to: '/reports/repayments/first-payment-default',
+    icon: 'i-heroicons-shield-exclamation',
+    label: t('admin.reports.repaymentReportsTiles.firstPaymentDefault.label'),
+    description: t('admin.reports.repaymentReportsTiles.firstPaymentDefault.description')
+  }
+])
+
+const collectionReportTiles = computed<ReportTile[]>(() => [
+  {
+    to: '/reports/collection/daily',
+    icon: 'i-heroicons-calendar-days',
+    label: t('admin.reports.collectionReportsTiles.dailyCollection.label'),
+    description: t('admin.reports.collectionReportsTiles.dailyCollection.description')
+  },
+  {
+    to: '/reports/collection/performance',
+    icon: 'i-heroicons-chart-bar',
+    label: t('admin.reports.collectionReportsTiles.collectionPerformance.label'),
+    description: t('admin.reports.collectionReportsTiles.collectionPerformance.description')
+  },
+  {
+    to: '/reports/collection/officer-performance',
+    icon: 'i-heroicons-user-group',
+    label: t('admin.reports.collectionReportsTiles.officerPerformance.label'),
+    description: t('admin.reports.collectionReportsTiles.officerPerformance.description')
+  },
+  {
+    to: '/reports/collection/branch-performance',
+    icon: 'i-heroicons-building-office-2',
+    label: t('admin.reports.collectionReportsTiles.branchPerformance.label'),
+    description: t('admin.reports.collectionReportsTiles.branchPerformance.description')
+  },
+  {
+    to: '/reports/collection/promises',
+    icon: 'i-heroicons-hand-raised',
+    label: t('admin.reports.collectionReportsTiles.promises.label'),
+    description: t('admin.reports.collectionReportsTiles.promises.description')
+  },
+  {
+    to: '/reports/collection/activity',
+    icon: 'i-heroicons-phone',
+    label: t('admin.reports.collectionReportsTiles.activity.label'),
+    description: t('admin.reports.collectionReportsTiles.activity.description')
   }
 ])
 
@@ -938,6 +1087,24 @@ const customerReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-trophy',
     label: t('admin.reports.customerReportsTiles.topBorrowers.label'),
     description: t('admin.reports.customerReportsTiles.topBorrowers.description')
+  },
+  {
+    to: '/reports/customers/repeat-borrowers',
+    icon: 'i-heroicons-arrow-path-rounded-square',
+    label: t('admin.reports.customerReportsTiles.repeatBorrowers.label'),
+    description: t('admin.reports.customerReportsTiles.repeatBorrowers.description')
+  },
+  {
+    to: '/reports/customers/loan-renewals',
+    icon: 'i-heroicons-arrow-path',
+    label: t('admin.reports.customerReportsTiles.loanRenewals.label'),
+    description: t('admin.reports.customerReportsTiles.loanRenewals.description')
+  },
+  {
+    to: '/reports/customers/growth',
+    icon: 'i-heroicons-user-plus',
+    label: t('admin.reports.customerReportsTiles.growth.label'),
+    description: t('admin.reports.customerReportsTiles.growth.description')
   }
 ])
 
@@ -1004,6 +1171,12 @@ const writeoffRestructureReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-calendar-days',
     label: t('admin.reports.writeoffRestructureReportsTiles.rescheduling.label'),
     description: t('admin.reports.writeoffRestructureReportsTiles.rescheduling.description')
+  },
+  {
+    to: '/reports/writeoffs-restructures/recovery',
+    icon: 'i-heroicons-arrow-uturn-left',
+    label: t('admin.reports.writeoffRestructureReportsTiles.recovery.label'),
+    description: t('admin.reports.writeoffRestructureReportsTiles.recovery.description')
   }
 ])
 
@@ -1067,6 +1240,18 @@ const dashboardReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-calculator',
     label: t('admin.reports.dashboardReportsTiles.averageLoanAmount.label'),
     description: t('admin.reports.dashboardReportsTiles.averageLoanAmount.description')
+  },
+  {
+    to: '/reports/dashboard/by-loan-product',
+    icon: 'i-heroicons-briefcase',
+    label: t('admin.reports.dashboardReportsTiles.portfolioByLoanProduct.label'),
+    description: t('admin.reports.dashboardReportsTiles.portfolioByLoanProduct.description')
+  },
+  {
+    to: '/reports/dashboard/forecast',
+    icon: 'i-heroicons-presentation-chart-line',
+    label: t('admin.reports.dashboardReportsTiles.forecast.label'),
+    description: t('admin.reports.dashboardReportsTiles.forecast.description')
   }
 ])
 
@@ -1100,6 +1285,30 @@ const riskComplianceReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-tag',
     label: t('admin.reports.riskComplianceReportsTiles.pricing.label'),
     description: t('admin.reports.riskComplianceReportsTiles.pricing.description')
+  },
+  {
+    to: '/reports/risk-compliance/collateral',
+    icon: 'i-heroicons-shield-check',
+    label: t('admin.reports.riskComplianceReportsTiles.collateral.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.collateral.description')
+  },
+  {
+    to: '/reports/risk-compliance/loan-to-value',
+    icon: 'i-heroicons-scale',
+    label: t('admin.reports.riskComplianceReportsTiles.loanToValue.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.loanToValue.description')
+  },
+  {
+    to: '/reports/risk-compliance/guarantors',
+    icon: 'i-heroicons-user-group',
+    label: t('admin.reports.riskComplianceReportsTiles.guarantors.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.guarantors.description')
+  },
+  {
+    to: '/reports/risk-compliance/kyc-compliance',
+    icon: 'i-heroicons-identification',
+    label: t('admin.reports.riskComplianceReportsTiles.kycCompliance.label'),
+    description: t('admin.reports.riskComplianceReportsTiles.kycCompliance.description')
   }
 ])
 
@@ -1129,6 +1338,20 @@ const operationalPerformanceReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-exclamation-circle',
     label: t('admin.reports.operationalPerformanceReportsTiles.dataQuality.label'),
     description: t('admin.reports.operationalPerformanceReportsTiles.dataQuality.description')
+  },
+  {
+    to: '/reports/operational-performance/disbursement-turnaround',
+    icon: 'i-heroicons-clock',
+    label: t('admin.reports.operationalPerformanceReportsTiles.disbursementTurnaround.label'),
+    description: t(
+      'admin.reports.operationalPerformanceReportsTiles.disbursementTurnaround.description'
+    )
+  },
+  {
+    to: '/reports/operational-performance/rejection-reasons',
+    icon: 'i-heroicons-x-circle',
+    label: t('admin.reports.operationalPerformanceReportsTiles.rejectionReasons.label'),
+    description: t('admin.reports.operationalPerformanceReportsTiles.rejectionReasons.description')
   }
 ])
 
@@ -1144,6 +1367,30 @@ const productProfitabilityReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-calculator',
     label: t('admin.reports.productProfitabilityReportsTiles.budgetVsActual.label'),
     description: t('admin.reports.productProfitabilityReportsTiles.budgetVsActual.description')
+  },
+  {
+    to: '/reports/loan-accounting/interest-income',
+    icon: 'i-heroicons-chart-bar',
+    label: t('admin.reports.productProfitabilityReportsTiles.interestIncome.label'),
+    description: t('admin.reports.productProfitabilityReportsTiles.interestIncome.description')
+  },
+  {
+    to: '/reports/loan-accounting/fee-income',
+    icon: 'i-heroicons-receipt-percent',
+    label: t('admin.reports.productProfitabilityReportsTiles.feeIncome.label'),
+    description: t('admin.reports.productProfitabilityReportsTiles.feeIncome.description')
+  },
+  {
+    to: '/reports/loan-accounting/penalty-income',
+    icon: 'i-heroicons-exclamation-triangle',
+    label: t('admin.reports.productProfitabilityReportsTiles.penaltyIncome.label'),
+    description: t('admin.reports.productProfitabilityReportsTiles.penaltyIncome.description')
+  },
+  {
+    to: '/reports/product-profitability/loan-profitability',
+    icon: 'i-heroicons-presentation-chart-line',
+    label: t('admin.reports.productProfitabilityReportsTiles.loanProfitability.label'),
+    description: t('admin.reports.productProfitabilityReportsTiles.loanProfitability.description')
   }
 ])
 
@@ -1156,52 +1403,131 @@ const globalSearch = ref('')
 
 const categorizedTileGroups = computed(() => [
   {
+    id: 'general-ledger',
     category: t('admin.reports.generalLedgerReportsHeader'),
     tiles: generalLedgerReportTiles.value
   },
-  { category: t('admin.reports.trialBalanceReportsHeader'), tiles: trialBalanceReportTiles.value },
-  { category: t('admin.reports.financialStatementsHeader'), tiles: financialStatementTiles.value },
   {
+    id: 'trial-balance',
+    category: t('admin.reports.trialBalanceReportsHeader'),
+    tiles: trialBalanceReportTiles.value
+  },
+  {
+    id: 'financial-statements',
+    category: t('admin.reports.financialStatementsHeader'),
+    tiles: financialStatementTiles.value
+  },
+  {
+    id: 'loan-accounting',
     category: t('admin.reports.loanAccountingReportsHeader'),
     tiles: loanAccountingReportTiles.value
   },
-  { category: t('admin.reports.receivablesReportsHeader'), tiles: receivablesReportTiles.value },
-  { category: t('admin.reports.cashReportsHeader'), tiles: cashReportTiles.value },
   {
+    id: 'receivables',
+    category: t('admin.reports.receivablesReportsHeader'),
+    tiles: receivablesReportTiles.value
+  },
+  { id: 'cash', category: t('admin.reports.cashReportsHeader'), tiles: cashReportTiles.value },
+  {
+    id: 'branch-accounting',
     category: t('admin.reports.branchAccountingReportsHeader'),
     tiles: branchAccountingReportTiles.value
   },
-  { category: t('admin.reports.expenseReportsHeader'), tiles: expenseReportTiles.value },
-  { category: t('admin.reports.revenueReportsHeader'), tiles: revenueReportTiles.value },
   {
+    id: 'expenses',
+    category: t('admin.reports.expenseReportsHeader'),
+    tiles: expenseReportTiles.value
+  },
+  {
+    id: 'revenue',
+    category: t('admin.reports.revenueReportsHeader'),
+    tiles: revenueReportTiles.value
+  },
+  {
+    id: 'loan-portfolio',
     category: t('admin.reports.loanPortfolioReportsHeader'),
     tiles: loanPortfolioReportTiles.value
   },
-  { category: t('admin.reports.repaymentReportsHeader'), tiles: repaymentReportTiles.value },
-  { category: t('admin.reports.outstandingReportsHeader'), tiles: outstandingReportTiles.value },
-  { category: t('admin.reports.overdueReportsHeader'), tiles: overdueReportTiles.value },
-  { category: t('admin.reports.penaltyReportsHeader'), tiles: penaltyReportTiles.value },
-  { category: t('admin.reports.interestReportsHeader'), tiles: interestReportTiles.value },
-  { category: t('admin.reports.customerReportsHeader'), tiles: customerReportTiles.value },
-  { category: t('admin.reports.scheduleReportsHeader'), tiles: scheduleReportTiles.value },
   {
+    id: 'group-lending',
+    category: t('admin.reports.groupLendingReportsHeader'),
+    tiles: groupLendingReportTiles.value
+  },
+  {
+    id: 'repayments',
+    category: t('admin.reports.repaymentReportsHeader'),
+    tiles: repaymentReportTiles.value
+  },
+  {
+    id: 'collection',
+    category: t('admin.reports.collectionReportsHeader'),
+    tiles: collectionReportTiles.value
+  },
+  {
+    id: 'outstanding',
+    category: t('admin.reports.outstandingReportsHeader'),
+    tiles: outstandingReportTiles.value
+  },
+  {
+    id: 'overdue',
+    category: t('admin.reports.overdueReportsHeader'),
+    tiles: overdueReportTiles.value
+  },
+  {
+    id: 'penalties',
+    category: t('admin.reports.penaltyReportsHeader'),
+    tiles: penaltyReportTiles.value
+  },
+  {
+    id: 'interest',
+    category: t('admin.reports.interestReportsHeader'),
+    tiles: interestReportTiles.value
+  },
+  {
+    id: 'customers',
+    category: t('admin.reports.customerReportsHeader'),
+    tiles: customerReportTiles.value
+  },
+  {
+    id: 'schedule',
+    category: t('admin.reports.scheduleReportsHeader'),
+    tiles: scheduleReportTiles.value
+  },
+  {
+    id: 'writeoffs-restructures',
     category: t('admin.reports.writeoffRestructureReportsHeader'),
     tiles: writeoffRestructureReportTiles.value
   },
-  { category: t('admin.reports.dashboardReportsHeader'), tiles: dashboardReportTiles.value },
   {
+    id: 'dashboard-reports',
+    category: t('admin.reports.dashboardReportsHeader'),
+    tiles: dashboardReportTiles.value
+  },
+  {
+    id: 'risk-compliance',
     category: t('admin.reports.riskComplianceReportsHeader'),
     tiles: riskComplianceReportTiles.value
   },
   {
+    id: 'operational-performance',
     category: t('admin.reports.operationalPerformanceReportsHeader'),
     tiles: operationalPerformanceReportTiles.value
   },
   {
+    id: 'product-profitability',
     category: t('admin.reports.productProfitabilityReportsHeader'),
     tiles: productProfitabilityReportTiles.value
   }
 ])
+
+const jumpNavSections = computed(() =>
+  categorizedTileGroups.value.map((g) => ({ id: g.id, label: g.category }))
+)
+
+const { isPinned } = usePinnedReports()
+const pinnedTiles = computed<ReportTile[]>(() =>
+  categorizedTileGroups.value.flatMap((g) => g.tiles.filter((tile) => isPinned(tile.to)))
+)
 
 const globalSearchResults = computed<SearchResultTile[]>(() => {
   const q = globalSearch.value.trim().toLowerCase()

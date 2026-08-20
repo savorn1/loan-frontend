@@ -369,6 +369,16 @@
       "decisions": "Decisions",
       "noDecisionsTitle": "No decisions yet",
       "noDecisionsDescription": "Approvals and rejections recorded against this application will appear here.",
+      "eligibility": {
+        "title": "Eligibility",
+        "expected": "Expected {value}",
+        "actual": "Actual {value}",
+        "results": {
+          "pass": "Pass",
+          "fail": "Fail",
+          "not_evaluable": "Not evaluable"
+        }
+      },
       "documents": "Documents",
       "documentTypePlaceholder": "Type (e.g. ID_PROOF)",
       "uploadDocument": "Upload document",
@@ -386,6 +396,8 @@
       "rejectModalTitle": "Reject application",
       "approvedAmount": "Approved amount",
       "interestRate": "Interest rate",
+      "interestRateSuggestedHint": "Suggested {rate}% from {scheme}'s rate tiers — adjust if needed",
+      "interestRateNoTierHint": "No matching rate tier in {scheme} for this amount/term — enter manually",
       "termMonths": "Term (months)",
       "comments": "Comments",
       "withdrawTitle": "Withdraw this application?",

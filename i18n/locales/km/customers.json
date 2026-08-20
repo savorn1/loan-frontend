@@ -369,6 +369,16 @@
       "decisions": "ការសម្រេចចិត្ត",
       "noDecisionsTitle": "មិនទាន់មានការសម្រេចចិត្តទេ",
       "noDecisionsDescription": "ការអនុម័ត និងការច្រានចោលចំពោះពាក្យស្នើសុំនេះនឹងបង្ហាញនៅទីនេះ។",
+      "eligibility": {
+        "title": "លក្ខណៈសម្បត្តិគ្រប់គ្រាន់",
+        "expected": "រំពឹងទុក {value}",
+        "actual": "ជាក់ស្តែង {value}",
+        "results": {
+          "pass": "ជាប់",
+          "fail": "មិនជាប់",
+          "not_evaluable": "មិនអាចវាយតម្លៃបាន"
+        }
+      },
       "documents": "ឯកសារ",
       "documentTypePlaceholder": "ប្រភេទ (ឧ. ID_PROOF)",
       "uploadDocument": "ផ្ទុកឯកសារឡើង",
@@ -386,6 +396,8 @@
       "rejectModalTitle": "ច្រានចោលពាក្យស្នើសុំ",
       "approvedAmount": "ចំនួនទឹកប្រាក់អនុម័ត",
       "interestRate": "អត្រាការប្រាក់",
+      "interestRateSuggestedHint": "បានស្នើ {rate}% ពីតារាងអត្រារបស់ {scheme} — កែសម្រួលបើចាំបាច់",
+      "interestRateNoTierHint": "គ្មានកម្រិតអត្រាដែលត្រូវគ្នាក្នុង {scheme} សម្រាប់ចំនួន/លក្ខខណ្ឌនេះទេ — សូមបញ្ចូលដោយផ្ទាល់",
       "termMonths": "រយៈពេល (ខែ)",
       "comments": "មតិយោបល់",
       "withdrawTitle": "ដកចេញពាក្យស្នើសុំនេះ?",

@@ -119,14 +119,66 @@
       </UCard>
     </div>
 
+    <UCard v-if="eligibilityChecks.length" class="mb-6">
+      <template #header>
+        <span class="font-semibold">{{ t('applications.detail.eligibility.title') }}</span>
+      </template>
+      <ul class="divide-y divide-gray-100 dark:divide-gray-800">
+        <li
+          v-for="check in eligibilityChecks"
+          :key="check.ruleCode"
+          class="flex items-center justify-between gap-4 py-3 text-sm"
+        >
+          <div class="min-w-0">
+            <p class="font-medium">{{ check.ruleName }}</p>
+            <p class="text-xs text-gray-500">
+              {{ t('applications.detail.eligibility.expected', { value: check.expectedValue }) }}
+              <template v-if="check.actualValue != null">
+                · {{ t('applications.detail.eligibility.actual', { value: check.actualValue }) }}
+              </template>
+              <template v-else-if="check.reason">· {{ check.reason }}</template>
+            </p>
+          </div>
+          <UBadge :color="eligibilityColor(check.result)" variant="subtle">{{
+            eligibilityLabel(check.result)
+          }}</UBadge>
+        </li>
+      </ul>
+    </UCard>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <UCard>
         <template #header>
           <span class="font-semibold">{{ t('applications.detail.documents') }}</span>
         </template>
 
+        <div v-if="requiredDocumentChecklist.length" class="mb-4 flex flex-wrap gap-1.5">
+          <UBadge
+            v-for="item in requiredDocumentChecklist"
+            :key="item.documentTemplateId"
+            :color="item.fulfilled ? 'green' : 'orange'"
+            variant="subtle"
+            size="sm"
+          >
+            <UIcon
+              :name="item.fulfilled ? 'i-heroicons-check-circle' : 'i-heroicons-exclamation-circle'"
+              class="w-3.5 h-3.5 mr-1"
+            />
+            {{ item.documentTemplateName }}
+          </UBadge>
+        </div>
+
         <UForm :state="documentForm" class="space-y-3 mb-6" @submit="onUploadDocument">
+          <USelectMenu
+            v-if="documentTypeOptions.length"
+            v-model="documentForm.documentType"
+            :options="documentTypeOptions"
+            option-attribute="label"
+            value-attribute="value"
+            :placeholder="t('applications.detail.documentTypePlaceholder')"
+          />
           <UInput
+            v-else
             v-model="documentForm.documentType"
             :placeholder="t('applications.detail.documentTypePlaceholder')"
           />
@@ -265,7 +317,11 @@
                   step="0.01"
                 />
               </UFormGroup>
-              <UFormGroup :label="t('applications.detail.interestRate')" required>
+              <UFormGroup
+                :label="t('applications.detail.interestRate')"
+                required
+                :help="interestRateHint"
+              >
                 <UInput
                   v-model.number="decisionForm.approvedInterestRate"
                   type="number"
@@ -343,8 +399,15 @@ import type {
   ApplicationApprovalRequest,
   ApplicationNoteRequest,
   ApplicationResponse,
-  ApprovalDecision
+  ApprovalDecision,
+  EligibilityCheckResponse,
+  EligibilityResult
 } from '~/features/loans/types'
+import type { InterestSchemeDetailResponse } from '~/features/loan-configuration/types'
+import type {
+  LoanProductDocumentResponse,
+  LoanProductInterestSchemeResponse
+} from '~/features/loan-products/types'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -363,6 +426,66 @@ const {
   api<ApplicationResponse>(`/loans/applications/${applicationId}`)
 )
 
+// ── Interest rate suggestion (from the product's assigned interest scheme) ──
+// Approving still requires a manual rate — this just saves the approver from
+// looking up the scheme's tier table by hand for the common case.
+const { data: productInterestSchemes } = await useAsyncData(
+  `application-${applicationId}-interest-schemes`,
+  () =>
+    application.value?.loanProductId
+      ? api<LoanProductInterestSchemeResponse[]>(
+          `/loan-products/${application.value.loanProductId}/interest-schemes`
+        )
+      : Promise.resolve([])
+)
+
+const activeInterestScheme = computed(() => {
+  const today = new Date().toISOString().slice(0, 10)
+  return [...(productInterestSchemes.value ?? [])]
+    .filter(
+      (s) =>
+        s.status === 'ACTIVE' &&
+        s.effectiveFrom <= today &&
+        (!s.effectiveTo || s.effectiveTo >= today)
+    )
+    .sort((a, b) =>
+      a.isDefault === b.isDefault ? a.priority - b.priority : a.isDefault ? -1 : 1
+    )[0]
+})
+
+const { data: interestSchemeDetails } = await useAsyncData(
+  `application-${applicationId}-interest-scheme-details`,
+  () =>
+    activeInterestScheme.value
+      ? api<InterestSchemeDetailResponse[]>(
+          `/interest-schemes/${activeInterestScheme.value.interestSchemeId}/details`
+        )
+      : Promise.resolve([])
+)
+
+function resolveSuggestedRate(amount?: number, term?: number): number | undefined {
+  if (amount == null || term == null) return undefined
+  return (interestSchemeDetails.value ?? []).find(
+    (d) => amount >= d.minAmount && amount <= d.maxAmount && term >= d.minTerm && term <= d.maxTerm
+  )?.interestRate
+}
+
+const interestRateHint = computed(() => {
+  if (!activeInterestScheme.value) return undefined
+  const suggested = resolveSuggestedRate(
+    decisionForm.approvedAmount,
+    decisionForm.approvedTermMonths
+  )
+  return suggested != null
+    ? t('applications.detail.interestRateSuggestedHint', {
+        rate: suggested,
+        scheme: activeInterestScheme.value.interestSchemeName
+      })
+    : t('applications.detail.interestRateNoTierHint', {
+        scheme: activeInterestScheme.value.interestSchemeName
+      })
+})
+
 const sortedNotes = computed(() =>
   [...(application.value?.notes ?? [])].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -373,6 +496,21 @@ const sortedApprovals = computed(() =>
     (a, b) => new Date(b.decidedAt).getTime() - new Date(a.decidedAt).getTime()
   )
 )
+
+// ── Eligibility (advisory only — see EligibilityServiceImpl for why some rules
+// are always NOT_EVALUABLE rather than a guessed pass/fail) ─────────────────
+const { data: eligibilityChecksRaw } = await useAsyncData(
+  `application-${applicationId}-eligibility`,
+  () => api<EligibilityCheckResponse[]>(`/loans/applications/${applicationId}/eligibility`)
+)
+const eligibilityChecks = computed(() => eligibilityChecksRaw.value ?? [])
+
+function eligibilityColor(result: EligibilityResult) {
+  return result === 'PASS' ? 'green' : result === 'FAIL' ? 'red' : 'gray'
+}
+function eligibilityLabel(result: EligibilityResult) {
+  return t(`applications.detail.eligibility.results.${result.toLowerCase()}`)
+}
 
 // ── Start review / withdraw ────────────────────────────────────────────────
 async function onStartReview() {
@@ -422,12 +560,30 @@ const decisionForm = reactive<{
 function openDecision(decision: ApprovalDecision) {
   decisionForm.decision = decision
   decisionForm.approvedAmount = application.value?.requestedAmount
-  decisionForm.approvedInterestRate = undefined
   decisionForm.approvedTermMonths = application.value?.requestedTermMonths
+  decisionForm.approvedInterestRate =
+    decision === 'APPROVED'
+      ? resolveSuggestedRate(decisionForm.approvedAmount, decisionForm.approvedTermMonths)
+      : undefined
   decisionForm.comments = ''
   decisionError.value = ''
   showDecision.value = true
 }
+
+// Keeps the suggestion in sync if the approver adjusts amount/term before
+// submitting — same "re-suggest on the dependency changing" pattern as the
+// application create form's requestedAmount/Term bounds.
+watch(
+  () => [decisionForm.approvedAmount, decisionForm.approvedTermMonths],
+  () => {
+    if (decisionForm.decision !== 'APPROVED') return
+    const suggested = resolveSuggestedRate(
+      decisionForm.approvedAmount,
+      decisionForm.approvedTermMonths
+    )
+    if (suggested != null) decisionForm.approvedInterestRate = suggested
+  }
+)
 
 async function onDecide() {
   if (
@@ -470,6 +626,42 @@ async function onDecide() {
 }
 
 // ── Documents ───────────────────────────────────────────────────────────────
+// Soft checklist only — nothing here blocks upload or approval, it just makes
+// the product's required documents (and whether each has been submitted)
+// visible instead of the admin having to know the checklist by heart.
+const { data: productDocuments } = await useAsyncData(
+  `application-${applicationId}-documents-checklist`,
+  () =>
+    application.value?.loanProductId
+      ? api<LoanProductDocumentResponse[]>(
+          `/loan-products/${application.value.loanProductId}/documents`
+        )
+      : Promise.resolve([])
+)
+
+const activeProductDocuments = computed(() =>
+  (productDocuments.value ?? []).filter((d) => d.status === 'ACTIVE')
+)
+
+const documentTypeOptions = computed(() =>
+  activeProductDocuments.value.map((d) => ({
+    label: d.documentTemplateName,
+    value: d.documentTemplateName
+  }))
+)
+
+const requiredDocumentChecklist = computed(() =>
+  activeProductDocuments.value
+    .filter((d) => d.required)
+    .map((d) => ({
+      documentTemplateId: d.documentTemplateId,
+      documentTemplateName: d.documentTemplateName,
+      fulfilled: (application.value?.documents ?? []).some(
+        (doc) => doc.documentType === d.documentTemplateName && doc.status !== 'REJECTED'
+      )
+    }))
+)
+
 const uploadingDocument = ref(false)
 const documentForm = reactive<{ documentType: string; files: File[] }>({
   documentType: '',

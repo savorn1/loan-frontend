@@ -430,6 +430,14 @@
         "position": {
           "label": "Cash Position",
           "description": "Cash balance as of a chosen date"
+        },
+        "cashFlow": {
+          "label": "Loan Cash Flow",
+          "description": "Loan disbursements vs repayment cash flow, by month"
+        },
+        "channelPerformance": {
+          "label": "Payment Channel & Gateway Performance",
+          "description": "Transaction volume and success rate by channel and gateway"
         }
       },
       "branchAccountingReportsHeader": "Branch Accounting Reports",
@@ -530,6 +538,29 @@
         "byCustomer": {
           "label": "Loans by Customer",
           "description": "Loan count and balances per customer"
+        },
+        "approachingMaturity": {
+          "label": "Loans Approaching Maturity",
+          "description": "Active loans nearing their maturity date"
+        },
+        "byPurpose": {
+          "label": "Loan Purpose Report",
+          "description": "Loan count and balances by stated loan purpose"
+        },
+        "byDisbursementMethod": {
+          "label": "Disbursement Method Report",
+          "description": "Approved disbursements by payout method"
+        }
+      },
+      "groupLendingReportsHeader": "Group Lending Reports",
+      "groupLendingReportsTiles": {
+        "groups": {
+          "label": "Groups Report",
+          "description": "Solidarity groups, their leaders, and member counts"
+        },
+        "applications": {
+          "label": "Group Loan Applications Report",
+          "description": "Group loan applications, requested vs approved amounts"
         }
       },
       "repaymentReportsHeader": "Repayment Reports",
@@ -553,6 +584,37 @@
         "missed": {
           "label": "Missed Repayment Report",
           "description": "Installments currently overdue and unpaid"
+        },
+        "firstPaymentDefault": {
+          "label": "First Payment Default Report",
+          "description": "Loans whose first installment was unpaid or paid late"
+        }
+      },
+      "collectionReportsHeader": "Collection Reports",
+      "collectionReportsTiles": {
+        "dailyCollection": {
+          "label": "Daily Collection",
+          "description": "Collections received, grouped by day"
+        },
+        "collectionPerformance": {
+          "label": "Collection Performance",
+          "description": "Collection rate: amount collected vs amount due for a date range"
+        },
+        "officerPerformance": {
+          "label": "Officer Performance",
+          "description": "Collections and case activity by collection officer"
+        },
+        "branchPerformance": {
+          "label": "Branch Performance",
+          "description": "Collection rate and totals by branch"
+        },
+        "promises": {
+          "label": "Promise-to-Pay Report",
+          "description": "Payment promises made by customers in collections, and whether they were kept"
+        },
+        "activity": {
+          "label": "Collection Activity Report",
+          "description": "Contact log and outcomes across active collection cases"
         }
       },
       "outstandingReportsHeader": "Outstanding Reports",
@@ -664,6 +726,18 @@
         "topBorrowers": {
           "label": "Top Borrowers",
           "description": "Customers ranked by loan count and balances"
+        },
+        "repeatBorrowers": {
+          "label": "Repeat Borrower Report",
+          "description": "Customers with two or more loans"
+        },
+        "loanRenewals": {
+          "label": "Loan Renewal Report",
+          "description": "Customers who took a new loan after a previous one closed"
+        },
+        "growth": {
+          "label": "Customer Growth Report",
+          "description": "New customer onboarding, by month"
         }
       },
       "scheduleReportsHeader": "Schedule Reports",
@@ -710,6 +784,10 @@
         "rescheduling": {
           "label": "Loan Rescheduling",
           "description": "Same as Loan Restructuring — term/rate changes"
+        },
+        "recovery": {
+          "label": "Loan Recovery Report",
+          "description": "Amount recovered against written-off loans"
         }
       },
       "dashboardReportsHeader": "Dashboard Reports",
@@ -753,6 +831,14 @@
         "averageLoanAmount": {
           "label": "Average Loan Amount",
           "description": "Average principal across active loans"
+        },
+        "portfolioByLoanProduct": {
+          "label": "Portfolio by Loan Product",
+          "description": "Loan count and balances per loan product"
+        },
+        "forecast": {
+          "label": "Forecast Report",
+          "description": "Predicted future repayments from the existing schedule"
         }
       },
       "reportsTable": {
@@ -784,6 +870,22 @@
         "pricing": {
           "label": "Loan Pricing Report",
           "description": "Portfolio by interest rate and term band"
+        },
+        "collateral": {
+          "label": "Collateral Report",
+          "description": "Pledged collateral value and status by loan"
+        },
+        "loanToValue": {
+          "label": "Loan-to-Value (LTV) Report",
+          "description": "Outstanding balance against pledged collateral value"
+        },
+        "guarantors": {
+          "label": "Guarantor Report",
+          "description": "Guarantors and guaranteed amounts by loan"
+        },
+        "kycCompliance": {
+          "label": "KYC Compliance Report",
+          "description": "Customer identity documents that are expired or expiring soon"
         }
       },
       "operationalPerformanceReportsHeader": "Operational Performance Reports",
@@ -803,6 +905,14 @@
         "dataQuality": {
           "label": "Data Quality / Exceptions",
           "description": "Loans and applications with missing fields, inconsistent state, or stuck progress"
+        },
+        "disbursementTurnaround": {
+          "label": "Disbursement Turnaround Report",
+          "description": "Time from approval to actual disbursement"
+        },
+        "rejectionReasons": {
+          "label": "Application Rejection Reasons Report",
+          "description": "Rejected applications with the decision reason"
         }
       },
       "productProfitabilityReportsHeader": "Product & Profitability Reports",
@@ -814,11 +924,30 @@
         "budgetVsActual": {
           "label": "Budget vs Actual",
           "description": "Budgeted vs actual GL account activity for a period"
+        },
+        "interestIncome": {
+          "label": "Interest Income",
+          "description": "Interest income ledger for a financial period"
+        },
+        "feeIncome": {
+          "label": "Fee Income",
+          "description": "Fee income ledger for a financial period"
+        },
+        "penaltyIncome": {
+          "label": "Penalty Income",
+          "description": "Penalty income ledger for a financial period"
+        },
+        "loanProfitability": {
+          "label": "Loan Profitability",
+          "description": "Interest yield and income per loan product"
         }
       },
       "backToReports": "Back to Reports",
       "globalSearchPlaceholder": "Search all reports...",
-      "globalSearchResultsHeader": "{count} matching reports"
+      "globalSearchResultsHeader": "{count} matching reports",
+      "togglePin": "Pin or unpin this report",
+      "pinnedReportsHeader": "Pinned Reports",
+      "jumpToCategory": "Jump to category"
     },
     "dashboard": {
       "greetingAnon": "Welcome back 👋",
@@ -836,10 +965,16 @@
         "portfolioAtRisk": "Portfolio at risk"
       },
       "portfolioByStatusHeader": "Loan portfolio by status",
-      "dueNext7DaysHeader": "Due in the next 7 days",
+      "dueSoonHeader": "Due soon",
+      "dueSoonDays": "Next {days} days",
+      "browseReports": "Browse Reports",
+      "needsAttentionHeader": "Needs Attention",
+      "needsAttentionApplications": "{count} application(s) awaiting review",
+      "needsAttentionContact": "{count} collection case(s) need contact",
+      "needsAttentionDelinquent": "{count} loan(s) 90+ days past due",
       "empty": {
         "dueSoonTitle": "Nothing due soon",
-        "dueSoonDescription": "No installments are due in the next 7 days.",
+        "dueSoonDescription": "No installments are due in the selected window.",
         "caughtUpTitle": "All caught up",
         "caughtUpDescription": "No loans are waiting for review right now.",
         "activityTitle": "Nothing yet",

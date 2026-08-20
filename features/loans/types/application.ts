@@ -111,3 +111,23 @@ export interface ApplicationApprovalResponse {
   comments: string | null
   decidedAt: string
 }
+
+// ── Eligibility check (advisory only — never blocks create/update/approval) ─
+// Evaluates the application's loan product's assigned rule templates against
+// the customer. A rule whose field has no source data anywhere in the system
+// (CREDIT_SCORE, DEBT_TO_INCOME_RATIO) is always NOT_EVALUABLE rather than a
+// guessed pass/fail — see loan-service's EligibilityServiceImpl.
+//
+//   GET /loans/applications/{id}/eligibility -> EligibilityCheckResponse[]
+export type EligibilityResult = 'PASS' | 'FAIL' | 'NOT_EVALUABLE'
+
+export interface EligibilityCheckResponse {
+  ruleCode: string
+  ruleName: string
+  field: string
+  operator: string
+  expectedValue: string
+  actualValue: string | null
+  result: EligibilityResult
+  reason: string | null
+}

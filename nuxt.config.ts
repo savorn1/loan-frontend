@@ -3,6 +3,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
+
   // devtools: {
   //   enabled: true,
 
@@ -13,7 +14,9 @@ export default defineNuxtConfig({
   devServer: {
     port: Number(process.env.NUXT_PORT) || 3004
   },
+
   modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/eslint', '@nuxtjs/i18n'],
+
   i18n: {
     locales: [
       {
@@ -58,11 +61,14 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_locale'
     }
   },
+
   ui: {
     safelistColors: ['teal', 'green', 'orange', 'red', 'pink']
   },
+
   ssr: true,
   css: ['~/assets/css/main.css'],
+
   app: {
     head: {
       title: 'Loan Management System',
@@ -70,10 +76,12 @@ export default defineNuxtConfig({
     },
     pageTransition: { name: 'page', mode: 'out-in' }
   },
+
   components: [
     { path: '~/components', pathPrefix: false },
     { path: '~/features', pattern: '*/components/**/*.vue', pathPrefix: false }
   ],
+
   imports: {
     dirs: [
       'shared/composables',
@@ -83,11 +91,13 @@ export default defineNuxtConfig({
       'features/*/stores'
     ]
   },
+
   runtimeConfig: {
     public: {
       apiBase: isDev ? apiBase : '/api'
     }
   },
+
   routeRules: isDev
     ? {}
     : {
@@ -114,7 +124,14 @@ export default defineNuxtConfig({
         '/api/reports/**': { proxy: `${apiBase}/api/reports/**` },
         '/api/budgets/**': { proxy: `${apiBase}/api/budgets/**` }
       },
+
   typescript: {
     strict: true
+  },
+
+  devtools: {
+    timeline: {
+      enabled: true
+    }
   }
 })

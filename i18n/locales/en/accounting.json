@@ -806,6 +806,35 @@
         "cashPosition": "Cash position",
         "totalReceiptsToDate": "Total receipts to date",
         "totalPaymentsToDate": "Total payments to date"
+      },
+      "cashFlow": {
+        "title": "Loan Cash Flow",
+        "description": "Loan disbursements (cash out) versus repayments collected (cash in), by month.",
+        "totalDisbursed": "Total disbursed",
+        "totalCollected": "Total collected",
+        "netCashFlow": "Net cash flow",
+        "emptyTitle": "No cash flow activity",
+        "emptyDescription": "No disbursements or collections were recorded.",
+        "columns": {
+          "month": "Month",
+          "totalDisbursed": "Disbursed (out)",
+          "totalCollected": "Collected (in)",
+          "netCashFlow": "Net cash flow"
+        }
+      },
+      "channelPerformance": {
+        "title": "Payment Channel & Gateway Performance",
+        "description": "Transaction volume and success rate broken down by channel and by gateway.",
+        "byChannelHeader": "By channel",
+        "byGatewayHeader": "By gateway",
+        "columns": {
+          "name": "Name",
+          "transactionCount": "Transactions",
+          "totalAmount": "Total amount",
+          "successCount": "Successful",
+          "failedCount": "Failed",
+          "successRate": "Success rate"
+        }
       }
     },
     "branchAccountingReports": {
@@ -1041,6 +1070,84 @@
           "totalPrincipal": "Total principal",
           "totalOutstanding": "Total outstanding"
         }
+      },
+      "approachingMaturity": {
+        "title": "Loans Approaching Maturity",
+        "description": "Active loans whose maturity date falls within the selected window.",
+        "totalOutstanding": "Total outstanding",
+        "searchPlaceholder": "Search by loan or customer…",
+        "emptyTitle": "No loans approaching maturity",
+        "emptyDescription": "No active loan matures within the selected window.",
+        "range30": "Next 30 days",
+        "range60": "Next 60 days",
+        "range90": "Next 90 days",
+        "rangeAll": "All upcoming",
+        "columns": {
+          "loan": "Loan",
+          "customer": "Customer",
+          "branch": "Branch",
+          "outstandingBalance": "Outstanding balance",
+          "maturityDate": "Maturity date",
+          "daysRemaining": "Days remaining"
+        }
+      },
+      "byPurpose": {
+        "title": "Loan Purpose Report",
+        "description": "Loan count, principal and outstanding balance by stated loan purpose.",
+        "emptyTitle": "No loans",
+        "emptyDescription": "No loans have a recorded purpose yet.",
+        "columns": {
+          "purpose": "Purpose",
+          "loanCount": "Loan count",
+          "totalPrincipal": "Total principal",
+          "totalOutstanding": "Total outstanding"
+        }
+      },
+      "byDisbursementMethod": {
+        "title": "Disbursement Method Report",
+        "description": "Approved disbursements broken down by payout method.",
+        "emptyTitle": "No disbursements",
+        "emptyDescription": "No loan has an approved disbursement yet.",
+        "columns": {
+          "method": "Method",
+          "disbursementCount": "Disbursements",
+          "totalAmount": "Total amount"
+        }
+      }
+    },
+    "groupLendingReports": {
+      "groups": {
+        "title": "Groups Report",
+        "description": "Solidarity groups, their leaders, branch, and member counts.",
+        "searchPlaceholder": "Search by group name, code, or leader…",
+        "emptyTitle": "No groups",
+        "emptyDescription": "No lending groups have been created yet.",
+        "columns": {
+          "name": "Group",
+          "code": "Code",
+          "branch": "Branch",
+          "leader": "Leader",
+          "memberCount": "Members",
+          "formationDate": "Formed",
+          "status": "Status"
+        }
+      },
+      "applications": {
+        "title": "Group Loan Applications Report",
+        "description": "Group loan applications, with requested vs approved amounts across all members.",
+        "searchPlaceholder": "Search by application or group…",
+        "emptyTitle": "No group loan applications",
+        "emptyDescription": "No group has submitted a loan application yet.",
+        "columns": {
+          "application": "Application",
+          "group": "Group",
+          "branch": "Branch",
+          "memberCount": "Members",
+          "totalRequested": "Total requested",
+          "totalApproved": "Total approved",
+          "status": "Status",
+          "submittedAt": "Submitted"
+        }
       }
     },
     "repaymentReports": {
@@ -1124,6 +1231,130 @@
           "dueDate": "Due date",
           "daysOverdue": "Days overdue",
           "amount": "Amount"
+        }
+      },
+      "firstPaymentDefault": {
+        "title": "First Payment Default Report",
+        "description": "Loans whose first installment is still unpaid past its due date, or was paid late.",
+        "searchPlaceholder": "Search by loan or customer…",
+        "emptyTitle": "No first payment defaults",
+        "emptyDescription": "Every loan's first installment was paid on time.",
+        "columns": {
+          "loan": "Loan",
+          "customer": "Customer",
+          "dueDate": "Due date",
+          "paidAt": "Paid at",
+          "daysLate": "Days late",
+          "amount": "Amount"
+        }
+      }
+    },
+    "collectionReports": {
+      "daily": {
+        "title": "Daily Collection",
+        "description": "Collections received, grouped by day, for a date range.",
+        "emptyTitlePick": "Pick a date range",
+        "emptyDescriptionPick": "Select a from and to date above to view daily collections.",
+        "emptyTitleNoActivity": "No collections",
+        "emptyDescriptionNoActivity": "No payments were collected in the selected range.",
+        "columns": {
+          "date": "Date",
+          "count": "Count",
+          "totalAmount": "Total amount",
+          "totalPrincipal": "Principal",
+          "totalInterest": "Interest"
+        }
+      },
+      "performance": {
+        "title": "Collection Performance",
+        "description": "Collection rate — amount collected versus amount due — for a date range.",
+        "totalDue": "Total due",
+        "totalCollected": "Total collected",
+        "collectionRate": "Collection rate",
+        "searchPlaceholder": "Search by loan…",
+        "emptyTitlePick": "Pick a date range",
+        "emptyDescriptionPick": "Select a from and to date above to view collection performance.",
+        "emptyTitleNoActivity": "No installments due",
+        "emptyDescriptionNoActivity": "No installments were due in the selected range.",
+        "columns": {
+          "loanId": "Loan",
+          "dueDate": "Due date",
+          "amount": "Amount due",
+          "status": "Status",
+          "paidAt": "Paid at"
+        }
+      },
+      "officerPerformance": {
+        "title": "Officer Performance",
+        "description": "Collections and case activity by collection officer.",
+        "tableHeader": "By officer",
+        "months1": "Last month",
+        "months3": "Last 3 months",
+        "months6": "Last 6 months",
+        "months12": "Last 12 months",
+        "emptyTitle": "No collection activity",
+        "emptyDescription": "No collection officer has any case activity in this period.",
+        "officerLabel": "Officer #{id}",
+        "columns": {
+          "officer": "Officer",
+          "caseCount": "Cases",
+          "openCaseCount": "Open cases",
+          "resolvedCaseCount": "Resolved cases",
+          "paymentCount": "Payments",
+          "totalCollected": "Total collected"
+        }
+      },
+      "branchPerformance": {
+        "title": "Branch Performance",
+        "description": "Collection rate and totals by branch, for a date range.",
+        "emptyTitlePick": "Pick a date range",
+        "emptyDescriptionPick": "Select a from and to date above to view branch performance.",
+        "emptyTitleNoActivity": "No installments due",
+        "emptyDescriptionNoActivity": "No installments were due in the selected range.",
+        "columns": {
+          "branch": "Branch",
+          "totalDue": "Total due",
+          "totalCollected": "Total collected",
+          "collectionRate": "Collection rate",
+          "paymentCount": "Payments"
+        }
+      },
+      "promises": {
+        "title": "Promise-to-Pay Report",
+        "description": "Payment promises made by customers currently in collections, and whether they were kept.",
+        "totalPromised": "Total promised",
+        "keptCount": "Kept",
+        "brokenCount": "Broken",
+        "keptRate": "Kept rate",
+        "searchPlaceholder": "Search by customer…",
+        "emptyTitle": "No promises",
+        "emptyDescription": "No collection case has a payment promise recorded.",
+        "columns": {
+          "loan": "Loan",
+          "customer": "Customer",
+          "promisedAmount": "Promised amount",
+          "promisedDate": "Promised date",
+          "status": "Status",
+          "amountPaid": "Amount paid",
+          "createdBy": "Recorded by"
+        }
+      },
+      "activity": {
+        "title": "Collection Activity Report",
+        "description": "Contact log and outcomes across every active collection case.",
+        "outcomeBreakdownHeader": "By outcome",
+        "searchPlaceholder": "Search by customer, author, or note…",
+        "emptyTitle": "No activity",
+        "emptyDescription": "No collection case has any contact activity recorded.",
+        "columns": {
+          "loan": "Loan",
+          "customer": "Customer",
+          "contactMethod": "Contact method",
+          "outcome": "Outcome",
+          "note": "Note",
+          "author": "Author",
+          "createdAt": "Recorded at",
+          "count": "Count"
         }
       }
     },
@@ -1319,6 +1550,47 @@
           "principalComponent": "Principal",
           "interestComponent": "Interest"
         }
+      },
+      "repeatBorrowers": {
+        "title": "Repeat Borrower Report",
+        "description": "Customers with two or more loans.",
+        "searchPlaceholder": "Search by customer…",
+        "emptyTitle": "No repeat borrowers",
+        "emptyDescription": "No customer has taken out more than one loan yet.",
+        "columns": {
+          "customer": "Customer",
+          "loanCount": "Loan count",
+          "totalPrincipal": "Total principal",
+          "totalOutstanding": "Total outstanding",
+          "firstLoanDate": "First loan",
+          "latestLoanDate": "Latest loan"
+        }
+      },
+      "loanRenewals": {
+        "title": "Loan Renewal Report",
+        "description": "Customers who took out a new loan after a previous loan of theirs had closed.",
+        "searchPlaceholder": "Search by customer or loan…",
+        "emptyTitle": "No loan renewals",
+        "emptyDescription": "No customer has taken a new loan after a previous one closed.",
+        "columns": {
+          "customer": "Customer",
+          "previousLoan": "Previous loan",
+          "previousClosedAt": "Previous loan closed",
+          "newLoan": "New loan",
+          "newLoanDate": "New loan date",
+          "gapDays": "Gap (days)"
+        }
+      },
+      "growth": {
+        "title": "Customer Growth Report",
+        "description": "New customer onboarding, by month.",
+        "emptyTitle": "No customers",
+        "emptyDescription": "No customers have been onboarded yet.",
+        "columns": {
+          "month": "Month",
+          "newCustomers": "New customers",
+          "cumulativeTotal": "Cumulative total"
+        }
       }
     },
     "writeoffRestructureReports": {
@@ -1369,6 +1641,23 @@
           "reason": "Reason",
           "effectiveDate": "Effective date"
         }
+      },
+      "recovery": {
+        "title": "Loan Recovery Report",
+        "description": "Amount recovered against loans that have been written off.",
+        "totalWrittenOff": "Total written off",
+        "totalRecovered": "Total recovered",
+        "recoveryRate": "Recovery rate",
+        "emptyTitle": "No write-offs",
+        "emptyDescription": "No loans have been written off yet.",
+        "columns": {
+          "loan": "Loan",
+          "writeoffDate": "Write-off date",
+          "writeoffAmount": "Written off",
+          "recoveredAmount": "Recovered",
+          "recoveryRate": "Recovery rate",
+          "status": "Status"
+        }
       }
     },
     "dashboardReports": {
@@ -1385,6 +1674,32 @@
         "portfolioAtRisk": "Portfolio at risk",
         "nonPerformingLoans": "Non-performing loans (90+ DPD)",
         "averageLoanAmount": "Average loan amount"
+      },
+      "byLoanProduct": {
+        "title": "Portfolio by Loan Product",
+        "description": "Loan count, principal and outstanding balance per loan product.",
+        "emptyTitle": "No loans",
+        "emptyDescription": "No loan product has any loans yet.",
+        "columns": {
+          "loanProduct": "Loan product",
+          "loanCount": "Loan count",
+          "totalPrincipal": "Total principal",
+          "totalOutstanding": "Total outstanding"
+        }
+      },
+      "forecast": {
+        "title": "Forecast Report",
+        "description": "Predicted future repayments, based on the existing installment schedule.",
+        "note": "This forecast is a straight read of not-yet-paid scheduled installments — it doesn't model new disbursements, prepayments, or defaults.",
+        "emptyTitle": "No scheduled installments",
+        "emptyDescription": "There are no unpaid installments to forecast.",
+        "columns": {
+          "month": "Month",
+          "installmentCount": "Installments",
+          "expectedTotal": "Expected total",
+          "expectedPrincipal": "Expected principal",
+          "expectedInterest": "Expected interest"
+        }
       }
     },
     "riskComplianceReports": {
@@ -1465,6 +1780,76 @@
           "totalPrincipal": "Total Principal",
           "avgInterestRate": "Avg. Interest Rate"
         }
+      },
+      "collateral": {
+        "title": "Collateral Report",
+        "description": "Pledged collateral value and status, for every active loan.",
+        "pledgedCount": "Pledged items",
+        "totalPledgedValue": "Total pledged value",
+        "searchPlaceholder": "Search by loan, customer, or description…",
+        "emptyTitle": "No collateral",
+        "emptyDescription": "No active loan has any collateral recorded.",
+        "columns": {
+          "loan": "Loan",
+          "customer": "Customer",
+          "type": "Type",
+          "description": "Description",
+          "estimatedValue": "Estimated value",
+          "status": "Status"
+        }
+      },
+      "loanToValue": {
+        "title": "Loan-to-Value (LTV) Report",
+        "description": "Outstanding balance against pledged collateral value, for every active loan with collateral.",
+        "searchPlaceholder": "Search by loan or customer…",
+        "emptyTitle": "No collateralized loans",
+        "emptyDescription": "No active loan has pledged collateral to compare against.",
+        "columns": {
+          "loan": "Loan",
+          "customer": "Customer",
+          "outstandingBalance": "Outstanding balance",
+          "collateralValue": "Collateral value",
+          "ltvPercent": "LTV"
+        }
+      },
+      "guarantors": {
+        "title": "Guarantor Report",
+        "description": "Guarantors and guaranteed amounts, for every active loan.",
+        "activeCount": "Active guarantors",
+        "totalGuaranteedAmount": "Total guaranteed amount",
+        "searchPlaceholder": "Search by loan, customer, or guarantor…",
+        "emptyTitle": "No guarantors",
+        "emptyDescription": "No active loan has a guarantor recorded.",
+        "columns": {
+          "loan": "Loan",
+          "customer": "Customer",
+          "guarantor": "Guarantor",
+          "phone": "Phone",
+          "relationship": "Relationship",
+          "guaranteedAmount": "Guaranteed amount",
+          "status": "Status"
+        }
+      },
+      "kycCompliance": {
+        "title": "KYC Compliance Report",
+        "description": "Customer identity documents that are expired or set to expire soon.",
+        "expiredCount": "Expired",
+        "expiringCount": "Expiring soon",
+        "missingKycCount": "Customers with no ID on file",
+        "range30": "Next 30 days",
+        "range60": "Next 60 days",
+        "range90": "Next 90 days",
+        "searchPlaceholder": "Search by customer or ID number…",
+        "emptyTitle": "No expiring documents",
+        "emptyDescription": "No identity document is expired or expiring within the selected window.",
+        "columns": {
+          "customer": "Customer",
+          "identityType": "Document type",
+          "identityNumber": "Document number",
+          "expiryDate": "Expiry date",
+          "daysUntilExpiry": "Days until expiry",
+          "status": "Status"
+        }
       }
     },
     "operationalPerformanceReports": {
@@ -1537,6 +1922,37 @@
           "description": "Description",
           "recordCreatedAt": "Created At"
         }
+      },
+      "disbursementTurnaround": {
+        "title": "Disbursement Turnaround Report",
+        "description": "Time from approval to actual disbursement, per loan.",
+        "loanCount": "Loans",
+        "avgTurnaroundDays": "Avg. turnaround (days)",
+        "searchPlaceholder": "Search by loan or customer…",
+        "emptyTitle": "No disbursed loans",
+        "emptyDescription": "No loan has both an approval and a disbursement date yet.",
+        "columns": {
+          "loan": "Loan",
+          "customer": "Customer",
+          "approvedAt": "Approved",
+          "disbursedAt": "Disbursed",
+          "turnaroundDays": "Turnaround (days)"
+        }
+      },
+      "rejectionReasons": {
+        "title": "Application Rejection Reasons Report",
+        "description": "Rejected applications with the decision reason recorded at rejection.",
+        "searchPlaceholder": "Search by application, customer, or reason…",
+        "emptyTitle": "No rejected applications",
+        "emptyDescription": "No application has been rejected yet.",
+        "columns": {
+          "application": "Application",
+          "customer": "Customer",
+          "requestedAmount": "Requested amount",
+          "rejectedBy": "Rejected by",
+          "reason": "Reason",
+          "decidedAt": "Decided at"
+        }
       }
     },
     "productProfitabilityReports": {
@@ -1578,6 +1994,19 @@
           "actualAmount": "Actual",
           "variance": "Variance",
           "variancePercent": "Variance %"
+        }
+      },
+      "loanProfitability": {
+        "title": "Loan Profitability",
+        "description": "Interest income collected and yield on principal, by loan product.",
+        "emptyTitle": "No loans",
+        "emptyDescription": "No loan product has any loans yet.",
+        "columns": {
+          "loanProduct": "Loan product",
+          "loanCount": "Loan count",
+          "totalPrincipal": "Total principal",
+          "totalInterestCollected": "Interest collected",
+          "yieldPercent": "Yield"
         }
       }
     }

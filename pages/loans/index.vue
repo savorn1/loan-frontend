@@ -127,6 +127,14 @@
         <template #header>
           <span class="font-semibold">{{ t('loans.list.modalTitle') }}</span>
         </template>
+        <UAlert
+          color="orange"
+          variant="subtle"
+          icon="i-heroicons-exclamation-triangle"
+          class="mb-4"
+          :title="t('loans.list.directCreateWarningTitle')"
+          :description="t('loans.list.directCreateWarningDescription')"
+        />
         <DynamicForm
           v-model="createForm"
           :fields="loanFields"

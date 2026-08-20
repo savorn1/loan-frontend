@@ -49,6 +49,8 @@
       },
       "modalTitle": "New Loan",
       "editModalTitle": "Edit Loan",
+      "directCreateWarningTitle": "This skips the application flow",
+      "directCreateWarningDescription": "A loan created here has no linked loan product — no product-driven interest rate suggestion, eligibility check, or document checklist. For a customer applying normally, use \"New Application\" instead.",
       "fields": {
         "customer": "Customer",
         "customerPlaceholder": "Search customers…",

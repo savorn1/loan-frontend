@@ -1,5 +1,5 @@
 <template>
-  <UCard class="mt-6">
+  <UCard :id="id" class="mt-6 scroll-mt-20">
     <template #header>
       <div class="flex flex-wrap items-center justify-between gap-3">
         <span class="font-semibold">{{ title }}</span>
@@ -20,6 +20,14 @@
     >
       <template #label-data="{ row }">
         <div class="flex items-center gap-3">
+          <UButton
+            :icon="isPinned(row.to) ? 'i-heroicons-star-solid' : 'i-heroicons-star'"
+            variant="ghost"
+            color="gray"
+            size="xs"
+            :aria-label="t('admin.reports.togglePin')"
+            @click.stop="togglePin(row.to)"
+          />
           <div
             class="shrink-0 rounded-lg p-2 bg-primary-50 dark:bg-primary-400/10 text-primary-500 dark:text-primary-300"
           >
@@ -49,10 +57,13 @@ import type { ColumnDef } from '~/shared/types'
 const props = defineProps<{
   title: string
   tiles: ReportTile[]
+  /** Anchor id for the sticky category jump-nav on the reports index page. */
+  id?: string
 }>()
 
 const { t } = useI18n()
 const router = useRouter()
+const { isPinned, togglePin } = usePinnedReports()
 
 const search = ref('')
 const filteredTiles = computed(() => {
