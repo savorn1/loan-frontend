@@ -13,7 +13,7 @@
 //   PUT    /loan-products/{id}      <- LoanProductRequest   -> LoanProductResponse
 //   DELETE /loan-products/{id}
 
-import type { RuleField, RuleOperator } from '~/features/loan-configuration/types'
+import type { RuleField, RuleOperator, TermUnit } from '~/features/loan-configuration/types'
 
 export type LoanType = 'PERSONAL' | 'HOME' | 'AUTO' | 'BUSINESS' | 'EDUCATION' | 'OTHER'
 export type LoanProductStatus = 'DRAFT' | 'PUBLISHED' | 'INACTIVE'
@@ -155,6 +155,9 @@ export interface LoanProductTermResponse {
   termTemplateCode: string
   termTemplateName: string
   termValue: number
+  // Optional because the backend doesn't populate the assigned template's
+  // unit yet — guard against undefined at every read site until it does.
+  termUnit?: TermUnit
   isDefault: boolean
   status: LoanProductTermStatus
   createdAt: string

@@ -60,7 +60,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <UCard>
               <div class="text-sm text-gray-500 dark:text-gray-400">
-                {{ t('loanCalculator.summary.installment') }}
+                {{
+                  result.schedule.length === 1
+                    ? t('loanCalculator.summary.bulletPayment')
+                    : t('loanCalculator.summary.installment')
+                }}
               </div>
               <div class="text-2xl font-semibold">{{ formatCurrency(result.installment) }}</div>
             </UCard>
@@ -209,6 +213,19 @@ const fields = computed<FieldDef[]>(() => [
       : undefined
   },
   {
+    name: 'termUnit',
+    label: t('loanCalculator.fields.termUnit'),
+    type: 'select',
+    required: true,
+    default: 'MONTH',
+    wrapper: 'half',
+    options: [
+      { label: t('loanConfig.termTemplates.units.day'), value: 'DAY' },
+      { label: t('loanConfig.termTemplates.units.month'), value: 'MONTH' },
+      { label: t('loanConfig.termTemplates.units.year'), value: 'YEAR' }
+    ]
+  },
+  {
     name: 'annualRatePercent',
     label: t('loanCalculator.fields.annualRate'),
     type: 'number',
@@ -272,6 +289,7 @@ function onCalculate(values: Record<string, any>) {
     principal: values.amount,
     annualRatePercent: values.annualRatePercent,
     termMonths: values.termMonths,
+    termUnit: values.termUnit,
     startDate: new Date(values.startDate)
   })
 }

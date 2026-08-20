@@ -17,6 +17,18 @@
       </a>
     </nav>
 
+    <UAlert
+      v-if="!hintDismissed"
+      icon="i-heroicons-light-bulb"
+      color="primary"
+      variant="subtle"
+      class="mb-6"
+      :title="t('admin.reports.hintTitle')"
+      :description="t('admin.reports.hintDescription')"
+      :close-button="{ icon: 'i-heroicons-x-mark', color: 'gray', variant: 'link' }"
+      @close="dismissHint"
+    />
+
     <UCard class="mb-6">
       <UInput
         v-model="globalSearch"
@@ -165,6 +177,17 @@
         id="pinned"
         :title="t('admin.reports.pinnedReportsHeader')"
         :tiles="pinnedTiles"
+        clearable
+        @clear="clearPinned"
+      />
+
+      <ReportCategoryCard
+        v-if="recentTiles.length > 0"
+        id="recent"
+        :title="t('admin.reports.recentReportsHeader')"
+        :tiles="recentTiles"
+        clearable
+        @clear="clearRecent"
       />
 
       <ReportCategoryCard
@@ -512,6 +535,12 @@ const generalLedgerReportTiles = computed<ReportTile[]>(() => [
     icon: 'i-heroicons-scale',
     label: t('admin.reports.generalLedgerReportsTiles.reconciliation.label'),
     description: t('admin.reports.generalLedgerReportsTiles.reconciliation.description')
+  },
+  {
+    to: '/reports/general-ledger/posting-coverage',
+    icon: 'i-heroicons-check-badge',
+    label: t('admin.reports.generalLedgerReportsTiles.postingCoverage.label'),
+    description: t('admin.reports.generalLedgerReportsTiles.postingCoverage.description')
   }
 ])
 
@@ -1399,6 +1428,19 @@ const productProfitabilityReportTiles = computed<ReportTile[]>(() => [
 // once there are 20+ categories and you don't know which one a report lives in.
 type SearchResultTile = ReportTile & { category: string }
 
+const HINT_DISMISSED_KEY = 'reportsHintDismissed'
+// Starts true so SSR/first paint renders nothing, then flips to the real
+// stored value on mount — avoids a hydration mismatch from reading
+// localStorage during render.
+const hintDismissed = ref(true)
+onMounted(() => {
+  hintDismissed.value = localStorage.getItem(HINT_DISMISSED_KEY) === 'true'
+})
+function dismissHint() {
+  hintDismissed.value = true
+  localStorage.setItem(HINT_DISMISSED_KEY, 'true')
+}
+
 const globalSearch = ref('')
 
 const categorizedTileGroups = computed(() => [
@@ -1524,9 +1566,23 @@ const jumpNavSections = computed(() =>
   categorizedTileGroups.value.map((g) => ({ id: g.id, label: g.category }))
 )
 
-const { isPinned } = usePinnedReports()
+const { isPinned, clearAll: clearPinned } = usePinnedReports()
 const pinnedTiles = computed<ReportTile[]>(() =>
   categorizedTileGroups.value.flatMap((g) => g.tiles.filter((tile) => isPinned(tile.to)))
+)
+
+const { recent, clearAll: clearRecent } = useRecentReports()
+const tileByPath = computed(() => {
+  const map = new Map<string, ReportTile>()
+  for (const group of categorizedTileGroups.value) {
+    for (const tile of group.tiles) map.set(tile.to, tile)
+  }
+  return map
+})
+const recentTiles = computed<ReportTile[]>(() =>
+  recent.value
+    .map((path) => tileByPath.value.get(path))
+    .filter((tile): tile is ReportTile => !!tile)
 )
 
 const globalSearchResults = computed<SearchResultTile[]>(() => {

@@ -241,6 +241,15 @@
             <UTextarea v-model="createApplicationForm.purpose" :rows="2" />
           </UFormGroup>
 
+          <UFormGroup :label="t('groupLoanApplications.groupCard.termUnitLabel')">
+            <USelectMenu
+              v-model="createApplicationForm.termUnit"
+              :options="termUnitOptions"
+              option-attribute="label"
+              value-attribute="value"
+            />
+          </UFormGroup>
+
           <div class="space-y-2">
             <p class="text-sm font-medium">
               {{ t('groupLoanApplications.groupCard.membersLabel') }}
@@ -263,7 +272,7 @@
                 v-model.number="row.requestedTermMonths"
                 type="number"
                 min="1"
-                max="360"
+                max="3650"
                 :disabled="!row.include"
                 :placeholder="t('groupLoanApplications.groupCard.requestedTermPlaceholder')"
               />
@@ -355,6 +364,7 @@ import type {
 } from '~/features/groups/types'
 import type { CustomerResponse } from '~/features/customers/types'
 import type { LoanPaymentResponse, LoanResponse } from '~/features/loans/types'
+import type { TermUnit } from '~/features/loans/types/loan'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const { t } = useI18n()
@@ -362,6 +372,12 @@ const route = useRoute()
 const router = useRouter()
 const api = useApi()
 const toast = useToast()
+
+const termUnitOptions = computed(() => [
+  { label: t('loanConfig.termTemplates.units.day'), value: 'DAY' },
+  { label: t('loanConfig.termTemplates.units.month'), value: 'MONTH' },
+  { label: t('loanConfig.termTemplates.units.year'), value: 'YEAR' }
+])
 
 const groupId = route.params.id as string
 
@@ -519,6 +535,7 @@ const creatingApplication = ref(false)
 const createApplicationError = ref('')
 const createApplicationForm = reactive<{
   purpose: string
+  termUnit: TermUnit
   members: {
     customerId: number
     customerName: string
@@ -526,10 +543,11 @@ const createApplicationForm = reactive<{
     requestedAmount: number | undefined
     requestedTermMonths: number | undefined
   }[]
-}>({ purpose: '', members: [] })
+}>({ purpose: '', termUnit: 'MONTH', members: [] })
 
 function openCreateApplication() {
   createApplicationForm.purpose = ''
+  createApplicationForm.termUnit = 'MONTH'
   createApplicationForm.members = (members.value ?? []).map((m) => ({
     customerId: m.customerId,
     customerName: m.customerName,
@@ -555,7 +573,8 @@ async function onCreateApplication() {
       .map((m) => ({
         customerId: m.customerId,
         requestedAmount: m.requestedAmount!,
-        requestedTermMonths: m.requestedTermMonths!
+        requestedTermMonths: m.requestedTermMonths!,
+        requestedTermUnit: createApplicationForm.termUnit
       }))
     const payload: GroupLoanApplicationRequest = {
       groupId: Number(groupId),

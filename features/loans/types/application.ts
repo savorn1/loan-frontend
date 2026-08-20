@@ -13,6 +13,8 @@
 //   PUT    /loans/applications/{id}/start-review                     -> ApplicationResponse                        (ADMIN, SUBMITTED only)
 //   PUT    /loans/applications/{id}/withdraw                         -> ApplicationResponse                        (SUBMITTED/UNDER_REVIEW only)
 //   DELETE /loans/applications/{id}                                                                                (ADMIN, only if no loan was created)
+import type { TermUnit } from './loan'
+
 export type ApplicationStatus = 'SUBMITTED' | 'UNDER_REVIEW' | 'APPROVED' | 'REJECTED' | 'WITHDRAWN'
 
 export interface ApplicationRequest {
@@ -20,6 +22,7 @@ export interface ApplicationRequest {
   loanProductId: string
   requestedAmount: number
   requestedTermMonths: number
+  requestedTermUnit: TermUnit
   purpose?: string
 }
 
@@ -33,6 +36,7 @@ export interface ApplicationResponse {
   loanProductName: string | null
   requestedAmount: number
   requestedTermMonths: number
+  requestedTermUnit: TermUnit
   purpose: string | null
   status: ApplicationStatus
   submittedAt: string
@@ -97,6 +101,8 @@ export interface ApplicationApprovalRequest {
   approvedAmount?: number
   approvedInterestRate?: number
   approvedTermMonths?: number
+  // Falls back to the application's requestedTermUnit server-side when omitted.
+  approvedTermUnit?: TermUnit
   comments?: string
 }
 
@@ -108,6 +114,7 @@ export interface ApplicationApprovalResponse {
   approvedAmount: number | null
   approvedInterestRate: number | null
   approvedTermMonths: number | null
+  approvedTermUnit: TermUnit | null
   comments: string | null
   decidedAt: string
 }

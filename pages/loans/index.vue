@@ -194,6 +194,7 @@ const { t } = useI18n()
 const api = useApi()
 const router = useRouter()
 const { isAdmin } = storeToRefs(useAuth())
+const { formatTermLength } = useTermUnit()
 
 const page = ref(1)
 const pageSize = ref(10)
@@ -342,7 +343,12 @@ const columns = computed<ColumnDef<LoanResponse>[]>(() => [
   },
   { key: 'principal', label: t('loans.list.columns.principal'), type: 'currency', sortable: true },
   { key: 'interestRate', label: t('loans.list.columns.rate'), type: 'percent', sortable: true },
-  { key: 'termMonths', label: t('loans.list.columns.term'), sortable: true },
+  {
+    key: 'termMonths',
+    label: t('loans.list.columns.term'),
+    sortable: true,
+    value: (row) => formatTermLength(row.termMonths, row.termUnit)
+  },
   { key: 'status', label: t('loans.list.columns.status'), type: 'status', sortable: true },
   { key: 'createdAt', label: t('loans.list.columns.created'), type: 'datetime', sortable: true },
   { key: 'actions', label: '', class: 'text-right' }
@@ -390,8 +396,20 @@ const loanFields = computed<FieldDef[]>(() => [
     type: 'number',
     required: true,
     min: 1,
-    max: 360,
+    max: 3650,
     hint: t('loans.list.fields.termHint')
+  },
+  {
+    name: 'termUnit',
+    label: t('loans.list.fields.termUnit'),
+    type: 'select',
+    required: true,
+    default: 'MONTH',
+    options: [
+      { label: t('loanConfig.termTemplates.units.day'), value: 'DAY' },
+      { label: t('loanConfig.termTemplates.units.month'), value: 'MONTH' },
+      { label: t('loanConfig.termTemplates.units.year'), value: 'YEAR' }
+    ]
   },
   { name: 'purpose', label: t('loans.list.fields.purpose'), type: 'textarea' }
 ])
@@ -419,6 +437,7 @@ const {
     principal: 1000,
     interestRate: 5,
     termMonths: 12,
+    termUnit: 'MONTH',
     purpose: ''
   }),
   toForm: (row) => ({
@@ -426,6 +445,7 @@ const {
     principal: row.principal,
     interestRate: row.interestRate,
     termMonths: row.termMonths,
+    termUnit: row.termUnit,
     purpose: row.purpose ?? ''
   }),
   toPayload: (values) => ({
@@ -433,6 +453,7 @@ const {
     principal: values.principal,
     interestRate: values.interestRate,
     termMonths: values.termMonths,
+    termUnit: values.termUnit,
     purpose: values.purpose || undefined
   }),
   onCreated: async (created) => {

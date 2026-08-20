@@ -13,6 +13,15 @@
 // visits that have no in-app history to go back to.
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
+const { recordVisit } = useRecentReports()
+
+// Every report page renders this button once, near the top — the one place
+// common to all of them — so it doubles as where a visit gets recorded for
+// the reports index's "Recently Viewed" section.
+onMounted(() => {
+  recordVisit(route.path)
+})
 
 function goBack() {
   if (window.history.state?.back) {

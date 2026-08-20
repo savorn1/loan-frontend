@@ -133,6 +133,7 @@ const { t } = useI18n()
 const api = useApi()
 const toast = useToast()
 const router = useRouter()
+const { formatTermLength } = useTermUnit()
 
 const {
   data: applicationsRaw,
@@ -201,7 +202,12 @@ const columns = computed<ColumnDef<ApplicationResponse>[]>(() => [
     type: 'currency',
     sortable: true
   },
-  { key: 'requestedTermMonths', label: t('applications.list.columns.term'), sortable: true },
+  {
+    key: 'requestedTermMonths',
+    label: t('applications.list.columns.term'),
+    sortable: true,
+    value: (row) => formatTermLength(row.requestedTermMonths, row.requestedTermUnit)
+  },
   { key: 'status', label: t('applications.list.columns.status'), type: 'status', sortable: true },
   {
     key: 'submittedAt',
@@ -317,6 +323,19 @@ const applicationFields = computed<FieldDef[]>(() => [
       : t('applications.list.fields.requestedTermHint'),
     wrapper: 'half'
   },
+  {
+    name: 'requestedTermUnit',
+    label: t('applications.list.fields.requestedTermUnit'),
+    type: 'select',
+    required: true,
+    default: 'MONTH',
+    wrapper: 'half',
+    options: [
+      { label: t('loanConfig.termTemplates.units.day'), value: 'DAY' },
+      { label: t('loanConfig.termTemplates.units.month'), value: 'MONTH' },
+      { label: t('loanConfig.termTemplates.units.year'), value: 'YEAR' }
+    ]
+  },
   { name: 'purpose', label: t('applications.list.fields.purpose'), type: 'textarea' }
 ])
 
@@ -338,6 +357,7 @@ function openCreate() {
     loanProductId: undefined,
     requestedAmount: 1000,
     requestedTermMonths: 12,
+    requestedTermUnit: 'MONTH',
     purpose: ''
   }
   error.value = ''
@@ -353,6 +373,7 @@ async function onCreate(values: Record<string, any>) {
       loanProductId: values.loanProductId,
       requestedAmount: values.requestedAmount,
       requestedTermMonths: values.requestedTermMonths,
+      requestedTermUnit: values.requestedTermUnit,
       purpose: values.purpose || undefined
     }
     const created = await api<ApplicationResponse>('/loans/applications', {

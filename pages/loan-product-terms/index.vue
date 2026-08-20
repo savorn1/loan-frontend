@@ -162,6 +162,7 @@ import type { ColumnDef, FieldDef } from '~/shared/types'
 const api = useApi()
 const toast = useToast()
 const { t } = useI18n()
+const { termUnitLabel } = useTermUnit()
 
 const {
   data: terms,
@@ -187,9 +188,10 @@ function productLabel(id: string) {
 const productOptions = computed(() =>
   (products.value ?? []).map((p) => ({ label: `${p.name} (${p.code})`, value: p.id }))
 )
+
 const templateOptions = computed(() =>
   (templates.value ?? []).map((t) => ({
-    label: `${t.name} (${t.code}) — ${t.termValue}`,
+    label: `${t.name} (${t.code}) — ${t.termValue} ${termUnitLabel(t.termUnit)}`.trim(),
     value: t.id
   }))
 )
@@ -203,7 +205,8 @@ const columns = computed<ColumnDef<LoanProductTermResponse>[]>(() => [
   {
     key: 'termTemplateName',
     label: t('loanConfig.loanProductTerms.termColumn'),
-    value: (row) => `${row.termTemplateName} (${row.termTemplateCode}) — ${row.termValue}`
+    value: (row) =>
+      `${row.termTemplateName} (${row.termTemplateCode}) — ${row.termValue} ${termUnitLabel(row.termUnit)}`.trim()
   },
   {
     key: 'isDefault',

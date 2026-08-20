@@ -104,12 +104,13 @@ export interface FeeSchemeDetailResponse {
 
 // ── Term templates ──────────────────────────────────────────────────────────
 export type TermTemplateStatus = 'ACTIVE' | 'INACTIVE'
+export type TermUnit = 'DAY' | 'MONTH' | 'YEAR'
 
 export interface TermTemplateRequest {
   code: string
   name: string
-  // Interpreted using the assigned product's termUnit (DAY/MONTH/YEAR).
   termValue: number
+  termUnit: TermUnit
   status: TermTemplateStatus
 }
 
@@ -118,6 +119,9 @@ export interface TermTemplateResponse {
   code: string
   name: string
   termValue: number
+  // Optional because the backend doesn't populate this yet on existing rows —
+  // guard against undefined at every read site until it does.
+  termUnit?: TermUnit
   status: TermTemplateStatus
   createdAt: string
   updatedAt: string

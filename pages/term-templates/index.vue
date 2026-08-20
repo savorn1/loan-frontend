@@ -158,6 +158,12 @@ const columns = computed<ColumnDef<TermTemplateResponse>[]>(() => [
     label: t('loanConfig.termTemplates.termValueColumn'),
     sortable: true
   },
+  {
+    key: 'termUnit',
+    label: t('loanConfig.termTemplates.termUnitColumn'),
+    type: 'enum',
+    sortable: true
+  },
   { key: 'status', label: t('loanConfig.shared.statusColumn'), type: 'status', sortable: true },
   {
     key: 'createdAt',
@@ -189,7 +195,22 @@ const fields = computed<FieldDef[]>(() => [
     type: 'number',
     required: true,
     min: 1,
+    step: 1,
     wrapper: 'half'
+  },
+  {
+    name: 'termUnit',
+    label: t('loanConfig.termTemplates.termUnitColumn'),
+    type: 'select',
+    required: true,
+    default: 'MONTH',
+    wrapper: 'half',
+    hint: t('loanConfig.termTemplates.termUnitHint'),
+    options: [
+      { label: t('loanConfig.termTemplates.units.day'), value: 'DAY' },
+      { label: t('loanConfig.termTemplates.units.month'), value: 'MONTH' },
+      { label: t('loanConfig.termTemplates.units.year'), value: 'YEAR' }
+    ]
   },
   {
     name: 'status',
@@ -223,17 +244,27 @@ const {
   onDelete
 } = useCrudModals<TermTemplateResponse, TermTemplateRequest>('/term-templates', refresh, {
   entityName: t('loanConfig.entities.termTemplate'),
-  createDefaults: () => ({ code: '', name: '', termValue: undefined, status: 'ACTIVE' }),
+  createDefaults: () => ({
+    code: '',
+    name: '',
+    termValue: undefined,
+    termUnit: 'MONTH',
+    status: 'ACTIVE'
+  }),
   toForm: (row) => ({
     code: row.code,
     name: row.name,
     termValue: row.termValue,
+    termUnit: row.termUnit,
     status: row.status
   }),
   toPayload: (values) => ({
     code: values.code,
     name: values.name,
-    termValue: values.termValue,
+    // A term (in days/months/years) is always a whole number — round off any
+    // stray decimal the number input's typing (rather than its stepper) let through.
+    termValue: Math.round(values.termValue),
+    termUnit: values.termUnit,
     status: values.status
   })
 })

@@ -29,7 +29,7 @@
           <dd class="sm:col-span-2">{{ loan.interestRate }}%</dd>
           <dt class="text-gray-500">{{ t('loans.contract.fields.term') }}</dt>
           <dd class="sm:col-span-2">
-            {{ t('loans.contract.months', { count: loan.termMonths }) }}
+            {{ formatTermLength(loan.termMonths, loan.termUnit) }}
           </dd>
           <dt class="text-gray-500">{{ t('loans.contract.fields.monthlyInstallment') }}</dt>
           <dd class="sm:col-span-2">{{ formatCurrency(loan.monthlyInstallment) }}</dd>
@@ -291,6 +291,7 @@ import type { ColumnDef } from '~/shared/types'
 const { t } = useI18n()
 const route = useRoute()
 const api = useApi()
+const { formatTermLength } = useTermUnit()
 
 const loanId = route.params.id as string
 
@@ -436,7 +437,7 @@ const restructureColumns = computed<ColumnDef<LoanRestructureResponse>[]>(() => 
   {
     key: 'newTermMonths',
     label: t('loans.contract.restructureColumns.newTerm'),
-    suffix: t('loans.contract.restructureColumns.newTermSuffix')
+    value: (row) => formatTermLength(row.newTermMonths, row.newTermUnit)
   },
   {
     key: 'newInterestRate',

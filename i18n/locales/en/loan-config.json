@@ -196,6 +196,13 @@
       "deleteTitle": "Delete term template \"{name}\"?",
       "deleteDescription": "This permanently removes the term template and cannot be undone.",
       "termValueColumn": "Term value",
+      "termUnitColumn": "Unit",
+      "termUnitHint": "Loan origination currently schedules everything monthly — Day/Year templates display correctly here and on a product's assigned terms, but a loan created from one is still scheduled in months.",
+      "units": {
+        "day": "Days",
+        "month": "Months",
+        "year": "Years"
+      },
       "total": { "one": "1 term template", "other": "{count} term templates" }
     },
     "loanProductDocuments": {

@@ -210,6 +210,29 @@
           "amount": "Amount",
           "balance": "Balance"
         }
+      },
+      "postingCoverage": {
+        "title": "Posting Coverage Report",
+        "description": "Compares loan disbursement and repayment activity totals against journal entries posted for the same financial period.",
+        "note": "This compares aggregate totals for the period, not individual transactions — it can't confirm any single loan or payment was posted, only whether the totals line up. A variance is a starting point for investigation, not proof something is wrong.",
+        "financialPeriod": "Financial period",
+        "financialPeriodPlaceholder": "Select a financial period",
+        "matched": "Matched",
+        "mismatched": "Variance",
+        "emptyTitle": "Select a financial period",
+        "emptyDescription": "Choose a financial period above to compare activity totals against posted journal entries.",
+        "categories": {
+          "disbursement": "Disbursements",
+          "principalPayment": "Principal collected",
+          "interestPayment": "Interest collected"
+        },
+        "columns": {
+          "category": "Category",
+          "operationalTotal": "Activity total",
+          "glTotal": "Posted to GL",
+          "variance": "Variance",
+          "matched": "Result"
+        }
       }
     },
     "glAccounts": {
@@ -297,7 +320,11 @@
         "account": "Account",
         "amount": "Amount",
         "debitsCredits": "Debits {debit} · Credits {credit}",
-        "mustBalance": "— must balance before saving"
+        "mustBalance": "— must balance before saving",
+        "template": "Journal template",
+        "templatePlaceholder": "Load lines from a template (optional)",
+        "templateHint": "Pre-fills the lines below from the template's account roles, mapped to real GL accounts via Accounting Schemes. Amounts still need to be entered.",
+        "unmappedRolesWarning": "No Accounting Scheme maps these roles to a GL account for this currency, so their line is missing an account: {roles}"
       },
       "details": {
         "title": "Details",

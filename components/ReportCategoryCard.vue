@@ -2,7 +2,19 @@
   <UCard :id="id" class="mt-6 scroll-mt-20">
     <template #header>
       <div class="flex flex-wrap items-center justify-between gap-3">
-        <span class="font-semibold">{{ title }}</span>
+        <div class="flex items-center gap-2">
+          <span class="font-semibold">{{ title }}</span>
+          <UButton
+            v-if="clearable"
+            variant="link"
+            color="gray"
+            size="xs"
+            class="px-0"
+            @click="$emit('clear')"
+          >
+            {{ t('admin.reports.clearAll') }}
+          </UButton>
+        </div>
         <UInput
           v-model="search"
           icon="i-heroicons-magnifying-glass"
@@ -59,7 +71,11 @@ const props = defineProps<{
   tiles: ReportTile[]
   /** Anchor id for the sticky category jump-nav on the reports index page. */
   id?: string
+  /** Shows a "Clear" action next to the title — for the Pinned/Recent sections only. */
+  clearable?: boolean
 }>()
+
+defineEmits<{ clear: [] }>()
 
 const { t } = useI18n()
 const router = useRouter()

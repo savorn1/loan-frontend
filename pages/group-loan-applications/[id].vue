@@ -194,6 +194,14 @@
         </template>
         <UForm :state="decisionForm" class="space-y-4" @submit="onDecide">
           <template v-if="decisionForm.decision === 'APPROVED'">
+            <UFormGroup :label="t('groupLoanApplications.detail.termUnitLabel')">
+              <USelectMenu
+                v-model="decisionForm.termUnit"
+                :options="termUnitOptions"
+                option-attribute="label"
+                value-attribute="value"
+              />
+            </UFormGroup>
             <div class="space-y-3">
               <div
                 v-for="m in decisionForm.members"
@@ -214,7 +222,7 @@
                   />
                 </UFormGroup>
                 <UFormGroup :label="t('groupLoanApplications.detail.termMonths')" required>
-                  <UInput v-model.number="m.approvedTermMonths" type="number" min="1" max="360" />
+                  <UInput v-model.number="m.approvedTermMonths" type="number" min="1" max="3650" />
                 </UFormGroup>
               </div>
             </div>
@@ -281,6 +289,7 @@ import type {
   GroupLoanApprovalMemberDecision,
   GroupLoanMemberLine
 } from '~/features/groups/types'
+import type { TermUnit } from '~/features/loans/types/loan'
 import type { ColumnDef } from '~/shared/types'
 
 const { t } = useI18n()
@@ -288,6 +297,13 @@ const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { formatTermLength } = useTermUnit()
+
+const termUnitOptions = computed(() => [
+  { label: t('loanConfig.termTemplates.units.day'), value: 'DAY' },
+  { label: t('loanConfig.termTemplates.units.month'), value: 'MONTH' },
+  { label: t('loanConfig.termTemplates.units.year'), value: 'YEAR' }
+])
 
 const applicationId = route.params.id as string
 
@@ -307,7 +323,11 @@ const memberColumns = computed<ColumnDef<GroupLoanMemberLine>[]>(() => [
     label: t('groupLoanApplications.detail.requestedColumn'),
     type: 'currency'
   },
-  { key: 'requestedTermMonths', label: t('groupLoanApplications.detail.termColumn') },
+  {
+    key: 'requestedTermMonths',
+    label: t('groupLoanApplications.detail.termColumn'),
+    value: (row) => formatTermLength(row.requestedTermMonths, row.requestedTermUnit)
+  },
   {
     key: 'approvedAmount',
     label: t('groupLoanApplications.detail.approvedColumn'),
@@ -349,16 +369,19 @@ const deciding = ref(false)
 const decisionError = ref('')
 const decisionForm = reactive<{
   decision: GroupLoanApprovalDecision
+  termUnit: TermUnit
   members: (GroupLoanApprovalMemberDecision & { customerName: string })[]
   comments: string
 }>({
   decision: 'APPROVED',
+  termUnit: 'MONTH',
   members: [],
   comments: ''
 })
 
 function openDecision(decision: GroupLoanApprovalDecision) {
   decisionForm.decision = decision
+  decisionForm.termUnit = application.value?.members?.[0]?.requestedTermUnit ?? 'MONTH'
   decisionForm.members = (application.value?.members ?? []).map((m) => ({
     customerId: m.customerId,
     customerName: m.customerName,
@@ -392,7 +415,8 @@ async function onDecide() {
               customerId: m.customerId,
               approvedAmount: m.approvedAmount,
               approvedInterestRate: m.approvedInterestRate,
-              approvedTermMonths: m.approvedTermMonths
+              approvedTermMonths: m.approvedTermMonths,
+              approvedTermUnit: decisionForm.termUnit
             }))
           : undefined,
       comments: decisionForm.comments || undefined

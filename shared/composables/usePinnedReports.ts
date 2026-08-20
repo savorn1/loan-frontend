@@ -25,5 +25,10 @@ export function usePinnedReports() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(pinned.value))
   }
 
-  return { pinned, isPinned, togglePin }
+  function clearAll() {
+    pinned.value = []
+    localStorage.removeItem(STORAGE_KEY)
+  }
+
+  return { pinned, isPinned, togglePin, clearAll }
 }

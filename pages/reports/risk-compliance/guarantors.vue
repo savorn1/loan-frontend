@@ -11,6 +11,15 @@
       ]"
     />
 
+    <UAlert
+      v-if="pending"
+      icon="i-heroicons-clock"
+      color="primary"
+      variant="subtle"
+      class="mb-6"
+      :title="t('admin.reports.heavyLoadHint')"
+    />
+
     <UCard v-if="rows.length > 0" class="mb-6">
       <dl class="grid grid-cols-2 gap-y-3 text-sm">
         <dt class="text-gray-500">

@@ -41,7 +41,7 @@
             <dt class="text-gray-500">{{ t('loans.overview.fields.interestRate') }}</dt>
             <dd>{{ loan.interestRate }}%</dd>
             <dt class="text-gray-500">{{ t('loans.overview.fields.term') }}</dt>
-            <dd>{{ t('loans.overview.months', { count: loan.termMonths }) }}</dd>
+            <dd>{{ formatTermLength(loan.termMonths, loan.termUnit) }}</dd>
             <dt class="text-gray-500">{{ t('loans.overview.fields.monthlyInstallment') }}</dt>
             <dd>{{ formatCurrency(loan.monthlyInstallment) }}</dd>
             <dt class="text-gray-500">{{ t('loans.overview.fields.outstandingBalance') }}</dt>
@@ -151,6 +151,7 @@ const { t } = useI18n()
 const route = useRoute()
 const api = useApi()
 const toast = useToast()
+const { formatTermLength } = useTermUnit()
 
 const loanId = route.params.id as string
 

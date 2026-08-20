@@ -72,6 +72,7 @@ describe('generateAmortizationSchedule', () => {
     principal: 10000,
     interestRate: 12,
     termMonths: 12,
+    termUnit: 'MONTH',
     status: 'ACTIVE',
     purpose: null,
     approvedAt: null,

@@ -327,6 +327,10 @@
         "reconciliation": {
           "label": "GL Reconciliation",
           "description": "Does the GL agree with the loan portfolio?"
+        },
+        "postingCoverage": {
+          "label": "Posting Coverage Report",
+          "description": "Loan disbursement/repayment activity totals vs journal entries posted for the period"
         }
       },
       "trialBalanceReportsHeader": "Trial Balance Reports",
@@ -947,6 +951,11 @@
       "globalSearchResultsHeader": "{count} matching reports",
       "togglePin": "Pin or unpin this report",
       "pinnedReportsHeader": "Pinned Reports",
+      "recentReportsHeader": "Recently Viewed",
+      "clearAll": "Clear",
+      "hintTitle": "Tip: pin your favorites",
+      "hintDescription": "Click the star on any report to pin it here, or use the category bar above to jump straight to a section.",
+      "heavyLoadHint": "This report checks records one by one behind the scenes and may take a few seconds to load.",
       "jumpToCategory": "Jump to category"
     },
     "dashboard": {

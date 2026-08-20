@@ -123,6 +123,30 @@
             <UTextarea v-model="createForm.description" />
           </UFormGroup>
 
+          <UFormGroup
+            :label="t('accounting.journalEntries.fields.template')"
+            :help="t('accounting.journalEntries.fields.templateHint')"
+          >
+            <USelectMenu
+              v-model="selectedTemplateId"
+              :options="templateOptions"
+              option-attribute="label"
+              value-attribute="value"
+              :placeholder="t('accounting.journalEntries.fields.templatePlaceholder')"
+            />
+          </UFormGroup>
+
+          <UAlert
+            v-if="unmappedRoles.length > 0"
+            color="amber"
+            variant="subtle"
+            :title="
+              t('accounting.journalEntries.fields.unmappedRolesWarning', {
+                roles: unmappedRoles.join(', ')
+              })
+            "
+          />
+
           <div>
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium">{{
@@ -203,10 +227,12 @@
 
 <script setup lang="ts">
 import type {
+  AccountingSchemeResponse,
   GlAccountResponse,
   JournalEntryLineRequest,
   JournalEntryRequest,
   JournalEntryResponse,
+  JournalTemplateResponse,
   TransactionType
 } from '~/features/accounting/types'
 import type { BranchResponse } from '~/features/branches/types'
@@ -220,11 +246,19 @@ const router = useRouter()
 const [
   { data: entries, pending, error: fetchError, refresh },
   { data: glAccounts },
-  { data: branches }
+  { data: branches },
+  { data: journalTemplates },
+  { data: accountingSchemes }
 ] = await Promise.all([
   useAsyncData('journal-entries', () => api<JournalEntryResponse[]>('/journal-entries')),
   useAsyncData('journal-entries-gl-accounts', () => api<GlAccountResponse[]>('/gl-accounts')),
-  useAsyncData('journal-entries-branches', () => api<BranchResponse[]>('/branches'))
+  useAsyncData('journal-entries-branches', () => api<BranchResponse[]>('/branches')),
+  useAsyncData('journal-entries-templates', () =>
+    api<JournalTemplateResponse[]>('/journal-templates')
+  ),
+  useAsyncData('journal-entries-schemes', () =>
+    api<AccountingSchemeResponse[]>('/accounting-schemes')
+  )
 ])
 
 // Only postable (leaf) accounts belong here — posting to a header account fails
@@ -314,11 +348,50 @@ interface LineFormValue extends Partial<JournalEntryLineRequest> {
   glAccountId?: number
   entrySide: 'DEBIT' | 'CREDIT'
   amount: number
+  description?: string
 }
 
 function emptyLine(): LineFormValue {
   return { glAccountId: undefined, entrySide: 'DEBIT', amount: 0 }
 }
+
+// Templates define each line's structure via an abstract accountRole (e.g.
+// "CASH") rather than a real GL account — Accounting Schemes map role +
+// currency to the actual glAccountId. Picking a template pre-fills the lines
+// from that mapping instead of the accountant choosing every account by hand.
+const selectedTemplateId = ref<number | undefined>(undefined)
+const templateOptions = computed(() =>
+  (journalTemplates.value ?? [])
+    .filter((tpl) => tpl.status === 'ACTIVE')
+    .map((tpl) => ({ label: `${tpl.code} — ${tpl.name}`, value: tpl.id }))
+)
+const unmappedRoles = ref<string[]>([])
+
+function applyTemplate(templateId: number | undefined) {
+  unmappedRoles.value = []
+  if (!templateId) return
+  const template = (journalTemplates.value ?? []).find((tpl) => tpl.id === templateId)
+  if (!template) return
+  createForm.transactionType = template.transactionType
+  createForm.lines = template.lines.map((line) => {
+    const scheme = (accountingSchemes.value ?? []).find(
+      (s) =>
+        s.journalTemplateId === template.id &&
+        s.accountRole === line.accountRole &&
+        s.currency === createForm.currency &&
+        s.status === 'ACTIVE'
+    )
+    if (!scheme) unmappedRoles.value.push(line.accountRole)
+    return {
+      glAccountId: scheme?.glAccountId,
+      entrySide: line.entrySide,
+      amount: 0,
+      description: line.description ?? undefined
+    }
+  })
+}
+
+watch(selectedTemplateId, (id) => applyTemplate(id))
 
 const createForm = reactive<{
   transactionType: TransactionType | undefined
@@ -369,6 +442,8 @@ function openCreate() {
   createForm.referenceId = ''
   createForm.description = ''
   createForm.lines = [emptyLine(), { ...emptyLine(), entrySide: 'CREDIT' }]
+  selectedTemplateId.value = undefined
+  unmappedRoles.value = []
   error.value = ''
   showCreate.value = true
 }
@@ -397,7 +472,8 @@ async function onCreate() {
         lineNo: i + 1,
         glAccountId: l.glAccountId!,
         entrySide: l.entrySide,
-        amount: Number(l.amount)
+        amount: Number(l.amount),
+        description: l.description || undefined
       }))
     }
     const created = await api<JournalEntryResponse>('/journal-entries', {

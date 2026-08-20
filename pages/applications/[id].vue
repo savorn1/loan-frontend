@@ -66,7 +66,9 @@
           <dt class="text-gray-500">{{ t('applications.detail.requestedAmount') }}</dt>
           <dd>{{ formatCurrency(application.requestedAmount) }}</dd>
           <dt class="text-gray-500">{{ t('applications.detail.requestedTerm') }}</dt>
-          <dd>{{ application.requestedTermMonths }} {{ t('applications.detail.monthsUnit') }}</dd>
+          <dd>
+            {{ formatTermLength(application.requestedTermMonths, application.requestedTermUnit) }}
+          </dd>
           <dt class="text-gray-500">{{ t('applications.detail.purpose') }}</dt>
           <dd>{{ application.purpose || '—' }}</dd>
           <dt class="text-gray-500">{{ t('applications.detail.submitted') }}</dt>
@@ -101,7 +103,7 @@
               <StatusBadge :status="a.decision" />
               <span v-if="a.decision === 'APPROVED'" class="text-sm text-gray-500">
                 {{ formatCurrency(a.approvedAmount) }} · {{ a.approvedInterestRate }}% ·
-                {{ a.approvedTermMonths }} mo
+                {{ formatTermLength(a.approvedTermMonths, a.approvedTermUnit) }}
               </span>
             </div>
             <p v-if="a.comments" class="text-sm mt-1 whitespace-pre-wrap">{{ a.comments }}</p>
@@ -335,7 +337,15 @@
                   v-model.number="decisionForm.approvedTermMonths"
                   type="number"
                   min="1"
-                  max="360"
+                  max="3650"
+                />
+              </UFormGroup>
+              <UFormGroup :label="t('applications.detail.termUnit')" required>
+                <USelectMenu
+                  v-model="decisionForm.approvedTermUnit"
+                  :options="termUnitOptions"
+                  option-attribute="label"
+                  value-attribute="value"
                 />
               </UFormGroup>
             </div>
@@ -401,7 +411,8 @@ import type {
   ApplicationResponse,
   ApprovalDecision,
   EligibilityCheckResponse,
-  EligibilityResult
+  EligibilityResult,
+  TermUnit
 } from '~/features/loans/types'
 import type { InterestSchemeDetailResponse } from '~/features/loan-configuration/types'
 import type {
@@ -414,8 +425,15 @@ const route = useRoute()
 const api = useApi()
 const toast = useToast()
 const { isAdmin } = storeToRefs(useAuth())
+const { formatTermLength } = useTermUnit()
 
 const applicationId = route.params.id as string
+
+const termUnitOptions = computed(() => [
+  { label: t('loanConfig.termTemplates.units.day'), value: 'DAY' },
+  { label: t('loanConfig.termTemplates.units.month'), value: 'MONTH' },
+  { label: t('loanConfig.termTemplates.units.year'), value: 'YEAR' }
+])
 
 const {
   data: application,
@@ -548,12 +566,14 @@ const decisionForm = reactive<{
   approvedAmount?: number
   approvedInterestRate?: number
   approvedTermMonths?: number
+  approvedTermUnit: TermUnit
   comments: string
 }>({
   decision: 'APPROVED',
   approvedAmount: undefined,
   approvedInterestRate: undefined,
   approvedTermMonths: undefined,
+  approvedTermUnit: 'MONTH',
   comments: ''
 })
 
@@ -561,6 +581,7 @@ function openDecision(decision: ApprovalDecision) {
   decisionForm.decision = decision
   decisionForm.approvedAmount = application.value?.requestedAmount
   decisionForm.approvedTermMonths = application.value?.requestedTermMonths
+  decisionForm.approvedTermUnit = application.value?.requestedTermUnit ?? 'MONTH'
   decisionForm.approvedInterestRate =
     decision === 'APPROVED'
       ? resolveSuggestedRate(decisionForm.approvedAmount, decisionForm.approvedTermMonths)
@@ -606,6 +627,8 @@ async function onDecide() {
         decisionForm.decision === 'APPROVED' ? decisionForm.approvedInterestRate : undefined,
       approvedTermMonths:
         decisionForm.decision === 'APPROVED' ? decisionForm.approvedTermMonths : undefined,
+      approvedTermUnit:
+        decisionForm.decision === 'APPROVED' ? decisionForm.approvedTermUnit : undefined,
       comments: decisionForm.comments || undefined
     }
     await api(`/loans/applications/${applicationId}/approvals`, { method: 'POST', body: payload })

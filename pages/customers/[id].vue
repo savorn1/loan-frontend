@@ -907,6 +907,7 @@ import type { LoanResponse } from '~/features/loans/types'
 import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const { t } = useI18n()
+const { formatTermLength } = useTermUnit()
 const route = useRoute()
 const router = useRouter()
 const api = useApi()
@@ -998,7 +999,11 @@ const confirmDelete = ref(false)
 
 const loanColumns: ColumnDef<LoanResponse>[] = [
   { key: 'principal', type: 'currency' },
-  { key: 'termMonths', label: 'Term (mo)' },
+  {
+    key: 'termMonths',
+    label: 'Term',
+    value: (row) => formatTermLength(row.termMonths, row.termUnit)
+  },
   { key: 'status', type: 'status' },
   { key: 'createdAt', label: 'Created', type: 'datetime' }
 ]

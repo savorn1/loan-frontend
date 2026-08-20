@@ -129,6 +129,7 @@ const api = useApi()
 const toast = useToast()
 const { isAdmin, username } = storeToRefs(useAuth())
 const { t } = useI18n()
+const { formatTermLength } = useTermUnit()
 
 const loanId = route.params.id as string
 
@@ -146,7 +147,7 @@ const columns = computed<ColumnDef<LoanRestructureResponse>[]>(() => [
   {
     key: 'newTermMonths',
     label: t('loans.restructures.columns.newTerm'),
-    suffix: t('loans.restructures.columns.newTermSuffix')
+    value: (row) => formatTermLength(row.newTermMonths, row.newTermUnit)
   },
   { key: 'newInterestRate', label: t('loans.restructures.columns.newRate'), type: 'percent' },
   { key: 'reason', label: t('loans.restructures.columns.reason') },
@@ -163,7 +164,21 @@ const fields = computed<FieldDef[]>(() => [
     type: 'number',
     required: true,
     min: 1,
+    max: 3650,
     wrapper: 'half'
+  },
+  {
+    name: 'newTermUnit',
+    label: t('loans.restructures.fields.newTermUnit'),
+    type: 'select',
+    required: true,
+    default: 'MONTH',
+    wrapper: 'half',
+    options: [
+      { label: t('loanConfig.termTemplates.units.day'), value: 'DAY' },
+      { label: t('loanConfig.termTemplates.units.month'), value: 'MONTH' },
+      { label: t('loanConfig.termTemplates.units.year'), value: 'YEAR' }
+    ]
   },
   {
     name: 'newInterestRate',
@@ -193,6 +208,7 @@ const createForm = ref<Record<string, any>>({})
 function openCreate() {
   createForm.value = {
     newTermMonths: undefined,
+    newTermUnit: 'MONTH',
     newInterestRate: undefined,
     effectiveDate: '',
     reason: ''
@@ -207,6 +223,7 @@ async function onCreate(values: Record<string, any>) {
   try {
     const payload: LoanRestructureRequest = {
       newTermMonths: values.newTermMonths,
+      newTermUnit: values.newTermUnit,
       newInterestRate: values.newInterestRate || undefined,
       effectiveDate: values.effectiveDate,
       reason: values.reason

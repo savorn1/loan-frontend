@@ -38,7 +38,7 @@
         "branch": "Branch",
         "principal": "Principal",
         "rate": "Rate",
-        "term": "Term (mo)",
+        "term": "Term",
         "status": "Status",
         "created": "Created"
       },
@@ -57,8 +57,9 @@
         "principalHint": "Minimum 1000",
         "interestRate": "Interest rate",
         "interestRateHint": "0.01 – 100",
-        "term": "Term (months)",
+        "term": "Term",
         "termHint": "1 – 360",
+        "termUnit": "Term unit",
         "purpose": "Purpose"
       },
       "confirmDelete": {
@@ -142,7 +143,6 @@
         "approved": "Approved",
         "disbursed": "Disbursed"
       },
-      "months": "{count} months",
       "applyPaymentTitle": "Apply payment to balance",
       "amount": "Amount",
       "applyPaymentButton": "Apply payment",
@@ -184,7 +184,6 @@
         "closed": "Closed",
         "purpose": "Purpose"
       },
-      "months": "{count} months",
       "repaymentScheduleTitle": "Repayment schedule",
       "scheduleColumns": {
         "installmentNumber": "#",
@@ -259,7 +258,6 @@
       "restructureColumns": {
         "effective": "Effective",
         "newTerm": "New term",
-        "newTermSuffix": " months",
         "newRate": "New rate",
         "reason": "Reason"
       },
@@ -542,13 +540,15 @@
     "fields": {
       "amount": "Loan amount",
       "amountRangeHint": "Product range: {min} – {max}",
-      "termMonths": "Term (months)",
+      "termMonths": "Term",
+      "termUnit": "Term unit",
       "termRangeHint": "Product range: {min} – {max} months",
       "annualRate": "Annual interest rate",
       "startDate": "Start date"
     },
     "summary": {
       "installment": "Monthly installment",
+      "bulletPayment": "Payment at maturity",
       "totalInterest": "Total interest",
       "totalPayment": "Total payment"
     },

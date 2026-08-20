@@ -1,9 +1,11 @@
 // Group lending ("solidarity group") — a set of customers, with a leader, who
 // co-guarantee each other's individually-held loans. Mirrors the real
 // `loan_groups` table (id, code, name, loan_product_id, branch_id,
-// leader_customer_id, formation_date, status, created_at, updated_at) — no
-// REST service answers these endpoints yet, but the row shape itself is now
-// ground truth rather than assumed:
+// leader_customer_id, formation_date, status, created_at, updated_at).
+// Confirmed live in loan-service (GroupController/GroupLoanApplicationController,
+// routed at /api/groups and /api/group-loan-applications) — an earlier version
+// of this comment said no REST service answered these endpoints yet; that's no
+// longer true:
 //
 //   GET    /groups                          -> PageResponse<GroupResponse>
 //   POST   /groups                          -> GroupResponse
@@ -15,6 +17,8 @@
 //   GET    /groups/{id}/members             -> GroupMemberResponse[]
 //   POST   /groups/{id}/members             -> GroupMemberResponse
 //   PUT    /groups/{id}/members/{customerId}/leave -> GroupMemberResponse (status ACTIVE -> LEFT, sets leftAt; no hard delete — mirrors `loan_group_members`'s left_at/status columns)
+import type { TermUnit } from '~/features/loans/types/loan'
+
 export type GroupStatus = 'ACTIVE' | 'INACTIVE' | 'CLOSED'
 
 export interface GroupRequest {
@@ -107,6 +111,7 @@ export interface GroupLoanMemberRequest {
   customerId: number
   requestedAmount: number
   requestedTermMonths: number
+  requestedTermUnit: TermUnit
 }
 
 export interface GroupLoanApplicationRequest {
@@ -120,9 +125,11 @@ export interface GroupLoanMemberLine {
   customerName: string
   requestedAmount: number
   requestedTermMonths: number
+  requestedTermUnit: TermUnit
   approvedAmount: number | null
   approvedInterestRate: number | null
   approvedTermMonths: number | null
+  approvedTermUnit: TermUnit | null
   loanId: number | null
 }
 
@@ -176,6 +183,8 @@ export interface GroupLoanApprovalMemberDecision {
   approvedAmount?: number
   approvedInterestRate?: number
   approvedTermMonths?: number
+  // Falls back to the member's requestedTermUnit server-side when omitted.
+  approvedTermUnit?: TermUnit
 }
 
 export interface GroupLoanApplicationApprovalRequest {

@@ -1,4 +1,4 @@
-import type { LoanResponse } from '~/features/loans/types'
+import type { LoanResponse, TermUnit } from '~/features/loans/types'
 import type { ScheduleInstallmentRequest } from '~/features/payments/types'
 
 export interface AmortizationPeriod {
@@ -60,22 +60,60 @@ function annuityInstallment(principal: number, monthlyRate: number, termMonths: 
         (Math.pow(1 + monthlyRate, termMonths) - 1)
 }
 
+// Single bullet repayment at maturity — principal + simple interest,
+// Actual/365 — mirrors loan-service's AmortizationCalculator.generateBulletInstallment,
+// used for DAY-unit terms instead of monthly amortization.
+function buildBulletPeriod(
+  principal: number,
+  annualRatePercent: number,
+  days: number,
+  startDate: Date
+): AmortizationPeriod {
+  const interestComponent = round2(principal * (annualRatePercent / 100) * (days / 365))
+  const dueDate = new Date(startDate)
+  dueDate.setDate(dueDate.getDate() + days)
+
+  return {
+    installmentNumber: 1,
+    dueDate: dueDate.toISOString().slice(0, 10),
+    principalComponent: round2(principal),
+    interestComponent,
+    amount: round2(principal + interestComponent)
+  }
+}
+
 // Standard fixed-installment (monthly reducing-balance annuity) amortization
 // — the same formula loan-service's AmortizationCalculator.java uses for real
 // loans, so any caller's numbers match what the backend would actually
 // produce. Doesn't branch on InterestScheme's `interestType`/`calculationMethod`
 // (FLAT vs REDUCING, day-count method) because neither this file nor the
 // backend equivalent does today — both hard-code monthly reducing-balance.
+// `termValue`/`termUnit` follow the same convention as the backend: MONTH is
+// unchanged, YEAR pre-multiplies by 12 before amortizing, DAY produces a
+// single bullet installment (termValue is then read as a raw day count).
 export function calculateSchedule(params: {
   principal: number
   annualRatePercent: number
   termMonths: number
+  termUnit?: TermUnit
   startDate: Date
 }): AmortizationResult {
-  const { principal, annualRatePercent, termMonths, startDate } = params
+  const { principal, annualRatePercent, termMonths, termUnit = 'MONTH', startDate } = params
+
+  if (termUnit === 'DAY') {
+    const bullet = buildBulletPeriod(principal, annualRatePercent, termMonths, startDate)
+    return {
+      installment: bullet.amount,
+      totalInterest: bullet.interestComponent,
+      totalPayment: bullet.amount,
+      schedule: [bullet]
+    }
+  }
+
+  const months = termUnit === 'YEAR' ? termMonths * 12 : termMonths
   const monthlyRate = annualRatePercent / 100 / 12
-  const installment = annuityInstallment(principal, monthlyRate, termMonths)
-  const schedule = buildPeriods(principal, monthlyRate, termMonths, installment, startDate)
+  const installment = annuityInstallment(principal, monthlyRate, months)
+  const schedule = buildPeriods(principal, monthlyRate, months, installment, startDate)
 
   return {
     installment: round2(installment),
@@ -89,14 +127,22 @@ export function calculateSchedule(params: {
 // send to POST /api/payments/schedule (payment-service's own record of
 // installments — separate from loan-service's outstandingBalance ledger).
 // Uses the loan's `monthlyInstallment` if the backend already computed one,
-// otherwise falls back to the standard annuity formula.
+// otherwise falls back to the standard annuity formula. Branches on `termUnit`
+// the same way calculateSchedule does, so a DAY/YEAR loan's manually
+// (re)generated schedule matches what loan-service itself would produce.
 export function generateAmortizationSchedule(loan: LoanResponse): ScheduleInstallmentRequest[] {
-  const monthlyRate = loan.interestRate / 100 / 12
-  const installment =
-    loan.monthlyInstallment ?? annuityInstallment(loan.principal, monthlyRate, loan.termMonths)
   const startDate = loan.disbursedAt ? new Date(loan.disbursedAt) : new Date()
 
-  return buildPeriods(loan.principal, monthlyRate, loan.termMonths, installment, startDate)
+  if (loan.termUnit === 'DAY') {
+    return [buildBulletPeriod(loan.principal, loan.interestRate, loan.termMonths, startDate)]
+  }
+
+  const months = loan.termUnit === 'YEAR' ? loan.termMonths * 12 : loan.termMonths
+  const monthlyRate = loan.interestRate / 100 / 12
+  const installment =
+    loan.monthlyInstallment ?? annuityInstallment(loan.principal, monthlyRate, months)
+
+  return buildPeriods(loan.principal, monthlyRate, months, installment, startDate)
 }
 
 function round2(value: number): number {

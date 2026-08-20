@@ -11,6 +11,15 @@
       ]"
     />
 
+    <UAlert
+      v-if="pending"
+      icon="i-heroicons-clock"
+      color="primary"
+      variant="subtle"
+      class="mb-6"
+      :title="t('admin.reports.heavyLoadHint')"
+    />
+
     <UCard>
       <template #header>
         <UInput

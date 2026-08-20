@@ -268,7 +268,6 @@
       "columns": {
         "effective": "Effective",
         "newTerm": "New term",
-        "newTermSuffix": " months",
         "newRate": "New rate",
         "reason": "Reason",
         "status": "Status",
@@ -276,7 +275,8 @@
         "created": "Created"
       },
       "fields": {
-        "newTermMonths": "New term (months)",
+        "newTermMonths": "New term",
+        "newTermUnit": "New term unit",
         "newInterestRate": "New interest rate",
         "newInterestRateHint": "Optional — leave blank to keep the current rate",
         "effectiveDate": "Effective date",

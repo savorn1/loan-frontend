@@ -268,7 +268,6 @@
       "columns": {
         "effective": "ចាប់ផ្តើមអនុវត្ត",
         "newTerm": "រយៈពេលថ្មី",
-        "newTermSuffix": " ខែ",
         "newRate": "អត្រាថ្មី",
         "reason": "មូលហេតុ",
         "status": "ស្ថានភាព",
@@ -276,7 +275,8 @@
         "created": "បង្កើតនៅ"
       },
       "fields": {
-        "newTermMonths": "រយៈពេលថ្មី (ខែ)",
+        "newTermMonths": "រយៈពេលថ្មី",
+        "newTermUnit": "ឯកតារយៈពេលថ្មី",
         "newInterestRate": "អត្រាការប្រាក់ថ្មី",
         "newInterestRateHint": "មិនចាំបាច់ — ទុកទទេដើម្បីរក្សាអត្រាបច្ចុប្បន្ន",
         "effectiveDate": "ថ្ងៃចាប់ផ្តើមអនុវត្ត",

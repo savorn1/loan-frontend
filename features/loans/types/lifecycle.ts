@@ -1,3 +1,5 @@
+import type { TermUnit } from './loan'
+
 // ── Loan restructures (in-place term/rate change — maker-checker like
 // disbursements: requesting one only logs the request, the recalculation and
 // application to the loan happen on approval by a different admin) ──────────
@@ -5,6 +7,7 @@ export type RestructureStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED'
 
 export interface LoanRestructureRequest {
   newTermMonths: number
+  newTermUnit: TermUnit
   newInterestRate?: number
   reason: string
   effectiveDate: string // ISO date
@@ -18,6 +21,7 @@ export interface LoanRestructureResponse {
   id: number
   loanId: number
   newTermMonths: number
+  newTermUnit: TermUnit
   newInterestRate: number | null
   reason: string
   effectiveDate: string

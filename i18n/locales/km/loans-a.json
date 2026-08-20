@@ -38,7 +38,7 @@
         "branch": "សាខា",
         "principal": "ប្រាក់ដើម",
         "rate": "អត្រា",
-        "term": "រយៈពេល (ខែ)",
+        "term": "រយៈពេល",
         "status": "ស្ថានភាព",
         "created": "បានបង្កើត"
       },
@@ -57,8 +57,9 @@
         "principalHint": "អប្បបរមា ១០០០",
         "interestRate": "អត្រាការប្រាក់",
         "interestRateHint": "០.០១ – ១០០",
-        "term": "រយៈពេល (ខែ)",
+        "term": "រយៈពេល",
         "termHint": "១ – ៣៦០",
+        "termUnit": "ឯកតារយៈពេល",
         "purpose": "គោលបំណង"
       },
       "confirmDelete": {
@@ -142,7 +143,6 @@
         "approved": "បានអនុម័ត",
         "disbursed": "បានចេញប្រាក់"
       },
-      "months": "{count} ខែ",
       "applyPaymentTitle": "អនុវត្តការទូទាត់ទៅសមតុល្យ",
       "amount": "ចំនួនទឹកប្រាក់",
       "applyPaymentButton": "អនុវត្តការទូទាត់",
@@ -184,7 +184,6 @@
         "closed": "បានបិទ",
         "purpose": "គោលបំណង"
       },
-      "months": "{count} ខែ",
       "repaymentScheduleTitle": "កាលវិភាគទូទាត់សង",
       "scheduleColumns": {
         "installmentNumber": "#",
@@ -259,7 +258,6 @@
       "restructureColumns": {
         "effective": "ចូលជាធរមាន",
         "newTerm": "រយៈពេលថ្មី",
-        "newTermSuffix": " ខែ",
         "newRate": "អត្រាថ្មី",
         "reason": "មូលហេតុ"
       },
@@ -542,13 +540,15 @@
     "fields": {
       "amount": "ចំនួនទឹកប្រាក់កម្ចី",
       "amountRangeHint": "ចន្លោះផលិតផល៖ {min} – {max}",
-      "termMonths": "រយៈពេល (ខែ)",
+      "termMonths": "រយៈពេល",
+      "termUnit": "ឯកតារយៈពេល",
       "termRangeHint": "ចន្លោះផលិតផល៖ {min} – {max} ខែ",
       "annualRate": "អត្រាការប្រាក់ប្រចាំឆ្នាំ",
       "startDate": "កាលបរិច្ឆេទចាប់ផ្តើម"
     },
     "summary": {
       "installment": "ការបង់ប្រចាំខែ",
+      "bulletPayment": "ការទូទាត់នៅពេលដល់កំណត់",
       "totalInterest": "ការប្រាក់សរុប",
       "totalPayment": "ការទូទាត់សរុប"
     },
