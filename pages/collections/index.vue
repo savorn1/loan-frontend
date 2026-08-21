@@ -48,14 +48,26 @@
 
       <DataTable
         v-model:sort="sort"
+        v-model:selected="selectedRows"
         :rows="rows"
         :columns="columns"
         :loading="pending"
+        :selectable="isAdmin"
         numbered
         refreshable
         :row-number-start="(page - 1) * pageSize"
         @refresh="refresh"
       >
+        <template #bulk-actions="{ selected: sel, clear: clearSelection }">
+          <UButton
+            size="xs"
+            variant="soft"
+            icon="i-heroicons-user-plus"
+            @click="openBulkAssign(sel, clearSelection)"
+          >
+            {{ t('collections.list.bulk.assignSelected', { count: sel.length }) }}
+          </UButton>
+        </template>
         <template #bucket-data="{ row }">
           <UBadge :color="bucketColor(row.bucket)" variant="subtle">{{
             bucketLabel(row.bucket)
@@ -144,6 +156,26 @@
           cancelable
           @submit="onAssign"
           @cancel="showAssign = false"
+        />
+      </UCard>
+    </UModal>
+
+    <UModal v-model="showBulkAssign">
+      <UCard>
+        <template #header>
+          <span class="font-semibold">{{
+            t('collections.list.bulk.assignModalTitle', { count: bulkAssignTargets.length })
+          }}</span>
+        </template>
+        <DynamicForm
+          v-model="bulkAssignForm"
+          :fields="assignFields"
+          :loading="bulkAssigning"
+          :error="bulkAssignError"
+          :submit-label="t('collections.shared.assign')"
+          cancelable
+          @submit="onBulkAssign"
+          @cancel="showBulkAssign = false"
         />
       </UCard>
     </UModal>
@@ -366,6 +398,49 @@ async function onAssign(values: Record<string, any>) {
     assignError.value = apiErrorMessage(err)
   } finally {
     assigning.value = false
+  }
+}
+
+// ── Bulk assign ─────────────────────────────────────────────────────────
+const selectedRows = ref<CollectionWorkqueueItemResponse[]>([])
+const showBulkAssign = ref(false)
+const bulkAssignTargets = ref<CollectionWorkqueueItemResponse[]>([])
+const bulkAssignClear = ref<() => void>(() => {})
+const bulkAssigning = ref(false)
+const bulkAssignError = ref('')
+const bulkAssignForm = ref<Record<string, any>>({})
+
+function openBulkAssign(sel: CollectionWorkqueueItemResponse[], clear: () => void) {
+  bulkAssignTargets.value = sel
+  bulkAssignClear.value = clear
+  bulkAssignForm.value = {}
+  bulkAssignError.value = ''
+  showBulkAssign.value = true
+}
+
+async function onBulkAssign(values: Record<string, any>) {
+  bulkAssigning.value = true
+  bulkAssignError.value = ''
+  try {
+    await Promise.all(
+      bulkAssignTargets.value.map((item) =>
+        api(`/payments/collections/${item.loanId}/assign`, {
+          method: 'PUT',
+          body: { userId: values.userId }
+        })
+      )
+    )
+    toast.add({
+      title: t('collections.list.bulk.assignedToast', { count: bulkAssignTargets.value.length }),
+      color: 'green'
+    })
+    showBulkAssign.value = false
+    bulkAssignClear.value()
+    await refresh()
+  } catch (err) {
+    bulkAssignError.value = apiErrorMessage(err)
+  } finally {
+    bulkAssigning.value = false
   }
 }
 

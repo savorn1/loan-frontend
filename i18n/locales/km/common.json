@@ -46,10 +46,21 @@
   },
   "commandPalette": {
     "open": "បើកការស្វែងរក",
-    "placeholder": "ស្វែងរកទំព័រ និងសកម្មភាព...",
+    "placeholder": "ស្វែងរកទំព័រ អតិថិជន កម្ចី និងសកម្មភាព...",
     "emptyLabel": "រកមិនឃើញលទ្ធផលទេ",
     "generalGroup": "ទូទៅ",
-    "actionsGroup": "សកម្មភាព"
+    "actionsGroup": "សកម្មភាព",
+    "recentGroup": "ថ្មីៗនេះ",
+    "customersGroup": "អតិថិជន",
+    "loansGroup": "កម្ចី",
+    "loanResultLabel": "កម្ចី #{id} — {customer}"
+  },
+  "appBar": {
+    "notifications": "ការជូនដំណឹង",
+    "viewAll": "មើលទាំងអស់",
+    "empty": "មិនទាន់មានការជូនដំណឹងទេ",
+    "error": "មិនអាចផ្ទុកការជូនដំណឹងបានទេ",
+    "retry": "ព្យាយាមម្តងទៀត"
   },
   "common": {
     "save": "រក្សាទុក",
@@ -86,6 +97,8 @@
       "to": "ដល់"
     },
     "clearFilters": "សម្អាតតម្រង",
+    "selectedCount": "បានជ្រើសរើស {count}",
+    "clearSelection": "សម្អាតការជ្រើសរើស",
     "search": "ស្វែងរក",
     "previous": "មុន",
     "next": "បន្ទាប់",

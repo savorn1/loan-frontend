@@ -1353,7 +1353,15 @@ const employmentFields: FieldDef[] = [
     ]
   },
   { name: 'salary', type: 'currency', wrapper: 'half' },
-  { name: 'currency', hint: 'e.g. USD', wrapper: 'half' },
+  {
+    name: 'currency',
+    type: 'select',
+    wrapper: 'half',
+    options: [
+      { label: 'USD', value: 'USD' },
+      { label: 'KHR', value: 'KHR' }
+    ]
+  },
   { name: 'startDate', label: 'Start date', type: 'date' }
 ]
 
@@ -1448,7 +1456,15 @@ const incomeFields: FieldDef[] = [
     ]
   },
   { name: 'amount', type: 'currency', required: true, wrapper: 'half' },
-  { name: 'currency', hint: 'e.g. USD', wrapper: 'half' }
+  {
+    name: 'currency',
+    type: 'select',
+    wrapper: 'half',
+    options: [
+      { label: 'USD', value: 'USD' },
+      { label: 'KHR', value: 'KHR' }
+    ]
+  }
 ]
 
 const {
@@ -1659,7 +1675,15 @@ async function onSaveRiskProfile(values: Record<string, any>) {
 
 const preferenceFields: FieldDef[] = [
   { name: 'language', hint: 'e.g. en, km', wrapper: 'half' },
-  { name: 'currency', hint: 'e.g. USD', wrapper: 'half' },
+  {
+    name: 'currency',
+    type: 'select',
+    wrapper: 'half',
+    options: [
+      { label: 'USD', value: 'USD' },
+      { label: 'KHR', value: 'KHR' }
+    ]
+  },
   {
     name: 'notificationMethod',
     label: 'Notification method',

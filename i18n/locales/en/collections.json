@@ -74,6 +74,11 @@
       "assignModal": {
         "title": "Assign loan #{id}"
       },
+      "bulk": {
+        "assignSelected": "Assign {count} selected",
+        "assignModalTitle": "Assign {count} selected case(s)",
+        "assignedToast": "{count} case(s) assigned"
+      },
       "noteModal": {
         "title": "Log contact — loan #{id}",
         "loading": "Loading notes…",
@@ -172,9 +177,13 @@
         "created": "Created"
       },
       "actions": {
+        "view": "View letter",
         "markSent": "Mark sent",
         "markDelivered": "Mark delivered",
         "markFailed": "Mark failed"
+      },
+      "viewModal": {
+        "noContent": "No content was recorded for this letter."
       },
       "empty": {
         "title": "No letters recorded",

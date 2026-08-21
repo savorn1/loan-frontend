@@ -72,13 +72,26 @@
 
       <DataTable
         v-model:sort="sort"
+        v-model:selected="selectedRows"
         :rows="rows"
         :columns="columns"
         :loading="pending"
+        :selectable="isAdmin"
         numbered
         :row-number-start="(page - 1) * pageSize"
         @select="(row: LoanResponse) => router.push(`/loans/${row.id}`)"
       >
+        <template #bulk-actions="{ selected: sel, clear: clearSelection }">
+          <UButton
+            size="xs"
+            color="green"
+            icon="i-heroicons-check-circle"
+            :disabled="!countPending(sel)"
+            @click="openBulkApprove(sel, clearSelection)"
+          >
+            {{ t('loans.list.bulk.approveSelected', { count: countPending(sel) }) }}
+          </UButton>
+        </template>
         <template #actions-data="{ row }">
           <div v-if="isAdmin && row.status === 'PENDING'" class="flex gap-1 justify-end">
             <UButton
@@ -180,6 +193,16 @@
       "
       @confirm="onDelete"
     />
+
+    <ConfirmModal
+      v-model="showBulkApprove"
+      :title="t('loans.list.bulk.confirmTitle')"
+      :description="t('loans.list.bulk.confirmDescription', { count: bulkApproveTargets.length })"
+      color="green"
+      :confirm-label="t('loans.shell.actions.approve')"
+      :loading="bulkApproving"
+      @confirm="onBulkApprove"
+    />
   </div>
 </template>
 
@@ -192,6 +215,7 @@ import type { ColumnDef, FieldDef, PageResponse } from '~/shared/types'
 
 const { t } = useI18n()
 const api = useApi()
+const toast = useToast()
 const router = useRouter()
 const { isAdmin } = storeToRefs(useAuth())
 const { formatTermLength } = useTermUnit()
@@ -460,4 +484,46 @@ const {
     await router.push(`/loans/${created.id}`)
   }
 })
+
+// ── Bulk approve ────────────────────────────────────────────────────────
+// Non-pending rows can end up selected (e.g. a filter change after selecting),
+// so the count/target list is always narrowed to PENDING rather than trusting
+// the raw selection.
+const selectedRows = ref<LoanResponse[]>([])
+const showBulkApprove = ref(false)
+const bulkApproveTargets = ref<LoanResponse[]>([])
+const bulkApproveClear = ref<() => void>(() => {})
+const bulkApproving = ref(false)
+
+function countPending(sel: LoanResponse[]) {
+  return sel.filter((l) => l.status === 'PENDING').length
+}
+
+function openBulkApprove(sel: LoanResponse[], clear: () => void) {
+  bulkApproveTargets.value = sel.filter((l) => l.status === 'PENDING')
+  bulkApproveClear.value = clear
+  showBulkApprove.value = true
+}
+
+async function onBulkApprove() {
+  bulkApproving.value = true
+  try {
+    const results = await Promise.allSettled(
+      bulkApproveTargets.value.map((l) => api(`/loans/${l.id}/approve`, { method: 'PUT' }))
+    )
+    const succeeded = results.filter((r) => r.status === 'fulfilled').length
+    const failed = results.length - succeeded
+    if (succeeded) {
+      toast.add({ title: t('loans.list.bulk.approvedToast', { count: succeeded }), color: 'green' })
+    }
+    if (failed) {
+      toast.add({ title: t('loans.list.bulk.someFailedToast', { count: failed }), color: 'red' })
+    }
+    showBulkApprove.value = false
+    bulkApproveClear.value()
+    await refresh()
+  } finally {
+    bulkApproving.value = false
+  }
+}
 </script>

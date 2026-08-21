@@ -66,6 +66,13 @@
         "title": "Delete loan",
         "description": "This pending loan will be permanently deleted. This cannot be undone."
       },
+      "bulk": {
+        "approveSelected": "Approve {count} selected",
+        "confirmTitle": "Approve selected loans",
+        "confirmDescription": "This will approve {count} pending loan(s). This cannot be undone.",
+        "approvedToast": "{count} loan(s) approved",
+        "someFailedToast": "{count} loan(s) failed to approve"
+      },
       "toastCreated": "Loan created"
     },
     "shell": {

@@ -64,6 +64,13 @@
         class="mb-4"
         :title="apiErrorMessage(fetchError)"
       />
+      <UAlert
+        v-else-if="isTruncated"
+        color="amber"
+        variant="subtle"
+        class="mb-4"
+        :title="t('payments.list.truncatedNotice', { count: payments?.length ?? 0 })"
+      />
 
       <PaymentCalendar
         v-if="view === 'calendar'"
@@ -217,6 +224,13 @@ type LoanOption = { label: string; value: number }
 
 const filterLoan = ref<LoanOption | undefined>(undefined)
 
+// PaymentController's GET /payments only accepts page/size/sortBy/sortOrder (no
+// status/date filter params), so those filters below have to run client-side over
+// one large fetch rather than true server-side pagination. FETCH_SIZE is the
+// resulting ceiling when no loan filter narrows the fetch — a branch with more than
+// this many payments will have older ones silently missing rather than paginated to.
+const FETCH_SIZE = 1000
+
 const {
   data: payments,
   pending,
@@ -231,11 +245,14 @@ const {
     if (filterLoan.value) {
       return api<PaymentResponse[]>(`/payments/loan/${filterLoan.value.value}`)
     }
-    const page = await api<PageResponse<PaymentResponse>>('/payments', { query: { size: 1000 } })
+    const page = await api<PageResponse<PaymentResponse>>('/payments', {
+      query: { size: FETCH_SIZE }
+    })
     return page.content
   },
   { watch: [filterLoan] }
 )
+const isTruncated = computed(() => !filterLoan.value && (payments.value?.length ?? 0) >= FETCH_SIZE)
 const { data: loansRaw } = await useAsyncData('payments-loans', () =>
   api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
 )

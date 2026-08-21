@@ -56,6 +56,13 @@
         class="mb-4"
         :title="apiErrorMessage(fetchError)"
       />
+      <UAlert
+        v-else-if="isTruncated"
+        color="amber"
+        variant="subtle"
+        class="mb-4"
+        :title="t('groupLoanApplications.list.truncatedNotice', { count: applications.length })"
+      />
 
       <DataTable
         v-model:sort="sort"
@@ -100,17 +107,25 @@ const { t } = useI18n()
 const api = useApi()
 const router = useRouter()
 
+// GroupLoanApplicationController's GET /group-loan-applications only accepts
+// page/size/sortBy/sortOrder (no status/branch/date filter params), so those
+// filters below have to run client-side over one large fetch rather than true
+// server-side pagination. FETCH_SIZE is the resulting ceiling: a branch with more
+// than this many group applications will have older ones silently missing.
+const FETCH_SIZE = 1000
+
 const {
   data: applicationsRaw,
   pending,
   error: fetchError
 } = await useAsyncData('group-loan-applications', () =>
   api<PageResponse<GroupLoanApplicationResponse>>('/group-loan-applications', {
-    query: { size: 1000 }
+    query: { size: FETCH_SIZE }
   })
 )
 
 const applications = computed(() => applicationsRaw.value?.content ?? [])
+const isTruncated = computed(() => applications.value.length >= FETCH_SIZE)
 
 const { data: branchesData } = await useAsyncData('branches-all', () =>
   api<BranchResponse[]>('/branches')

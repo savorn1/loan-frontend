@@ -45,7 +45,8 @@
         "disable": "Disable",
         "enable": "Enable",
         "roles": "Roles",
-        "branch": "Branch"
+        "branch": "Branch",
+        "resetPassword": "Reset password"
       },
       "empty": {
         "title": "No users found",
@@ -58,13 +59,25 @@
         "passwordHint": "At least 6 characters",
         "role": "Role",
         "active": "Active",
-        "branch": "Branch"
+        "branch": "Branch",
+        "newPassword": "New password"
+      },
+      "resetPasswordModal": {
+        "title": "Reset password — {username}",
+        "description": "Sets a new password for this user and signs them out everywhere. Share the new password with them through a secure channel."
       },
       "branchOptions": {
         "none": "No branch"
       },
       "deleteConfirmTitle": "Delete user \"{username}\"?",
       "deleteConfirmDescription": "This action cannot be undone.",
+      "bulk": {
+        "deactivateSelected": "Deactivate selected ({count})",
+        "confirmTitle": "Deactivate {count} user(s)?",
+        "confirmDescription": "They won't be able to sign in until reactivated.",
+        "deactivatedToast": "{count} user(s) deactivated",
+        "someFailedToast": "{count} user(s) failed to deactivate"
+      },
       "rolesModal": {
         "title": "Roles — {username}",
         "emptyTitle": "No roles defined",
@@ -80,6 +93,7 @@
         "disabled": "{username} disabled",
         "enabled": "{username} enabled",
         "branchChanged": "{username}'s branch updated",
+        "passwordReset": "{username}'s password was reset",
         "deleted": "User deleted"
       }
     },
@@ -255,7 +269,7 @@
       },
       "columns": {
         "recipient": "Recipient",
-        "recipientId": "Recipient ID",
+        "recipientId": "Recipient",
         "channel": "Channel",
         "subject": "Subject",
         "message": "Message",
@@ -266,7 +280,8 @@
       "empty": {
         "title": "No notifications found",
         "description": "Try adjusting your filters. Reminders are sent automatically by the payment service."
-      }
+      },
+      "truncatedNotice": "Showing the {count} most recent results — narrow the filters to see more."
     },
     "reports": {
       "title": "Reports",

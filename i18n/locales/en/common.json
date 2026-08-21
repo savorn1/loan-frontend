@@ -46,10 +46,21 @@
   },
   "commandPalette": {
     "open": "Open search",
-    "placeholder": "Search pages and actions...",
+    "placeholder": "Search pages, customers, loans, and actions...",
     "emptyLabel": "No results found",
     "generalGroup": "General",
-    "actionsGroup": "Actions"
+    "actionsGroup": "Actions",
+    "recentGroup": "Recent",
+    "customersGroup": "Customers",
+    "loansGroup": "Loans",
+    "loanResultLabel": "Loan #{id} — {customer}"
+  },
+  "appBar": {
+    "notifications": "Notifications",
+    "viewAll": "View all",
+    "empty": "No notifications yet",
+    "error": "Couldn't load notifications",
+    "retry": "Retry"
   },
   "common": {
     "save": "Save",
@@ -86,6 +97,8 @@
       "to": "To"
     },
     "clearFilters": "Clear filters",
+    "selectedCount": "{count} selected",
+    "clearSelection": "Clear selection",
     "search": "Search",
     "previous": "Previous",
     "next": "Next",

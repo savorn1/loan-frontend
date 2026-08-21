@@ -39,6 +39,13 @@
         class="mb-4"
         :title="apiErrorMessage(fetchError)"
       />
+      <UAlert
+        v-else-if="isTruncated"
+        color="amber"
+        variant="subtle"
+        class="mb-4"
+        :title="t('admin.notifications.truncatedNotice', { count: notifications.length })"
+      />
 
       <DataTable v-model:sort="sort" :rows="rows" :columns="columns" :loading="pending">
         <template #empty-state>
@@ -64,10 +71,17 @@ import type {
   NotificationStatus,
   RecipientType
 } from '~/features/notifications/types'
+import type { CustomerResponse } from '~/features/customers/types'
+import type { UserResponse } from '~/features/users/types'
 import type { ColumnDef, PageResponse } from '~/shared/types'
 
 const { t } = useI18n()
 const api = useApi()
+
+// Matches the `size` in buildQuery below — this endpoint has no recipientId
+// filter (see useNotificationBell.ts), so a hit list this large means older
+// notifications outside the window are silently absent rather than paginated to.
+const FETCH_SIZE = 200
 
 const filters = reactive({
   recipientType: '' as '' | RecipientType,
@@ -100,7 +114,7 @@ function buildQuery(): NotificationFilter {
     channel: filters.channel || undefined,
     status: filters.status || undefined,
     page: 1,
-    size: 200
+    size: FETCH_SIZE
   }
 }
 
@@ -114,8 +128,60 @@ const {
 )
 
 const notifications = computed(() => notificationsRaw.value?.content ?? [])
+const isTruncated = computed(() => notifications.value.length >= FETCH_SIZE)
 
 const { page, pageSize, sort, total, rows } = useClientTable(notifications, { pageSize: 10 })
+
+// Recipient names, resolved lazily per row shown (rather than for all `notifications`,
+// which can hold up to FETCH_SIZE entries) since /notifications only returns a numeric
+// recipientId. Maps are reactive (Vue proxies Map/Set), so a column reading them
+// re-renders once a lookup resolves — same pattern as applications/index.vue's
+// branchNameById. A failed lookup (e.g. a deleted customer) just leaves the id showing.
+const customerNameById = ref(new Map<number, string>())
+const userNameById = ref(new Map<number, string>())
+
+watch(
+  rows,
+  async (visible) => {
+    const customerIds = [
+      ...new Set(
+        visible
+          .filter(
+            (n) => n.recipientType === 'CUSTOMER' && !customerNameById.value.has(n.recipientId)
+          )
+          .map((n) => n.recipientId)
+      )
+    ]
+    const userIds = [
+      ...new Set(
+        visible
+          .filter((n) => n.recipientType === 'USER' && !userNameById.value.has(n.recipientId))
+          .map((n) => n.recipientId)
+      )
+    ]
+    await Promise.allSettled([
+      // No batch-by-ids endpoint on customer-service, so these stay one request per id.
+      ...customerIds.map(async (id) => {
+        const customer = await api<CustomerResponse>(`/customers/${id}`)
+        customerNameById.value.set(id, customer.fullName)
+      }),
+      (async () => {
+        if (!userIds.length) return
+        const users = await api<UserResponse[]>('/auth/users/by-ids', { query: { ids: userIds } })
+        for (const u of users) userNameById.value.set(u.id, u.username)
+      })()
+    ])
+  },
+  { immediate: true }
+)
+
+function recipientLabel(n: NotificationResponse) {
+  const name =
+    n.recipientType === 'CUSTOMER'
+      ? customerNameById.value.get(n.recipientId)
+      : userNameById.value.get(n.recipientId)
+  return name ? `${name} (#${n.recipientId})` : String(n.recipientId)
+}
 
 const totalLabel = computed(() => {
   const count = notifications.value?.length ?? 0
@@ -131,7 +197,11 @@ watch(
 
 const columns = computed<ColumnDef<NotificationResponse>[]>(() => [
   { key: 'recipientType', label: t('admin.notifications.columns.recipient'), type: 'enum' },
-  { key: 'recipientId', label: t('admin.notifications.columns.recipientId') },
+  {
+    key: 'recipientId',
+    label: t('admin.notifications.columns.recipientId'),
+    value: recipientLabel
+  },
   { key: 'channel', label: t('admin.notifications.columns.channel'), type: 'enum' },
   { key: 'subject', label: t('admin.notifications.columns.subject') },
   {

@@ -46,6 +46,21 @@
     </div>
 
     <div
+      v-if="selectable && selected.length > 0"
+      class="flex items-center justify-between gap-3 mb-3 rounded-lg bg-primary-50 dark:bg-primary-400/10 px-3 py-2"
+    >
+      <span class="text-sm text-primary-700 dark:text-primary-300 font-medium">
+        {{ t('common.selectedCount', { count: selected.length }) }}
+      </span>
+      <div class="flex items-center gap-2">
+        <slot name="bulk-actions" :selected="selected" :clear="() => (selected = [])" />
+        <UButton size="xs" variant="ghost" color="gray" @click="selected = []">
+          {{ t('common.clearSelection') }}
+        </UButton>
+      </div>
+    </div>
+
+    <div
       v-if="loading && rows.length === 0"
       class="flex flex-col items-center justify-center gap-3 py-14"
     >
@@ -64,6 +79,7 @@
 
     <template v-else>
       <UTable
+        v-model="tableSelectedModel"
         v-model:sort="sort"
         :rows="themedRows"
         :columns="uColumns"
@@ -141,15 +157,30 @@ const props = withDefaults(
     numbered?: boolean
     /** Offset for numbering, e.g. `(page - 1) * pageSize` so it stays continuous across pages. */
     rowNumberStart?: number
+    /** Adds a checkbox column and a "N selected" bulk-actions bar (see the
+     * `bulk-actions` slot) driven by `v-model:selected`. */
+    selectable?: boolean
   }>(),
   {
     exportable: true,
     columnsToggleable: true,
     refreshable: false,
     numbered: false,
-    rowNumberStart: 0
+    rowNumberStart: 0,
+    selectable: false
   }
 )
+
+const selected = defineModel<T[]>('selected', { default: () => [] })
+
+// UTable only renders its checkbox column when `modelValue` is truthy, so a
+// non-selectable table must pass undefined rather than an (always-truthy) empty array.
+const tableSelectedModel = computed<T[] | undefined>({
+  get: () => (props.selectable ? selected.value : undefined),
+  set: (value) => {
+    selected.value = value ?? []
+  }
+})
 
 const ROW_NUMBER_KEY = '__rowNumber'
 

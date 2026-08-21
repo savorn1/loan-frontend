@@ -18,6 +18,11 @@
       "emptyDescription": "Add your first customer to start creating loans for them.",
       "toastCreated": "Customer created",
       "branchFilterAll": "All branches",
+      "statusOptions": {
+        "all": "All statuses",
+        "active": "Active",
+        "disabled": "Disabled"
+      },
       "columns": {
         "id": "ID",
         "reference": "Reference No.",
@@ -26,6 +31,7 @@
         "email": "Email",
         "phone": "Phone",
         "branch": "Branch",
+        "status": "Status",
         "created": "Created"
       }
     },
@@ -314,6 +320,7 @@
       "emptyDescription": "Submit a loan application for one of your customers to get started.",
       "submit": "Submit",
       "toastCreated": "Application submitted",
+      "truncatedNotice": "Showing the {count} most recent results — narrow the filters to see more.",
       "branchFilter": {
         "all": "All branches"
       },

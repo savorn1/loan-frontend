@@ -188,6 +188,7 @@
       "emptyTitle": "No payments found",
       "emptyDescription": "Payments appear here once a schedule is generated or created manually.",
       "emptySearchDescription": "Try clearing the loan or status filter.",
+      "truncatedNotice": "Showing the {count} most recent results — narrow the filters to see more.",
       "deleteConfirmTitle": "Delete this payment?",
       "deleteConfirmDescription": "This removes the installment from the schedule. This action cannot be undone.",
       "created": "Payment created",

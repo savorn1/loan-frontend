@@ -4,6 +4,7 @@
       "title": "Group Loan Applications",
       "searchPlaceholder": "Search by group...",
       "branchFilterAll": "All branches",
+      "truncatedNotice": "Showing the {count} most recent results — narrow the filters to see more.",
       "columns": {
         "id": "ID",
         "reference": "Reference No.",

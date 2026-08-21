@@ -57,14 +57,28 @@
       />
 
       <DataTable
+        v-model:selected="selectedRows"
         :rows="users?.content ?? []"
         :columns="columns"
         :loading="pending"
+        selectable
         numbered
         refreshable
         :row-number-start="(page - 1) * pageSize"
         @refresh="refresh"
       >
+        <template #bulk-actions="{ selected: sel, clear: clearSelection }">
+          <UButton
+            size="xs"
+            color="red"
+            variant="soft"
+            icon="i-heroicons-no-symbol"
+            :disabled="!countDeactivatable(sel)"
+            @click="openBulkDeactivate(sel, clearSelection)"
+          >
+            {{ t('admin.users.bulk.deactivateSelected', { count: countDeactivatable(sel) }) }}
+          </UButton>
+        </template>
         <template #actions-data="{ row }">
           <div class="flex items-center justify-end gap-1">
             <UButton
@@ -101,6 +115,15 @@
             <UButton size="xs" color="gray" variant="ghost" @click="openBranch(row)">{{
               t('admin.users.actions.branch')
             }}</UButton>
+            <UButton
+              size="xs"
+              color="gray"
+              variant="ghost"
+              :disabled="row.username === username"
+              @click="openResetPassword(row)"
+            >
+              {{ t('admin.users.actions.resetPassword') }}
+            </UButton>
             <UButton
               size="xs"
               color="red"
@@ -172,6 +195,16 @@
         </div>
       </UCard>
     </UModal>
+
+    <ConfirmModal
+      v-model="showBulkDeactivate"
+      :title="t('admin.users.bulk.confirmTitle', { count: bulkDeactivateTargets.length })"
+      :description="t('admin.users.bulk.confirmDescription')"
+      color="red"
+      :confirm-label="t('admin.users.actions.disable')"
+      :loading="bulkDeactivating"
+      @confirm="onBulkDeactivate"
+    />
 
     <UModal v-model="showRoles">
       <UCard v-if="rolesTargetUser">
@@ -245,6 +278,40 @@
         </div>
       </UCard>
     </UModal>
+
+    <UModal v-model="showResetPassword">
+      <UCard v-if="resetPasswordTargetUser">
+        <template #header>
+          <span class="font-semibold">{{
+            t('admin.users.resetPasswordModal.title', {
+              username: resetPasswordTargetUser.username
+            })
+          }}</span>
+        </template>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">
+          {{ t('admin.users.resetPasswordModal.description') }}
+        </p>
+        <UFormGroup
+          :label="t('admin.users.fields.newPassword')"
+          :error="resetPasswordError"
+          :hint="t('admin.users.fields.passwordHint')"
+        >
+          <UInput
+            v-model="resetPasswordForm.newPassword"
+            type="password"
+            autocomplete="new-password"
+          />
+        </UFormGroup>
+        <div class="flex justify-end gap-2 mt-4">
+          <UButton color="gray" variant="ghost" @click="showResetPassword = false">{{
+            t('common.cancel')
+          }}</UButton>
+          <UButton :loading="resettingPassword" @click="onResetPassword">{{
+            t('admin.users.actions.resetPassword')
+          }}</UButton>
+        </div>
+      </UCard>
+    </UModal>
   </div>
 </template>
 
@@ -252,6 +319,7 @@
 import type {
   AssignUserRoleRequest,
   CreateUserRequest,
+  ResetPasswordRequest,
   UpdateBranchRequest,
   UserFilter,
   UserResponse,
@@ -490,6 +558,58 @@ async function onToggleStatus(row: UserResponse) {
   }
 }
 
+// ── Bulk deactivate ─────────────────────────────────────────────────────
+// Mixed selections can include already-disabled rows or the signed-in user's own
+// row (whose per-row toggle is disabled below for the same reason: locking out
+// your own session), so the target list is always narrowed rather than trusting
+// the raw selection.
+const selectedRows = ref<UserResponse[]>([])
+const showBulkDeactivate = ref(false)
+const bulkDeactivateTargets = ref<UserResponse[]>([])
+const bulkDeactivateClear = ref<() => void>(() => {})
+const bulkDeactivating = ref(false)
+
+function isDeactivatable(row: UserResponse) {
+  return row.status === 'ACTIVE' && row.username !== username.value
+}
+
+function countDeactivatable(sel: UserResponse[]) {
+  return sel.filter(isDeactivatable).length
+}
+
+function openBulkDeactivate(sel: UserResponse[], clear: () => void) {
+  bulkDeactivateTargets.value = sel.filter(isDeactivatable)
+  bulkDeactivateClear.value = clear
+  showBulkDeactivate.value = true
+}
+
+async function onBulkDeactivate() {
+  bulkDeactivating.value = true
+  try {
+    const results = await Promise.allSettled(
+      bulkDeactivateTargets.value.map((u) =>
+        api(`/auth/users/${u.id}/status`, { method: 'PUT', body: { status: 'INACTIVE' } })
+      )
+    )
+    const succeeded = results.filter((r) => r.status === 'fulfilled').length
+    const failed = results.length - succeeded
+    if (succeeded) {
+      toast.add({
+        title: t('admin.users.bulk.deactivatedToast', { count: succeeded }),
+        color: 'green'
+      })
+    }
+    if (failed) {
+      toast.add({ title: t('admin.users.bulk.someFailedToast', { count: failed }), color: 'red' })
+    }
+    showBulkDeactivate.value = false
+    bulkDeactivateClear.value()
+    await refresh()
+  } finally {
+    bulkDeactivating.value = false
+  }
+}
+
 async function onDelete() {
   if (!confirmDeleteUser.value) return
   deleting.value = true
@@ -577,6 +697,46 @@ async function onSaveBranch() {
     toast.add({ title: apiErrorMessage(err), color: 'red' })
   } finally {
     savingBranch.value = false
+  }
+}
+
+// ── Reset password (admin-assisted recovery — there's no self-service "forgot
+// password" flow, so this PUT /auth/users/{id}/password action is the only way
+// back in for a locked-out user) ────────────────────────────────────────────
+const showResetPassword = ref(false)
+const resettingPassword = ref(false)
+const resetPasswordError = ref('')
+const resetPasswordTargetUser = ref<UserResponse | null>(null)
+const resetPasswordForm = reactive<{ newPassword: string }>({ newPassword: '' })
+
+function openResetPassword(row: UserResponse) {
+  resetPasswordTargetUser.value = row
+  resetPasswordForm.newPassword = ''
+  resetPasswordError.value = ''
+  showResetPassword.value = true
+}
+
+async function onResetPassword() {
+  if (!resetPasswordTargetUser.value) return
+  resettingPassword.value = true
+  resetPasswordError.value = ''
+  try {
+    const payload: ResetPasswordRequest = { newPassword: resetPasswordForm.newPassword }
+    await api(`/auth/users/${resetPasswordTargetUser.value.id}/password`, {
+      method: 'PUT',
+      body: payload
+    })
+    toast.add({
+      title: t('admin.users.toast.passwordReset', {
+        username: resetPasswordTargetUser.value.username
+      }),
+      color: 'green'
+    })
+    showResetPassword.value = false
+  } catch (err) {
+    resetPasswordError.value = apiErrorMessage(err)
+  } finally {
+    resettingPassword.value = false
   }
 }
 </script>

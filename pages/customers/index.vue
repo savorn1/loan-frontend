@@ -36,6 +36,13 @@
             value-attribute="value"
             class="w-full sm:w-48"
           />
+          <USelectMenu
+            v-model="statusFilter"
+            :options="statusOptions"
+            option-attribute="label"
+            value-attribute="value"
+            class="w-full sm:w-40"
+          />
           <DateRangeFilter v-model:from="dateFrom" v-model:to="dateTo" />
           <UButton
             v-if="hasFilters"
@@ -110,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CustomerRequest, CustomerResponse } from '~/features/customers/types'
+import type { CustomerRequest, CustomerResponse, CustomerStatus } from '~/features/customers/types'
 import type { BranchResponse } from '~/features/branches/types'
 import type { ColumnDef, PageResponse } from '~/shared/types'
 
@@ -124,6 +131,12 @@ const page = ref(1)
 const pageSize = ref(10)
 const sort = ref<{ column: string; direction: 'asc' | 'desc' } | undefined>(undefined)
 const branchFilter = ref<number | ''>('')
+const statusFilter = ref<CustomerStatus | ''>('')
+const statusOptions = computed(() => [
+  { label: t('customers.list.statusOptions.all'), value: '' },
+  { label: t('customers.list.statusOptions.active'), value: 'ACTIVE' },
+  { label: t('customers.list.statusOptions.disabled'), value: 'INACTIVE' }
+])
 const { from: dateFrom, to: dateTo } = useDateRangeFilter()
 
 function buildQuery() {
@@ -132,6 +145,7 @@ function buildQuery() {
     size: pageSize.value,
     search: search.value || undefined,
     branchId: branchFilter.value || undefined,
+    status: statusFilter.value || undefined,
     dateFrom: dateFrom.value || undefined,
     dateTo: dateTo.value || undefined,
     sortBy: sort.value?.column ?? 'createdAt',
@@ -152,7 +166,7 @@ const rows = computed(() => customersPage.value?.content ?? [])
 const total = computed(() => customersPage.value?.totalElements ?? 0)
 
 watch(page, () => refresh())
-watch([pageSize, branchFilter, dateFrom, dateTo], () => {
+watch([pageSize, branchFilter, statusFilter, dateFrom, dateTo], () => {
   page.value = 1
   refresh()
 })
@@ -203,6 +217,16 @@ const columns = computed<ColumnDef<CustomerResponse>[]>(() => [
       row.branchId != null ? (branchNameById.value.get(row.branchId) ?? row.branchId) : '—'
   },
   {
+    key: 'status',
+    label: t('customers.list.columns.status'),
+    type: 'boolean',
+    value: (row) => row.status === 'ACTIVE',
+    trueLabel: t('customers.list.statusOptions.active'),
+    falseLabel: t('customers.list.statusOptions.disabled'),
+    trueColor: 'teal',
+    falseColor: 'red'
+  },
+  {
     key: 'createdAt',
     label: t('customers.list.columns.created'),
     type: 'datetime',
@@ -211,12 +235,18 @@ const columns = computed<ColumnDef<CustomerResponse>[]>(() => [
 ])
 
 const hasFilters = computed(
-  () => !!search.value || branchFilter.value !== '' || !!dateFrom.value || !!dateTo.value
+  () =>
+    !!search.value ||
+    branchFilter.value !== '' ||
+    statusFilter.value !== '' ||
+    !!dateFrom.value ||
+    !!dateTo.value
 )
 
 function clearFilters() {
   search.value = ''
   branchFilter.value = ''
+  statusFilter.value = ''
   dateFrom.value = ''
   dateTo.value = ''
 }

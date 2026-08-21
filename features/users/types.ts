@@ -34,6 +34,10 @@ export interface UpdateStatusRequest {
   status: UserStatus
 }
 
+export interface ResetPasswordRequest {
+  newPassword: string
+}
+
 // Query params for GET /auth/users — all optional, mirrors UserFilterRequest.
 export interface UserFilter {
   username?: string

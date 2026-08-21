@@ -28,13 +28,102 @@
         color="gray"
         variant="ghost"
         square
+        class="sm:hidden"
         :aria-label="t('commandPalette.open')"
         @click="emit('open-search')"
       />
+      <UButton
+        icon="i-heroicons-magnifying-glass"
+        color="gray"
+        variant="ghost"
+        class="hidden sm:flex items-center gap-1.5"
+        :aria-label="t('commandPalette.open')"
+        @click="emit('open-search')"
+      >
+        <kbd
+          class="font-sans text-[10px] leading-none text-gray-400 dark:text-gray-500 border border-gray-300 dark:border-gray-700 rounded px-1 py-0.5"
+          >⌘K</kbd
+        >
+      </UButton>
       <ClientOnly>
+        <UPopover :popper="{ placement: 'bottom-end' }">
+          <div class="relative">
+            <UButton
+              icon="i-heroicons-bell"
+              color="gray"
+              variant="ghost"
+              square
+              :aria-label="t('appBar.notifications')"
+              @click="markNotificationsSeen"
+            />
+            <span
+              v-if="notificationsError"
+              class="absolute -top-0.5 -right-0.5 flex h-3 w-3 rounded-full bg-amber-500 ring-2 ring-white dark:ring-gray-900 pointer-events-none"
+            />
+            <span
+              v-else-if="unreadNotificationCount > 0"
+              class="absolute -top-0.5 -right-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white pointer-events-none"
+            >
+              {{ unreadNotificationCount > 9 ? '9+' : unreadNotificationCount }}
+            </span>
+          </div>
+
+          <template #panel>
+            <div class="w-80 max-h-96 overflow-y-auto p-2">
+              <div class="flex items-center justify-between px-2 py-1.5">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{
+                  t('appBar.notifications')
+                }}</span>
+                <NuxtLink to="/notifications" class="text-xs text-primary-500 hover:underline">{{
+                  t('appBar.viewAll')
+                }}</NuxtLink>
+              </div>
+              <div
+                v-if="notificationsPending"
+                class="py-6 text-center text-sm text-gray-500 dark:text-gray-400"
+              >
+                {{ t('common.loading') }}
+              </div>
+              <div
+                v-else-if="notificationsError && !notificationItems.length"
+                class="flex flex-col items-center gap-2 py-6 text-center text-sm text-gray-500 dark:text-gray-400"
+              >
+                <span>{{ t('appBar.error') }}</span>
+                <UButton size="xs" variant="soft" color="gray" @click="refreshNotifications">{{
+                  t('appBar.retry')
+                }}</UButton>
+              </div>
+              <div
+                v-else-if="!notificationItems.length"
+                class="py-6 text-center text-sm text-gray-500 dark:text-gray-400"
+              >
+                {{ t('appBar.empty') }}
+              </div>
+              <ul v-else class="divide-y divide-gray-100 dark:divide-gray-800">
+                <li v-for="n in notificationItems.slice(0, 8)" :key="n.id" class="py-2 px-2">
+                  <p class="text-sm text-gray-900 dark:text-white font-medium truncate">
+                    {{ n.subject || n.message }}
+                  </p>
+                  <p
+                    v-if="n.subject"
+                    class="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5"
+                  >
+                    {{ n.message }}
+                  </p>
+                  <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                    {{ formatDateTime(n.createdAt) }}
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </template>
+        </UPopover>
         <ColorModeToggle />
         <template #fallback>
-          <div class="w-7 h-7" />
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <div class="w-7 h-7" />
+            <div class="w-7 h-7" />
+          </div>
         </template>
       </ClientOnly>
       <LanguageSwitcher />
@@ -90,6 +179,15 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+
+const {
+  items: notificationItems,
+  unreadCount: unreadNotificationCount,
+  pending: notificationsPending,
+  error: notificationsError,
+  markSeen: markNotificationsSeen,
+  refresh: refreshNotifications
+} = useNotificationBell()
 
 const menuItems = computed(() => [
   [

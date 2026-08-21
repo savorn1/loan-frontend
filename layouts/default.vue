@@ -195,10 +195,12 @@ const sidebarCollapsed = useCookie<boolean>('sidebar_collapsed', {
 
 // Close the mobile drawer automatically whenever a nav link is followed.
 const route = useRoute()
+const { recordVisit } = useRecentPages()
 watch(
   () => route.fullPath,
   () => {
     mobileNavOpen.value = false
+    recordVisit(route.path)
   }
 )
 

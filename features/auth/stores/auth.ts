@@ -46,6 +46,9 @@ export const useAuth = defineStore('auth', () => {
     default: () => null,
     sameSite: 'lax'
   })
+  // Not carried in the login response/JWT (see fetchProfile below) — needed to scope
+  // IN_APP notifications to the signed-in user since /notifications has no recipientId filter.
+  const userId = useCookie<number | null>('auth_user_id', { default: () => null, sameSite: 'lax' })
 
   const isAuthenticated = computed(() => !!token.value)
   const isAdmin = computed(() => role.value === 'ADMIN')
@@ -91,6 +94,7 @@ export const useAuth = defineStore('auth', () => {
   function applyProfile(profile: UserProfileResponse) {
     email.value = profile.email
     avatarUrl.value = profile.avatarUrl
+    userId.value = profile.id
   }
 
   // Populates email/avatarUrl (not carried in the login response/JWT) so the
@@ -116,6 +120,7 @@ export const useAuth = defineStore('auth', () => {
     branchName.value = null
     email.value = null
     avatarUrl.value = null
+    userId.value = null
     if (pendingRefreshToken) {
       // Best-effort server-side revocation — the client-side session is already
       // cleared above regardless of whether this call succeeds.
@@ -135,6 +140,7 @@ export const useAuth = defineStore('auth', () => {
     branchName,
     email,
     avatarUrl,
+    userId,
     isAuthenticated,
     isAdmin,
     login,

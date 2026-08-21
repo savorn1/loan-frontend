@@ -23,6 +23,7 @@
       :loading="pending"
       refreshable
       @refresh="refresh"
+      @select="openView"
     >
       <template #letterType-data="{ row }">
         <UBadge color="gray" variant="subtle">{{ formatEnum(row.letterType) }}</UBadge>
@@ -33,11 +34,18 @@
       <template #actions-data="{ row }">
         <div class="flex gap-1 justify-end">
           <UButton
+            size="2xs"
+            variant="soft"
+            icon="i-heroicons-eye"
+            :aria-label="t('collections.letters.actions.view')"
+            @click.stop="openView(row)"
+          />
+          <UButton
             v-if="row.status === 'DRAFT'"
             size="2xs"
             variant="soft"
             :loading="updatingId === row.id"
-            @click="onUpdateStatus(row, 'SENT')"
+            @click.stop="onUpdateStatus(row, 'SENT')"
           >
             {{ t('collections.letters.actions.markSent') }}
           </UButton>
@@ -47,7 +55,7 @@
               variant="soft"
               color="teal"
               :loading="updatingId === row.id"
-              @click="onUpdateStatus(row, 'DELIVERED')"
+              @click.stop="onUpdateStatus(row, 'DELIVERED')"
             >
               {{ t('collections.letters.actions.markDelivered') }}
             </UButton>
@@ -56,7 +64,7 @@
               variant="soft"
               color="red"
               :loading="updatingId === row.id"
-              @click="onUpdateStatus(row, 'FAILED')"
+              @click.stop="onUpdateStatus(row, 'FAILED')"
             >
               {{ t('collections.letters.actions.markFailed') }}
             </UButton>
@@ -77,6 +85,47 @@
         </EmptyState>
       </template>
     </DataTable>
+
+    <UModal v-model="showView">
+      <UCard v-if="viewingLetter">
+        <template #header>
+          <div class="flex items-center gap-2">
+            <UBadge color="gray" variant="subtle">{{
+              formatEnum(viewingLetter.letterType)
+            }}</UBadge>
+            <StatusBadge :status="viewingLetter.status" />
+          </div>
+        </template>
+        <dl class="grid grid-cols-2 gap-y-2 text-sm mb-4">
+          <dt class="text-gray-500 dark:text-gray-400">
+            {{ t('collections.letters.columns.delivery') }}
+          </dt>
+          <dd>{{ formatEnum(viewingLetter.deliveryMethod) }}</dd>
+          <dt class="text-gray-500 dark:text-gray-400">
+            {{ t('collections.letters.columns.recipient') }}
+          </dt>
+          <dd>{{ viewingLetter.recipientAddress || '—' }}</dd>
+          <dt class="text-gray-500 dark:text-gray-400">
+            {{ t('collections.letters.columns.generatedBy') }}
+          </dt>
+          <dd>{{ viewingLetter.generatedByName }}</dd>
+          <dt class="text-gray-500 dark:text-gray-400">
+            {{ t('collections.letters.columns.sent') }}
+          </dt>
+          <dd>{{ viewingLetter.sentAt ? formatDateTime(viewingLetter.sentAt) : '—' }}</dd>
+        </dl>
+        <div
+          class="rounded-lg bg-gray-50 dark:bg-gray-800/50 p-3 text-sm whitespace-pre-wrap max-h-80 overflow-y-auto"
+        >
+          {{ viewingLetter.content || t('collections.letters.viewModal.noContent') }}
+        </div>
+        <div class="flex justify-end mt-4">
+          <UButton color="gray" variant="ghost" @click="showView = false">{{
+            t('common.close')
+          }}</UButton>
+        </div>
+      </UCard>
+    </UModal>
 
     <UModal v-model="showCreate">
       <UCard>
@@ -133,6 +182,14 @@ const columns = computed<ColumnDef<CollectionLetterResponse>[]>(() => [
   { key: 'createdAt', label: t('collections.letters.columns.created'), type: 'datetime' },
   { key: 'actions', label: '', class: 'text-right' }
 ])
+
+const showView = ref(false)
+const viewingLetter = ref<CollectionLetterResponse | null>(null)
+
+function openView(row: CollectionLetterResponse) {
+  viewingLetter.value = row
+  showView.value = true
+}
 
 const showCreate = ref(false)
 const creating = ref(false)
