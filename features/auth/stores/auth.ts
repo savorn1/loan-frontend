@@ -6,6 +6,7 @@ import type {
 } from '~/features/auth/types'
 import type { Role } from '~/shared/types'
 import { unwrapApiResponse } from '~/shared/utils/apiResponse'
+import { dedupeAsync } from '~/shared/utils/dedupeAsync'
 
 // Auth state persisted in cookies (SSR-safe, survives reloads). The access token is
 // short-lived (24h per auth-service `jwt.expiration`); the refresh token (7d, single-use,
@@ -82,6 +83,16 @@ export const useAuth = defineStore('auth', () => {
     return res
   }
 
+  // Every useApi() call site gets its own closure, so a naive dedup local to useApi()
+  // only covers 401s within a single composable instance — it does nothing for e.g.
+  // the AppBar's notification poll (useNotificationBell, its own useApi()) hitting a
+  // 401 around the same time as the page's own data fetch. Since the refresh token is
+  // single-use/rotated server-side, two independent refreshes racing each other means
+  // the second one fails and force-logs-out an otherwise valid session. Keying the
+  // dedup off this store instance (one per SSR request, one singleton for the lifetime
+  // of a browser tab) makes every useApi() instance share the same in-flight refresh.
+  const refreshOnce = dedupeAsync(refresh)
+
   async function changePassword(payload: ChangePasswordRequest) {
     await $fetch('/api/auth/change-password', {
       baseURL: apiBase,
@@ -145,6 +156,7 @@ export const useAuth = defineStore('auth', () => {
     isAdmin,
     login,
     refresh,
+    refreshOnce,
     changePassword,
     applyProfile,
     fetchProfile,

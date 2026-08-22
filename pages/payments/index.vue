@@ -206,7 +206,6 @@
 </template>
 
 <script setup lang="ts">
-import type { LoanResponse } from '~/features/loans/types'
 import type {
   PaymentRequest,
   PaymentResponse,
@@ -253,26 +252,16 @@ const {
   { watch: [filterLoan] }
 )
 const isTruncated = computed(() => !filterLoan.value && (payments.value?.length ?? 0) >= FETCH_SIZE)
-const { data: loansRaw } = await useAsyncData('payments-loans', () =>
-  api<PageResponse<LoanResponse>>('/loans', { query: { size: 1000 } })
-)
+const { loans, loanLabel } = await useLoanLookup('payments-loans')
 
 const loanOptions = computed<LoanOption[]>(() =>
-  (loansRaw.value?.content ?? []).map((l) => ({
+  loans.value.map((l) => ({
     label: `${l.loanNo || `#${l.id}`} — ${l.customerName} (${l.status})`,
     value: l.id
   }))
 )
 
-const loanNoById = computed(
-  () => new Map((loansRaw.value?.content ?? []).map((l) => [l.id, l.loanNo]))
-)
-
 const view = ref<'list' | 'calendar'>('list')
-
-function loanLabel(loanId: number): string {
-  return loanNoById.value.get(loanId) || `#${loanId}`
-}
 
 const statusOptions = computed<{ label: string; value: PaymentStatus | '' }[]>(() => [
   { label: t('payments.list.statusOptions.all'), value: '' },
@@ -316,7 +305,7 @@ const columns = computed<ColumnDef<PaymentResponse>[]>(() => [
     type: 'link',
     sortable: true,
     href: (row) => `/loans/${row.loanId}`,
-    value: (row) => loanNoById.value.get(row.loanId) || `#${row.loanId}`
+    value: (row) => loanLabel(row.loanId)
   },
   {
     key: 'installmentNumber',

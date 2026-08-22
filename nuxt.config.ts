@@ -129,6 +129,15 @@ export default defineNuxtConfig({
     strict: true
   },
 
+  // useApi()'s 401-retry flow (refresh then redirect to /login on failure) calls
+  // composables like navigateTo()/useCookie() after crossing several `await`
+  // boundaries; without this, Nuxt loses track of the current app instance at that
+  // point and throws instead of redirecting, so an expired session renders a raw
+  // error page instead of the login screen.
+  experimental: {
+    asyncContext: true
+  },
+
   devtools: {
     timeline: {
       enabled: true

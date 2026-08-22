@@ -9,7 +9,7 @@ import { unwrapApiResponse } from '~/shared/utils/apiResponse'
 export function useApi() {
   const auth = useAuth()
   const { token } = storeToRefs(auth)
-  const { refresh, logout } = auth
+  const { refreshOnce, logout } = auth
 
   const { apiBase } = useRuntimeConfig().public
 
@@ -24,11 +24,6 @@ export function useApi() {
     },
     onResponse: unwrapApiResponse
   })
-
-  // Dedupes concurrent 401s triggered by multiple calls through this same
-  // `api` instance (e.g. a page firing several requests at once) so they
-  // don't each rotate the refresh token and race each other.
-  let refreshPromise: Promise<unknown> | null = null
 
   // `any` here matches ofetch's own loosely-typed FetchOptions second parameter —
   // callers still get full inference on the return type via request<T>(...).
@@ -48,10 +43,8 @@ export function useApi() {
         throw err
       }
       try {
-        refreshPromise ??= refresh().finally(() => {
-          refreshPromise = null
-        })
-        await refreshPromise
+        // Deduped at the auth store level (not per useApi() instance) — see refreshOnce().
+        await refreshOnce()
         return await client<T>(apiUrl, opts)
       } catch {
         await logout()

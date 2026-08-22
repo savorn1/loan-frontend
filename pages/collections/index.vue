@@ -144,7 +144,9 @@
       <UCard>
         <template #header>
           <span class="font-semibold">{{
-            t('collections.list.assignModal.title', { id: assigningRow?.loanId })
+            t('collections.list.assignModal.title', {
+              id: assigningRow ? loanLabel(assigningRow.loanId) : ''
+            })
           }}</span>
         </template>
         <DynamicForm
@@ -184,7 +186,7 @@
       <UCard>
         <template #header>
           <span class="font-semibold">{{
-            t('collections.list.noteModal.title', { id: noteRow?.loanId })
+            t('collections.list.noteModal.title', { id: noteRow ? loanLabel(noteRow.loanId) : '' })
           }}</span>
         </template>
 
@@ -258,6 +260,8 @@ const { data: usersPage } = await useAsyncData('collections-users', () =>
   isAdmin.value ? api<PageResponse<UserResponse>>('/auth/users?size=200') : Promise.resolve(null)
 )
 
+const { loanLabel } = await useLoanLookup('collections-loans')
+
 const userMap = computed(
   () => new Map((usersPage.value?.content ?? []).map((u) => [u.id, u.username]))
 )
@@ -330,7 +334,7 @@ const columns = computed<ColumnDef<CollectionWorkqueueItemResponse>[]>(() => [
     type: 'link',
     sortable: true,
     href: (row) => `/loans/${row.loanId}`,
-    prefix: () => '#'
+    value: (row) => loanLabel(row.loanId)
   },
   { key: 'customerName', label: t('collections.list.columns.customer'), sortable: true },
   { key: 'customerPhone', label: t('collections.list.columns.phone') },
